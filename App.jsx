@@ -40,17 +40,18 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
 }
 
 // Posts by specific authors (Following / My posts / My offer). Always newest first.
-async function fetchByAuthors(ids, cursor, kind) {
+// own = true shows every status (fulfilled, closed, expired) so owners can manage them.
+async function fetchByAuthors(ids, cursor, kind, own = false) {
   if (!ids.length) return []
   let q = supabase
     .from('posts')
-    .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,created_at')
+    .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,status,listing_type,expires_at,created_at')
     .in('user_id', ids)
-    .eq('status', 'active')
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
     .limit(PAGE)
   if (kind) q = q.eq('kind', kind)
+  if (!own) q = q.eq('status', 'active')
   if (cursor) q = q.or(`created_at.lt.${cursor.created_at},and(created_at.eq.${cursor.created_at},id.lt.${cursor.id})`)
   const { data, error } = await q
   if (error) throw error
@@ -98,6 +99,7 @@ function SignIn() {
 function Composer({ userId, mode, onPosted }) {
   const base = mode === 'offer' ? 'offer' : 'update'
   const [kind, setKind] = useState(base)
+  const [ltype, setLtype] = useState('one_time')
   const [f, setF] = useState({ category: 'general', title: '', body: '', price: '', area: '' })
   const [geo, setGeo] = useState(false)
   const [photo, setPhoto] = useState(null)
@@ -151,6 +153,7 @@ function Composer({ userId, mode, onPosted }) {
         id: postId,
         user_id: userId,
         kind,
+        listing_type: kind === 'offer' ? ltype : 'one_time',
         category: detailed ? f.category : 'general',
         title: detailed ? f.title || null : null,
         body: f.body.trim(),
@@ -184,7 +187,25 @@ function Composer({ userId, mode, onPosted }) {
           ))}
         </div>
       )}
-      {mode === 'offer' && <h2 className="text-xl font-bold">List something to offer</h2>}
+      {mode === 'offer' && (
+        <>
+          <h2 className="text-xl font-bold">List something to offer</h2>
+          <div className="grid grid-cols-2 gap-2">
+            {[['one_time', 'One-time sale', 'Free'], ['ongoing', 'Inventory or service', '$5.00 / 30 days']].map(([k, l, sub]) => (
+              <button type="button" key={k} onClick={() => setLtype(k)}
+                className={`rounded-2xl border-2 px-3 py-2 text-left ${ltype === k ? 'border-[#4a3af0] bg-[#e8e9fb]' : 'border-[#dcdff5]'}`}>
+                <div className="font-bold">{l}</div>
+                <div className="text-sm text-stone-500">{sub}</div>
+              </button>
+            ))}
+          </div>
+          <p className="text-sm text-stone-500">
+            {ltype === 'one_time'
+              ? 'For a single item, like a mattress or a bicycle. It stays up until you mark it fulfilled.'
+              : 'For products in stock and services that need ongoing advertising. Listed 30 days at a time. Introductory offer: once Wao! reaches its launch member goal, your first 30 days are free. Billing is not live yet, so listings are free during the demo.'}
+          </p>
+        </>
+      )}
 
       {detailed && <input className={field} maxLength={120} placeholder={kind === 'offer' ? 'What are you offering?' : 'What do you need?'} value={f.title} onChange={set('title')} />}
       <textarea className={`${field} min-h-24`} required maxLength={500}
@@ -297,17 +318,30 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
   const [open, setOpen] = useState(false)
   const [err, setErr] = useState('')
   const mine = me && p.user_id === me
-  const canClose = mine && p.kind !== 'update'
+  const ongoing = p.listing_type === 'ongoing'
+  const expired = !!p.expires_at && new Date(p.expires_at) < new Date()
+  const inactive = (!!p.status && p.status !== 'active') || expired
+  const canClose = mine && p.kind !== 'update' && !inactive
 
-  async function fulfil() {
+  async function close() {
+    const ok = window.confirm(ongoing
+      ? 'Close this listing? You can renew it later.'
+      : 'Mark this as fulfilled? It will leave the public feed. You can reopen it later.')
+    if (!ok) return
     setErr('')
-    const { error } = await supabase.from('posts').update({ status: 'fulfilled' }).eq('id', p.id).eq('user_id', me)
+    const { error } = await supabase.from('posts').update({ status: ongoing ? 'archived' : 'fulfilled' }).eq('id', p.id).eq('user_id', me)
+    if (error) setErr(error.message)
+    else onChanged()
+  }
+  async function reopen() {
+    setErr('')
+    const { error } = await supabase.rpc('renew_listing', { p_post_id: p.id })
     if (error) setErr(error.message)
     else onChanged()
   }
 
   return (
-    <article className={card}>
+    <article className={`${card} ${inactive ? 'opacity-70' : ''}`}>
       <div className="flex items-center gap-3">
         <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">
           {(p.author_display_name || '?')[0].toUpperCase()}
@@ -323,6 +357,8 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
       {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
       <div className="mt-3 flex flex-wrap gap-1.5">
         <span className={`${chip} !bg-[#4a3af0] !text-white`}>{p.kind}</span>
+        {inactive && <span className={`${chip} !bg-stone-300`}>{expired ? 'Expired' : p.status === 'archived' ? 'Closed' : 'Fulfilled'}</span>}
+        {ongoing && <span className={chip}>inventory / service</span>}
         <span className={chip}>{p.category}</span>
         {money(p.price_cents) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents)}</span>}
         {p.location_text && <span className={chip}>{p.location_text}</span>}
@@ -330,8 +366,10 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? 'Hide comments' : 'Comments'}</button>
-        {canClose && <button className={ghostSm} onClick={fulfil}>Mark fulfilled</button>}
+        {canClose && <button className={ghostSm} onClick={close}>{ongoing ? 'Close listing' : 'Mark fulfilled'}</button>}
+        {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? 'Renew for 30 days' : 'Reopen'}</button>}
       </div>
+      {ongoing && !inactive && p.expires_at && <p className="mt-2 text-xs text-stone-500">Listed until {new Date(p.expires_at).toLocaleDateString([], { dateStyle: 'medium' })}</p>}
       {err && <p className="mt-2 text-sm text-red-600">{err}</p>}
       {open && <Comments postId={p.id} me={me} />}
     </article>
@@ -410,8 +448,8 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
 
   const fetchPage = useCallback(async (cursor) => {
     if (mode === 'following') return fetchByAuthors([...following], cursor)
-    if (mode === 'mine') return fetchByAuthors([me], cursor)
-    if (mode === 'offer') return fetchByAuthors([me], cursor, 'offer')
+    if (mode === 'mine') return fetchByAuthors([me], cursor, null, true)
+    if (mode === 'offer') return fetchByAuthors([me], cursor, 'offer', true)
     const disc = mode === 'discover'
     const { data, error } = await supabase.rpc('get_feed', {
       p_kind: disc ? filters.kind : null,
@@ -544,12 +582,21 @@ function OurPromise() {
     ['Your email stays private.', 'It is never shown on your public profile.'],
   ]
   return (
-    <div className={card}>
-      <h2 className="mb-4 text-xl font-bold">Our promise</h2>
-      {items.map(([t, d], i) => (
-        <p key={t} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{t}</b> {d}</span></p>
-      ))}
-    </div>
+    <>
+      <div className={card}>
+        <h2 className="mb-4 text-xl font-bold">Our promise</h2>
+        {items.map(([t, d], i) => (
+          <p key={t} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{t}</b> {d}</span></p>
+        ))}
+      </div>
+      <div className={card}>
+        <h2 className="mb-3 text-xl font-bold">Pricing</h2>
+        <p className="mb-2"><b>One-time sales are always free.</b> A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.</p>
+        <p className="mb-2"><b>Inventory and services: $5.00 per 30 days</b> (about 17¢ a day). Listings run in 30-day cycles, with a 30-day minimum.</p>
+        <p className="mb-2"><b>Introductory offer:</b> once Wao! reaches its launch member goal, the first 30 days of an inventory or service listing are free.</p>
+        <p className="text-sm text-stone-500">Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.</p>
+      </div>
+    </>
   )
 }
 
