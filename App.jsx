@@ -19,6 +19,7 @@ const card = 'rounded-3xl border-2 border-[#dcdff5] bg-white p-5'
 const field = 'w-full rounded-2xl border-2 border-[#dcdff5] bg-[#eef0fc] px-4 py-3 text-[#14123a] placeholder:text-stone-400'
 const primary = 'rounded-full bg-[#4a3af0] px-6 py-3 font-bold text-white disabled:bg-[#b4adf8]'
 const ghost = 'rounded-full border-2 border-[#4a3af0] px-5 py-2 font-bold text-[#4a3af0]'
+const ghostSm = 'rounded-full border-2 border-[#4a3af0] px-4 py-1.5 text-sm font-bold text-[#4a3af0]'
 const chip = 'rounded-full bg-[#e8e9fb] px-2.5 py-0.5 text-xs text-[#14123a]'
 
 // ---------- Helpers ----------
@@ -235,8 +236,168 @@ function FollowButton({ userId, following, onToggle }) {
   )
 }
 
+// ---------- Comments ----------
+function Comments({ postId, me }) {
+  const [items, setItems] = useState(null)
+  const [text, setText] = useState('')
+  const [error, setError] = useState('')
+
+  const load = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('comments')
+      .select('id,user_id,body,created_at,profiles(display_name,username)')
+      .eq('post_id', postId)
+      .order('created_at', { ascending: true })
+      .limit(100)
+    if (error) setError(error.message)
+    else setItems(data)
+  }, [postId])
+
+  useEffect(() => { if (me) load() }, [me, load])
+
+  async function add(e) {
+    e.preventDefault()
+    setError('')
+    const { error } = await supabase.from('comments').insert({ post_id: postId, user_id: me, body: text.trim() })
+    if (error) return setError(error.message)
+    setText('')
+    load()
+  }
+  async function remove(id) {
+    await supabase.from('comments').delete().eq('id', id).eq('user_id', me)
+    load()
+  }
+
+  if (!me) return <p className="mt-3 text-sm text-stone-500">Sign in to read and write comments.</p>
+
+  return (
+    <div className="mt-3 space-y-2 border-t-2 border-[#eef0fc] pt-3">
+      {items === null && <p className="text-sm text-stone-500">Loading…</p>}
+      {items && items.length === 0 && <p className="text-sm text-stone-500">No comments yet.</p>}
+      {items && items.map((c) => (
+        <div key={c.id} className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm">
+          <div className="flex items-center justify-between gap-2">
+            <span><b>{c.profiles?.display_name}</b> <span className="text-xs text-stone-500">{when(c.created_at)}</span></span>
+            {c.user_id === me && <button className="text-xs text-stone-500 underline" onClick={() => remove(c.id)}>delete</button>}
+          </div>
+          <p className="whitespace-pre-wrap">{c.body}</p>
+        </div>
+      ))}
+      <form onSubmit={add} className="flex gap-2">
+        <input className={field} maxLength={200} placeholder="Write a comment…" value={text} onChange={(e) => setText(e.target.value)} />
+        <button disabled={!text.trim()} className={`${primary} !px-4`}>Send</button>
+      </form>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+    </div>
+  )
+}
+
+// ---------- One post ----------
+function PostCard({ p, me, following, onToggleFollow, onChanged }) {
+  const [open, setOpen] = useState(false)
+  const [err, setErr] = useState('')
+  const mine = me && p.user_id === me
+  const canClose = mine && p.kind !== 'update'
+
+  async function fulfil() {
+    setErr('')
+    const { error } = await supabase.from('posts').update({ status: 'fulfilled' }).eq('id', p.id).eq('user_id', me)
+    if (error) setErr(error.message)
+    else onChanged()
+  }
+
+  return (
+    <article className={card}>
+      <div className="flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">
+          {(p.author_display_name || '?')[0].toUpperCase()}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
+          <time className="text-xs text-stone-500">{when(p.created_at)}</time>
+        </div>
+        {me && !mine && <FollowButton userId={p.user_id} following={following} onToggle={onToggleFollow} />}
+      </div>
+      {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
+      <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
+      {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        <span className={`${chip} !bg-[#4a3af0] !text-white`}>{p.kind}</span>
+        <span className={chip}>{p.category}</span>
+        {money(p.price_cents) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents)}</span>}
+        {p.location_text && <span className={chip}>{p.location_text}</span>}
+        {p.distance_km != null && <span className={`${chip} !bg-emerald-100`}>{p.distance_km.toFixed(1)} km</span>}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? 'Hide comments' : 'Comments'}</button>
+        {canClose && <button className={ghostSm} onClick={fulfil}>Mark fulfilled</button>}
+      </div>
+      {err && <p className="mt-2 text-sm text-red-600">{err}</p>}
+      {open && <Comments postId={p.id} me={me} />}
+    </article>
+  )
+}
+
+// ---------- Profile editor ----------
+function ProfileEditor({ me, onSaved, onClose }) {
+  const [f, setF] = useState(null)
+  const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    supabase.from('profiles').select('username,display_name,bio,location_text').eq('id', me).single()
+      .then(({ data, error }) => {
+        if (error) setMsg(error.message)
+        else setF({ username: data.username || '', display_name: data.display_name || '', bio: data.bio || '', location_text: data.location_text || '' })
+      })
+  }, [me])
+
+  async function save(e) {
+    e.preventDefault()
+    setBusy(true)
+    setMsg('')
+    const { error } = await supabase.from('profiles').update({
+      username: f.username,
+      display_name: f.display_name.trim(),
+      bio: f.bio.trim() || null,
+      location_text: f.location_text.trim() || null,
+    }).eq('id', me)
+    setBusy(false)
+    if (error) return setMsg(error.code === '23505' ? 'That username is taken.' : error.message)
+    setMsg('Saved!')
+    onSaved()
+  }
+
+  if (!f) return <div className={card}>{msg || 'Loading…'}</div>
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
+
+  return (
+    <form onSubmit={save} className={`${card} space-y-3`}>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">Your profile</h2>
+        <button type="button" className="text-sm text-stone-500 underline" onClick={onClose}>close</button>
+      </div>
+      <label className="block text-sm text-stone-600">Username (letters, numbers, underscore; 3–30)
+        <input className={`${field} mt-1`} value={f.username} minLength={3} maxLength={30} required
+          onChange={(e) => setF({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} />
+      </label>
+      <label className="block text-sm text-stone-600">Name
+        <input className={`${field} mt-1`} value={f.display_name} maxLength={40} required onChange={set('display_name')} />
+      </label>
+      <label className="block text-sm text-stone-600">Area
+        <input className={`${field} mt-1`} placeholder="e.g. Southeast Portland" value={f.location_text} onChange={set('location_text')} />
+      </label>
+      <label className="block text-sm text-stone-600">About you
+        <textarea className={`${field} mt-1 min-h-20`} maxLength={500} value={f.bio} onChange={set('bio')} />
+      </label>
+      <button disabled={busy} className={primary}>{busy ? 'Saving…' : 'Save'}</button>
+      {msg && <p className="text-sm text-stone-600">{msg}</p>}
+    </form>
+  )
+}
+
 // ---------- Feed ----------
-function Feed({ mode, session, following, onToggleFollow, refreshKey }) {
+function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged }) {
   const me = session?.user.id
   const [filters, setFilters] = useState({ kind: 'offer', category: '', radius: '25' })
   const [coords, setCoords] = useState(null)
@@ -334,28 +495,7 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey }) {
       {!loading && !needsLogin && posts.length === 0 && <div className={`${card} text-stone-600`}>{empty}</div>}
 
       {posts.map((p) => (
-        <article key={p.id} className={card}>
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">
-              {(p.author_display_name || '?')[0].toUpperCase()}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
-              <time className="text-xs text-stone-500">{when(p.created_at)}</time>
-            </div>
-            {me && p.user_id !== me && <FollowButton userId={p.user_id} following={following} onToggle={onToggleFollow} />}
-          </div>
-          {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
-          <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
-          {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            <span className={`${chip} !bg-[#4a3af0] !text-white`}>{p.kind}</span>
-            <span className={chip}>{p.category}</span>
-            {money(p.price_cents) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents)}</span>}
-            {p.location_text && <span className={chip}>{p.location_text}</span>}
-            {p.distance_km != null && <span className={`${chip} !bg-emerald-100`}>{p.distance_km.toFixed(1)} km</span>}
-          </div>
-        </article>
+        <PostCard key={p.id} p={p} me={me} following={following} onToggleFollow={onToggleFollow} onChanged={onChanged} />
       ))}
 
       {hasMore && !loading && (
@@ -421,6 +561,7 @@ export default function App() {
   const [showSignIn, setShowSignIn] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const [note, setNote] = useState('')
+  const [showProfile, setShowProfile] = useState(false)
   const me = session?.user.id
 
   useEffect(() => {
@@ -430,7 +571,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!me) { setFollowing(new Set()); return }
+    if (!me) { setFollowing(new Set()); setShowProfile(false); return }
     setShowSignIn(false)
     supabase.from('follows').select('followed_id').eq('follower_id', me)
       .then(({ data }) => setFollowing(new Set((data || []).map((r) => r.followed_id))))
@@ -449,22 +590,26 @@ export default function App() {
     if (error) { setFollowing(before); setNote(error.message) }
   }
 
-  const feedProps = { session, following, onToggleFollow: toggleFollow, refreshKey }
   const posted = () => setRefreshKey((k) => k + 1)
+  const feedProps = { session, following, onToggleFollow: toggleFollow, refreshKey, onChanged: posted }
 
   return (
     <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
       <header className="flex items-center justify-between border-b-2 border-[#dcdff5] bg-white px-5 py-3">
-        <div className="flex items-center gap-2 text-4xl font-extrabold tracking-tight text-[#4a3af0]">
+        <div className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-[#4a3af0]">
           Wao<span className="grid h-8 w-8 place-items-center rounded-full bg-[#f6d155] text-xl text-[#14123a]">!</span>
         </div>
-        {me
-          ? <button className={ghost} onClick={() => supabase.auth.signOut()}>Sign out</button>
-          : <button className={ghost} onClick={() => setShowSignIn((v) => !v)}>Sign in</button>}
+        {me ? (
+          <div className="flex gap-2">
+            <button className={ghostSm} onClick={() => setShowProfile((v) => !v)}>Profile</button>
+            <button className={ghostSm} onClick={() => supabase.auth.signOut()}>Sign out</button>
+          </div>
+        ) : <button className={ghost} onClick={() => setShowSignIn((v) => !v)}>Sign in</button>}
       </header>
 
       <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
         {showSignIn && !me && <SignIn />}
+        {showProfile && me && <ProfileEditor me={me} onSaved={posted} onClose={() => setShowProfile(false)} />}
 
         <nav className={`${card} grid grid-cols-3 gap-1 !p-3`}>
           {TABS.map(([k, l]) => (
@@ -481,7 +626,7 @@ export default function App() {
           <>
             {me && <Composer userId={me} mode="update" onPosted={posted} />}
             <Feed mode="everyone" {...feedProps} />
-            <People session={session} following={following} onToggleFollow={toggleFollow} />
+            <People key={refreshKey} session={session} following={following} onToggleFollow={toggleFollow} />
           </>
         )}
         {tab === 'following' && <Feed mode="following" {...feedProps} />}
