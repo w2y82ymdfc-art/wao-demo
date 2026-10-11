@@ -9,10 +9,16 @@ const supabase = createClient(
 const BUCKET = 'photos'
 const PAGE = 20
 const CATEGORIES = ['general', 'produce', 'tools', 'services', 'household', 'free']
-const TABS = [
+// Launch phase: 'connect' = people connecting only (no selling).
+// Change to 'market' later to switch on Discover, My offer, listings and pricing.
+const PHASE = 'connect'
+const ALL_TABS = [
   ['everyone', 'Everyone'], ['following', 'Following'], ['mine', 'My posts'],
   ['discover', 'Discover'], ['offer', 'My offer'], ['promise', 'Our promise'],
 ]
+const TABS = PHASE === 'connect'
+  ? ALL_TABS.filter(([k]) => ['everyone', 'following', 'mine', 'promise'].includes(k))
+  : ALL_TABS
 
 // ---------- Shared styles ----------
 const card = 'rounded-3xl border-2 border-[#dcdff5] bg-white p-5'
@@ -45,7 +51,7 @@ async function fetchByAuthors(ids, cursor, kind, own = false) {
   if (!ids.length) return []
   let q = supabase
     .from('posts')
-    .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,status,listing_type,expires_at,created_at')
+    .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,caricature_image_url,status,listing_type,expires_at,created_at')
     .in('user_id', ids)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
@@ -163,6 +169,12 @@ function Composer({ userId, mode, onPosted }) {
         ...where,
       })
       if (postErr) throw postErr
+      // Caricature hook: asks the generate-caricature function to make an image from this moment.
+      if (kind === 'update') {
+        supabase.functions.invoke('generate-caricature', { body: { post_id: postId } })
+          .then(() => onPosted())
+          .catch(() => {})
+      }
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
       clearPhoto()
@@ -177,7 +189,8 @@ function Composer({ userId, mode, onPosted }) {
 
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
-      {mode === 'update' && (
+      {mode === 'update' && <h2 className="text-2xl font-extrabold">What's your Wao moment?</h2>}
+      {mode === 'update' && PHASE === 'market' && (
         <div className="flex gap-2">
           {[['update', 'Update'], ['request', 'Request']].map(([k, l]) => (
             <button type="button" key={k} onClick={() => setKind(k)}
@@ -209,7 +222,7 @@ function Composer({ userId, mode, onPosted }) {
 
       {detailed && <input className={field} maxLength={120} placeholder={kind === 'offer' ? 'What are you offering?' : 'What do you need?'} value={f.title} onChange={set('title')} />}
       <textarea className={`${field} min-h-24`} required maxLength={500}
-        placeholder={mode === 'offer' ? 'Describe it…' : kind === 'request' ? 'Tell people more…' : "What's your Wao! moment?"}
+        placeholder={mode === 'offer' ? 'Describe it…' : kind === 'request' ? 'Tell people more…' : "Tell your community what's happening…"}
         value={f.body} onChange={set('body')} />
 
       {detailed && (
@@ -234,6 +247,7 @@ function Composer({ userId, mode, onPosted }) {
           <button type="button" onClick={clearPhoto} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">Remove</button>
         </div>
       )}
+      {mode === 'update' && kind === 'update' && <p className="text-sm text-stone-500">We'll create a custom caricature to go with your moment.</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex items-center gap-3">
@@ -354,8 +368,9 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
       </div>
       {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
       <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
+      {p.caricature_image_url && <img loading="lazy" alt="Caricature of this Wao moment" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
       {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
-      <div className="mt-3 flex flex-wrap gap-1.5">
+      {(PHASE === 'market' || p.kind !== 'update' || inactive) && <div className="mt-3 flex flex-wrap gap-1.5">
         <span className={`${chip} !bg-[#4a3af0] !text-white`}>{p.kind}</span>
         {inactive && <span className={`${chip} !bg-stone-300`}>{expired ? 'Expired' : p.status === 'archived' ? 'Closed' : 'Fulfilled'}</span>}
         {ongoing && <span className={chip}>inventory / service</span>}
@@ -363,7 +378,7 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
         {money(p.price_cents) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents)}</span>}
         {p.location_text && <span className={chip}>{p.location_text}</span>}
         {p.distance_km != null && <span className={`${chip} !bg-emerald-100`}>{p.distance_km.toFixed(1)} km</span>}
-      </div>
+      </div>}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? 'Hide comments' : 'Comments'}</button>
         {canClose && <button className={ghostSm} onClick={close}>{ongoing ? 'Close listing' : 'Mark fulfilled'}</button>}
@@ -428,6 +443,7 @@ function ProfileEditor({ me, onSaved, onClose }) {
       <label className="block text-sm text-stone-600">About you
         <textarea className={`${field} mt-1 min-h-20`} maxLength={500} value={f.bio} onChange={set('bio')} />
       </label>
+      <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">Coming soon: your sign-in email will link you to the free Affiliate Program. It is never shown on your public profile.</p>
       <button disabled={busy} className={primary}>{busy ? 'Saving…' : 'Save'}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
     </form>
@@ -447,12 +463,12 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
   const needsLogin = ['following', 'mine', 'offer'].includes(mode) && !me
 
   const fetchPage = useCallback(async (cursor) => {
-    if (mode === 'following') return fetchByAuthors([...following], cursor)
-    if (mode === 'mine') return fetchByAuthors([me], cursor, null, true)
+    if (mode === 'following') return fetchByAuthors([...following], cursor, PHASE === 'connect' ? 'update' : null)
+    if (mode === 'mine') return fetchByAuthors([me], cursor, PHASE === 'connect' ? 'update' : null, true)
     if (mode === 'offer') return fetchByAuthors([me], cursor, 'offer', true)
     const disc = mode === 'discover'
     const { data, error } = await supabase.rpc('get_feed', {
-      p_kind: disc ? filters.kind : null,
+      p_kind: disc ? filters.kind : PHASE === 'connect' ? 'update' : null,
       p_category: disc && filters.category ? filters.category : null,
       p_lat: disc && coords ? coords.lat : null,
       p_lng: disc && coords ? coords.lng : null,
@@ -572,6 +588,26 @@ function People({ session, following, onToggleFollow }) {
   )
 }
 
+// ---------- Roadmap banner ----------
+function RoadmapBanner() {
+  const [hidden, setHidden] = useState(() => {
+    try { return localStorage.getItem('wao_roadmap_hidden') === '1' } catch { return false }
+  })
+  if (hidden) return null
+  return (
+    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white/70 px-4 py-3 text-sm">
+      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold">!</span>
+      <p className="flex-1">
+        <b>Wao! is live for connection today.</b> Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.
+      </p>
+      <button className="text-xs text-stone-500 underline" onClick={() => {
+        try { localStorage.setItem('wao_roadmap_hidden', '1') } catch { /* ignore */ }
+        setHidden(true)
+      }}>Got it</button>
+    </div>
+  )
+}
+
 // ---------- Our promise ----------
 function OurPromise() {
   const items = [
@@ -589,13 +625,21 @@ function OurPromise() {
           <p key={t} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{t}</b> {d}</span></p>
         ))}
       </div>
-      <div className={card}>
-        <h2 className="mb-3 text-xl font-bold">Pricing</h2>
-        <p className="mb-2"><b>One-time sales are always free.</b> A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.</p>
-        <p className="mb-2"><b>Inventory and services: $5.00 per 30 days</b> (about 17¢ a day). Listings run in 30-day cycles, with a 30-day minimum.</p>
-        <p className="mb-2"><b>Introductory offer:</b> once Wao! reaches its launch member goal, the first 30 days of an inventory or service listing are free.</p>
-        <p className="text-sm text-stone-500">Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.</p>
-      </div>
+      {PHASE === 'market' ? (
+        <div className={card}>
+          <h2 className="mb-3 text-xl font-bold">Pricing</h2>
+          <p className="mb-2"><b>One-time sales are always free.</b> A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.</p>
+          <p className="mb-2"><b>Inventory and services: $5.00 per 30 days</b> (about 17¢ a day). Listings run in 30-day cycles, with a 30-day minimum.</p>
+          <p className="mb-2"><b>Introductory offer:</b> once Wao! reaches its launch member goal, the first 30 days of an inventory or service listing are free.</p>
+          <p className="text-sm text-stone-500">Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.</p>
+        </div>
+      ) : (
+        <div className={card}>
+          <h2 className="mb-3 text-xl font-bold">What's coming</h2>
+          <p className="mb-2"><b>Today:</b> Wao! is a place to connect. Share your Wao moment, follow people, and see what is happening, newest first.</p>
+          <p><b>Soon:</b> a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.</p>
+        </div>
+      )}
     </>
   )
 }
@@ -620,6 +664,7 @@ export default function App() {
   useEffect(() => {
     if (!me) { setFollowing(new Set()); setShowProfile(false); return }
     setShowSignIn(false)
+    setTab('everyone')
     supabase.from('follows').select('followed_id').eq('follower_id', me)
       .then(({ data }) => setFollowing(new Set((data || []).map((r) => r.followed_id))))
   }, [me])
@@ -658,7 +703,16 @@ export default function App() {
         {showSignIn && !me && <SignIn />}
         {showProfile && me && <ProfileEditor me={me} onSaved={posted} onClose={() => setShowProfile(false)} />}
 
-        <nav className={`${card} grid grid-cols-3 gap-1 !p-3`}>
+        {me && ['everyone', 'following', 'mine'].includes(tab) && <Composer userId={me} mode="update" onPosted={posted} />}
+        {!me && !showSignIn && tab !== 'promise' && (
+          <div className={`${card} space-y-3`}>
+            <h2 className="text-2xl font-extrabold">What's your Wao moment?</h2>
+            <p className="text-stone-600">Sign in to share it with the community.</p>
+            <button className={primary} onClick={() => setShowSignIn(true)}>Sign in to share</button>
+          </div>
+        )}
+
+        <nav className={`${card} grid ${TABS.length === 4 ? 'grid-cols-2' : 'grid-cols-3'} gap-1 !p-3`}>
           {TABS.map(([k, l]) => (
             <button key={k} onClick={() => setTab(k)}
               className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
@@ -668,10 +722,10 @@ export default function App() {
         </nav>
 
         {note && <p className="text-sm text-red-600">{note}</p>}
+        {PHASE === 'connect' && tab === 'everyone' && <RoadmapBanner />}
 
         {tab === 'everyone' && (
           <>
-            {me && <Composer userId={me} mode="update" onPosted={posted} />}
             <Feed mode="everyone" {...feedProps} />
             <People key={refreshKey} session={session} following={following} onToggleFollow={toggleFollow} />
           </>
