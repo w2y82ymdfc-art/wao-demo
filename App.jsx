@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import heroImg from './wao-hero.jpg'
+import heroImg from './wao-hero.jpeg'
 
 // ---------- Supabase ----------
 const supabase = createClient(
