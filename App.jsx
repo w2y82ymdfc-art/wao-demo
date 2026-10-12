@@ -17,14 +17,10 @@ const I18N = {
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
-    caricatureHint: "We'll create a custom caricature to go with your moment.",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
-    needPhotoTitle: 'Add a photo of yourself first',
-    needPhotoBody: 'We use your photo as a reference to draw your caricature. Take a selfie or choose one from your gallery.',
-    photoConsent: 'This is a photo of me, and I agree that Wao! may send it to an image service to create my caricatures.',
-    choosePhoto: 'Take or choose a photo', changePhoto: 'Change photo', uploading: 'Uploading…',
-    photoSaved: 'Photo saved. Tap Post to share your moment.', removePhoto: 'Remove my photo',
+    photoConsent: 'This is a photo of me, and I agree to show it on my public profile.',
+    choosePhoto: 'Take or choose a photo', changePhoto: 'Change photo', uploading: 'Uploading…', removePhoto: 'Remove my photo',
     profilePhoto: 'Profile photo', couldNotRead: 'Could not read that image.',
     listOffer: 'List something to offer', oneTime: 'One-time sale', free: 'Free',
     ongoing: 'Inventory or service', ongoingSub: 'Listed 30 days at a time', ongoingPriced: '$5.00 / 30 days',
@@ -91,14 +87,10 @@ const I18N = {
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
-    caricatureHint: 'Crearemos una caricatura personalizada para acompañar tu momento.',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
-    needPhotoTitle: 'Primero añade una foto tuya',
-    needPhotoBody: 'Usamos tu foto como referencia para dibujar tu caricatura. Tómate una selfie o elige una de tu galería.',
-    photoConsent: 'Esta es una foto mía y acepto que Wao! pueda enviarla a un servicio de imágenes para crear mis caricaturas.',
-    choosePhoto: 'Tomar o elegir una foto', changePhoto: 'Cambiar foto', uploading: 'Subiendo…',
-    photoSaved: 'Foto guardada. Toca Publicar para compartir tu momento.', removePhoto: 'Quitar mi foto',
+    photoConsent: 'Esta es una foto mía y acepto mostrarla en mi perfil público.',
+    choosePhoto: 'Tomar o elegir una foto', changePhoto: 'Cambiar foto', uploading: 'Subiendo…', removePhoto: 'Quitar mi foto',
     profilePhoto: 'Foto de perfil', couldNotRead: 'No se pudo leer esa imagen.',
     listOffer: 'Publica algo para ofrecer', oneTime: 'Venta única', free: 'Gratis',
     ongoing: 'Inventario o servicio', ongoingSub: 'Publicado por periodos de 30 días', ongoingPriced: '$5.00 / 30 días',
@@ -272,7 +264,7 @@ function SignIn() {
   )
 }
 
-// ---------- Profile photo (reference for caricatures) ----------
+// ---------- Profile photo ----------
 function AvatarUploader({ me, avatarUrl, onChange }) {
   const { t } = useLang()
   const [consent, setConsent] = useState(false)
@@ -335,7 +327,7 @@ function AvatarUploader({ me, avatarUrl, onChange }) {
 }
 
 // ---------- Composer ----------
-function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
+function Composer({ userId, mode, onPosted }) {
   const { t } = useLang()
   const kind = mode === 'offer' ? 'offer' : 'update'
   const detailed = kind === 'offer'
@@ -345,8 +337,6 @@ function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
   const [photo, setPhoto] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const [needPhoto, setNeedPhoto] = useState(false)
-  const [savedNote, setSavedNote] = useState(false)
   const fileRef = useRef(null)
 
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
@@ -377,8 +367,6 @@ function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
 
   async function submit(e) {
     e.preventDefault()
-    // A Wao moment needs a profile photo first (it is the reference for the caricature).
-    if (kind === 'update' && !avatarUrl) { setNeedPhoto(true); return }
     setBusy(true)
     setError('')
     const postId = crypto.randomUUID()
@@ -404,16 +392,8 @@ function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
         ...where,
       })
       if (postErr) throw postErr
-      // Caricature hook: the generate-caricature function uses your profile photo and this text.
-      if (kind === 'update') {
-        supabase.functions.invoke('generate-caricature', { body: { post_id: postId } })
-          .then(() => onPosted())
-          .catch(() => {})
-      }
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
-      setNeedPhoto(false)
-      setSavedNote(false)
       clearPhoto()
       onPosted()
     } catch (err) {
@@ -473,15 +453,6 @@ function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
         </div>
       )}
 
-      {kind === 'update' && needPhoto && !avatarUrl && (
-        <div className="space-y-2 rounded-2xl bg-[#eef0fc] p-4">
-          <h3 className="font-bold">{t.needPhotoTitle}</h3>
-          <p className="text-sm text-stone-600">{t.needPhotoBody}</p>
-          <AvatarUploader me={userId} avatarUrl={avatarUrl} onChange={(u) => { onAvatar(u); setSavedNote(true) }} />
-        </div>
-      )}
-      {kind === 'update' && savedNote && avatarUrl && <p className="text-sm text-emerald-700">{t.photoSaved}</p>}
-      {kind === 'update' && <p className="text-sm text-stone-500">{t.caricatureHint}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex items-center gap-3">
@@ -1053,7 +1024,7 @@ export default function App() {
             <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
           )}
           {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
-            <Composer userId={me} mode="update" avatarUrl={avatarUrl} onAvatar={setAvatarUrl}
+            <Composer userId={me} mode="update"
               onPosted={() => { setComposerOpen(false); posted() }} />
           )}
           {!me && !showSignIn && tab === 'discover' && (
@@ -1085,7 +1056,7 @@ export default function App() {
           {tab === 'discover' && <Feed mode="discover" {...feedProps} />}
           {tab === 'offer' && (
             <>
-              {me && <Composer userId={me} mode="offer" avatarUrl={avatarUrl} onAvatar={setAvatarUrl} onPosted={posted} />}
+              {me && <Composer userId={me} mode="offer" onPosted={posted} />}
               <Feed mode="offer" {...feedProps} />
             </>
           )}
