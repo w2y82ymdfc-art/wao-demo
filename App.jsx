@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import heroImg from './wao-hero.jpg'
 
 // ---------- Supabase ----------
 const supabase = createClient(
@@ -69,6 +70,7 @@ const I18N = {
     comingTitle: "What's coming",
     comingToday: ['Today:', ' Wao! is a place to connect. Share your Wao moment and see what is happening, newest first.'],
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
+    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wao moment', hide: 'Close' },
     welcome: {
       skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wao!', replay: 'Watch the welcome again',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -142,6 +144,7 @@ const I18N = {
     comingTitle: 'Lo que viene',
     comingToday: ['Hoy:', ' Wao! es un lugar para conectar. Comparte tu momento Wao y mira lo que está pasando, lo más reciente primero.'],
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
+    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wao', hide: 'Cerrar' },
     welcome: {
       skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wao!', replay: 'Ver la bienvenida otra vez',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
@@ -828,6 +831,26 @@ function RoadmapBanner() {
   )
 }
 
+// ---------- Hero (top of the Everyone tab) ----------
+function Hero({ signedIn, open, onShare, onSignIn }) {
+  const { t } = useLang()
+  return (
+    <section className="relative overflow-hidden rounded-3xl bg-[#14123a] text-white">
+      <img src={heroImg} alt="" className="block w-full" />
+      <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-[#14123a] via-[#14123a]/85 to-transparent px-5 pb-12 pt-5">
+        <h2 className="text-[clamp(1.5rem,6.4vw,2.25rem)] font-black leading-tight tracking-tight">
+          {t.hero.l1}<br /><span className="text-[#f6d155]">{t.hero.l2}</span>
+        </h2>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14123a] via-[#14123a]/70 to-transparent px-5 pb-5 pt-16">
+        <button className="w-full rounded-full bg-[#f6d155] px-6 py-3.5 text-lg font-black text-[#14123a]" onClick={signedIn ? onShare : onSignIn}>
+          {signedIn ? (open ? t.hero.hide : t.hero.share) : t.signInToShare}
+        </button>
+      </div>
+    </section>
+  )
+}
+
 // ---------- Welcome (first impression: words and motion) ----------
 const WELCOME_MS = 4800
 const ORB_POS = [
@@ -951,6 +974,7 @@ export default function App() {
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [welcome, setWelcome] = useState(null)
+  const [composerOpen, setComposerOpen] = useState(false)
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
     if (fromLink === 'en' || fromLink === 'es') return fromLink
@@ -992,7 +1016,7 @@ export default function App() {
 
   // After sign-in, go straight to the home screen and load the member's profile photo.
   useEffect(() => {
-    if (!me) { setShowProfile(false); setAvatarUrl(null); setWelcome(null); return }
+    if (!me) { setShowProfile(false); setAvatarUrl(null); setWelcome(null); setComposerOpen(false); return }
     setShowSignIn(false)
     setTab('everyone')
     supabase.from('profiles').select('avatar_url').eq('id', me).single()
@@ -1025,10 +1049,14 @@ export default function App() {
               onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
           )}
 
-          {me && ['everyone', 'mine'].includes(tab) && (
-            <Composer userId={me} mode="update" avatarUrl={avatarUrl} onAvatar={setAvatarUrl} onPosted={posted} />
+          {tab === 'everyone' && (
+            <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
           )}
-          {!me && !showSignIn && ['everyone', 'discover'].includes(tab) && (
+          {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
+            <Composer userId={me} mode="update" avatarUrl={avatarUrl} onAvatar={setAvatarUrl}
+              onPosted={() => { setComposerOpen(false); posted() }} />
+          )}
+          {!me && !showSignIn && tab === 'discover' && (
             <div className={`${card} space-y-3`}>
               <h2 className="text-2xl font-extrabold">{t.wowTitle}</h2>
               <p className="text-stone-600">{t.signInToShareText}</p>
