@@ -69,6 +69,17 @@ const I18N = {
     comingTitle: "What's coming",
     comingToday: ['Today:', ' Wao! is a place to connect. Share your Wao moment and see what is happening, newest first.'],
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
+    welcome: {
+      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wao!', replay: 'Watch the welcome again',
+      hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
+      scenes: [
+        { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
+        { a: 'Too often,', b: ['whoever ', 'pays', ' gets seen.'] },
+        { a: 'Here, it is', b: ['', 'newest', ' first. Always.'] },
+        { a: 'No algorithm. No boosting.', b: ['No black ', 'boxes.', ''] },
+        { a: 'You are early.', b: ['Build it ', 'with us.', ''] },
+      ],
+    },
   },
   es: {
     signIn: 'Iniciar sesión', profile: 'Perfil', signOut: 'Cerrar sesión',
@@ -131,6 +142,17 @@ const I18N = {
     comingTitle: 'Lo que viene',
     comingToday: ['Hoy:', ' Wao! es un lugar para conectar. Comparte tu momento Wao y mira lo que está pasando, lo más reciente primero.'],
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
+    welcome: {
+      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wao!', replay: 'Ver la bienvenida otra vez',
+      hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
+      scenes: [
+        { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
+        { a: 'Demasiadas veces,', b: ['se ve a quien ', 'paga.', ''] },
+        { a: 'Aquí, lo más', b: ['', 'nuevo', ' primero. Siempre.'] },
+        { a: 'Sin algoritmo. Sin impulsos pagados.', b: ['Sin cajas ', 'negras.', ''] },
+        { a: 'Llegaste temprano.', b: ['Constrúyelo ', 'con nosotros.', ''] },
+      ],
+    },
   },
 }
 
@@ -142,7 +164,7 @@ const TABS = ['everyone', 'mine', 'discover', 'offer', 'promise']
 // Set to true later to show listing prices ($5.00 / 30 days) and the Pricing card.
 const SHOW_PRICING = false
 
-const LangCtx = createContext({ lang: 'en', t: I18N.en })
+const LangCtx = createContext({ lang: 'en', t: I18N.en, setLang: () => {} })
 const useLang = () => useContext(LangCtx)
 const loc = (lang) => (lang === 'es' ? 'es' : 'en')
 
@@ -806,8 +828,93 @@ function RoadmapBanner() {
   )
 }
 
+// ---------- Welcome (first impression: words and motion) ----------
+const WELCOME_MS = 4800
+const ORB_POS = [
+  ['translate(0,0)', 'translate(0,0)'],
+  ['translate(18vmin,12vmin) scale(1.1)', 'translate(-16vmin,-14vmin) scale(1.2)'],
+  ['translate(8vmin,-10vmin) scale(.9)', 'translate(-6vmin,10vmin)'],
+  ['translate(24vmin,6vmin) scale(1.2)', 'translate(-22vmin,-4vmin) scale(.9)'],
+  ['translate(14vmin,-6vmin) scale(1.35)', 'translate(-12vmin,-20vmin) scale(1.5)'],
+]
+
+function Welcome({ name, number, onDone }) {
+  const { t, lang, setLang } = useLang()
+  const w = t.welcome
+  const [i, setI] = useState(0)
+  const last = i === w.scenes.length - 1
+  const reduce = useRef(typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches).current
+
+  useEffect(() => {
+    if (last || reduce) return
+    const id = setTimeout(() => setI((n) => n + 1), WELCOME_MS)
+    return () => clearTimeout(id)
+  }, [i, last, reduce])
+
+  const s = w.scenes[i]
+  const rise = (delay) => (reduce ? {} : { animation: `wao-rise .8s cubic-bezier(.2,.7,.2,1) ${delay}s both` })
+  const orb = { position: 'absolute', borderRadius: '9999px', filter: 'blur(60px)', pointerEvents: 'none', transition: reduce ? 'none' : 'transform 1.6s cubic-bezier(.2,.7,.2,1)' }
+
+  return (
+    <div
+      onClick={() => { if (!last) setI(i + 1) }}
+      role="dialog" aria-modal="true"
+      className="fixed inset-0 z-50 flex cursor-pointer flex-col overflow-hidden px-5 text-[#eef0fc]"
+      style={{
+        background: 'linear-gradient(160deg,#14123a 0%,#2a1fa8 55%,#4a3af0 100%)',
+        paddingTop: 'max(14px, env(safe-area-inset-top))',
+        paddingBottom: 'max(22px, env(safe-area-inset-bottom))',
+        WebkitTapHighlightColor: 'transparent',
+      }}>
+      <style>{`@keyframes wao-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes wao-fill{from{width:0}to{width:100%}}`}</style>
+
+      <div aria-hidden="true" style={{ ...orb, width: '70vmin', height: '70vmin', background: '#4a3af0', left: '-20vmin', top: '10%', opacity: 0.55, transform: ORB_POS[i][0] }} />
+      <div aria-hidden="true" style={{ ...orb, width: '55vmin', height: '55vmin', background: '#f6d155', right: '-25vmin', bottom: '8%', opacity: 0.28, transform: ORB_POS[i][1] }} />
+
+      <div className="relative z-10 flex flex-col gap-3">
+        <div className="flex gap-1.5" aria-hidden="true">
+          {w.scenes.map((_, k) => (
+            <span key={k} className="h-[3px] flex-1 overflow-hidden rounded-full bg-[#eef0fc]/25">
+              <span className="block h-full bg-[#eef0fc]"
+                style={{ width: k < i || last || reduce ? '100%' : k === i ? undefined : '0%', animation: k === i && !last && !reduce ? `wao-fill ${WELCOME_MS}ms linear forwards` : undefined }} />
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex overflow-hidden rounded-full border-2 border-[#eef0fc] text-sm font-bold" role="group" aria-label="Language" onClick={(e) => e.stopPropagation()}>
+            {['en', 'es'].map((l) => (
+              <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l}
+                className={`px-3 py-1.5 ${lang === l ? 'bg-[#eef0fc] text-[#14123a]' : 'text-[#eef0fc]'}`}>{l.toUpperCase()}</button>
+            ))}
+          </div>
+          <button className="px-1 py-2 text-sm font-bold underline underline-offset-4" onClick={(e) => { e.stopPropagation(); onDone() }}>{w.skip}</button>
+        </div>
+      </div>
+
+      <div key={`${lang}-${i}`} className="relative z-10 flex min-h-0 flex-1 flex-col justify-center gap-3">
+        <p className="max-w-[18ch] text-[clamp(1.25rem,5.6vw,2rem)] font-semibold leading-tight text-[#b9bde6]" style={rise(0)}>{s.a}</p>
+        <h1 className="max-w-[11ch] break-words text-[clamp(2.5rem,12.5vw,4.75rem)] font-black leading-[1.02] tracking-tight" style={rise(0.35)}>
+          {s.b[0]}<span className="text-[#f6d155]">{s.b[1]}</span>{s.b[2]}
+        </h1>
+        {last && (
+          <p className="mt-2 text-[clamp(1rem,4.4vw,1.25rem)] font-bold" style={rise(0.8)}>
+            {w.hello(name)}<br />
+            {w.memberPre}<span className="text-[#f6d155]">{number}</span>{w.memberPost}
+          </p>
+        )}
+      </div>
+
+      <div className="relative z-10 flex min-h-[84px] flex-col justify-end gap-2">
+        {last
+          ? <button className="rounded-full bg-[#f6d155] px-6 py-4 text-lg font-black text-[#14123a]" onClick={(e) => { e.stopPropagation(); onDone() }}>{w.enter}</button>
+          : <p className="text-center text-sm text-[#b9bde6]">{w.tap}</p>}
+      </div>
+    </div>
+  )
+}
+
 // ---------- Our promise ----------
-function OurPromise() {
+function OurPromise({ onReplay }) {
   const { t } = useLang()
   return (
     <>
@@ -830,6 +937,7 @@ function OurPromise() {
           <p><b>{t.comingSoon[0]}</b>{t.comingSoon[1]}</p>
         </div>
       )}
+      {onReplay && <button className={ghost} onClick={onReplay}>{t.welcome.replay}</button>}
     </>
   )
 }
@@ -842,6 +950,7 @@ export default function App() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
+  const [welcome, setWelcome] = useState(null)
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
     if (fromLink === 'en' || fromLink === 'es') return fromLink
@@ -866,20 +975,36 @@ export default function App() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
+  // Loads the member's name and number, then opens the welcome. Automatic only the first time.
+  async function openWelcome(force) {
+    let seen = false
+    try { seen = localStorage.getItem('wao_welcome_seen') === '1' } catch { /* ignore */ }
+    if (seen && !force) return
+    const { data } = await supabase.from('profiles').select('display_name,created_at').eq('id', me).single()
+    if (!data) return
+    const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).lte('created_at', data.created_at)
+    setWelcome({ name: data.display_name || '', number: count || 1 })
+  }
+  function closeWelcome() {
+    try { localStorage.setItem('wao_welcome_seen', '1') } catch { /* ignore */ }
+    setWelcome(null)
+  }
+
   // After sign-in, go straight to the home screen and load the member's profile photo.
   useEffect(() => {
-    if (!me) { setShowProfile(false); setAvatarUrl(null); return }
+    if (!me) { setShowProfile(false); setAvatarUrl(null); setWelcome(null); return }
     setShowSignIn(false)
     setTab('everyone')
     supabase.from('profiles').select('avatar_url').eq('id', me).single()
       .then(({ data }) => setAvatarUrl(data?.avatar_url || null))
+    openWelcome(false)
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
   const feedProps = { session, refreshKey, onChanged: posted }
 
   return (
-    <LangCtx.Provider value={{ lang, t }}>
+    <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
         <header className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#dcdff5] bg-white px-4 py-3">
           <div className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-[#4a3af0]">
@@ -936,8 +1061,9 @@ export default function App() {
               <Feed mode="offer" {...feedProps} />
             </>
           )}
-          {tab === 'promise' && <OurPromise />}
+          {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
+        {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
       </div>
     </LangCtx.Provider>
   )
