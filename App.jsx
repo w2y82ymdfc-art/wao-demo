@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
+import { I18N } from './i18n.js'
 
 // ---------- Supabase ----------
 const supabase = createClient(
@@ -9,29 +10,26 @@ const supabase = createClient(
 const BUCKET = 'photos'
 const PAGE = 20
 const CATEGORIES = ['general', 'produce', 'tools', 'services', 'household', 'free']
-// Launch phase: 'connect' = people connecting only (no selling).
-// Change to 'market' later to switch on Discover, My offer, listings and pricing.
-const PHASE = 'connect'
-const ALL_TABS = [
-  ['everyone', 'Everyone'], ['following', 'Following'], ['mine', 'My posts'],
-  ['discover', 'Discover'], ['offer', 'My offer'], ['promise', 'Our promise'],
-]
-const TABS = PHASE === 'connect'
-  ? ALL_TABS.filter(([k]) => ['everyone', 'following', 'mine', 'promise'].includes(k))
-  : ALL_TABS
+const TABS = ['everyone', 'mine', 'discover', 'offer', 'promise']
+// Set to true later to show listing prices ($5.00 / 30 days) and the Pricing card.
+const SHOW_PRICING = false
+
+const LangCtx = createContext({ lang: 'en', t: I18N.en })
+const useLang = () => useContext(LangCtx)
+const loc = (lang) => (lang === 'es' ? 'es' : 'en')
 
 // ---------- Shared styles ----------
 const card = 'rounded-3xl border-2 border-[#dcdff5] bg-white p-5'
 const field = 'w-full rounded-2xl border-2 border-[#dcdff5] bg-[#eef0fc] px-4 py-3 text-[#14123a] placeholder:text-stone-400'
 const primary = 'rounded-full bg-[#4a3af0] px-6 py-3 font-bold text-white disabled:bg-[#b4adf8]'
 const ghost = 'rounded-full border-2 border-[#4a3af0] px-5 py-2 font-bold text-[#4a3af0]'
-const ghostSm = 'rounded-full border-2 border-[#4a3af0] px-4 py-1.5 text-sm font-bold text-[#4a3af0]'
+const ghostSm = 'rounded-full border-2 border-[#4a3af0] px-4 py-1.5 text-sm font-bold text-[#4a3af0] disabled:opacity-40'
 const chip = 'rounded-full bg-[#e8e9fb] px-2.5 py-0.5 text-xs text-[#14123a]'
 
 // ---------- Helpers ----------
 const photoUrl = (path) => supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
-const when = (iso) => new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
-const money = (c) => (c == null ? null : c === 0 ? 'Free' : `$${(c / 100).toFixed(2)}`)
+const when = (iso, lang) => new Date(iso).toLocaleString(loc(lang), { dateStyle: 'medium', timeStyle: 'short' })
+const money = (c, free) => (c == null ? null : c === 0 ? free : `$${(c / 100).toFixed(2)}`)
 
 async function resizeImage(file, maxW = 1600, quality = 0.85) {
   const bitmap = await createImageBitmap(file)
@@ -45,37 +43,54 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
   )
 }
 
-// Posts by specific authors (Following / My posts / My offer). Always newest first.
-// own = true shows every status (fulfilled, closed, expired) so owners can manage them.
-async function fetchByAuthors(ids, cursor, kind, own = false) {
-  if (!ids.length) return []
+// A member's own posts (My posts / My offer). Newest first. Shows every status so owners can manage them.
+async function fetchMine(me, cursor, kind) {
   let q = supabase
     .from('posts')
     .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,caricature_image_url,status,listing_type,expires_at,created_at')
-    .in('user_id', ids)
+    .eq('user_id', me)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
     .limit(PAGE)
   if (kind) q = q.eq('kind', kind)
-  if (!own) q = q.eq('status', 'active')
   if (cursor) q = q.or(`created_at.lt.${cursor.created_at},and(created_at.eq.${cursor.created_at},id.lt.${cursor.id})`)
   const { data, error } = await q
   if (error) throw error
-  const authorIds = [...new Set(data.map((r) => r.user_id))]
-  const { data: profs, error: e2 } = authorIds.length
-    ? await supabase.from('profiles').select('id,username,display_name,avatar_url').in('id', authorIds)
-    : { data: [] }
-  if (e2) throw e2
-  const byId = Object.fromEntries(profs.map((p) => [p.id, p]))
+  const { data: prof } = await supabase.from('profiles').select('username,display_name,avatar_url').eq('id', me).single()
   return data.map((r) => ({
     ...r,
-    author_username: byId[r.user_id]?.username,
-    author_display_name: byId[r.user_id]?.display_name,
+    author_username: prof?.username,
+    author_display_name: prof?.display_name,
+    author_avatar_url: prof?.avatar_url,
   }))
+}
+
+// ---------- Small pieces ----------
+function Avatar({ url, name }) {
+  if (url) return <img src={url} alt="" className="h-10 w-10 rounded-full object-cover" />
+  return (
+    <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">
+      {(name || '?')[0].toUpperCase()}
+    </div>
+  )
+}
+
+function LangToggle({ lang, setLang }) {
+  return (
+    <div className="flex overflow-hidden rounded-full border-2 border-[#4a3af0] text-sm font-bold" role="group" aria-label="Language">
+      {['en', 'es'].map((l) => (
+        <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l}
+          className={`px-3 py-1.5 ${lang === l ? 'bg-[#4a3af0] text-white' : 'text-[#4a3af0]'}`}>
+          {l.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  )
 }
 
 // ---------- Sign in ----------
 function SignIn() {
+  const { t } = useLang()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
@@ -87,34 +102,96 @@ function SignIn() {
       email,
       options: { data: { display_name: name || undefined, referred_by: ref || undefined } },
     })
-    setMsg(error ? error.message : 'Check your email for a sign-in link.')
+    setMsg(error ? error.message : t.checkEmail)
   }
 
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
-      <h2 className="text-xl font-bold">Join or sign in</h2>
-      <input className={field} placeholder="Your name (new members)" value={name} onChange={(e) => setName(e.target.value)} />
-      <input className={field} type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <button className={primary}>Email me a link</button>
+      <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
+      <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
+      <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+      <button className={primary}>{t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
     </form>
   )
 }
 
+// ---------- Profile photo (reference for caricatures) ----------
+function AvatarUploader({ me, avatarUrl, onChange }) {
+  const { t } = useLang()
+  const [consent, setConsent] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const fileRef = useRef(null)
+
+  async function pick(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setBusy(true)
+    setErr('')
+    try {
+      const blob = await resizeImage(file, 768)
+      const path = `${me}/avatar.jpg`
+      const { error: upErr } = await supabase.storage.from('avatars').upload(path, blob, { contentType: 'image/jpeg', upsert: true })
+      if (upErr) throw upErr
+      const url = `${supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl}?v=${Date.now()}`
+      const { error: pErr } = await supabase.from('profiles')
+        .update({ avatar_url: url, photo_consent_at: new Date().toISOString() }).eq('id', me)
+      if (pErr) throw pErr
+      onChange(url)
+    } catch (e2) {
+      setErr(e2.message || t.couldNotRead)
+    } finally {
+      setBusy(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
+
+  async function removePhoto() {
+    setBusy(true)
+    setErr('')
+    await supabase.storage.from('avatars').remove([`${me}/avatar.jpg`])
+    const { error } = await supabase.from('profiles').update({ avatar_url: null, photo_consent_at: null }).eq('id', me)
+    setBusy(false)
+    if (error) setErr(error.message)
+    else onChange(null)
+  }
+
+  return (
+    <div className="space-y-2">
+      {avatarUrl && <img src={avatarUrl} alt="" className="h-24 w-24 rounded-full object-cover" />}
+      {!avatarUrl && (
+        <label className="flex items-start gap-2 text-sm text-stone-600">
+          <input type="checkbox" className="mt-1" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
+          {t.photoConsent}
+        </label>
+      )}
+      <input ref={fileRef} type="file" accept="image/*" hidden onChange={pick} />
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className={ghostSm} disabled={busy || (!avatarUrl && !consent)} onClick={() => fileRef.current?.click()}>
+          {busy ? t.uploading : avatarUrl ? t.changePhoto : t.choosePhoto}
+        </button>
+        {avatarUrl && <button type="button" className={ghostSm} disabled={busy} onClick={removePhoto}>{t.removePhoto}</button>}
+      </div>
+      {err && <p className="text-sm text-red-600">{err}</p>}
+    </div>
+  )
+}
+
 // ---------- Composer ----------
-function Composer({ userId, mode, onPosted }) {
-  const base = mode === 'offer' ? 'offer' : 'update'
-  const [kind, setKind] = useState(base)
+function Composer({ userId, mode, avatarUrl, onAvatar, onPosted }) {
+  const { t } = useLang()
+  const kind = mode === 'offer' ? 'offer' : 'update'
+  const detailed = kind === 'offer'
   const [ltype, setLtype] = useState('one_time')
   const [f, setF] = useState({ category: 'general', title: '', body: '', price: '', area: '' })
   const [geo, setGeo] = useState(false)
   const [photo, setPhoto] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [needPhoto, setNeedPhoto] = useState(false)
+  const [savedNote, setSavedNote] = useState(false)
   const fileRef = useRef(null)
-  const detailed = kind !== 'update'
-
-  useEffect(() => setKind(base), [base])
 
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const coords = () =>
@@ -133,7 +210,7 @@ function Composer({ userId, mode, onPosted }) {
       const blob = await resizeImage(file)
       setPhoto({ blob, url: URL.createObjectURL(blob) })
     } catch {
-      setError('Could not read that image.')
+      setError(t.couldNotRead)
     }
   }
   function clearPhoto() {
@@ -144,6 +221,8 @@ function Composer({ userId, mode, onPosted }) {
 
   async function submit(e) {
     e.preventDefault()
+    // A Wao moment needs a profile photo first (it is the reference for the caricature).
+    if (kind === 'update' && !avatarUrl) { setNeedPhoto(true); return }
     setBusy(true)
     setError('')
     const postId = crypto.randomUUID()
@@ -169,7 +248,7 @@ function Composer({ userId, mode, onPosted }) {
         ...where,
       })
       if (postErr) throw postErr
-      // Caricature hook: asks the generate-caricature function to make an image from this moment.
+      // Caricature hook: the generate-caricature function uses your profile photo and this text.
       if (kind === 'update') {
         supabase.functions.invoke('generate-caricature', { body: { post_id: postId } })
           .then(() => onPosted())
@@ -177,6 +256,8 @@ function Composer({ userId, mode, onPosted }) {
       }
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
+      setNeedPhoto(false)
+      setSavedNote(false)
       clearPhoto()
       onPosted()
     } catch (err) {
@@ -189,22 +270,12 @@ function Composer({ userId, mode, onPosted }) {
 
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
-      {mode === 'update' && <h2 className="text-2xl font-extrabold">What's your Wao moment?</h2>}
-      {mode === 'update' && PHASE === 'market' && (
-        <div className="flex gap-2">
-          {[['update', 'Update'], ['request', 'Request']].map(([k, l]) => (
-            <button type="button" key={k} onClick={() => setKind(k)}
-              className={`rounded-full px-4 py-1.5 font-semibold ${kind === k ? 'bg-[#4a3af0] text-white' : 'bg-[#e8e9fb] text-[#4a3af0]'}`}>
-              {l}
-            </button>
-          ))}
-        </div>
-      )}
-      {mode === 'offer' && (
+      {kind === 'update' && <h2 className="text-2xl font-extrabold">{t.wowTitle}</h2>}
+      {kind === 'offer' && (
         <>
-          <h2 className="text-xl font-bold">List something to offer</h2>
+          <h2 className="text-xl font-bold">{t.listOffer}</h2>
           <div className="grid grid-cols-2 gap-2">
-            {[['one_time', 'One-time sale', 'Free'], ['ongoing', 'Inventory or service', '$5.00 / 30 days']].map(([k, l, sub]) => (
+            {[['one_time', t.oneTime, t.free], ['ongoing', t.ongoing, SHOW_PRICING ? t.ongoingPriced : t.ongoingSub]].map(([k, l, sub]) => (
               <button type="button" key={k} onClick={() => setLtype(k)}
                 className={`rounded-2xl border-2 px-3 py-2 text-left ${ltype === k ? 'border-[#4a3af0] bg-[#e8e9fb]' : 'border-[#dcdff5]'}`}>
                 <div className="font-bold">{l}</div>
@@ -213,66 +284,63 @@ function Composer({ userId, mode, onPosted }) {
             ))}
           </div>
           <p className="text-sm text-stone-500">
-            {ltype === 'one_time'
-              ? 'For a single item, like a mattress or a bicycle. It stays up until you mark it fulfilled.'
-              : 'For products in stock and services that need ongoing advertising. Listed 30 days at a time. Introductory offer: once Wao! reaches its launch member goal, your first 30 days are free. Billing is not live yet, so listings are free during the demo.'}
+            {ltype === 'one_time' ? t.oneTimeNote : SHOW_PRICING ? t.ongoingNotePriced : t.ongoingNote}
           </p>
         </>
       )}
 
-      {detailed && <input className={field} maxLength={120} placeholder={kind === 'offer' ? 'What are you offering?' : 'What do you need?'} value={f.title} onChange={set('title')} />}
+      {detailed && <input className={field} maxLength={120} placeholder={t.offeringPh} value={f.title} onChange={set('title')} />}
       <textarea className={`${field} min-h-24`} required maxLength={500}
-        placeholder={mode === 'offer' ? 'Describe it…' : kind === 'request' ? 'Tell people more…' : "Tell your community what's happening…"}
+        placeholder={kind === 'offer' ? t.describePh : t.wowPlaceholder}
         value={f.body} onChange={set('body')} />
 
       {detailed && (
         <>
           <div className="grid grid-cols-2 gap-2">
             <select className={field} value={f.category} onChange={set('category')}>
-              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+              {CATEGORIES.map((c) => <option key={c} value={c}>{t.cats[c]}</option>)}
             </select>
-            {kind === 'offer' && <input className={field} type="number" min="0" step="0.01" placeholder="Price (blank = free/swap)" value={f.price} onChange={set('price')} />}
+            <input className={field} type="number" min="0" step="0.01" placeholder={t.pricePh} value={f.price} onChange={set('price')} />
           </div>
-          <input className={field} placeholder="Area (e.g. Southeast Portland)" value={f.area} onChange={set('area')} />
+          <input className={field} placeholder={t.areaPh} value={f.area} onChange={set('area')} />
           <label className="flex items-center gap-2 text-sm text-stone-600">
             <input type="checkbox" checked={geo} onChange={(e) => setGeo(e.target.checked)} />
-            Attach my approximate location so nearby people can find this
+            {t.attachLoc}
           </label>
         </>
       )}
 
       {photo && (
         <div className="relative">
-          <img src={photo.url} alt="Selected" className="max-h-64 w-full rounded-2xl object-cover" />
-          <button type="button" onClick={clearPhoto} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">Remove</button>
+          <img src={photo.url} alt="" className="max-h-64 w-full rounded-2xl object-cover" />
+          <button type="button" onClick={clearPhoto} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">{t.remove}</button>
         </div>
       )}
-      {mode === 'update' && kind === 'update' && <p className="text-sm text-stone-500">We'll create a custom caricature to go with your moment.</p>}
+
+      {kind === 'update' && needPhoto && !avatarUrl && (
+        <div className="space-y-2 rounded-2xl bg-[#eef0fc] p-4">
+          <h3 className="font-bold">{t.needPhotoTitle}</h3>
+          <p className="text-sm text-stone-600">{t.needPhotoBody}</p>
+          <AvatarUploader me={userId} avatarUrl={avatarUrl} onChange={(u) => { onAvatar(u); setSavedNote(true) }} />
+        </div>
+      )}
+      {kind === 'update' && savedNote && avatarUrl && <p className="text-sm text-emerald-700">{t.photoSaved}</p>}
+      {kind === 'update' && <p className="text-sm text-stone-500">{t.caricatureHint}</p>}
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex items-center gap-3">
         <input ref={fileRef} type="file" accept="image/*" hidden onChange={pick} />
-        <button type="button" className={ghost} onClick={() => fileRef.current?.click()}>Add photo</button>
+        <button type="button" className={ghost} onClick={() => fileRef.current?.click()}>{t.addPhoto}</button>
         <span className="text-sm text-stone-500">{f.body.length} / 500</span>
-        <button disabled={busy || !f.body.trim()} className={`${primary} ml-auto`}>{busy ? 'Posting…' : 'Post'}</button>
+        <button disabled={busy || !f.body.trim()} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
       </div>
     </form>
   )
 }
 
-// ---------- Follow button ----------
-function FollowButton({ userId, following, onToggle }) {
-  const on = following.has(userId)
-  return (
-    <button onClick={() => onToggle(userId)}
-      className={`rounded-full border-2 border-[#4a3af0] px-3 py-1 text-sm font-semibold ${on ? 'bg-[#4a3af0] text-white' : 'text-[#4a3af0]'}`}>
-      {on ? 'Following' : 'Follow'}
-    </button>
-  )
-}
-
 // ---------- Comments ----------
 function Comments({ postId, me }) {
+  const { t, lang } = useLang()
   const [items, setItems] = useState(null)
   const [text, setText] = useState('')
   const [error, setError] = useState('')
@@ -303,24 +371,24 @@ function Comments({ postId, me }) {
     load()
   }
 
-  if (!me) return <p className="mt-3 text-sm text-stone-500">Sign in to read and write comments.</p>
+  if (!me) return <p className="mt-3 text-sm text-stone-500">{t.signInComments}</p>
 
   return (
     <div className="mt-3 space-y-2 border-t-2 border-[#eef0fc] pt-3">
-      {items === null && <p className="text-sm text-stone-500">Loading…</p>}
-      {items && items.length === 0 && <p className="text-sm text-stone-500">No comments yet.</p>}
+      {items === null && <p className="text-sm text-stone-500">{t.loading}</p>}
+      {items && items.length === 0 && <p className="text-sm text-stone-500">{t.noComments}</p>}
       {items && items.map((c) => (
         <div key={c.id} className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm">
           <div className="flex items-center justify-between gap-2">
-            <span><b>{c.profiles?.display_name}</b> <span className="text-xs text-stone-500">{when(c.created_at)}</span></span>
-            {c.user_id === me && <button className="text-xs text-stone-500 underline" onClick={() => remove(c.id)}>delete</button>}
+            <span><b>{c.profiles?.display_name}</b> <span className="text-xs text-stone-500">{when(c.created_at, lang)}</span></span>
+            {c.user_id === me && <button className="text-xs text-stone-500 underline" onClick={() => remove(c.id)}>{t.del}</button>}
           </div>
           <p className="whitespace-pre-wrap">{c.body}</p>
         </div>
       ))}
       <form onSubmit={add} className="flex gap-2">
-        <input className={field} maxLength={200} placeholder="Write a comment…" value={text} onChange={(e) => setText(e.target.value)} />
-        <button disabled={!text.trim()} className={`${primary} !px-4`}>Send</button>
+        <input className={field} maxLength={200} placeholder={t.writeComment} value={text} onChange={(e) => setText(e.target.value)} />
+        <button disabled={!text.trim()} className={`${primary} !px-4`}>{t.send}</button>
       </form>
       {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
@@ -328,7 +396,8 @@ function Comments({ postId, me }) {
 }
 
 // ---------- One post ----------
-function PostCard({ p, me, following, onToggleFollow, onChanged }) {
+function PostCard({ p, me, onChanged }) {
+  const { t, lang } = useLang()
   const [open, setOpen] = useState(false)
   const [err, setErr] = useState('')
   const mine = me && p.user_id === me
@@ -338,10 +407,7 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
   const canClose = mine && p.kind !== 'update' && !inactive
 
   async function close() {
-    const ok = window.confirm(ongoing
-      ? 'Close this listing? You can renew it later.'
-      : 'Mark this as fulfilled? It will leave the public feed. You can reopen it later.')
-    if (!ok) return
+    if (!window.confirm(ongoing ? t.confirmClose : t.confirmFulfil)) return
     setErr('')
     const { error } = await supabase.from('posts').update({ status: ongoing ? 'archived' : 'fulfilled' }).eq('id', p.id).eq('user_id', me)
     if (error) setErr(error.message)
@@ -357,34 +423,35 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
   return (
     <article className={`${card} ${inactive ? 'opacity-70' : ''}`}>
       <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">
-          {(p.author_display_name || '?')[0].toUpperCase()}
-        </div>
+        <Avatar url={p.author_avatar_url} name={p.author_display_name} />
         <div className="min-w-0 flex-1">
           <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
-          <time className="text-xs text-stone-500">{when(p.created_at)}</time>
+          <time className="text-xs text-stone-500">{when(p.created_at, lang)}</time>
         </div>
-        {me && !mine && <FollowButton userId={p.user_id} following={following} onToggle={onToggleFollow} />}
       </div>
       {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
       <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
-      {p.caricature_image_url && <img loading="lazy" alt="Caricature of this Wao moment" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
+      {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
       {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
-      {(PHASE === 'market' || p.kind !== 'update' || inactive) && <div className="mt-3 flex flex-wrap gap-1.5">
-        <span className={`${chip} !bg-[#4a3af0] !text-white`}>{p.kind}</span>
-        {inactive && <span className={`${chip} !bg-stone-300`}>{expired ? 'Expired' : p.status === 'archived' ? 'Closed' : 'Fulfilled'}</span>}
-        {ongoing && <span className={chip}>inventory / service</span>}
-        <span className={chip}>{p.category}</span>
-        {money(p.price_cents) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents)}</span>}
-        {p.location_text && <span className={chip}>{p.location_text}</span>}
-        {p.distance_km != null && <span className={`${chip} !bg-emerald-100`}>{p.distance_km.toFixed(1)} km</span>}
-      </div>}
+      {(p.kind !== 'update' || inactive) && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <span className={`${chip} !bg-[#4a3af0] !text-white`}>{t.kinds[p.kind] || p.kind}</span>
+          {inactive && <span className={`${chip} !bg-stone-300`}>{expired ? t.expired : p.status === 'archived' ? t.closed : t.fulfilled}</span>}
+          {ongoing && <span className={chip}>{t.inventory}</span>}
+          <span className={chip}>{t.cats[p.category] || p.category}</span>
+          {money(p.price_cents, t.free) && <span className={`${chip} !bg-[#f6d155]`}>{money(p.price_cents, t.free)}</span>}
+          {p.location_text && <span className={chip}>{p.location_text}</span>}
+          {p.distance_km != null && <span className={`${chip} !bg-emerald-100`}>{p.distance_km.toFixed(1)} km</span>}
+        </div>
+      )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? 'Hide comments' : 'Comments'}</button>
-        {canClose && <button className={ghostSm} onClick={close}>{ongoing ? 'Close listing' : 'Mark fulfilled'}</button>}
-        {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? 'Renew for 30 days' : 'Reopen'}</button>}
+        <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
+        {canClose && <button className={ghostSm} onClick={close}>{ongoing ? t.closeListing : t.markFulfilled}</button>}
+        {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? t.renew : t.reopen}</button>}
       </div>
-      {ongoing && !inactive && p.expires_at && <p className="mt-2 text-xs text-stone-500">Listed until {new Date(p.expires_at).toLocaleDateString([], { dateStyle: 'medium' })}</p>}
+      {ongoing && !inactive && p.expires_at && (
+        <p className="mt-2 text-xs text-stone-500">{t.listedUntil(new Date(p.expires_at).toLocaleDateString(loc(lang), { dateStyle: 'medium' }))}</p>
+      )}
       {err && <p className="mt-2 text-sm text-red-600">{err}</p>}
       {open && <Comments postId={p.id} me={me} />}
     </article>
@@ -392,7 +459,8 @@ function PostCard({ p, me, following, onToggleFollow, onChanged }) {
 }
 
 // ---------- Profile editor ----------
-function ProfileEditor({ me, onSaved, onClose }) {
+function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut }) {
+  const { t } = useLang()
   const [f, setF] = useState(null)
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
@@ -416,42 +484,53 @@ function ProfileEditor({ me, onSaved, onClose }) {
       location_text: f.location_text.trim() || null,
     }).eq('id', me)
     setBusy(false)
-    if (error) return setMsg(error.code === '23505' ? 'That username is taken.' : error.message)
-    setMsg('Saved!')
+    if (error) return setMsg(error.code === '23505' ? t.usernameTaken : error.message)
+    setMsg(t.saved)
     onSaved()
   }
 
-  if (!f) return <div className={card}>{msg || 'Loading…'}</div>
+  if (!f) return <div className={card}>{msg || t.loading}</div>
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
 
   return (
-    <form onSubmit={save} className={`${card} space-y-3`}>
+    <div className={`${card} space-y-4`}>
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold">Your profile</h2>
-        <button type="button" className="text-sm text-stone-500 underline" onClick={onClose}>close</button>
+        <h2 className="text-xl font-bold">{t.yourProfile}</h2>
+        <button type="button" className="text-sm text-stone-500 underline" onClick={onClose}>{t.close}</button>
       </div>
-      <label className="block text-sm text-stone-600">Username (letters, numbers, underscore; 3–30)
-        <input className={`${field} mt-1`} value={f.username} minLength={3} maxLength={30} required
-          onChange={(e) => setF({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} />
-      </label>
-      <label className="block text-sm text-stone-600">Name
-        <input className={`${field} mt-1`} value={f.display_name} maxLength={40} required onChange={set('display_name')} />
-      </label>
-      <label className="block text-sm text-stone-600">Area
-        <input className={`${field} mt-1`} placeholder="e.g. Southeast Portland" value={f.location_text} onChange={set('location_text')} />
-      </label>
-      <label className="block text-sm text-stone-600">About you
-        <textarea className={`${field} mt-1 min-h-20`} maxLength={500} value={f.bio} onChange={set('bio')} />
-      </label>
-      <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">Coming soon: your sign-in email will link you to the free Affiliate Program. It is never shown on your public profile.</p>
-      <button disabled={busy} className={primary}>{busy ? 'Saving…' : 'Save'}</button>
-      {msg && <p className="text-sm text-stone-600">{msg}</p>}
-    </form>
+
+      <div>
+        <h3 className="mb-2 font-bold">{t.profilePhoto}</h3>
+        <AvatarUploader me={me} avatarUrl={avatarUrl} onChange={onAvatar} />
+      </div>
+
+      <form onSubmit={save} className="space-y-3">
+        <label className="block text-sm text-stone-600">{t.usernameLabel}
+          <input className={`${field} mt-1`} value={f.username} minLength={3} maxLength={30} required
+            onChange={(e) => setF({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} />
+        </label>
+        <label className="block text-sm text-stone-600">{t.nameLabel}
+          <input className={`${field} mt-1`} value={f.display_name} maxLength={40} required onChange={set('display_name')} />
+        </label>
+        <label className="block text-sm text-stone-600">{t.areaLabel}
+          <input className={`${field} mt-1`} placeholder={t.areaPh} value={f.location_text} onChange={set('location_text')} />
+        </label>
+        <label className="block text-sm text-stone-600">{t.aboutLabel}
+          <textarea className={`${field} mt-1 min-h-20`} maxLength={500} value={f.bio} onChange={set('bio')} />
+        </label>
+        <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.affiliateNote}</p>
+        <button disabled={busy} className={primary}>{busy ? t.saving : t.save}</button>
+        {msg && <p className="text-sm text-stone-600">{msg}</p>}
+      </form>
+
+      <button type="button" className={ghostSm} onClick={onSignOut}>{t.signOut}</button>
+    </div>
   )
 }
 
 // ---------- Feed ----------
-function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged }) {
+function Feed({ mode, session, refreshKey, onChanged }) {
+  const { t } = useLang()
   const me = session?.user.id
   const [filters, setFilters] = useState({ kind: 'offer', category: '', radius: '25' })
   const [coords, setCoords] = useState(null)
@@ -459,16 +538,14 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
   const [hasMore, setHasMore] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const followKey = [...following].sort().join(',')
-  const needsLogin = ['following', 'mine', 'offer'].includes(mode) && !me
+  const needsLogin = ['mine', 'offer'].includes(mode) && !me
 
   const fetchPage = useCallback(async (cursor) => {
-    if (mode === 'following') return fetchByAuthors([...following], cursor, PHASE === 'connect' ? 'update' : null)
-    if (mode === 'mine') return fetchByAuthors([me], cursor, PHASE === 'connect' ? 'update' : null, true)
-    if (mode === 'offer') return fetchByAuthors([me], cursor, 'offer', true)
+    if (mode === 'mine') return fetchMine(me, cursor, null)
+    if (mode === 'offer') return fetchMine(me, cursor, 'offer')
     const disc = mode === 'discover'
     const { data, error } = await supabase.rpc('get_feed', {
-      p_kind: disc ? filters.kind : PHASE === 'connect' ? 'update' : null,
+      p_kind: disc ? filters.kind : 'update',
       p_category: disc && filters.category ? filters.category : null,
       p_lat: disc && coords ? coords.lat : null,
       p_lng: disc && coords ? coords.lng : null,
@@ -479,8 +556,7 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
     })
     if (error) throw error
     return data
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, filters, coords, me, followKey])
+  }, [mode, filters, coords, me])
 
   useEffect(() => {
     if (needsLogin) { setPosts([]); setHasMore(false); setLoading(false); return }
@@ -506,15 +582,10 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
   function nearMe() {
     navigator.geolocation.getCurrentPosition(
       (p) => setCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      () => setError('Could not get your location.')
+      () => setError(t.noLocation)
     )
   }
 
-  const empty = {
-    following: 'Follow people to see their posts here, newest first.',
-    mine: 'You have not posted yet.',
-    offer: 'You have no offers yet. List one above!',
-  }[mode] || 'Nothing here yet. Be the first to post!'
   const sel = 'rounded-full border-2 border-[#dcdff5] bg-white px-3 py-1.5 text-sm'
 
   return (
@@ -522,74 +593,72 @@ function Feed({ mode, session, following, onToggleFollow, refreshKey, onChanged 
       {mode === 'discover' && (
         <div className={`${card} space-y-2`}>
           <div className="flex flex-wrap items-center gap-2">
-            {[['offer', 'Offers'], ['request', 'Requests']].map(([k, l]) => (
+            {[['offer', t.offers], ['request', t.requests]].map(([k, l]) => (
               <button key={k} onClick={() => setFilters({ ...filters, kind: k })}
                 className={`rounded-full px-4 py-1.5 font-semibold ${filters.kind === k ? 'bg-[#4a3af0] text-white' : 'bg-[#e8e9fb] text-[#4a3af0]'}`}>{l}</button>
             ))}
             <select className={sel} value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })}>
-              <option value="">All categories</option>
-              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+              <option value="">{t.allCategories}</option>
+              {CATEGORIES.map((c) => <option key={c} value={c}>{t.cats[c]}</option>)}
             </select>
             {coords ? (
               <>
                 <select className={sel} value={filters.radius} onChange={(e) => setFilters({ ...filters, radius: e.target.value })}>
-                  {[5, 10, 25, 50, 100].map((r) => <option key={r} value={r}>Within {r} km</option>)}
+                  {[5, 10, 25, 50, 100].map((r) => <option key={r} value={r}>{t.within(r)}</option>)}
                 </select>
-                <button className="text-sm text-stone-500 underline" onClick={() => setCoords(null)}>clear</button>
+                <button className="text-sm text-stone-500 underline" onClick={() => setCoords(null)}>{t.clear}</button>
               </>
-            ) : <button className={sel} onClick={nearMe}>Near me</button>}
+            ) : <button className={sel} onClick={nearMe}>{t.nearMe}</button>}
           </div>
-          <p className="text-sm text-stone-500">Browse by type, category and distance. Always newest first.</p>
+          <p className="text-sm text-stone-500">{t.discoverNote}</p>
         </div>
       )}
 
-      {needsLogin && <div className={`${card} text-stone-600`}>Sign in to see this.</div>}
+      {needsLogin && <div className={`${card} text-stone-600`}>{t.needLogin}</div>}
       {error && <p className="text-sm text-red-600">{error}</p>}
-      {loading && !needsLogin && <p className="text-stone-500">Loading…</p>}
-      {!loading && !needsLogin && posts.length === 0 && <div className={`${card} text-stone-600`}>{empty}</div>}
+      {loading && !needsLogin && <p className="text-stone-500">{t.loading}</p>}
+      {!loading && !needsLogin && posts.length === 0 && <div className={`${card} text-stone-600`}>{t.empty[mode] || t.empty.everyone}</div>}
 
-      {posts.map((p) => (
-        <PostCard key={p.id} p={p} me={me} following={following} onToggleFollow={onToggleFollow} onChanged={onChanged} />
-      ))}
+      {posts.map((p) => <PostCard key={p.id} p={p} me={me} onChanged={onChanged} />)}
 
       {hasMore && !loading && (
-        <button onClick={loadMore} className="w-full rounded-full border-2 border-[#dcdff5] bg-white py-3 font-semibold">Load more</button>
+        <button onClick={loadMore} className="w-full rounded-full border-2 border-[#dcdff5] bg-white py-3 font-semibold">{t.loadMore}</button>
       )}
     </section>
   )
 }
 
 // ---------- People on Wao! ----------
-function People({ session, following, onToggleFollow }) {
-  const me = session?.user.id
+function People() {
+  const { t } = useLang()
   const [people, setPeople] = useState([])
   useEffect(() => {
-    supabase.from('profiles').select('id,username,display_name,location_text,created_at')
+    supabase.from('profiles').select('id,username,display_name,avatar_url,location_text,created_at')
       .order('created_at', { ascending: false }).limit(12)
       .then(({ data }) => setPeople(data || []))
   }, [])
   return (
     <div className={card}>
-      <h2 className="mb-3 text-xl font-bold">People on Wao!</h2>
+      <h2 className="mb-3 text-xl font-bold">{t.peopleTitle}</h2>
       <div className="space-y-3">
         {people.map((p) => (
           <div key={p.id} className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-[#e8e9fb] font-bold text-[#4a3af0]">{(p.display_name || '?')[0].toUpperCase()}</div>
+            <Avatar url={p.avatar_url} name={p.display_name} />
             <div className="min-w-0 flex-1">
               <div className="truncate"><b>{p.display_name}</b> <span className="text-sm text-stone-500">@{p.username}</span></div>
               {p.location_text && <div className="text-xs text-stone-500">{p.location_text}</div>}
             </div>
-            {me && p.id !== me && <FollowButton userId={p.id} following={following} onToggle={onToggleFollow} />}
           </div>
         ))}
       </div>
-      <p className="mt-3 text-sm text-stone-500">Newest members first.</p>
+      <p className="mt-3 text-sm text-stone-500">{t.newestFirst}</p>
     </div>
   )
 }
 
-// ---------- Roadmap banner ----------
+// ---------- Roadmap banner (follows the language toggle) ----------
 function RoadmapBanner() {
+  const { t } = useLang()
   const [hidden, setHidden] = useState(() => {
     try { return localStorage.getItem('wao_roadmap_hidden') === '1' } catch { return false }
   })
@@ -597,47 +666,37 @@ function RoadmapBanner() {
   return (
     <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white/70 px-4 py-3 text-sm">
       <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold">!</span>
-      <p className="flex-1">
-        <b>Wao! is live for connection today.</b> Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.
-      </p>
+      <p className="flex-1">{t.banner}</p>
       <button className="text-xs text-stone-500 underline" onClick={() => {
         try { localStorage.setItem('wao_roadmap_hidden', '1') } catch { /* ignore */ }
         setHidden(true)
-      }}>Got it</button>
+      }}>{t.gotIt}</button>
     </div>
   )
 }
 
 // ---------- Our promise ----------
 function OurPromise() {
-  const items = [
-    ['No black boxes.', "Your feed is newest first. We don't rank, score, or reorder it."],
-    ['Nothing for sale in the feed.', 'No boosts, no sponsored posts, no pay-to-play.'],
-    ['Filters you control.', 'Category and distance only narrow the list. They never reshuffle it.'],
-    ['Easy for everyone.', 'Share an update or list something in under a minute.'],
-    ['Your email stays private.', 'It is never shown on your public profile.'],
-  ]
+  const { t } = useLang()
   return (
     <>
       <div className={card}>
-        <h2 className="mb-4 text-xl font-bold">Our promise</h2>
-        {items.map(([t, d], i) => (
-          <p key={t} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{t}</b> {d}</span></p>
+        <h2 className="mb-4 text-xl font-bold">{t.promiseTitle}</h2>
+        {t.promiseItems.map(([title, desc], i) => (
+          <p key={title} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{title}</b> {desc}</span></p>
         ))}
       </div>
-      {PHASE === 'market' ? (
+      {SHOW_PRICING ? (
         <div className={card}>
-          <h2 className="mb-3 text-xl font-bold">Pricing</h2>
-          <p className="mb-2"><b>One-time sales are always free.</b> A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.</p>
-          <p className="mb-2"><b>Inventory and services: $5.00 per 30 days</b> (about 17¢ a day). Listings run in 30-day cycles, with a 30-day minimum.</p>
-          <p className="mb-2"><b>Introductory offer:</b> once Wao! reaches its launch member goal, the first 30 days of an inventory or service listing are free.</p>
-          <p className="text-sm text-stone-500">Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.</p>
+          <h2 className="mb-3 text-xl font-bold">{t.pricingTitle}</h2>
+          {[t.pricing1, t.pricing2, t.pricing3].map(([b, rest]) => <p key={b} className="mb-2"><b>{b}</b>{rest}</p>)}
+          <p className="text-sm text-stone-500">{t.pricingNote}</p>
         </div>
       ) : (
         <div className={card}>
-          <h2 className="mb-3 text-xl font-bold">What's coming</h2>
-          <p className="mb-2"><b>Today:</b> Wao! is a place to connect. Share your Wao moment, follow people, and see what is happening, newest first.</p>
-          <p><b>Soon:</b> a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.</p>
+          <h2 className="mb-3 text-xl font-bold">{t.comingTitle}</h2>
+          <p className="mb-2"><b>{t.comingToday[0]}</b>{t.comingToday[1]}</p>
+          <p><b>{t.comingSoon[0]}</b>{t.comingSoon[1]}</p>
         </div>
       )}
     </>
@@ -648,12 +707,25 @@ function OurPromise() {
 export default function App() {
   const [session, setSession] = useState(null)
   const [tab, setTab] = useState('everyone')
-  const [following, setFollowing] = useState(new Set())
   const [showSignIn, setShowSignIn] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [note, setNote] = useState('')
   const [showProfile, setShowProfile] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState(null)
+  const [lang, setLangState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('wao_lang')
+      if (saved === 'en' || saved === 'es') return saved
+    } catch { /* ignore */ }
+    return (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en'
+  })
+  const t = I18N[lang]
   const me = session?.user.id
+
+  const setLang = (l) => {
+    setLangState(l)
+    try { localStorage.setItem('wao_lang', l) } catch { /* ignore */ }
+  }
+  useEffect(() => { document.documentElement.lang = lang }, [lang])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
@@ -661,86 +733,79 @@ export default function App() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
+  // After sign-in, go straight to the home screen and load the member's profile photo.
   useEffect(() => {
-    if (!me) { setFollowing(new Set()); setShowProfile(false); return }
+    if (!me) { setShowProfile(false); setAvatarUrl(null); return }
     setShowSignIn(false)
     setTab('everyone')
-    supabase.from('follows').select('followed_id').eq('follower_id', me)
-      .then(({ data }) => setFollowing(new Set((data || []).map((r) => r.followed_id))))
+    supabase.from('profiles').select('avatar_url').eq('id', me).single()
+      .then(({ data }) => setAvatarUrl(data?.avatar_url || null))
   }, [me])
 
-  async function toggleFollow(userId) {
-    if (!me) return setShowSignIn(true)
-    const before = following
-    const next = new Set(following)
-    const wasOn = next.has(userId)
-    wasOn ? next.delete(userId) : next.add(userId)
-    setFollowing(next)
-    const { error } = wasOn
-      ? await supabase.from('follows').delete().eq('follower_id', me).eq('followed_id', userId)
-      : await supabase.from('follows').insert({ follower_id: me, followed_id: userId })
-    if (error) { setFollowing(before); setNote(error.message) }
-  }
-
   const posted = () => setRefreshKey((k) => k + 1)
-  const feedProps = { session, following, onToggleFollow: toggleFollow, refreshKey, onChanged: posted }
+  const feedProps = { session, refreshKey, onChanged: posted }
 
   return (
-    <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
-      <header className="flex items-center justify-between border-b-2 border-[#dcdff5] bg-white px-5 py-3">
-        <div className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-[#4a3af0]">
-          Wao<span className="grid h-8 w-8 place-items-center rounded-full bg-[#f6d155] text-xl text-[#14123a]">!</span>
-        </div>
-        {me ? (
-          <div className="flex gap-2">
-            <button className={ghostSm} onClick={() => setShowProfile((v) => !v)}>Profile</button>
-            <button className={ghostSm} onClick={() => supabase.auth.signOut()}>Sign out</button>
+    <LangCtx.Provider value={{ lang, t }}>
+      <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
+        <header className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+          <div className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-[#4a3af0]">
+            Wao<span className="grid h-8 w-8 place-items-center rounded-full bg-[#f6d155] text-xl text-[#14123a]">!</span>
           </div>
-        ) : <button className={ghost} onClick={() => setShowSignIn((v) => !v)}>Sign in</button>}
-      </header>
-
-      <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
-        {showSignIn && !me && <SignIn />}
-        {showProfile && me && <ProfileEditor me={me} onSaved={posted} onClose={() => setShowProfile(false)} />}
-
-        {me && ['everyone', 'following', 'mine'].includes(tab) && <Composer userId={me} mode="update" onPosted={posted} />}
-        {!me && !showSignIn && tab !== 'promise' && (
-          <div className={`${card} space-y-3`}>
-            <h2 className="text-2xl font-extrabold">What's your Wao moment?</h2>
-            <p className="text-stone-600">Sign in to share it with the community.</p>
-            <button className={primary} onClick={() => setShowSignIn(true)}>Sign in to share</button>
+          <div className="flex items-center gap-2">
+            <LangToggle lang={lang} setLang={setLang} />
+            {me
+              ? <button className={ghostSm} onClick={() => setShowProfile((v) => !v)}>{t.profile}</button>
+              : <button className={ghostSm} onClick={() => setShowSignIn((v) => !v)}>{t.signIn}</button>}
           </div>
-        )}
+        </header>
 
-        <nav className={`${card} grid ${TABS.length === 4 ? 'grid-cols-2' : 'grid-cols-3'} gap-1 !p-3`}>
-          {TABS.map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)}
-              className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
-              {l}
-            </button>
-          ))}
-        </nav>
+        <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
+          {showSignIn && !me && <SignIn />}
+          {showProfile && me && (
+            <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
+              onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
+          )}
 
-        {note && <p className="text-sm text-red-600">{note}</p>}
-        {PHASE === 'connect' && tab === 'everyone' && <RoadmapBanner />}
+          {me && ['everyone', 'mine'].includes(tab) && (
+            <Composer userId={me} mode="update" avatarUrl={avatarUrl} onAvatar={setAvatarUrl} onPosted={posted} />
+          )}
+          {!me && !showSignIn && ['everyone', 'discover'].includes(tab) && (
+            <div className={`${card} space-y-3`}>
+              <h2 className="text-2xl font-extrabold">{t.wowTitle}</h2>
+              <p className="text-stone-600">{t.signInToShareText}</p>
+              <button className={primary} onClick={() => setShowSignIn(true)}>{t.signInToShare}</button>
+            </div>
+          )}
 
-        {tab === 'everyone' && (
-          <>
-            <Feed mode="everyone" {...feedProps} />
-            <People key={refreshKey} session={session} following={following} onToggleFollow={toggleFollow} />
-          </>
-        )}
-        {tab === 'following' && <Feed mode="following" {...feedProps} />}
-        {tab === 'mine' && <Feed mode="mine" {...feedProps} />}
-        {tab === 'discover' && <Feed mode="discover" {...feedProps} />}
-        {tab === 'offer' && (
-          <>
-            {me && <Composer userId={me} mode="offer" onPosted={posted} />}
-            <Feed mode="offer" {...feedProps} />
-          </>
-        )}
-        {tab === 'promise' && <OurPromise />}
-      </main>
-    </div>
+          <nav className={`${card} grid grid-cols-3 gap-1 !p-3`}>
+            {TABS.map((k) => (
+              <button key={k} onClick={() => setTab(k)}
+                className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
+                {t.tabs[k]}
+              </button>
+            ))}
+          </nav>
+
+          {tab === 'everyone' && <RoadmapBanner />}
+
+          {tab === 'everyone' && (
+            <>
+              <Feed mode="everyone" {...feedProps} />
+              <People key={refreshKey} />
+            </>
+          )}
+          {tab === 'mine' && <Feed mode="mine" {...feedProps} />}
+          {tab === 'discover' && <Feed mode="discover" {...feedProps} />}
+          {tab === 'offer' && (
+            <>
+              {me && <Composer userId={me} mode="offer" avatarUrl={avatarUrl} onAvatar={setAvatarUrl} onPosted={posted} />}
+              <Feed mode="offer" {...feedProps} />
+            </>
+          )}
+          {tab === 'promise' && <OurPromise />}
+        </main>
+      </div>
+    </LangCtx.Provider>
   )
 }
