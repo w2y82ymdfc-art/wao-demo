@@ -218,7 +218,7 @@ function LangToggle({ lang, setLang }) {
 
 // ---------- Sign in ----------
 function SignIn() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
@@ -228,7 +228,10 @@ function SignIn() {
     const ref = new URLSearchParams(window.location.search).get('ref')
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { data: { display_name: name || undefined, referred_by: ref || undefined } },
+      options: {
+        data: { display_name: name || undefined, referred_by: ref || undefined },
+        emailRedirectTo: `${window.location.origin}/?lang=${lang}`,
+      },
     })
     setMsg(error ? error.message : t.checkEmail)
   }
@@ -840,6 +843,8 @@ export default function App() {
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [lang, setLangState] = useState(() => {
+    const fromLink = new URLSearchParams(window.location.search).get('lang')
+    if (fromLink === 'en' || fromLink === 'es') return fromLink
     try {
       const saved = localStorage.getItem('wao_lang')
       if (saved === 'en' || saved === 'es') return saved
