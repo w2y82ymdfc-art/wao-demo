@@ -138,7 +138,7 @@ const I18N = {
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
     hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wao moment', hide: 'Close' },
     welcome: {
-      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wao!', replay: 'Watch the welcome again',
+      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wao!', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
       scenes: [
         { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
@@ -278,7 +278,7 @@ const I18N = {
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
     hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wao', hide: 'Cerrar' },
     welcome: {
-      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wao!', replay: 'Ver la bienvenida otra vez',
+      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wao!', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
       scenes: [
         { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
@@ -1595,6 +1595,8 @@ export default function App() {
   function closeWelcome() {
     try { localStorage.setItem('wao_welcome_seen', '1') } catch { /* ignore */ }
     setWelcome(null)
+    setTab('everyone')
+    window.scrollTo(0, 0)
   }
 
   // After sign-in, go straight to the home screen and load the member's profile photo.
