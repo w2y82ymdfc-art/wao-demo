@@ -50,8 +50,10 @@ const I18N = {
     gotIt: 'Got it',
     aff: {
       bannerTitle: 'Your Affiliate network',
-      bannerOut: ['Free Three-Tier Affiliate Program.', ' Invite people and share in the advertising revenue Wao! receives: 20% · 10% · 5%.'],
-      join: 'Join free',
+      bannerOutTitle: 'Free Three-Tier Affiliate Program',
+      bannerOutNote: 'Invite people and share in the advertising revenue Wao! receives. Joining is always free.',
+      tierShort: ['Your invites', 'Their invites', 'Next level'],
+      join: 'Start my network',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
@@ -212,8 +214,10 @@ const I18N = {
     gotIt: 'Entendido',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
-      bannerOut: ['Programa de Afiliados de Tres Niveles, gratis.', ' Invita personas y participa de los ingresos por publicidad que recibe Wao!: 20% · 10% · 5%.'],
-      join: 'Únete gratis',
+      bannerOutTitle: 'Programa de Afiliados de Tres Niveles',
+      bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wao! Unirse siempre es gratis.',
+      tierShort: ['Tus invitados', 'Sus invitados', 'Siguiente nivel'],
+      join: 'Empezar mi red',
       tier: (n) => `Nivel ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
@@ -1543,10 +1547,21 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
   const { data } = useAffiliateTiers(me, refreshKey)
   if (!me) {
     return (
-      <div className="flex flex-wrap items-center gap-3 rounded-3xl bg-[#14123a] px-4 py-3 text-sm text-white">
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#f6d155] font-extrabold text-[#14123a]">%</span>
-        <p className="min-w-0 flex-1"><b>{t.aff.bannerOut[0]}</b>{t.aff.bannerOut[1]}</p>
-        <button className="rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]" onClick={onSignIn}>{t.aff.join}</button>
+      <div className="rounded-3xl bg-[#14123a] px-4 py-3 text-white">
+        <div className="text-sm font-bold">{t.aff.bannerOutTitle}</div>
+        <div className="mt-2 grid grid-cols-3 gap-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="rounded-2xl bg-white/10 px-3 py-2">
+              <div className="flex items-center gap-1.5 text-xs text-white/75"><TierDot i={i} />{t.aff.tier(i + 1)}</div>
+              <div className="text-2xl font-extrabold tabular-nums text-[#f6d155]">{TIER_RATES[i]}%</div>
+              <div className="text-xs leading-tight text-white/60">{t.aff.tierShort[i]}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 flex items-center gap-3">
+          <p className="min-w-0 flex-1 text-xs leading-snug text-white/80">{t.aff.bannerOutNote}</p>
+          <button className="shrink-0 rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]" onClick={onSignIn}>{t.aff.join}</button>
+        </div>
       </div>
     )
   }
