@@ -438,7 +438,8 @@ function LangToggle({ lang, setLang }) {
 // ---------- Sign in ----------
 function SignIn() {
   const { t, lang } = useLang()
-  const [email, setEmail] = useState('')
+  const [email, setEmailRaw] = useState(() => { try { return localStorage.getItem('wao_signin_email') || '' } catch { return '' } })
+  const setEmail = (v) => { setEmailRaw(v); try { localStorage.setItem('wao_signin_email', v) } catch { /* ignore */ } }
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
   const [sent, setSent] = useState(false)
@@ -487,7 +488,7 @@ function SignIn() {
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
       <button className={primary}>{t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
-      {sent && (
+      {(
         <div className="space-y-2 border-t border-[#dcdff5] pt-3">
           <p className="text-sm text-stone-600">{t.codeHint}</p>
           <input className={field} autoComplete="one-time-code" autoCapitalize="off" autoCorrect="off" placeholder={t.codePlaceholder}
