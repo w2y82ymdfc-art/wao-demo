@@ -452,12 +452,13 @@ function SignIn() {
       res = await supabase.auth.verifyOtp({ email, token: v, type: 'email' })
     } else {
       // A pasted sign-in link: use the token inside it, so the home-screen app signs in by itself.
-      let tokenHash = null, type = 'magiclink'
-      try {
-        const u = new URL(v)
-        tokenHash = u.searchParams.get('token') || u.searchParams.get('token_hash')
-        type = u.searchParams.get('type') || type
-      } catch { /* not a link */ }
+      // Gmail and other apps may wrap the link (e.g. google.com/url?q=...), so unwrap it before reading the token.
+      let text = v, tokenHash = null, type = 'magiclink'
+      for (let k = 0; k < 3; k++) { try { text = decodeURIComponent(text) } catch { break } }
+      const tm = text.match(/[?&]token(?:_hash)?=([^&#\s]+)/)
+      const ty = text.match(/[?&]type=([a-z_]+)/)
+      if (tm) tokenHash = tm[1]
+      if (ty) type = ty[1]
       if (!tokenHash) { setMsg(t.notLink); return }
       res = await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
     }
