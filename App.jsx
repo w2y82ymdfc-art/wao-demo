@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    codeHint: 'Using Wao! from your home screen? Type the 6-digit code from the email here.', codePlaceholder: '6-digit code', codeVerify: 'Sign in with code',
+    codeHint: 'Using Wao! from your home screen? In the email, press and hold "Sign in", tap Copy Link, and paste it here.', codePlaceholder: 'Paste the sign-in link here', codeVerify: 'Sign in here',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    codeHint: '¿Usas Wao! desde tu pantalla de inicio? Escribe aquí el código de 6 dígitos del correo.', codePlaceholder: 'Código de 6 dígitos', codeVerify: 'Entrar con el código',
+    codeHint: '¿Usas Wao! desde tu pantalla de inicio? En el correo, mantén presionado "Sign in", toca Copiar enlace y pégalo aquí.', codePlaceholder: 'Pega aquí el enlace de acceso', codeVerify: 'Entrar aquí',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -446,8 +446,22 @@ function SignIn() {
 
   async function verify(e) {
     e.preventDefault()
-    const { error } = await supabase.auth.verifyOtp({ email, token: code.trim(), type: 'email' })
-    if (error) setMsg(error.message)
+    const v = code.trim()
+    let res
+    if (/^\d{6}$/.test(v)) {
+      res = await supabase.auth.verifyOtp({ email, token: v, type: 'email' })
+    } else {
+      // A pasted sign-in link: use the token inside it, so the home-screen app signs in by itself.
+      let tokenHash = null, type = 'magiclink'
+      try {
+        const u = new URL(v)
+        tokenHash = u.searchParams.get('token') || u.searchParams.get('token_hash')
+        type = u.searchParams.get('type') || type
+      } catch { /* not a link */ }
+      if (!tokenHash) { setMsg(t.codeHint); return }
+      res = await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
+    }
+    if (res.error) setMsg(res.error.message)
   }
 
   async function submit(e) {
@@ -475,9 +489,9 @@ function SignIn() {
       {sent && (
         <div className="space-y-2 border-t border-[#dcdff5] pt-3">
           <p className="text-sm text-stone-600">{t.codeHint}</p>
-          <input className={field} inputMode="numeric" autoComplete="one-time-code" placeholder={t.codePlaceholder}
-            value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))} />
-          <button type="button" className={primary} disabled={code.length < 6} onClick={verify}>{t.codeVerify}</button>
+          <input className={field} autoComplete="one-time-code" autoCapitalize="off" autoCorrect="off" placeholder={t.codePlaceholder}
+            value={code} onChange={(e) => setCode(e.target.value)} />
+          <button type="button" className={primary} disabled={code.trim().length < 6} onClick={verify}>{t.codeVerify}</button>
         </div>
       )}
     </form>
