@@ -11,7 +11,15 @@ const supabase = createClient(
 const I18N = {
   en: {
     signIn: 'Sign in', profile: 'Profile', signOut: 'Sign out',
-    tabs: { everyone: 'Everyone', mine: 'My posts', discover: 'Discover', offer: 'My offer', promise: 'Our promise' },
+    tabs: { everyone: 'Everyone', mine: 'My posts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
+    share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wao!',
+    edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
+    confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
+    addPhotos: (n) => `Add photos (${n} left)`, maxPhotos: (n) => `Up to ${n} photos per post.`,
+    members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
+    sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
+    homeTipIos: 'Put Wao! on your home screen: tap the Share button in Safari, then "Add to Home Screen".',
+    homeTipInstall: 'Put Wao! on your home screen so it opens like an app.', install: 'Add to home screen',
     banner: 'Wao! is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
@@ -57,6 +65,39 @@ const I18N = {
       ['Filters you control.', 'Category and distance only narrow the list. They never reshuffle it.'],
       ['Easy for everyone.', 'Share a moment or list something in under a minute.'],
       ['Your email stays private.', 'It is never shown on your public profile.'],
+      ['Less noise.', 'Real moments from real people, without a machine deciding what keeps you scrolling.'],
+      ['Transparency.', 'Our rules are published here. When they change, we tell you what changed and why.'],
+      ['You share in what Wao! earns.', 'Through our free Three-Tier Affiliate Program, members who help Wao! grow will receive a share of the advertising revenue Wao! actually receives. It costs nothing to join, and it starts paying once advertising begins.'],
+    ],
+    differentTitle: 'Why Wao! is different',
+    differentText: 'Most big social networks are built to keep you scrolling and to sell your attention. Wao! shows you what is happening, newest first, and shares the advertising revenue with the members who build the community.',
+    policiesTitle: 'Policies',
+    policiesNote: 'Plain-language summary for the demo. Full legal versions will be published before launch.',
+    policies: [
+      ['Privacy', [
+        'We collect only what Wao! needs to work: your email, your name and username, and what you choose to post.',
+        'Your email is never shown publicly and is never sold.',
+        'Location is attached only when you tick the box, and only as an approximate point.',
+        'You can edit or delete your posts and your photo at any time.',
+      ]],
+      ['Terms of use', [
+        'You must be at least 18 to join.',
+        'You own what you post. You allow Wao! to show it to the audience you chose.',
+        'Do not post things you do not have the right to share.',
+        'Wao! can remove content or accounts that break these rules.',
+      ]],
+      ['Community rules', [
+        'Be respectful. No harassment, hate, threats or scams.',
+        'No adult content, violence or illegal goods or services.',
+        'Moments are for moments. Selling goes in What I offer.',
+        'Tell us about anything that breaks these rules.',
+      ]],
+      ['Affiliate Program', [
+        'Joining is free, and nobody ever has to buy anything.',
+        'Shares come only from advertising revenue Wao! actually receives: 20% to your first tier, 10% to your second, 5% to your third.',
+        'Earnings depend on real advertising revenue and are never guaranteed.',
+        'Payments are calculated at the end of each month and sent through Stripe. Taxes are each member\'s responsibility.',
+      ]],
     ],
     pricingTitle: 'Pricing',
     pricing1: ['One-time sales are always free.', ' A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.'],
@@ -81,7 +122,15 @@ const I18N = {
   },
   es: {
     signIn: 'Iniciar sesión', profile: 'Perfil', signOut: 'Cerrar sesión',
-    tabs: { everyone: 'Todos', mine: 'Mis publicaciones', discover: 'Descubrir', offer: 'Mi oferta', promise: 'Nuestra promesa' },
+    tabs: { everyone: 'Todos', mine: 'Mis publicaciones', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
+    share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wao!',
+    edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
+    confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
+    addPhotos: (n) => `Añadir fotos (quedan ${n})`, maxPhotos: (n) => `Hasta ${n} fotos por publicación.`,
+    members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
+    sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
+    homeTipIos: 'Pon Wao! en tu pantalla de inicio: toca el botón Compartir de Safari y luego "Agregar a inicio".',
+    homeTipInstall: 'Pon Wao! en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
     banner: 'Wao! está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
@@ -127,6 +176,39 @@ const I18N = {
       ['Filtros que tú controlas.', 'La categoría y la distancia solo reducen la lista. Nunca la reordenan.'],
       ['Fácil para todos.', 'Comparte un momento o publica una oferta en menos de un minuto.'],
       ['Tu correo es privado.', 'Nunca se muestra en tu perfil público.'],
+      ['Menos ruido.', 'Momentos reales de personas reales, sin una máquina que decida qué te mantiene deslizando.'],
+      ['Transparencia.', 'Nuestras reglas están publicadas aquí. Cuando cambien, te diremos qué cambió y por qué.'],
+      ['Compartes lo que Wao! gana.', 'Con nuestro Programa de Afiliados de Tres Niveles, gratuito, los miembros que ayuden a Wao! a crecer recibirán una parte de los ingresos por publicidad que Wao! realmente reciba. Unirse no cuesta nada y empieza a pagar cuando comience la publicidad.'],
+    ],
+    differentTitle: 'Por qué Wao! es diferente',
+    differentText: 'La mayoría de las grandes redes sociales están hechas para mantenerte deslizando y vender tu atención. Wao! te muestra lo que está pasando, lo más reciente primero, y comparte los ingresos por publicidad con los miembros que construyen la comunidad.',
+    policiesTitle: 'Políticas',
+    policiesNote: 'Resumen en lenguaje sencillo para la demostración. Las versiones legales completas se publicarán antes del lanzamiento.',
+    policies: [
+      ['Privacidad', [
+        'Solo recopilamos lo que Wao! necesita para funcionar: tu correo, tu nombre y usuario, y lo que decidas publicar.',
+        'Tu correo nunca se muestra en público y nunca se vende.',
+        'La ubicación solo se adjunta si marcas la casilla, y solo como un punto aproximado.',
+        'Puedes editar o borrar tus publicaciones y tu foto en cualquier momento.',
+      ]],
+      ['Condiciones de uso', [
+        'Debes tener al menos 18 años para unirte.',
+        'Lo que publicas es tuyo. Permites que Wao! lo muestre al público que elegiste.',
+        'No publiques cosas que no tienes derecho a compartir.',
+        'Wao! puede quitar contenido o cuentas que no cumplan estas reglas.',
+      ]],
+      ['Reglas de la comunidad', [
+        'Sé respetuoso. Nada de acoso, odio, amenazas ni estafas.',
+        'Nada de contenido para adultos, violencia ni bienes o servicios ilegales.',
+        'Los momentos son para momentos. Las ventas van en Lo que ofrezco.',
+        'Avísanos de cualquier cosa que no cumpla estas reglas.',
+      ]],
+      ['Programa de Afiliados', [
+        'Unirse es gratis y nadie tiene que comprar nada nunca.',
+        'Las partes salen solo de los ingresos por publicidad que Wao! realmente reciba: 20% por tu primer nivel, 10% por el segundo y 5% por el tercero.',
+        'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
+        'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
+      ]],
     ],
     pricingTitle: 'Precios',
     pricing1: ['Las ventas únicas siempre son gratis.', ' Un colchón, una bicicleta, un equipo: publícalo y ciérralo cuando se venda.'],
@@ -167,7 +249,7 @@ const loc = (lang) => (lang === 'es' ? 'es' : 'en')
 const card = 'rounded-3xl border-2 border-[#dcdff5] bg-white p-5'
 const field = 'w-full rounded-2xl border-2 border-[#dcdff5] bg-[#eef0fc] px-4 py-3 text-[#14123a] placeholder:text-stone-400'
 const primary = 'rounded-full bg-[#4a3af0] px-6 py-3 font-bold text-white disabled:bg-[#b4adf8]'
-const ghost = 'rounded-full border-2 border-[#4a3af0] px-5 py-2 font-bold text-[#4a3af0]'
+const ghost = 'rounded-full border-2 border-[#4a3af0] px-5 py-2 font-bold text-[#4a3af0] disabled:opacity-40'
 const ghostSm = 'rounded-full border-2 border-[#4a3af0] px-4 py-1.5 text-sm font-bold text-[#4a3af0] disabled:opacity-40'
 const chip = 'rounded-full bg-[#e8e9fb] px-2.5 py-0.5 text-xs text-[#14123a]'
 
@@ -188,11 +270,42 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
   )
 }
 
+// Multi-photo posts need the image_paths column. Until that database update is applied, posts keep one photo.
+let multiPhotoCheck = null
+function supportsMultiPhoto() {
+  if (!multiPhotoCheck) {
+    multiPhotoCheck = supabase.from('posts').select('image_paths,edited_at').limit(1)
+      .then(({ error }) => !error).catch(() => false)
+  }
+  return multiPhotoCheck
+}
+function useMaxPhotos() {
+  const [max, setMax] = useState(1)
+  useEffect(() => { supportsMultiPhoto().then((ok) => setMax(ok ? 4 : 1)) }, [])
+  return max
+}
+const postImages = (p) => (p.image_paths?.length ? p.image_paths : p.image_path ? [p.image_path] : [])
+const imageFields = (paths, multi) => (multi ? { image_path: paths[0] || null, image_paths: paths } : { image_path: paths[0] || null })
+
+function postLink(id, lang) {
+  return `${window.location.origin}/?post=${id}&lang=${lang}`
+}
+// Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
+async function sharePost(p, t, lang) {
+  const url = postLink(p.id, lang)
+  const text = (p.title || p.body || t.shareText).slice(0, 140)
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Wao!', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
+  }
+  try { await navigator.clipboard.writeText(url); return t.linkCopied } catch { window.prompt('', url); return null }
+}
+
 // A member's own posts (My posts / My offer). Newest first. Shows every status so owners can manage them.
 async function fetchMine(me, cursor, kind) {
+  const multi = await supportsMultiPhoto()
   let q = supabase
     .from('posts')
-    .select('id,user_id,kind,category,title,body,price_cents,location_text,image_path,caricature_image_url,status,listing_type,expires_at,created_at')
+    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? 'image_paths,edited_at,' : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
     .eq('user_id', me)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
@@ -326,6 +439,70 @@ function AvatarUploader({ me, avatarUrl, onChange }) {
   )
 }
 
+// ---------- Photos (new posts and editing) ----------
+// Each item is either { path } (already saved) or { blob, url } (picked now, not uploaded yet).
+function PhotoGrid({ items, onRemove }) {
+  const { t } = useLang()
+  if (!items.length) return null
+  return (
+    <div className={`grid gap-2 ${items.length > 1 ? 'grid-cols-2' : ''}`}>
+      {items.map((it, i) => (
+        <div key={it.path || it.url} className="relative">
+          <img src={it.url || photoUrl(it.path)} alt="" className={`w-full rounded-2xl object-cover ${items.length > 1 ? 'aspect-square' : 'max-h-64'}`} />
+          <button type="button" onClick={() => onRemove(i)} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">{t.remove}</button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function usePhotoPicker(initial, max, onError) {
+  const [items, setItems] = useState(initial)
+  const fileRef = useRef(null)
+  async function pick(e) {
+    const files = Array.from(e.target.files || []).slice(0, Math.max(0, max - items.length))
+    if (fileRef.current) fileRef.current.value = ''
+    const added = []
+    for (const file of files) {
+      try {
+        const blob = await resizeImage(file)
+        added.push({ blob, url: URL.createObjectURL(blob) })
+      } catch { onError() }
+    }
+    setItems((cur) => [...cur, ...added].slice(0, max))
+  }
+  function removeAt(i) {
+    setItems((cur) => {
+      if (cur[i]?.url) URL.revokeObjectURL(cur[i].url)
+      return cur.filter((_, k) => k !== i)
+    })
+  }
+  function reset(next = []) {
+    items.forEach((it) => it.url && URL.revokeObjectURL(it.url))
+    setItems(next)
+  }
+  const input = <input ref={fileRef} type="file" accept="image/*" multiple={max > 1} hidden onChange={pick} />
+  return { items, removeAt, reset, input, open: () => fileRef.current?.click() }
+}
+
+// Uploads any new photos and returns the full ordered list of storage paths, plus the ones just uploaded.
+async function uploadPhotos(items, userId, postId) {
+  const paths = []
+  const uploaded = []
+  for (const it of items) {
+    if (it.path) { paths.push(it.path); continue }
+    const path = `${userId}/${postId}-${crypto.randomUUID().slice(0, 8)}.jpg`
+    const { error } = await supabase.storage.from(BUCKET).upload(path, it.blob, { contentType: 'image/jpeg' })
+    if (error) {
+      if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
+      throw error
+    }
+    paths.push(path)
+    uploaded.push(path)
+  }
+  return { paths, uploaded }
+}
+
 // ---------- Composer ----------
 function Composer({ userId, mode, onPosted }) {
   const { t } = useLang()
@@ -334,10 +511,10 @@ function Composer({ userId, mode, onPosted }) {
   const [ltype, setLtype] = useState('one_time')
   const [f, setF] = useState({ category: 'general', title: '', body: '', price: '', area: '' })
   const [geo, setGeo] = useState(false)
-  const [photo, setPhoto] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const fileRef = useRef(null)
+  const maxPhotos = useMaxPhotos()
+  const photos = usePhotoPicker([], maxPhotos, () => setError(t.couldNotRead))
 
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
   const coords = () =>
@@ -349,34 +526,16 @@ function Composer({ userId, mode, onPosted }) {
       )
     )
 
-  async function pick(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    try {
-      const blob = await resizeImage(file)
-      setPhoto({ blob, url: URL.createObjectURL(blob) })
-    } catch {
-      setError(t.couldNotRead)
-    }
-  }
-  function clearPhoto() {
-    if (photo) URL.revokeObjectURL(photo.url)
-    setPhoto(null)
-    if (fileRef.current) fileRef.current.value = ''
-  }
-
   async function submit(e) {
     e.preventDefault()
     setBusy(true)
     setError('')
     const postId = crypto.randomUUID()
-    let path = null
+    let uploaded = []
     try {
-      if (photo) {
-        path = `${userId}/${postId}.jpg`
-        const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, photo.blob, { contentType: 'image/jpeg' })
-        if (upErr) throw upErr
-      }
+      const up = await uploadPhotos(photos.items, userId, postId)
+      uploaded = up.uploaded
+      const multi = await supportsMultiPhoto()
       const where = geo ? await coords() : {}
       const { error: postErr } = await supabase.from('posts').insert({
         id: postId,
@@ -388,16 +547,16 @@ function Composer({ userId, mode, onPosted }) {
         body: f.body.trim(),
         price_cents: kind === 'offer' && f.price !== '' ? Math.round(parseFloat(f.price) * 100) : null,
         location_text: detailed ? f.area || null : null,
-        image_path: path,
+        ...imageFields(up.paths, multi),
         ...where,
       })
       if (postErr) throw postErr
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
-      clearPhoto()
+      photos.reset()
       onPosted()
     } catch (err) {
-      if (path) supabase.storage.from(BUCKET).remove([path])
+      if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
       setError(err.message)
     } finally {
       setBusy(false)
@@ -446,18 +605,15 @@ function Composer({ userId, mode, onPosted }) {
         </>
       )}
 
-      {photo && (
-        <div className="relative">
-          <img src={photo.url} alt="" className="max-h-64 w-full rounded-2xl object-cover" />
-          <button type="button" onClick={clearPhoto} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">{t.remove}</button>
-        </div>
-      )}
+      <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <div className="flex items-center gap-3">
-        <input ref={fileRef} type="file" accept="image/*" hidden onChange={pick} />
-        <button type="button" className={ghost} onClick={() => fileRef.current?.click()}>{t.addPhoto}</button>
+      <div className="flex flex-wrap items-center gap-3">
+        {photos.input}
+        <button type="button" className={ghost} disabled={photos.items.length >= maxPhotos} onClick={photos.open}>
+          {maxPhotos > 1 ? t.addPhotos(maxPhotos - photos.items.length) : t.addPhoto}
+        </button>
         <span className="text-sm text-stone-500">{f.body.length} / 500</span>
         <button disabled={busy || !f.body.trim()} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
       </div>
@@ -522,11 +678,71 @@ function Comments({ postId, me }) {
   )
 }
 
+// ---------- Edit a post ----------
+function PostEditor({ p, me, onDone, onCancel }) {
+  const { t } = useLang()
+  const [title, setTitle] = useState(p.title || '')
+  const [body, setBody] = useState(p.body || '')
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const maxPhotos = useMaxPhotos()
+  const original = postImages(p)
+  const photos = usePhotoPicker(original.map((path) => ({ path })), Math.max(maxPhotos, original.length), () => setErr(t.couldNotRead))
+
+  async function save(e) {
+    e.preventDefault()
+    setBusy(true)
+    setErr('')
+    let uploaded = []
+    try {
+      const up = await uploadPhotos(photos.items, me, p.id)
+      uploaded = up.uploaded
+      const multi = await supportsMultiPhoto()
+      const { error } = await supabase.from('posts').update({
+        body: body.trim(),
+        ...(p.kind !== 'update' ? { title: title.trim() || null } : {}),
+        ...imageFields(up.paths, multi),
+      }).eq('id', p.id).eq('user_id', me)
+      if (error) throw error
+      const dropped = original.filter((path) => !up.paths.includes(path))
+      if (dropped.length) supabase.storage.from(BUCKET).remove(dropped)
+      photos.reset()
+      onDone()
+    } catch (e2) {
+      if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
+      setErr(e2.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <form onSubmit={save} className="mt-3 space-y-3">
+      {p.kind !== 'update' && <input className={field} maxLength={120} placeholder={t.offeringPh} value={title} onChange={(e) => setTitle(e.target.value)} />}
+      <textarea className={`${field} min-h-24`} required maxLength={500} value={body} onChange={(e) => setBody(e.target.value)} />
+      <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
+      {photos.input}
+      {err && <p className="text-sm text-red-600">{err}</p>}
+      <div className="flex flex-wrap items-center gap-2">
+        <button type="button" className={ghostSm} disabled={photos.items.length >= maxPhotos} onClick={photos.open}>
+          {maxPhotos > 1 ? t.addPhotos(Math.max(0, maxPhotos - photos.items.length)) : t.addPhoto}
+        </button>
+        <button type="button" className={ghostSm} onClick={() => { photos.reset(); onCancel() }}>{t.cancel}</button>
+        <button disabled={busy || !body.trim()} className={`${primary} ml-auto !py-2`}>{busy ? t.saving : t.save}</button>
+      </div>
+    </form>
+  )
+}
+
 // ---------- One post ----------
 function PostCard({ p, me, onChanged }) {
   const { t, lang } = useLang()
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [note, setNote] = useState('')
   const [err, setErr] = useState('')
+  const images = postImages(p)
   const mine = me && p.user_id === me
   const ongoing = p.listing_type === 'ongoing'
   const expired = !!p.expires_at && new Date(p.expires_at) < new Date()
@@ -546,6 +762,20 @@ function PostCard({ p, me, onChanged }) {
     if (error) setErr(error.message)
     else onChanged()
   }
+  async function remove() {
+    if (!window.confirm(t.confirmDelete)) return
+    setErr('')
+    setDeleting(true)
+    const { error } = await supabase.from('posts').delete().eq('id', p.id).eq('user_id', me)
+    setDeleting(false)
+    if (error) return setErr(error.message)
+    if (images.length) supabase.storage.from(BUCKET).remove(images)
+    onChanged()
+  }
+  async function share() {
+    const msg = await sharePost(p, t, lang)
+    if (msg) { setNote(msg); setTimeout(() => setNote(''), 2500) }
+  }
 
   return (
     <article className={`${card} ${inactive ? 'opacity-70' : ''}`}>
@@ -553,13 +783,28 @@ function PostCard({ p, me, onChanged }) {
         <Avatar url={p.author_avatar_url} name={p.author_display_name} />
         <div className="min-w-0 flex-1">
           <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
-          <time className="text-xs text-stone-500">{when(p.created_at, lang)}</time>
+          <time className="text-xs text-stone-500">{when(p.created_at, lang)}{p.edited_at && ` · ${t.edited}`}</time>
         </div>
       </div>
-      {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
-      <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
-      {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
-      {p.image_path && <img loading="lazy" alt="" src={photoUrl(p.image_path)} className="mt-3 max-h-96 w-full rounded-2xl object-cover" />}
+      {editing ? (
+        <PostEditor p={p} me={me} onCancel={() => setEditing(false)} onDone={() => { setEditing(false); onChanged() }} />
+      ) : (
+        <>
+          {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
+          <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
+          {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
+          {images.length > 0 && (
+            <div className={`mt-3 grid gap-2 ${images.length > 1 ? 'grid-cols-2' : ''}`}>
+              {images.map((path) => (
+                <a key={path} href={photoUrl(path)} target="_blank" rel="noreferrer">
+                  <img loading="lazy" alt="" src={photoUrl(path)}
+                    className={`w-full rounded-2xl object-cover ${images.length > 1 ? 'aspect-square' : 'max-h-96'}`} />
+                </a>
+              ))}
+            </div>
+          )}
+        </>
+      )}
       {(p.kind !== 'update' || inactive) && (
         <div className="mt-3 flex flex-wrap gap-1.5">
           <span className={`${chip} !bg-[#4a3af0] !text-white`}>{t.kinds[p.kind] || p.kind}</span>
@@ -573,8 +818,12 @@ function PostCard({ p, me, onChanged }) {
       )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
+        {!inactive && <button className={ghostSm} onClick={share}>{t.share}</button>}
+        {mine && !editing && <button className={ghostSm} onClick={() => setEditing(true)}>{t.edit}</button>}
+        {mine && <button className={ghostSm} disabled={deleting} onClick={remove}>{deleting ? t.deleting : t.deletePost}</button>}
         {canClose && <button className={ghostSm} onClick={close}>{ongoing ? t.closeListing : t.markFulfilled}</button>}
         {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? t.renew : t.reopen}</button>}
+        {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
       </div>
       {ongoing && !inactive && p.expires_at && (
         <p className="mt-2 text-xs text-stone-500">{t.listedUntil(new Date(p.expires_at).toLocaleDateString(loc(lang), { dateStyle: 'medium' }))}</p>
@@ -783,6 +1032,83 @@ function People() {
   )
 }
 
+// ---------- A post opened from a shared link (?post=…) ----------
+function SharedPost({ id, me, onClose, onChanged }) {
+  const { t } = useLang()
+  const [p, setP] = useState(undefined)
+  useEffect(() => {
+    let cancelled = false
+    supportsMultiPhoto().then((multi) =>
+      supabase.from('posts')
+        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? 'image_paths,edited_at,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
+        .eq('id', id).maybeSingle()
+    ).then(({ data }) => {
+      if (cancelled) return
+      setP(data ? { ...data, author_username: data.profiles?.username, author_display_name: data.profiles?.display_name, author_avatar_url: data.profiles?.avatar_url } : null)
+    })
+    return () => { cancelled = true }
+  }, [id])
+  if (p === undefined) return null
+  return (
+    <section className="space-y-2">
+      <div className="flex items-center justify-between px-1">
+        <h2 className="font-bold text-[#4a3af0]">{t.sharedPost}</h2>
+        <button className="text-sm text-stone-500 underline" onClick={onClose}>{t.backToFeed}</button>
+      </div>
+      {p ? <PostCard p={p} me={me} onChanged={onChanged} /> : <div className={`${card} text-stone-600`}>{t.postGone}</div>}
+    </section>
+  )
+}
+
+// ---------- Member counter ----------
+function MemberCount({ refreshKey }) {
+  const { t } = useLang()
+  const [n, setN] = useState(null)
+  useEffect(() => {
+    supabase.from('profiles').select('id', { count: 'exact', head: true })
+      .then(({ count }) => setN(count ?? null))
+  }, [refreshKey])
+  if (n == null) return null
+  return (
+    <div className="flex justify-center">
+      <span className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-[#4a3af0] ring-2 ring-[#dcdff5]">
+        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500 align-middle" />{t.members(n)}
+      </span>
+    </div>
+  )
+}
+
+// ---------- Home-screen tip ----------
+// iPhone: Safari cannot add a site by itself, so we show how. Android/Chrome: we can offer the install button.
+function HomeScreenTip() {
+  const { t } = useLang()
+  const [installEvt, setInstallEvt] = useState(null)
+  const [hidden, setHidden] = useState(() => {
+    try { return localStorage.getItem('wao_home_tip_hidden') === '1' } catch { return false }
+  })
+  const standalone = window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
+  useEffect(() => {
+    const onPrompt = (e) => { e.preventDefault(); setInstallEvt(e) }
+    window.addEventListener('beforeinstallprompt', onPrompt)
+    return () => window.removeEventListener('beforeinstallprompt', onPrompt)
+  }, [])
+  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden', '1') } catch { /* ignore */ } setHidden(true) }
+  if (hidden || standalone || (!ios && !installEvt)) return null
+  return (
+    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-3 text-sm">
+      <img src="/apple-touch-icon.png" alt="" className="h-10 w-10 shrink-0 rounded-xl" />
+      <div className="flex-1 space-y-2">
+        <p>{ios ? t.homeTipIos : t.homeTipInstall}</p>
+        {!ios && installEvt && (
+          <button className={ghostSm} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
+        )}
+      </div>
+      <button className="text-xs text-stone-500 underline" onClick={hide}>{t.gotIt}</button>
+    </div>
+  )
+}
+
 // ---------- Roadmap banner (follows the language toggle) ----------
 function RoadmapBanner() {
   const { t } = useLang()
@@ -912,6 +1238,10 @@ function OurPromise({ onReplay }) {
   const { t } = useLang()
   return (
     <>
+      <div className={`${card} !bg-[#14123a] text-white`}>
+        <h2 className="mb-2 text-xl font-bold text-[#f6d155]">{t.differentTitle}</h2>
+        <p>{t.differentText}</p>
+      </div>
       <div className={card}>
         <h2 className="mb-4 text-xl font-bold">{t.promiseTitle}</h2>
         {t.promiseItems.map(([title, desc], i) => (
@@ -931,6 +1261,18 @@ function OurPromise({ onReplay }) {
           <p><b>{t.comingSoon[0]}</b>{t.comingSoon[1]}</p>
         </div>
       )}
+      <div className={card}>
+        <h2 className="mb-1 text-xl font-bold">{t.policiesTitle}</h2>
+        <p className="mb-3 text-sm text-stone-500">{t.policiesNote}</p>
+        {t.policies.map(([title, lines]) => (
+          <details key={title} className="border-t-2 border-[#eef0fc] py-3">
+            <summary className="cursor-pointer font-bold text-[#4a3af0]">{title}</summary>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-700">
+              {lines.map((l) => <li key={l}>{l}</li>)}
+            </ul>
+          </details>
+        ))}
+      </div>
       {onReplay && <button className={ghost} onClick={onReplay}>{t.welcome.replay}</button>}
     </>
   )
@@ -946,6 +1288,7 @@ export default function App() {
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [welcome, setWelcome] = useState(null)
   const [composerOpen, setComposerOpen] = useState(false)
+  const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
     if (fromLink === 'en' || fromLink === 'es') return fromLink
@@ -996,6 +1339,12 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
+  function closeShared() {
+    setSharedId(null)
+    const url = new URL(window.location.href)
+    url.searchParams.delete('post')
+    window.history.replaceState(null, '', url.pathname + url.search)
+  }
   const feedProps = { session, refreshKey, onChanged: posted }
 
   return (
@@ -1020,8 +1369,15 @@ export default function App() {
               onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
           )}
 
+          {sharedId && tab === 'everyone' && (
+            <SharedPost key={`${sharedId}-${refreshKey}`} id={sharedId} me={me} onClose={closeShared} onChanged={posted} />
+          )}
           {tab === 'everyone' && (
-            <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
+            <>
+              <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
+              <MemberCount refreshKey={refreshKey} />
+              <HomeScreenTip />
+            </>
           )}
           {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
             <Composer userId={me} mode="update"
