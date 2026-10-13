@@ -317,3 +317,16 @@ as $function$
 $function$;
 revoke all on function public.my_affiliate_tiers(integer) from public, anon;
 grant execute on function public.my_affiliate_tiers(integer) to authenticated;
+
+-- Whole-community numbers for the banner slideshow (counts only, visible to visitors too).
+create or replace function public.affiliate_community_stats()
+ returns jsonb language sql stable security definer set search_path to ''
+as $function$
+  select jsonb_build_object(
+    'members', count(*),
+    'members_week', count(*) filter (where created_at >= now() - interval '7 days'),
+    'invited', count(*) filter (where referred_by is not null),
+    'invited_week', count(*) filter (where referred_by is not null and created_at >= now() - interval '7 days')
+  ) from public.profiles;
+$function$;
+grant execute on function public.affiliate_community_stats() to anon, authenticated;
