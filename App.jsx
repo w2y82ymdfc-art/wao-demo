@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.',
+    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.',
+    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -472,7 +472,7 @@ function SignIn() {
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
       <div className="space-y-2 border-t border-[#dcdff5] pt-3">
         <p className="text-sm text-stone-600">{t.pwHint}</p>
-        <input className={field} type="password" autoComplete="current-password" placeholder={t.pwPlaceholder}
+        <PasswordInput autoComplete="current-password" placeholder={t.pwPlaceholder}
           value={password} onChange={(e) => setPassword(e.target.value)} />
         <button type="button" className={primary} disabled={!email || password.length < 6} onClick={signInPw}>{t.pwSignIn}</button>
       </div>
@@ -1080,7 +1080,28 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
 
       <PasswordSetter />
 
-      <button type="button" className={ghostSm} onClick={onSignOut}>{t.signOut}</button>
+      <div className="mt-8 border-t border-[#dcdff5] pt-6">
+        <button type="button" className={ghostSm} onClick={onSignOut}>{t.signOut}</button>
+      </div>
+    </div>
+  )
+}
+
+// Password field with a show/hide eye toggle (easier typing on phones).
+function PasswordInput(props) {
+  const { t } = useLang()
+  const [show, setShow] = useState(false)
+  return (
+    <div className="relative">
+      <input {...props} className={`${field} pr-14`} type={show ? 'text' : 'password'} />
+      <button type="button" onClick={() => setShow(!show)} aria-label={show ? t.pwHide : t.pwShow} title={show ? t.pwHide : t.pwShow}
+        className="absolute inset-y-0 right-1 flex w-12 items-center justify-center text-stone-500">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+          <circle cx="12" cy="12" r="3" />
+          {show && <line x1="3" y1="3" x2="21" y2="21" />}
+        </svg>
+      </button>
     </div>
   )
 }
@@ -1104,7 +1125,7 @@ function PasswordSetter() {
     <form onSubmit={save} className="space-y-2 border-t border-[#dcdff5] pt-4">
       <h3 className="font-bold">{t.pwTitle}</h3>
       <p className="text-sm text-stone-600">{t.pwSetHint}</p>
-      <input className={field} type="password" autoComplete="new-password" placeholder={t.pwNew} value={pw} onChange={(e) => setPw(e.target.value)} />
+      <PasswordInput autoComplete="new-password" placeholder={t.pwNew} value={pw} onChange={(e) => setPw(e.target.value)} />
       <button disabled={busy} className={primary}>{t.pwSave}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
     </form>
@@ -1442,11 +1463,14 @@ function Hero({ signedIn, open, onShare, onSignIn }) {
   const { t } = useLang()
   return (
     <section className="relative overflow-hidden rounded-3xl bg-[#14123a] text-white">
-      <img src={heroImg} alt="" className="block w-full" />
-      <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-[#14123a] via-[#14123a]/85 to-transparent px-5 pb-12 pt-5">
+      <div className="px-5 pb-4 pt-5">
         <h2 className="text-[clamp(1.5rem,6.4vw,2.25rem)] font-black leading-tight tracking-tight">
           {t.hero.l1}<br /><span className="text-[#f6d155]">{t.hero.l2}</span>
         </h2>
+      </div>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#14123a] to-transparent" />
+        <img src={heroImg} alt="" className="block w-full" />
       </div>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14123a] via-[#14123a]/70 to-transparent px-5 pb-5 pt-16">
         <button className="w-full rounded-full bg-[#f6d155] px-6 py-3.5 text-lg font-black text-[#14123a]" onClick={signedIn ? onShare : onSignIn}>
