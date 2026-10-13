@@ -41,7 +41,7 @@ const I18N = {
     confirmRemoveContact: (n) => `Remove ${n} from your contacts? You will stop seeing each other's contacts-only moments.`,
     needUpdate: 'Contacts are being set up. Please check back soon.',
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
-    addPhotos: (n) => `Add photos (${n} left)`, maxPhotos: (n) => `Up to ${n} photos per post.`,
+    photoLimit: (n) => `You've reached the maximum of ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wao! on your home screen: tap the Share button in Safari, then "Add to Home Screen".',
@@ -181,7 +181,7 @@ const I18N = {
     confirmRemoveContact: (n) => `¿Quitar a ${n} de tus contactos? Dejarán de ver los momentos solo para contactos del otro.`,
     needUpdate: 'Los contactos se están configurando. Vuelve pronto.',
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
-    addPhotos: (n) => `Añadir fotos (quedan ${n})`, maxPhotos: (n) => `Hasta ${n} fotos por publicación.`,
+    photoLimit: (n) => `Llegaste al máximo de ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wao! en tu pantalla de inicio: toca el botón Compartir de Safari y luego "Agregar a inicio".',
@@ -546,9 +546,12 @@ function PhotoGrid({ items, onRemove }) {
 
 function usePhotoPicker(initial, max, onError) {
   const [items, setItems] = useState(initial)
+  const [limitHit, setLimitHit] = useState(false)
   const fileRef = useRef(null)
   async function pick(e) {
-    const files = Array.from(e.target.files || []).slice(0, Math.max(0, max - items.length))
+    const chosen = Array.from(e.target.files || [])
+    const files = chosen.slice(0, Math.max(0, max - items.length))
+    if (chosen.length > files.length) setLimitHit(true)
     if (fileRef.current) fileRef.current.value = ''
     const added = []
     for (const file of files) {
@@ -560,6 +563,7 @@ function usePhotoPicker(initial, max, onError) {
     setItems((cur) => [...cur, ...added].slice(0, max))
   }
   function removeAt(i) {
+    setLimitHit(false)
     setItems((cur) => {
       if (cur[i]?.url) URL.revokeObjectURL(cur[i].url)
       return cur.filter((_, k) => k !== i)
@@ -567,10 +571,16 @@ function usePhotoPicker(initial, max, onError) {
   }
   function reset(next = []) {
     items.forEach((it) => it.url && URL.revokeObjectURL(it.url))
+    setLimitHit(false)
     setItems(next)
   }
+  function open() {
+    if (items.length >= max) { setLimitHit(true); return }
+    setLimitHit(false)
+    fileRef.current?.click()
+  }
   const input = <input ref={fileRef} type="file" accept="image/*" multiple={max > 1} hidden onChange={pick} />
-  return { items, removeAt, reset, input, open: () => fileRef.current?.click() }
+  return { items, removeAt, reset, input, open, limitHit }
 }
 
 // Uploads any new photos and returns the full ordered list of storage paths, plus the ones just uploaded.
@@ -727,15 +737,15 @@ function Composer({ userId, mode, onPosted }) {
 
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
 
+      {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
+
       {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={setVisibility} />}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex flex-wrap items-center gap-3">
         {photos.input}
-        <button type="button" className={ghost} disabled={photos.items.length >= maxPhotos} onClick={photos.open}>
-          {maxPhotos > 1 ? t.addPhotos(maxPhotos - photos.items.length) : t.addPhoto}
-        </button>
+        <button type="button" className={ghost} onClick={photos.open}>{t.addPhoto}</button>
         <span className="text-sm text-stone-500">{f.body.length} / 500</span>
         <button disabled={busy || !f.body.trim()} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
       </div>
@@ -859,12 +869,11 @@ function PostEditor({ p, me, onDone, onCancel }) {
       )}
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
       {photos.input}
+      {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
       {canChooseVisibility && <VisibilityPicker value={visibility} onChange={setVisibility} />}
       {err && <p className="text-sm text-red-600">{err}</p>}
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" className={ghostSm} disabled={photos.items.length >= maxPhotos} onClick={photos.open}>
-          {maxPhotos > 1 ? t.addPhotos(Math.max(0, maxPhotos - photos.items.length)) : t.addPhoto}
-        </button>
+        <button type="button" className={ghostSm} onClick={photos.open}>{t.addPhoto}</button>
         <button type="button" className={ghostSm} onClick={() => { photos.reset(); onCancel() }}>{t.cancel}</button>
         <button disabled={busy || !body.trim()} className={`${primary} ml-auto !py-2`}>{busy ? t.saving : t.save}</button>
       </div>
