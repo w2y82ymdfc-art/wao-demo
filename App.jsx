@@ -338,12 +338,28 @@ function supportsMultiPhoto() {
   if (!schemaCheck) {
     schemaCheck = supabase.from('posts').select('image_paths,edited_at,visibility,public_block_reason').limit(1)
       .then(({ error }) => !error).catch(() => false)
+      // Never remember a failed check: it can fail just because sign-in was still settling.
+      .then((ok) => { if (!ok) schemaCheck = null; return ok })
   }
   return schemaCheck
 }
+// Re-checks whenever the signed-in member changes, so signing in later still unlocks Contacts.
 function useSchemaReady() {
   const [ready, setReady] = useState(false)
-  useEffect(() => { supportsMultiPhoto().then(setReady) }, [])
+  const [who, setWho] = useState(null)
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setWho(s?.user.id || null))
+    return () => sub.subscription.unsubscribe()
+  }, [])
+  useEffect(() => {
+    let alive = true
+    supportsMultiPhoto().then((ok) => {
+      if (!alive) return
+      setReady(ok)
+      if (!ok) setTimeout(() => { if (alive) supportsMultiPhoto().then((ok2) => alive && setReady(ok2)) }, 3000)
+    })
+    return () => { alive = false }
+  }, [who])
   return ready
 }
 const NEW_COLS = 'image_paths,edited_at,visibility,public_block_reason,'
