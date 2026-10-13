@@ -272,3 +272,48 @@ AS $function$
   limit least(coalesce(p_limit, 20), 100);
 $function$;
 grant execute on function public.get_feed(post_kind, text, double precision, double precision, double precision, timestamptz, uuid, integer) to anon, authenticated;
+------------------------------------------------------------------ Affiliate dashboard
+-- A member's sub-affiliates by tier, built from profiles.referred_by (set when someone joins through an invite link).
+-- Tier 1 = people you invited, tier 2 = people they invited, tier 3 = the next level.
+-- Returns counts, weekly growth for the last p_weeks weeks, and the names of your tier 1 only
+-- (tiers 2 and 3 are shown as counts, so members never see who is deeper in someone else's network).
+create or replace function public.my_affiliate_tiers(p_weeks integer default 8)
+ returns jsonb language sql stable security definer set search_path to ''
+as $function$
+  with recursive tree as (
+    select p.id, p.created_at, 1 as tier
+    from public.profiles p
+    where p.referred_by = (select auth.uid()) and p.id <> (select auth.uid())
+    union all
+    select c.id, c.created_at, t.tier + 1
+    from public.profiles c
+    join tree t on c.referred_by = t.id
+    where t.tier < 3 and c.id <> (select auth.uid())
+  ),
+  weeks as (
+    select generate_series(
+      date_trunc('week', now()) - make_interval(weeks => greatest(least(coalesce(p_weeks, 8), 26), 1) - 1),
+      date_trunc('week', now()), interval '1 week') as wk
+  )
+  select case when (select auth.uid()) is null then null else jsonb_build_object(
+    'tier1', (select count(*) from tree where tier = 1),
+    'tier2', (select count(*) from tree where tier = 2),
+    'tier3', (select count(*) from tree where tier = 3),
+    'week1', (select count(*) from tree where tier = 1 and created_at >= now() - interval '7 days'),
+    'week2', (select count(*) from tree where tier = 2 and created_at >= now() - interval '7 days'),
+    'week3', (select count(*) from tree where tier = 3 and created_at >= now() - interval '7 days'),
+    'weeks', (select coalesce(jsonb_agg(jsonb_build_object(
+                'week', w.wk::date,
+                't1', (select count(*) from tree where tier = 1 and created_at < w.wk + interval '1 week'),
+                't2', (select count(*) from tree where tier = 2 and created_at < w.wk + interval '1 week'),
+                't3', (select count(*) from tree where tier = 3 and created_at < w.wk + interval '1 week'))
+              order by w.wk), '[]'::jsonb) from weeks w),
+    'first_tier', (select coalesce(jsonb_agg(jsonb_build_object(
+                     'id', p.id, 'display_name', p.display_name, 'avatar_url', p.avatar_url, 'joined', p.created_at)
+                   order by p.created_at desc), '[]'::jsonb)
+                   from (select pr.* from public.profiles pr join tree t on t.id = pr.id and t.tier = 1
+                         order by pr.created_at desc limit 50) p)
+  ) end;
+$function$;
+revoke all on function public.my_affiliate_tiers(integer) from public, anon;
+grant execute on function public.my_affiliate_tiers(integer) to authenticated;

@@ -48,6 +48,27 @@ const I18N = {
     homeTipInstall: 'Put Wao! on your home screen so it opens like an app.', install: 'Add to home screen',
     banner: 'Wao! is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
+    aff: {
+      bannerTitle: 'Your Affiliate network',
+      bannerOut: ['Free Three-Tier Affiliate Program.', ' Invite people and share in the advertising revenue Wao! receives: 20% · 10% · 5%.'],
+      join: 'Join free',
+      tier: (n) => `Tier ${n}`,
+      newWeek: (n) => `+${n} this week`,
+      open: 'Open my dashboard',
+      title: 'Affiliate dashboard', back: '← Back',
+      intro: 'Your network grows when someone joins Wao! through your invite link, and again when they invite others.',
+      tierDesc: ['People you invited', 'Invited by your Tier 1', 'Invited by your Tier 2'],
+      shareOf: (r) => `${r}% share of ad revenue`,
+      total: (n) => `${n.toLocaleString('en')} in your network`,
+      growth: 'Network growth, last 8 weeks',
+      weekOf: (d) => new Date(`${d}T12:00:00`).toLocaleDateString('en', { month: 'short', day: 'numeric' }),
+      firstTier: 'Your Tier 1',
+      noneYet: 'No sub-affiliates yet. Share your invite link to start your network.',
+      joined: (d) => `Joined ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
+      earningsTitle: 'Commissions',
+      earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wao! actually receives and has cleared, are paid monthly, and are never guaranteed.',
+      loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
+    },
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
     pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'You are not signed in on this screen', outText: 'On iPhone, Wao! opened from the home-screen icon, from Safari, or from an email app each keeps its own sign-in. Sign in once here with your email and password, and Profile and your welcome come back. It stays signed in after that.', outBtn: 'Sign in here', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
@@ -189,6 +210,27 @@ const I18N = {
     homeTipInstall: 'Pon Wao! en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
     banner: 'Wao! está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
+    aff: {
+      bannerTitle: 'Tu red de Afiliados',
+      bannerOut: ['Programa de Afiliados de Tres Niveles, gratis.', ' Invita personas y participa de los ingresos por publicidad que recibe Wao!: 20% · 10% · 5%.'],
+      join: 'Únete gratis',
+      tier: (n) => `Nivel ${n}`,
+      newWeek: (n) => `+${n} esta semana`,
+      open: 'Abrir mi panel',
+      title: 'Panel de Afiliados', back: '← Volver',
+      intro: 'Tu red crece cuando alguien se une a Wao! con tu enlace de invitación, y otra vez cuando esa persona invita a otros.',
+      tierDesc: ['Personas que invitaste', 'Invitados por tu Nivel 1', 'Invitados por tu Nivel 2'],
+      shareOf: (r) => `${r}% de los ingresos por publicidad`,
+      total: (n) => `${n.toLocaleString('es')} en tu red`,
+      growth: 'Crecimiento de la red, últimas 8 semanas',
+      weekOf: (d) => new Date(`${d}T12:00:00`).toLocaleDateString('es', { month: 'short', day: 'numeric' }),
+      firstTier: 'Tu Nivel 1',
+      noneYet: 'Aún no tienes subafiliados. Comparte tu enlace de invitación para empezar tu red.',
+      joined: (d) => `Se unió el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
+      earningsTitle: 'Comisiones',
+      earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wao! recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
+      loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
+    },
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
     pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'No has iniciado sesión en esta pantalla', outText: 'En iPhone, Wao! abierto desde el ícono de la pantalla de inicio, desde Safari o desde una app de correo guarda su propia sesión. Entra una vez aquí con tu correo y contraseña, y vuelven tu Perfil y tu bienvenida. Después se queda con la sesión abierta.', outBtn: 'Entrar aquí', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
@@ -1463,6 +1505,184 @@ function HomeScreenTip() {
   )
 }
 
+// ---------- Affiliate Program: tier banner + dashboard ----------
+// Data comes from the my_affiliate_tiers() database function (built from profiles.referred_by).
+// Tier 1 = people you invited, Tier 2 = people they invited, Tier 3 = the next level.
+const TIER_RATES = [20, 10, 5]
+const TIER_COLORS = ['#4a3af0', '#9a8ff7', '#e0a800']
+
+function useAffiliateTiers(me, refreshKey) {
+  const [state, setState] = useState({ data: null, error: false, loading: !!me })
+  useEffect(() => {
+    if (!me) { setState({ data: null, error: false, loading: false }); return }
+    let live = true
+    setState((s) => ({ ...s, loading: true }))
+    supabase.rpc('my_affiliate_tiers', { p_weeks: 8 }).then(({ data, error }) => {
+      if (live) setState({ data: error ? null : data, error: !!error, loading: false })
+    })
+    return () => { live = false }
+  }, [me, refreshKey])
+  return state
+}
+
+async function shareInviteLink(me, lang, t, onCopied) {
+  const url = inviteLink(me, lang)
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Wao!', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+  }
+  try { await navigator.clipboard.writeText(url); onCopied?.() } catch { window.prompt('', url) }
+}
+
+function TierDot({ i }) {
+  return <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: TIER_COLORS[i] }} />
+}
+
+// Banner at the front of the platform. Members see their own network by tier; visitors see the program and a join button.
+function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
+  const { t } = useLang()
+  const { data } = useAffiliateTiers(me, refreshKey)
+  if (!me) {
+    return (
+      <div className="flex flex-wrap items-center gap-3 rounded-3xl bg-[#14123a] px-4 py-3 text-sm text-white">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#f6d155] font-extrabold text-[#14123a]">%</span>
+        <p className="min-w-0 flex-1"><b>{t.aff.bannerOut[0]}</b>{t.aff.bannerOut[1]}</p>
+        <button className="rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]" onClick={onSignIn}>{t.aff.join}</button>
+      </div>
+    )
+  }
+  const counts = [data?.tier1, data?.tier2, data?.tier3]
+  const fresh = [data?.week1, data?.week2, data?.week3]
+  return (
+    <button onClick={onOpen} className="block w-full rounded-3xl bg-[#14123a] px-4 py-3 text-left text-white">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm font-bold">{t.aff.bannerTitle}</span>
+        <span className="text-xs font-bold text-[#f6d155]">{t.aff.open} →</span>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-2xl bg-white/10 px-3 py-2">
+            <div className="flex items-center gap-1.5 text-xs text-white/75"><TierDot i={i} />{t.aff.tier(i + 1)} · {TIER_RATES[i]}%</div>
+            <div className="text-2xl font-extrabold tabular-nums">{counts[i] ?? '–'}</div>
+            <div className={`text-xs tabular-nums ${fresh[i] ? 'font-bold text-emerald-300' : 'text-white/50'}`}>{t.aff.newWeek(fresh[i] ?? 0)}</div>
+          </div>
+        ))}
+      </div>
+    </button>
+  )
+}
+
+// Stacked weekly bars: the size of each tier at the end of each week.
+function TierGrowthChart({ weeks }) {
+  const { t } = useLang()
+  const [hover, setHover] = useState(null)
+  const max = Math.max(1, ...weeks.map((w) => w.t1 + w.t2 + w.t3))
+  const H = 140
+  const shown = hover ?? weeks.length - 1
+  const w = weeks[shown]
+  return (
+    <div>
+      <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-stone-600">
+        {w && <span className="font-bold text-[#14123a]">{t.aff.weekOf(w.week)}</span>}
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="flex items-center gap-1.5"><TierDot i={i} />{t.aff.tier(i + 1)} <b className="tabular-nums text-[#14123a]">{w ? w[`t${i + 1}`] : 0}</b></span>
+        ))}
+      </div>
+      <div className="flex items-end gap-1.5" style={{ height: H }} onMouseLeave={() => setHover(null)}>
+        {weeks.map((wk, k) => {
+          const vals = [wk.t1, wk.t2, wk.t3]
+          const total = vals[0] + vals[1] + vals[2]
+          return (
+            <button key={wk.week} aria-label={t.aff.weekOf(wk.week)} onMouseEnter={() => setHover(k)} onClick={() => setHover(k)}
+              className={`flex h-full flex-1 flex-col-reverse rounded-lg ${k === shown ? 'bg-[#eef0fc]' : ''}`}>
+              {total === 0 && <span className="block h-0.5 w-full rounded bg-[#dcdff5]" />}
+              {vals.map((v, i) => v > 0 && (
+                <span key={i} className="block w-full first:rounded-b-md last:rounded-t-md"
+                  style={{ height: `${(v / max) * (H - 8)}px`, background: TIER_COLORS[i], marginTop: 2 }} />
+              ))}
+            </button>
+          )
+        })}
+      </div>
+      <div className="mt-1 flex justify-between text-[11px] text-stone-500">
+        <span>{weeks[0] && t.aff.weekOf(weeks[0].week)}</span>
+        <span>{weeks.at(-1) && t.aff.weekOf(weeks.at(-1).week)}</span>
+      </div>
+    </div>
+  )
+}
+
+function AffiliateDashboard({ me, refreshKey, onBack }) {
+  const { t, lang } = useLang()
+  const { data, error, loading } = useAffiliateTiers(me, refreshKey)
+  const [note, setNote] = useState('')
+  if (!me) return <div className={`${card} text-stone-600`}>{t.needLogin}</div>
+  const counts = [data?.tier1 ?? 0, data?.tier2 ?? 0, data?.tier3 ?? 0]
+  const fresh = [data?.week1 ?? 0, data?.week2 ?? 0, data?.week3 ?? 0]
+  const total = counts[0] + counts[1] + counts[2]
+  return (
+    <div className="space-y-4">
+      <div className={`${card} space-y-2`}>
+        <button className="text-sm font-bold text-[#4a3af0]" onClick={onBack}>{t.aff.back}</button>
+        <h2 className="text-2xl font-extrabold">{t.aff.title}</h2>
+        <p className="text-stone-600">{t.aff.intro}</p>
+        {data && <p className="text-sm font-bold text-[#4a3af0]">{t.aff.total(total)}</p>}
+      </div>
+
+      {loading && !data && <div className={`${card} text-stone-600`}>{t.aff.loading}</div>}
+      {error && <div className={`${card} text-stone-600`}>{t.aff.error}</div>}
+
+      {data && (
+        <>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className={`${card} !p-4`}>
+                <div className="flex items-center gap-2 text-sm font-bold"><TierDot i={i} />{t.aff.tier(i + 1)}</div>
+                <div className="mt-1 text-4xl font-extrabold tabular-nums">{counts[i]}</div>
+                <div className={`text-sm tabular-nums ${fresh[i] ? 'font-bold text-emerald-700' : 'text-stone-500'}`}>{t.aff.newWeek(fresh[i])}</div>
+                <div className="mt-2 text-xs text-stone-600">{t.aff.tierDesc[i]}</div>
+                <div className="mt-1 text-xs font-bold text-[#4a3af0]">{t.aff.shareOf(TIER_RATES[i])}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className={`${card} space-y-2`}>
+            <h3 className="font-bold">{t.aff.growth}</h3>
+            <TierGrowthChart weeks={data.weeks || []} />
+          </div>
+
+          <div className={`${card} space-y-3`}>
+            <h3 className="font-bold">{t.aff.firstTier}</h3>
+            {(data.first_tier || []).length === 0
+              ? <p className="text-stone-600">{t.aff.noneYet}</p>
+              : (
+                <ul className="space-y-2">
+                  {data.first_tier.map((p) => (
+                    <li key={p.id} className="flex items-center gap-3">
+                      <Avatar url={p.avatar_url} name={p.display_name} />
+                      <div className="min-w-0">
+                        <div className="truncate font-bold">{p.display_name}</div>
+                        <div className="text-xs text-stone-500">{t.aff.joined(p.joined)}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            <div className="flex flex-wrap items-center gap-3">
+              <button className={primary} onClick={() => shareInviteLink(me, lang, t, () => { setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) })}>{t.inviteBtn}</button>
+              {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm">
+        <p className="font-bold">{t.aff.earningsTitle}</p>
+        <p className="text-stone-700">{t.aff.earningsText}</p>
+      </div>
+    </div>
+  )
+}
+
 // ---------- Roadmap banner (follows the language toggle) ----------
 function RoadmapBanner() {
   const { t } = useLang()
@@ -1786,6 +2006,8 @@ export default function App() {
           )}
           {tab === 'everyone' && (
             <>
+              <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+                onSignIn={() => setShowSignIn(true)} />
               <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
               <MemberCount refreshKey={refreshKey} />
               <HomeScreenTip />
@@ -1835,6 +2057,7 @@ export default function App() {
               <Feed mode="offer" {...feedProps} />
             </>
           )}
+          {tab === 'affiliate' && <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')} />}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
