@@ -1639,10 +1639,15 @@ function TierTiles({ values, sub, active, money }) {
     <div className="mt-2 grid grid-cols-3 gap-2">
       {[0, 1, 2].map((i) => (
         <div key={i} className="rounded-2xl bg-white/10 px-3 py-2">
-          <div className="flex items-center gap-1.5 text-xs text-white/75"><TierDot i={i} />{t.aff.tier(i + 1)}{money ? '' : ` · ${TIER_RATES[i]}%`}</div>
-          <div className={`text-2xl font-extrabold ${money ? 'text-[#f6d155]' : ''}`}>
-            {money ? `${TIER_RATES[i]}%` : <CountUp value={values[i]} active={active} />}
-          </div>
+          <div className="flex items-center gap-1.5 whitespace-nowrap text-xs text-white/75"><TierDot i={i} />{t.aff.tier(i + 1)}</div>
+          {money
+            ? <div className="text-2xl font-extrabold text-[#f6d155]">{TIER_RATES[i]}%</div>
+            : (
+              <div className="flex items-baseline justify-between gap-1">
+                <span className="text-2xl font-extrabold"><CountUp value={values[i]} active={active} /></span>
+                <span className="text-xs font-bold text-[#f6d155]">{TIER_RATES[i]}%</span>
+              </div>
+            )}
           <div className={`text-xs leading-tight ${sub[i].hot ? 'font-bold text-emerald-300' : 'text-white/60'}`}>{sub[i].text}</div>
         </div>
       ))}
