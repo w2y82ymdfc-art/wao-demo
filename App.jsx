@@ -44,7 +44,7 @@ const I18N = {
     photoLimit: (n) => `You've reached the maximum of ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
-    homeTipIos: 'Put Wao! on your home screen: tap the Share button in Safari, then "Add to Home Screen".',
+    homeTipIos: 'Put Wao! on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wao! on your home screen so it opens like an app.', install: 'Add to home screen',
     banner: 'Wao! is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
@@ -184,7 +184,7 @@ const I18N = {
     photoLimit: (n) => `Llegaste al máximo de ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
-    homeTipIos: 'Pon Wao! en tu pantalla de inicio: toca el botón Compartir de Safari y luego "Agregar a inicio".',
+    homeTipIos: 'Pon Wao! en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wao! en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
     banner: 'Wao! está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
@@ -1344,7 +1344,7 @@ function MemberCount({ refreshKey }) {
 }
 
 // ---------- Home-screen tip ----------
-// iPhone: Safari cannot add a site by itself, so we show how. Android/Chrome: we can offer the install button.
+// Phones (iPhone and Android): show how to add Wao! from the browser's Share button. Where the browser offers it, also show an install button.
 function HomeScreenTip() {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
@@ -1353,19 +1353,20 @@ function HomeScreenTip() {
   })
   const standalone = window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
+  const mobile = ios || /android/i.test(navigator.userAgent)
   useEffect(() => {
     const onPrompt = (e) => { e.preventDefault(); setInstallEvt(e) }
     window.addEventListener('beforeinstallprompt', onPrompt)
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
   const hide = () => { try { localStorage.setItem('wao_home_tip_hidden', '1') } catch { /* ignore */ } setHidden(true) }
-  if (hidden || standalone || (!ios && !installEvt)) return null
+  if (hidden || standalone || (!mobile && !installEvt)) return null
   return (
     <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-3 text-sm">
       <img src="/apple-touch-icon.png" alt="" className="h-10 w-10 shrink-0 rounded-xl" />
       <div className="flex-1 space-y-2">
-        <p>{ios ? t.homeTipIos : t.homeTipInstall}</p>
-        {!ios && installEvt && (
+        <p>{mobile ? t.homeTipIos : t.homeTipInstall}</p>
+        {installEvt && (
           <button className={ghostSm} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
         )}
       </div>
