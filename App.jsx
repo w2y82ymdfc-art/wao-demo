@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    codeHint: 'Using Wao! from your home screen? In the email, press and hold "Sign in", tap Copy Link, and paste it here.', codePlaceholder: 'Paste the sign-in link here', codeVerify: 'Sign in here', notLink: 'That is not the sign-in link yet. Copy the link from the email and paste it here.',
+    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    codeHint: '¿Usas Wao! desde tu pantalla de inicio? En el correo, mantén presionado "Sign in", toca Copiar enlace y pégalo aquí.', codePlaceholder: 'Pega aquí el enlace de acceso', codeVerify: 'Entrar aquí', notLink: 'Eso todavía no es el enlace de acceso. Copia el enlace del correo y pégalo aquí.',
+    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -442,28 +442,11 @@ function SignIn() {
   const setEmail = (v) => { setEmailRaw(v); try { localStorage.setItem('wao_signin_email', v) } catch { /* ignore */ } }
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
-  const [sent, setSent] = useState(false)
-  const [code, setCode] = useState('')
+  const [password, setPassword] = useState('')
 
-  async function verify(e) {
-    e.preventDefault()
-    const v = code.trim()
-    let res
-    if (/^\d{6}$/.test(v)) {
-      res = await supabase.auth.verifyOtp({ email, token: v, type: 'email' })
-    } else {
-      // A pasted sign-in link: use the token inside it, so the home-screen app signs in by itself.
-      // Gmail and other apps may wrap the link (e.g. google.com/url?q=...), so unwrap it before reading the token.
-      let text = v, tokenHash = null, type = 'magiclink'
-      for (let k = 0; k < 3; k++) { try { text = decodeURIComponent(text) } catch { break } }
-      const tm = text.match(/[?&]token(?:_hash)?=([^&#\s]+)/)
-      const ty = text.match(/[?&]type=([a-z_]+)/)
-      if (tm) tokenHash = tm[1]
-      if (ty) type = ty[1]
-      if (!tokenHash) { setMsg(t.notLink); return }
-      res = await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
-    }
-    if (res.error) setMsg(res.error.message)
+  async function signInPw() {
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    if (error) setMsg(t.pwBad)
   }
 
   async function submit(e) {
@@ -478,7 +461,6 @@ function SignIn() {
       },
     })
     setMsg(error ? error.message : t.checkEmail)
-    if (!error) setSent(true)
   }
 
   return (
@@ -488,14 +470,12 @@ function SignIn() {
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
       <button className={primary}>{t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
-      {(
-        <div className="space-y-2 border-t border-[#dcdff5] pt-3">
-          <p className="text-sm text-stone-600">{t.codeHint}</p>
-          <input className={field} autoComplete="one-time-code" autoCapitalize="off" autoCorrect="off" placeholder={t.codePlaceholder}
-            value={code} onChange={(e) => setCode(e.target.value)} />
-          <button type="button" className={primary} disabled={code.trim().length < 6} onClick={verify}>{t.codeVerify}</button>
-        </div>
-      )}
+      <div className="space-y-2 border-t border-[#dcdff5] pt-3">
+        <p className="text-sm text-stone-600">{t.pwHint}</p>
+        <input className={field} type="password" autoComplete="current-password" placeholder={t.pwPlaceholder}
+          value={password} onChange={(e) => setPassword(e.target.value)} />
+        <button type="button" className={primary} disabled={!email || password.length < 6} onClick={signInPw}>{t.pwSignIn}</button>
+      </div>
     </form>
   )
 }
@@ -1098,8 +1078,36 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
         {msg && <p className="text-sm text-stone-600">{msg}</p>}
       </form>
 
+      <PasswordSetter />
+
       <button type="button" className={ghostSm} onClick={onSignOut}>{t.signOut}</button>
     </div>
+  )
+}
+
+// Lets a member set a password, so the home-screen app (which cannot use email links) can sign in.
+function PasswordSetter() {
+  const { t } = useLang()
+  const [pw, setPw] = useState('')
+  const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
+  async function save(e) {
+    e.preventDefault()
+    if (pw.length < 8) return setMsg(t.pwShort)
+    setBusy(true)
+    const { error } = await supabase.auth.updateUser({ password: pw })
+    setBusy(false)
+    setMsg(error ? error.message : t.pwSaved)
+    if (!error) setPw('')
+  }
+  return (
+    <form onSubmit={save} className="space-y-2 border-t border-[#dcdff5] pt-4">
+      <h3 className="font-bold">{t.pwTitle}</h3>
+      <p className="text-sm text-stone-600">{t.pwSetHint}</p>
+      <input className={field} type="password" autoComplete="new-password" placeholder={t.pwNew} value={pw} onChange={(e) => setPw(e.target.value)} />
+      <button disabled={busy} className={primary}>{t.pwSave}</button>
+      {msg && <p className="text-sm text-stone-600">{msg}</p>}
+    </form>
   )
 }
 
