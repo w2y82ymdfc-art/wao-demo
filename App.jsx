@@ -11,10 +11,35 @@ const supabase = createClient(
 const I18N = {
   en: {
     signIn: 'Sign in', profile: 'Profile', signOut: 'Sign out',
-    tabs: { everyone: 'Everyone', mine: 'My posts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
+    tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wao!',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
+    visContacts: 'Contacts only', visPublic: 'Public',
+    visContactsSub: 'Only your contacts see it', visPublicSub: 'Everyone, if it follows the rules',
+    publicRulesTitle: 'Rules for public moments',
+    publicRules: ['No prices or dollar amounts.', 'No web links or phone numbers.', 'Up to 3 public moments a day.', 'Hidden from Everyone if 3 members report it.'],
+    blocked: {
+      price: 'it mentions a price or dollar amount',
+      link: 'it includes a web link',
+      phone: 'it includes a phone number',
+      daily_cap: 'you already shared 3 public moments in the last 24 hours',
+      reported: '3 members reported it',
+    },
+    blockedNotice: (r) => `Shared with your contacts only. It is not public because ${r}.`,
+    notPublic: 'Not public:',
+    report: 'Report', reportedThanks: 'Reported. Thank you.', alreadyReported: 'You already reported this.',
+    confirmReport: 'Report this moment for breaking the community rules?',
+    inviteTitle: 'Invite people to Wao!',
+    inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
+    inviteBtn: 'Share my invite link', inviteShareText: 'Join me on Wao! New social media, new moments to remember.',
+    invitedBy: (n) => `${n} invited you to Wao! Join below and you will be connected.`,
+    nowContacts: (n) => `You and ${n} are now contacts!`,
+    requestsTitle: 'Contact requests', accept: 'Accept', decline: 'Decline',
+    myContacts: 'My contacts', noContacts: 'No contacts yet. Share your invite link to start!',
+    addContact: 'Add contact', requested: 'Requested', isContact: 'Contact', removeContact: 'Remove',
+    confirmRemoveContact: (n) => `Remove ${n} from your contacts? You will stop seeing each other's contacts-only moments.`,
+    needUpdate: 'Contacts are being set up. Please check back soon.',
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
     addPhotos: (n) => `Add photos (${n} left)`, maxPhotos: (n) => `Up to ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
@@ -91,7 +116,10 @@ const I18N = {
         'Be respectful. No harassment, hate, threats or scams.',
         'No adult content, violence or illegal goods or services.',
         'Moments are for moments. Selling goes in What I offer.',
-        'Tell us about anything that breaks these rules.',
+        'Moments are for your contacts by default. A public moment appears in Everyone only if it has no prices or dollar amounts, no web links and no phone numbers, and you have shared fewer than 3 public moments in the last 24 hours.',
+        'If a moment breaks a rule, it stays visible to your contacts and Wao! tells you exactly which rule it broke. Nothing is hidden quietly.',
+        'A public moment reported by 3 different members leaves Everyone. Your contacts can still see it.',
+        'Use Report on any moment that breaks these rules.',
       ]],
       ['Affiliate Program', [
         'Joining is free, and nobody ever has to buy anything.',
@@ -123,10 +151,35 @@ const I18N = {
   },
   es: {
     signIn: 'Iniciar sesión', profile: 'Perfil', signOut: 'Cerrar sesión',
-    tabs: { everyone: 'Todos', mine: 'Mis publicaciones', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
+    tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wao!',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
+    visContacts: 'Solo contactos', visPublic: 'Público',
+    visContactsSub: 'Solo tus contactos lo ven', visPublicSub: 'Todos, si cumple las reglas',
+    publicRulesTitle: 'Reglas para momentos públicos',
+    publicRules: ['Sin precios ni cantidades de dinero.', 'Sin enlaces web ni números de teléfono.', 'Hasta 3 momentos públicos al día.', 'Se oculta de Todos si 3 miembros lo reportan.'],
+    blocked: {
+      price: 'menciona un precio o una cantidad de dinero',
+      link: 'incluye un enlace web',
+      phone: 'incluye un número de teléfono',
+      daily_cap: 'ya compartiste 3 momentos públicos en las últimas 24 horas',
+      reported: '3 miembros lo reportaron',
+    },
+    blockedNotice: (r) => `Compartido solo con tus contactos. No es público porque ${r}.`,
+    notPublic: 'No es público:',
+    report: 'Reportar', reportedThanks: 'Reportado. Gracias.', alreadyReported: 'Ya reportaste esto.',
+    confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
+    inviteTitle: 'Invita personas a Wao!',
+    inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
+    inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Únete a Wao! Una nueva red social, nuevos momentos para recordar.',
+    invitedBy: (n) => `${n} te invitó a Wao! Únete abajo y quedarán conectados.`,
+    nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
+    requestsTitle: 'Solicitudes de contacto', accept: 'Aceptar', decline: 'Rechazar',
+    myContacts: 'Mis contactos', noContacts: 'Aún no tienes contactos. ¡Comparte tu enlace de invitación para empezar!',
+    addContact: 'Agregar contacto', requested: 'Solicitado', isContact: 'Contacto', removeContact: 'Quitar',
+    confirmRemoveContact: (n) => `¿Quitar a ${n} de tus contactos? Dejarán de ver los momentos solo para contactos del otro.`,
+    needUpdate: 'Los contactos se están configurando. Vuelve pronto.',
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
     addPhotos: (n) => `Añadir fotos (quedan ${n})`, maxPhotos: (n) => `Hasta ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
@@ -203,7 +256,10 @@ const I18N = {
         'Sé respetuoso. Nada de acoso, odio, amenazas ni estafas.',
         'Nada de contenido para adultos, violencia ni bienes o servicios ilegales.',
         'Los momentos son para momentos. Las ventas van en Lo que ofrezco.',
-        'Avísanos de cualquier cosa que no cumpla estas reglas.',
+        'Por defecto, los momentos son para tus contactos. Un momento público aparece en Todos solo si no tiene precios ni cantidades de dinero, ni enlaces web, ni números de teléfono, y has compartido menos de 3 momentos públicos en las últimas 24 horas.',
+        'Si un momento no cumple una regla, sigue visible para tus contactos y Wao! te dice exactamente qué regla no cumplió. Nada se oculta en silencio.',
+        'Un momento público reportado por 3 miembros distintos sale de Todos. Tus contactos aún pueden verlo.',
+        'Usa Reportar en cualquier momento que no cumpla estas reglas.',
       ]],
       ['Programa de Afiliados', [
         'Unirse es gratis y nadie tiene que comprar nada nunca.',
@@ -237,9 +293,10 @@ const I18N = {
 
 
 const BUCKET = 'photos'
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const PAGE = 20
 const CATEGORIES = ['general', 'produce', 'tools', 'services', 'household', 'free']
-const TABS = ['everyone', 'mine', 'discover', 'offer', 'promise']
+const TABS = ['everyone', 'mine', 'contacts', 'discover', 'offer', 'promise']
 // Set to true later to show listing prices ($5.00 / 30 days) and the Pricing card.
 const SHOW_PRICING = false
 
@@ -272,14 +329,42 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
   )
 }
 
-// Multi-photo posts need the image_paths column. Until that database update is applied, posts keep one photo.
-let multiPhotoCheck = null
+// New features (4 photos, visibility, contacts) need the database update. Until it is applied,
+// the app keeps working the old way: one photo, every moment public, no Contacts tab.
+let schemaCheck = null
 function supportsMultiPhoto() {
-  if (!multiPhotoCheck) {
-    multiPhotoCheck = supabase.from('posts').select('image_paths,edited_at').limit(1)
+  if (!schemaCheck) {
+    schemaCheck = supabase.from('posts').select('image_paths,edited_at,visibility,public_block_reason').limit(1)
       .then(({ error }) => !error).catch(() => false)
   }
-  return multiPhotoCheck
+  return schemaCheck
+}
+function useSchemaReady() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { supportsMultiPhoto().then(setReady) }, [])
+  return ready
+}
+const NEW_COLS = 'image_paths,edited_at,visibility,public_block_reason,'
+
+function inviteLink(me, lang) {
+  return `${window.location.origin}/?invite=${me}&ref=${me}&lang=${lang}`
+}
+
+// Connections of the signed-in member: { [otherId]: { id, status, incoming } }
+function useConnections(me, ready, refreshKey) {
+  const [map, setMap] = useState({})
+  const load = useCallback(async () => {
+    if (!me || !ready) { setMap({}); return }
+    const { data } = await supabase.from('connections').select('id,requester_id,addressee_id,status')
+    const next = {}
+    for (const c of data || []) {
+      const other = c.requester_id === me ? c.addressee_id : c.requester_id
+      next[other] = { id: c.id, status: c.status, incoming: c.addressee_id === me }
+    }
+    setMap(next)
+  }, [me, ready])
+  useEffect(() => { load() }, [load, refreshKey])
+  return { map, reload: load }
 }
 function useMaxPhotos() {
   const [max, setMax] = useState(1)
@@ -307,7 +392,7 @@ async function fetchMine(me, cursor, kind) {
   const multi = await supportsMultiPhoto()
   let q = supabase
     .from('posts')
-    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? 'image_paths,edited_at,' : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
+    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
     .eq('user_id', me)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
@@ -357,7 +442,8 @@ function SignIn() {
 
   async function submit(e) {
     e.preventDefault()
-    const ref = new URLSearchParams(window.location.search).get('ref')
+    let ref = new URLSearchParams(window.location.search).get('ref')
+    try { ref = ref || localStorage.getItem('wao_invite') } catch { /* ignore */ }
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -505,6 +591,30 @@ async function uploadPhotos(items, userId, postId) {
   return { paths, uploaded }
 }
 
+// ---------- Who can see a moment ----------
+function VisibilityPicker({ value, onChange }) {
+  const { t } = useLang()
+  return (
+    <div className="space-y-2">
+      <div className="grid grid-cols-2 gap-2">
+        {[['contacts', t.visContacts, t.visContactsSub], ['public', t.visPublic, t.visPublicSub]].map(([k, l, sub]) => (
+          <button type="button" key={k} onClick={() => onChange(k)} aria-pressed={value === k}
+            className={`rounded-2xl border-2 bg-white px-3 py-2 text-left ${value === k ? 'border-[#4a3af0] !bg-[#e8e9fb]' : 'border-[#dcdff5]'}`}>
+            <div className="font-bold">{l}</div>
+            <div className="text-sm text-stone-500">{sub}</div>
+          </button>
+        ))}
+      </div>
+      {value === 'public' && (
+        <div className="rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm">
+          <b>{t.publicRulesTitle}</b>
+          <ul className="mt-1 list-disc pl-5 text-stone-700">{t.publicRules.map((r) => <li key={r}>{r}</li>)}</ul>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ---------- Composer ----------
 function Composer({ userId, mode, onPosted }) {
   const { t } = useLang()
@@ -515,6 +625,8 @@ function Composer({ userId, mode, onPosted }) {
   const [geo, setGeo] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [visibility, setVisibility] = useState('contacts')
+  const ready = useSchemaReady()
   const maxPhotos = useMaxPhotos()
   const photos = usePhotoPicker([], maxPhotos, () => setError(t.couldNotRead))
 
@@ -550,13 +662,19 @@ function Composer({ userId, mode, onPosted }) {
         price_cents: kind === 'offer' && f.price !== '' ? Math.round(parseFloat(f.price) * 100) : null,
         location_text: detailed ? f.area || null : null,
         ...imageFields(up.paths, multi),
+        ...(multi && kind === 'update' ? { visibility } : {}),
         ...where,
       })
       if (postErr) throw postErr
+      let notice = ''
+      if (multi && kind === 'update' && visibility === 'public') {
+        const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
+        if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
+      }
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
       photos.reset()
-      onPosted()
+      onPosted(notice)
     } catch (err) {
       if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
       setError(err.message)
@@ -608,6 +726,8 @@ function Composer({ userId, mode, onPosted }) {
       )}
 
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
+
+      {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={setVisibility} />}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -688,6 +808,8 @@ function PostEditor({ p, me, onDone, onCancel }) {
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
   const [keepCaricature, setKeepCaricature] = useState(!!p.caricature_image_url)
+  const [visibility, setVisibility] = useState(p.visibility || 'contacts')
+  const canChooseVisibility = p.kind === 'update' && p.visibility != null
   const maxPhotos = useMaxPhotos()
   const original = postImages(p)
   const photos = usePhotoPicker(original.map((path) => ({ path })), Math.max(maxPhotos, original.length), () => setErr(t.couldNotRead))
@@ -705,6 +827,7 @@ function PostEditor({ p, me, onDone, onCancel }) {
         body: body.trim(),
         ...(p.kind !== 'update' ? { title: title.trim() || null } : {}),
         ...(p.caricature_image_url && !keepCaricature ? { caricature_image_url: null } : {}),
+        ...(canChooseVisibility ? { visibility } : {}),
         ...imageFields(up.paths, multi),
       }).eq('id', p.id).eq('user_id', me)
       if (error) throw error
@@ -736,6 +859,7 @@ function PostEditor({ p, me, onDone, onCancel }) {
       )}
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
       {photos.input}
+      {canChooseVisibility && <VisibilityPicker value={visibility} onChange={setVisibility} />}
       {err && <p className="text-sm text-red-600">{err}</p>}
       <div className="flex flex-wrap items-center gap-2">
         <button type="button" className={ghostSm} disabled={photos.items.length >= maxPhotos} onClick={photos.open}>
@@ -762,6 +886,10 @@ function PostCard({ p, me, onChanged }) {
   const expired = !!p.expires_at && new Date(p.expires_at) < new Date()
   const inactive = (!!p.status && p.status !== 'active') || expired
   const canClose = mine && p.kind !== 'update' && !inactive
+  const moment = p.kind === 'update' && p.visibility != null
+  const isPublic = moment && p.visibility === 'public' && !p.public_block_reason
+  const canShare = !inactive && (!moment || isPublic)
+  const canReport = !!me && !mine && moment && p.visibility === 'public'
 
   async function close() {
     if (!window.confirm(ongoing ? t.confirmClose : t.confirmFulfil)) return
@@ -786,6 +914,12 @@ function PostCard({ p, me, onChanged }) {
     if (images.length) supabase.storage.from(BUCKET).remove(images)
     onChanged()
   }
+  async function report() {
+    if (!window.confirm(t.confirmReport)) return
+    const { error } = await supabase.from('reports').insert({ reporter_id: me, post_id: p.id, reported_user_id: p.user_id })
+    const msg = !error ? t.reportedThanks : error.code === '23505' ? t.alreadyReported : error.message
+    setNote(msg); setTimeout(() => setNote(''), 3000)
+  }
   async function share() {
     const msg = await sharePost(p, t, lang)
     if (msg) { setNote(msg); setTimeout(() => setNote(''), 2500) }
@@ -799,7 +933,13 @@ function PostCard({ p, me, onChanged }) {
           <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
           <time className="text-xs text-stone-500">{when(p.created_at, lang)}{p.edited_at && ` · ${t.edited}`}</time>
         </div>
+        {moment && mine && (
+          <span className={`${chip} shrink-0 ${isPublic ? '!bg-emerald-100' : ''}`}>{isPublic ? t.visPublic : t.visContacts}</span>
+        )}
       </div>
+      {moment && mine && p.visibility === 'public' && p.public_block_reason && !editing && (
+        <p className="mt-3 rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm"><b>{t.notPublic}</b> {t.blocked[p.public_block_reason]}.</p>
+      )}
       {editing ? (
         <PostEditor p={p} me={me} onCancel={() => setEditing(false)} onDone={() => { setEditing(false); onChanged() }} />
       ) : (
@@ -832,7 +972,8 @@ function PostCard({ p, me, onChanged }) {
       )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
-        {!inactive && <button className={ghostSm} onClick={share}>{t.share}</button>}
+        {canShare && <button className={ghostSm} onClick={share}>{t.share}</button>}
+        {canReport && <button className={ghostSm} onClick={report}>{t.report}</button>}
         {mine && !editing && <button className={ghostSm} onClick={() => setEditing(true)}>{t.edit}</button>}
         {mine && <button className={ghostSm} disabled={deleting} onClick={remove}>{deleting ? t.deleting : t.deletePost}</button>}
         {canClose && <button className={ghostSm} onClick={close}>{ongoing ? t.closeListing : t.markFulfilled}</button>}
@@ -1019,7 +1160,39 @@ function Feed({ mode, session, refreshKey, onChanged }) {
 }
 
 // ---------- People on Wao! ----------
-function People() {
+function PersonRow({ p, children }) {
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar url={p.avatar_url} name={p.display_name} />
+      <div className="min-w-0 flex-1">
+        <div className="truncate"><b>{p.display_name}</b> <span className="text-sm text-stone-500">@{p.username}</span></div>
+        {p.location_text && <div className="text-xs text-stone-500">{p.location_text}</div>}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+// Add / Requested / Accept / Contact, with no duplicate requests (the database allows one link per pair).
+function ContactButton({ me, person, conn, onChanged }) {
+  const { t } = useLang()
+  const [busy, setBusy] = useState(false)
+  if (!me || person.id === me) return null
+  const c = conn[person.id]
+  async function run(fn) { setBusy(true); await fn(); setBusy(false); onChanged() }
+  if (!c) {
+    return <button className={ghostSm} disabled={busy}
+      onClick={() => run(() => supabase.from('connections').insert({ requester_id: me, addressee_id: person.id }))}>{t.addContact}</button>
+  }
+  if (c.status === 'pending' && c.incoming) {
+    return <button className={`${ghostSm} !bg-[#4a3af0] !text-white`} disabled={busy}
+      onClick={() => run(() => supabase.from('connections').update({ status: 'accepted' }).eq('id', c.id))}>{t.accept}</button>
+  }
+  if (c.status === 'pending') return <span className={chip}>{t.requested}</span>
+  return <span className={`${chip} !bg-emerald-100`}>{t.isContact}</span>
+}
+
+function People({ me, conn, onChanged, ready }) {
   const { t } = useLang()
   const [people, setPeople] = useState([])
   useEffect(() => {
@@ -1032,17 +1205,86 @@ function People() {
       <h2 className="mb-3 text-xl font-bold">{t.peopleTitle}</h2>
       <div className="space-y-3">
         {people.map((p) => (
-          <div key={p.id} className="flex items-center gap-3">
-            <Avatar url={p.avatar_url} name={p.display_name} />
-            <div className="min-w-0 flex-1">
-              <div className="truncate"><b>{p.display_name}</b> <span className="text-sm text-stone-500">@{p.username}</span></div>
-              {p.location_text && <div className="text-xs text-stone-500">{p.location_text}</div>}
-            </div>
-          </div>
+          <PersonRow key={p.id} p={p}>
+            {ready && <ContactButton me={me} person={p} conn={conn} onChanged={onChanged} />}
+          </PersonRow>
         ))}
       </div>
       <p className="mt-3 text-sm text-stone-500">{t.newestFirst}</p>
     </div>
+  )
+}
+
+// ---------- Contacts tab ----------
+function Contacts({ me, conn, onChanged, ready }) {
+  const { t, lang } = useLang()
+  const [profiles, setProfiles] = useState({})
+  const [note, setNote] = useState('')
+  const ids = Object.keys(conn)
+  const idKey = ids.sort().join(',')
+
+  useEffect(() => {
+    if (!idKey) { setProfiles({}); return }
+    supabase.from('profiles').select('id,username,display_name,avatar_url,location_text').in('id', idKey.split(','))
+      .then(({ data }) => setProfiles(Object.fromEntries((data || []).map((p) => [p.id, p]))))
+  }, [idKey])
+
+  async function shareInvite() {
+    const url = inviteLink(me, lang)
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Wao!', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    try { await navigator.clipboard.writeText(url); setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) } catch { window.prompt('', url) }
+  }
+  async function decline(c) {
+    await supabase.from('connections').delete().eq('id', c.id)
+    onChanged()
+  }
+  async function removeContact(c, p) {
+    if (!window.confirm(t.confirmRemoveContact(p?.display_name || ''))) return
+    await supabase.from('connections').delete().eq('id', c.id)
+    onChanged()
+  }
+
+  if (!me) return <div className={`${card} text-stone-600`}>{t.needLogin}</div>
+  if (!ready) return <div className={`${card} text-stone-600`}>{t.needUpdate}</div>
+
+  const incoming = ids.filter((id) => conn[id].status === 'pending' && conn[id].incoming)
+  const accepted = ids.filter((id) => conn[id].status === 'accepted')
+
+  return (
+    <>
+      <div className={`${card} space-y-3`}>
+        <h2 className="text-xl font-bold">{t.inviteTitle}</h2>
+        <p className="text-stone-600">{t.inviteText}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <button className={primary} onClick={shareInvite}>{t.inviteBtn}</button>
+          {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
+        </div>
+      </div>
+
+      {incoming.length > 0 && (
+        <div className={`${card} space-y-3`}>
+          <h2 className="text-xl font-bold">{t.requestsTitle}</h2>
+          {incoming.map((id) => profiles[id] && (
+            <PersonRow key={id} p={profiles[id]}>
+              <ContactButton me={me} person={profiles[id]} conn={conn} onChanged={onChanged} />
+              <button className="text-sm text-stone-500 underline" onClick={() => decline(conn[id])}>{t.decline}</button>
+            </PersonRow>
+          ))}
+        </div>
+      )}
+
+      <div className={`${card} space-y-3`}>
+        <h2 className="text-xl font-bold">{t.myContacts}</h2>
+        {accepted.length === 0 && <p className="text-stone-600">{t.noContacts}</p>}
+        {accepted.map((id) => profiles[id] && (
+          <PersonRow key={id} p={profiles[id]}>
+            <button className="text-sm text-stone-500 underline" onClick={() => removeContact(conn[id], profiles[id])}>{t.removeContact}</button>
+          </PersonRow>
+        ))}
+      </div>
+    </>
   )
 }
 
@@ -1054,7 +1296,7 @@ function SharedPost({ id, me, onClose, onChanged }) {
     let cancelled = false
     supportsMultiPhoto().then((multi) =>
       supabase.from('posts')
-        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? 'image_paths,edited_at,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
+        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
         .eq('id', id).maybeSingle()
     ).then(({ data }) => {
       if (cancelled) return
@@ -1303,6 +1545,8 @@ export default function App() {
   const [welcome, setWelcome] = useState(null)
   const [composerOpen, setComposerOpen] = useState(false)
   const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
+  const [flash, setFlash] = useState('')
+  const [inviter, setInviter] = useState(null)
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
     if (fromLink === 'en' || fromLink === 'es') return fromLink
@@ -1314,6 +1558,8 @@ export default function App() {
   })
   const t = I18N[lang]
   const me = session?.user.id
+  const ready = useSchemaReady()
+  const { map: conn, reload: reloadConn } = useConnections(me, ready, refreshKey)
 
   const setLang = (l) => {
     setLangState(l)
@@ -1353,6 +1599,36 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
+
+  // Invite links (?invite=<member id>): remember the inviter, show who invited you,
+  // and connect the two of you as soon as you are signed in.
+  useEffect(() => {
+    const fromLink = new URLSearchParams(window.location.search).get('invite')
+    if (fromLink && UUID_RE.test(fromLink)) {
+      try { localStorage.setItem('wao_invite', fromLink) } catch { /* ignore */ }
+    }
+    let id = fromLink
+    try { id = id || localStorage.getItem('wao_invite') } catch { /* ignore */ }
+    if (!id || !UUID_RE.test(id)) return
+    supabase.from('profiles').select('id,display_name').eq('id', id).maybeSingle()
+      .then(({ data }) => { if (data) setInviter(data) })
+  }, [])
+  useEffect(() => {
+    if (!inviter || me) return
+    setShowSignIn(true)
+  }, [inviter, me])
+  useEffect(() => {
+    if (!me || !ready || !inviter) return
+    supabase.rpc('connect_by_invite', { p_inviter: inviter.id }).then(({ data, error }) => {
+      try { localStorage.removeItem('wao_invite') } catch { /* ignore */ }
+      const url = new URL(window.location.href)
+      url.searchParams.delete('invite')
+      url.searchParams.delete('ref')
+      window.history.replaceState(null, '', url.pathname + url.search)
+      if (!error && data === 'connected') { setFlash(t.nowContacts(inviter.display_name)); posted() }
+      setInviter(null)
+    })
+  }, [me, ready, inviter])
   function closeShared() {
     setSharedId(null)
     const url = new URL(window.location.href)
@@ -1377,6 +1653,9 @@ export default function App() {
         </header>
 
         <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
+          {showSignIn && !me && inviter && (
+            <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
+          )}
           {showSignIn && !me && <SignIn />}
           {showProfile && me && (
             <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
@@ -1393,9 +1672,15 @@ export default function App() {
               <HomeScreenTip />
             </>
           )}
+          {flash && (
+            <div className="flex items-start gap-3 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm">
+              <p className="flex-1 font-semibold">{flash}</p>
+              <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
+            </div>
+          )}
           {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
             <Composer userId={me} mode="update"
-              onPosted={() => { setComposerOpen(false); posted() }} />
+              onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
           )}
           {!me && !showSignIn && tab === 'discover' && (
             <div className={`${card} space-y-3`}>
@@ -1419,10 +1704,11 @@ export default function App() {
           {tab === 'everyone' && (
             <>
               <Feed mode="everyone" {...feedProps} />
-              <People key={refreshKey} />
+              <People key={refreshKey} me={me} conn={conn} onChanged={reloadConn} ready={ready} />
             </>
           )}
           {tab === 'mine' && <Feed mode="mine" {...feedProps} />}
+          {tab === 'contacts' && <Contacts me={me} conn={conn} onChanged={() => { reloadConn(); posted() }} ready={ready} />}
           {tab === 'discover' && <Feed mode="discover" {...feedProps} />}
           {tab === 'offer' && (
             <>
