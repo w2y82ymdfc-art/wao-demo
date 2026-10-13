@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
+    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'You are not signed in on this screen', outText: 'On iPhone, Wao! opened from the home-screen icon, from Safari, or from an email app each keeps its own sign-in. Sign in once here with your email and password, and Profile and your welcome come back. It stays signed in after that.', outBtn: 'Sign in here', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
+    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'No has iniciado sesión en esta pantalla', outText: 'En iPhone, Wao! abierto desde el ícono de la pantalla de inicio, desde Safari o desde una app de correo guarda su propia sesión. Entra una vez aquí con tu correo y contraseña, y vuelven tu Perfil y tu bienvenida. Después se queda con la sesión abierta.', outBtn: 'Entrar aquí', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -436,17 +436,17 @@ function LangToggle({ lang, setLang }) {
 }
 
 // ---------- Sign in ----------
-function SignIn() {
+function SignIn({ startWithPassword = false }) {
   const { t, lang } = useLang()
   const [email, setEmailRaw] = useState(() => { try { return localStorage.getItem('wao_signin_email') || '' } catch { return '' } })
   const setEmail = (v) => { setEmailRaw(v); try { localStorage.setItem('wao_signin_email', v) } catch { /* ignore */ } }
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
   const [password, setPassword] = useState('')
-  const [pwOpen, setPwOpen] = useState(false)
+  const [pwOpen, setPwOpen] = useState(startWithPassword)
 
   async function signInPw() {
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password })
     if (error) setMsg(t.pwBad)
   }
 
@@ -1620,8 +1620,17 @@ function OurPromise({ onReplay }) {
 // ---------- App ----------
 export default function App() {
   const [session, setSession] = useState(null)
+  const [authChecked, setAuthChecked] = useState(false)
   const [tab, setTab] = useState('everyone')
   const [showSignIn, setShowSignIn] = useState(false)
+  const [pwFirst, setPwFirst] = useState(false)
+  // A returning member on a screen with no sign-in yet: the home-screen app, or a browser used before.
+  const [returning] = useState(() => {
+    let used = false
+    try { used = !!localStorage.getItem('wao_signin_email') } catch { /* ignore */ }
+    const standalone = window.navigator.standalone === true || window.matchMedia?.('(display-mode: standalone)').matches
+    return used || standalone
+  })
   const [refreshKey, setRefreshKey] = useState(0)
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
@@ -1651,7 +1660,7 @@ export default function App() {
   useEffect(() => { document.documentElement.lang = lang }, [lang])
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => sub.subscription.unsubscribe()
   }, [])
@@ -1741,7 +1750,14 @@ export default function App() {
           {showSignIn && !me && inviter && (
             <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
           )}
-          {showSignIn && !me && <SignIn />}
+          {!me && !showSignIn && !inviter && returning && authChecked && (
+            <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3">
+              <p className="font-bold">{t.outTitle}</p>
+              <p className="text-sm text-stone-700">{t.outText}</p>
+              <button className={primary} onClick={() => { setPwFirst(true); setShowSignIn(true) }}>{t.outBtn}</button>
+            </div>
+          )}
+          {showSignIn && !me && <SignIn startWithPassword={pwFirst} />}
           {showProfile && me && (
             <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
               onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
