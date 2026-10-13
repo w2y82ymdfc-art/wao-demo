@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password',
+    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña',
+    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -443,6 +443,7 @@ function SignIn() {
   const [name, setName] = useState('')
   const [msg, setMsg] = useState('')
   const [password, setPassword] = useState('')
+  const [pwOpen, setPwOpen] = useState(false)
 
   async function signInPw() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
@@ -466,15 +467,20 @@ function SignIn() {
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
       <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
+      <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
       <button className={primary}>{t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
       <div className="space-y-2 border-t border-[#dcdff5] pt-3">
-        <p className="text-sm text-stone-600">{t.pwHint}</p>
-        <PasswordInput autoComplete="current-password" placeholder={t.pwPlaceholder}
-          value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="button" className={primary} disabled={!email || password.length < 6} onClick={signInPw}>{t.pwSignIn}</button>
+        {!pwOpen ? (
+          <button type="button" className="text-sm font-bold text-[#4a3af0] underline" onClick={() => setPwOpen(true)}>{t.pwOpen}</button>
+        ) : (<>
+          <p className="text-sm text-stone-600">{t.pwHint}</p>
+          <PasswordInput autoComplete="current-password" placeholder={t.pwPlaceholder}
+            value={password} onChange={(e) => setPassword(e.target.value)} />
+          <button type="button" className={primary} disabled={!email || password.length < 6} onClick={signInPw}>{t.pwSignIn}</button>
+        </>)}
       </div>
     </form>
   )
@@ -1118,7 +1124,7 @@ function PasswordSetter() {
     setBusy(true)
     const { error } = await supabase.auth.updateUser({ password: pw })
     setBusy(false)
-    setMsg(error ? error.message : t.pwSaved)
+    setMsg(error ? (error.code === 'same_password' ? t.pwSame : error.message) : t.pwSaved)
     if (!error) setPw('')
   }
   return (
