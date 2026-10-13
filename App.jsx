@@ -10,7 +10,7 @@ const supabase = createClient(
 // ---------- Languages (EN / ES) ----------
 const I18N = {
   en: {
-    signIn: 'Sign in', profile: 'Profile', signOut: 'Sign out',
+    signIn: 'Join free', profile: 'Profile', signOut: 'Sign out',
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wao!',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
@@ -52,7 +52,7 @@ const I18N = {
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
     pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
-    signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
+    signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
     photoConsent: 'This is a photo of me, and I agree to show it on my public profile.',
     choosePhoto: 'Take or choose a photo', changePhoto: 'Change photo', uploading: 'Uploading…', removePhoto: 'Remove my photo',
@@ -151,7 +151,7 @@ const I18N = {
     },
   },
   es: {
-    signIn: 'Iniciar sesión', profile: 'Perfil', signOut: 'Cerrar sesión',
+    signIn: 'Únete gratis', profile: 'Perfil', signOut: 'Cerrar sesión',
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wao!',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
@@ -193,7 +193,7 @@ const I18N = {
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
     pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
-    signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
+    signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
     photoConsent: 'Esta es una foto mía y acepto mostrarla en mi perfil público.',
     choosePhoto: 'Tomar o elegir una foto', changePhoto: 'Cambiar foto', uploading: 'Subiendo…', removePhoto: 'Quitar mi foto',
