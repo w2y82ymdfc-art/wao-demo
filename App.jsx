@@ -14,6 +14,7 @@ const I18N = {
     tabs: { everyone: 'Everyone', mine: 'My posts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wao!',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
+    editTitle: 'Edit your post', undoRemove: 'Keep the picture',
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
     addPhotos: (n) => `Add photos (${n} left)`, maxPhotos: (n) => `Up to ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
@@ -125,6 +126,7 @@ const I18N = {
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wao!',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
+    editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
     addPhotos: (n) => `Añadir fotos (quedan ${n})`, maxPhotos: (n) => `Hasta ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
@@ -685,6 +687,7 @@ function PostEditor({ p, me, onDone, onCancel }) {
   const [body, setBody] = useState(p.body || '')
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
+  const [keepCaricature, setKeepCaricature] = useState(!!p.caricature_image_url)
   const maxPhotos = useMaxPhotos()
   const original = postImages(p)
   const photos = usePhotoPicker(original.map((path) => ({ path })), Math.max(maxPhotos, original.length), () => setErr(t.couldNotRead))
@@ -701,6 +704,7 @@ function PostEditor({ p, me, onDone, onCancel }) {
       const { error } = await supabase.from('posts').update({
         body: body.trim(),
         ...(p.kind !== 'update' ? { title: title.trim() || null } : {}),
+        ...(p.caricature_image_url && !keepCaricature ? { caricature_image_url: null } : {}),
         ...imageFields(up.paths, multi),
       }).eq('id', p.id).eq('user_id', me)
       if (error) throw error
@@ -717,9 +721,19 @@ function PostEditor({ p, me, onDone, onCancel }) {
   }
 
   return (
-    <form onSubmit={save} className="mt-3 space-y-3">
-      {p.kind !== 'update' && <input className={field} maxLength={120} placeholder={t.offeringPh} value={title} onChange={(e) => setTitle(e.target.value)} />}
-      <textarea className={`${field} min-h-24`} required maxLength={500} value={body} onChange={(e) => setBody(e.target.value)} />
+    <form onSubmit={save} className="mt-3 space-y-3 rounded-2xl bg-[#eef0fc] p-3">
+      <h3 className="font-bold text-[#4a3af0]">{t.editTitle}</h3>
+      {p.kind !== 'update' && <input className={`${field} !bg-white`} maxLength={120} placeholder={t.offeringPh} value={title} onChange={(e) => setTitle(e.target.value)} />}
+      <textarea className={`${field} min-h-24 !bg-white`} required maxLength={500} value={body} onChange={(e) => setBody(e.target.value)} />
+      {p.caricature_image_url && keepCaricature && (
+        <div className="relative max-w-sm">
+          <img src={p.caricature_image_url} alt="" className="w-full rounded-2xl bg-white" />
+          <button type="button" onClick={() => setKeepCaricature(false)} className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-sm text-white">{t.remove}</button>
+        </div>
+      )}
+      {p.caricature_image_url && !keepCaricature && (
+        <button type="button" className="text-sm text-stone-500 underline" onClick={() => setKeepCaricature(true)}>{t.undoRemove}</button>
+      )}
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
       {photos.input}
       {err && <p className="text-sm text-red-600">{err}</p>}
