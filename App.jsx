@@ -50,7 +50,7 @@ const I18N = {
     gotIt: 'Got it',
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    codeHint: 'Using Wao! from your home screen? In the email, press and hold "Sign in", tap Copy Link, and paste it here.', codePlaceholder: 'Paste the sign-in link here', codeVerify: 'Sign in here',
+    codeHint: 'Using Wao! from your home screen? In the email, press and hold "Sign in", tap Copy Link, and paste it here.', codePlaceholder: 'Paste the sign-in link here', codeVerify: 'Sign in here', notLink: 'That is not the sign-in link yet. Copy the link from the email and paste it here.',
     wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Sign in to share it with the community.', signInToShare: 'Sign in to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -191,7 +191,7 @@ const I18N = {
     gotIt: 'Entendido',
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    codeHint: '¿Usas Wao! desde tu pantalla de inicio? En el correo, mantén presionado "Sign in", toca Copiar enlace y pégalo aquí.', codePlaceholder: 'Pega aquí el enlace de acceso', codeVerify: 'Entrar aquí',
+    codeHint: '¿Usas Wao! desde tu pantalla de inicio? En el correo, mantén presionado "Sign in", toca Copiar enlace y pégalo aquí.', codePlaceholder: 'Pega aquí el enlace de acceso', codeVerify: 'Entrar aquí', notLink: 'Eso todavía no es el enlace de acceso. Copia el enlace del correo y pégalo aquí.',
     wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Inicia sesión para compartirlo con la comunidad.', signInToShare: 'Inicia sesión para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -458,7 +458,7 @@ function SignIn() {
         tokenHash = u.searchParams.get('token') || u.searchParams.get('token_hash')
         type = u.searchParams.get('type') || type
       } catch { /* not a link */ }
-      if (!tokenHash) { setMsg(t.codeHint); return }
+      if (!tokenHash) { setMsg(t.notLink); return }
       res = await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
     }
     if (res.error) setMsg(res.error.message)
