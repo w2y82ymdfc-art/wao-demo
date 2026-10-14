@@ -330,3 +330,237 @@ as $function$
   ) from public.profiles;
 $function$;
 grant execute on function public.affiliate_community_stats() to anon, authenticated;
+------------------------------------------------------------------ Provider bank (advertisers linked to affiliates)
+-- Every advertiser (provider) is sponsored by one affiliate for 12 months.
+--   referred: the advertiser came in through an affiliate's advertiser link -> that affiliate sponsors it.
+--   direct:   the advertiser came straight to Wao! -> a draw among active affiliates picks the sponsor.
+-- An affiliate's own business goes into the bank like any provider, but it can never be sponsored
+-- by its owner: it is treated as direct and the owner is left out of its draw.
+-- Cleared advertising payments inside the 12 months pay 20% / 10% / 5% up the sponsor's tiers.
+
+create table if not exists public.app_admins (
+  profile_id uuid primary key references public.profiles(id) on delete cascade
+);
+alter table public.app_admins enable row level security;
+drop policy if exists "Admins read admins" on public.app_admins;
+create policy "Admins read admins" on public.app_admins for select to authenticated
+  using (profile_id = (select auth.uid()));
+
+create or replace function public.is_admin()
+ returns boolean language sql stable security definer set search_path to ''
+as $$ select exists (select 1 from public.app_admins where profile_id = (select auth.uid())) $$;
+grant execute on function public.is_admin() to authenticated;
+
+create table if not exists public.providers (
+  id            uuid primary key default gen_random_uuid(),
+  business_name text not null check (length(business_name) between 2 and 120),
+  contact_name  text check (length(contact_name) <= 80),
+  contact_email text not null check (contact_email ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$' and length(contact_email) <= 200),
+  contact_phone text check (length(contact_phone) <= 40),
+  website       text check (length(website) <= 200),
+  offer         text check (length(offer) <= 1000),
+  lang          text not null default 'en',
+  owner_id      uuid references public.profiles(id) on delete set null,
+  link_from     uuid references public.profiles(id) on delete set null,
+  source        text not null check (source in ('referred','direct')),
+  status        text not null default 'new' check (status in ('new','active','declined')),
+  sponsor_id    uuid references public.profiles(id) on delete set null,
+  sponsor_via   text check (sponsor_via in ('referral','draw')),
+  sponsor_start timestamptz,
+  sponsor_end   timestamptz,
+  created_at    timestamptz not null default now()
+);
+alter table public.providers enable row level security;  -- read and written only through the functions below
+
+create table if not exists public.provider_draws (
+  id            uuid primary key default gen_random_uuid(),
+  provider_id   uuid not null references public.providers(id) on delete cascade,
+  winner_id     uuid not null references public.profiles(id),
+  entrant_count integer not null,
+  entrants      uuid[] not null,
+  drawn_by      uuid references public.profiles(id),
+  drawn_at      timestamptz not null default now()
+);
+alter table public.provider_draws enable row level security;
+
+create table if not exists public.ad_payments (
+  id           uuid primary key default gen_random_uuid(),
+  provider_id  uuid not null references public.providers(id) on delete restrict,
+  amount_cents integer not null check (amount_cents > 0),
+  cleared_at   timestamptz not null,
+  note         text check (length(note) <= 300),
+  recorded_by  uuid references public.profiles(id),
+  created_at   timestamptz not null default now()
+);
+alter table public.ad_payments enable row level security;
+
+-- Commission lines: each cleared payment inside the sponsor's 12 months, split up three tiers.
+create or replace view public.affiliate_commissions with (security_invoker = true) as
+  with base as (
+    select pay.id as payment_id, pay.provider_id, pay.amount_cents, pay.cleared_at, pr.sponsor_id
+    from public.ad_payments pay
+    join public.providers pr on pr.id = pay.provider_id
+    where pr.sponsor_id is not null
+      and pay.cleared_at >= pr.sponsor_start and pay.cleared_at < pr.sponsor_end
+  )
+  select payment_id, provider_id, cleared_at, sponsor_id as affiliate_id, 1 as tier, 20 as rate,
+         (amount_cents * 20 / 100) as commission_cents from base
+  union all
+  select b.payment_id, b.provider_id, b.cleared_at, u.upline_id, u.tier + 1, case u.tier when 1 then 10 else 5 end,
+         (b.amount_cents * case u.tier when 1 then 10 else 5 end / 100)
+  from base b join public.affiliate_upline u on u.profile_id = b.sponsor_id and u.tier <= 2;
+revoke all on public.affiliate_commissions from anon, authenticated;
+
+-- Active affiliate: a member (not on the Wao! team) who signed in, posted or commented in the last 30 days.
+create or replace function public.active_affiliates(p_exclude uuid default null)
+ returns setof uuid language sql stable security definer set search_path to ''
+as $$
+  select p.id from public.profiles p
+  where p.id is distinct from p_exclude
+    and not exists (select 1 from public.app_admins a where a.profile_id = p.id)
+    and (exists (select 1 from auth.users u where u.id = p.id and u.last_sign_in_at >= now() - interval '30 days')
+      or exists (select 1 from public.posts x where x.user_id = p.id and x.created_at >= now() - interval '30 days')
+      or exists (select 1 from public.comments c where c.user_id = p.id and c.created_at >= now() - interval '30 days'))
+$$;
+revoke all on function public.active_affiliates(uuid) from public, anon, authenticated;
+
+-- Public form: anyone can ask to advertise. p_link is the affiliate from the advertiser link, if any.
+create or replace function public.submit_provider(
+  p_business text, p_contact text, p_email text, p_phone text, p_website text, p_offer text,
+  p_link uuid default null, p_lang text default 'en')
+ returns text language plpgsql security definer set search_path to ''
+as $$
+declare
+  v_owner uuid := (select auth.uid());
+  v_link  uuid := p_link;
+  v_src   text;
+  v_email text := lower(trim(p_email));
+begin
+  if coalesce(length(trim(p_business)), 0) < 2 then return 'missing_business'; end if;
+  if v_email !~* '^[^@\s]+@[^@\s]+\.[^@\s]+$' then return 'bad_email'; end if;
+  if exists (select 1 from public.providers where lower(contact_email) = v_email and created_at > now() - interval '1 day') then
+    return 'already_sent';
+  end if;
+  if v_link is not null and not exists (select 1 from public.profiles where id = v_link) then v_link := null; end if;
+  -- Nobody sponsors their own business: it is treated as direct.
+  v_src := case when v_link is not null and v_link is distinct from v_owner then 'referred' else 'direct' end;
+  insert into public.providers (business_name, contact_name, contact_email, contact_phone, website, offer, lang,
+                                owner_id, link_from, source, sponsor_id, sponsor_via)
+  values (trim(p_business), nullif(trim(p_contact), ''), v_email, nullif(trim(p_phone), ''), nullif(trim(p_website), ''),
+          nullif(trim(p_offer), ''), case when p_lang = 'es' then 'es' else 'en' end,
+          v_owner, v_link, v_src,
+          case when v_src = 'referred' then v_link end, case when v_src = 'referred' then 'referral' end);
+  return 'ok';
+end $$;
+grant execute on function public.submit_provider(text, text, text, text, text, text, uuid, text) to anon, authenticated;
+
+-- What an affiliate sees: the providers they sponsor (business name only) and their commissions by tier.
+create or replace function public.my_provider_bank()
+ returns jsonb language sql stable security definer set search_path to ''
+as $$
+  select case when (select auth.uid()) is null then null else jsonb_build_object(
+    'providers', (select coalesce(jsonb_agg(jsonb_build_object(
+        'id', pr.id, 'business_name', pr.business_name, 'via', pr.sponsor_via, 'status', pr.status,
+        'start', pr.sponsor_start, 'end', pr.sponsor_end) order by pr.created_at desc), '[]'::jsonb)
+      from public.providers pr where pr.sponsor_id = (select auth.uid()) and pr.status <> 'declined'),
+    'commission_cents', (select jsonb_build_object(
+        't1', coalesce(sum(commission_cents) filter (where tier = 1), 0),
+        't2', coalesce(sum(commission_cents) filter (where tier = 2), 0),
+        't3', coalesce(sum(commission_cents) filter (where tier = 3), 0))
+      from public.affiliate_commissions where affiliate_id = (select auth.uid())),
+    'bank_size', (select count(*) from public.providers where status = 'active'),
+    'draws_won', (select count(*) from public.provider_draws where winner_id = (select auth.uid()))
+  ) end
+$$;
+grant execute on function public.my_provider_bank() to authenticated;
+
+-- Wao! team: the full bank.
+create or replace function public.admin_provider_bank()
+ returns jsonb language plpgsql stable security definer set search_path to ''
+as $$
+begin
+  if not public.is_admin() then raise exception 'not allowed'; end if;
+  return jsonb_build_object(
+    'active_affiliates', (select count(*) from public.active_affiliates(null)),
+    'providers', (select coalesce(jsonb_agg(jsonb_build_object(
+      'id', pr.id, 'business_name', pr.business_name, 'contact_name', pr.contact_name, 'contact_email', pr.contact_email,
+      'contact_phone', pr.contact_phone, 'website', pr.website, 'offer', pr.offer, 'source', pr.source, 'status', pr.status,
+      'owner_name', o.display_name, 'link_name', l.display_name, 'sponsor_name', s.display_name, 'sponsor_via', pr.sponsor_via,
+      'start', pr.sponsor_start, 'end', pr.sponsor_end, 'created_at', pr.created_at,
+      'paid_cents', (select coalesce(sum(amount_cents), 0) from public.ad_payments where provider_id = pr.id),
+      'draw', (select jsonb_build_object('entrants', d.entrant_count, 'at', d.drawn_at)
+               from public.provider_draws d where d.provider_id = pr.id order by d.drawn_at desc limit 1)
+    ) order by pr.created_at desc), '[]'::jsonb)
+    from public.providers pr
+    left join public.profiles o on o.id = pr.owner_id
+    left join public.profiles l on l.id = pr.link_from
+    left join public.profiles s on s.id = pr.sponsor_id));
+end $$;
+grant execute on function public.admin_provider_bank() to authenticated;
+
+-- Approve or decline. Approving a referred provider starts its sponsor's 12 months.
+create or replace function public.admin_set_provider_status(p_id uuid, p_status text)
+ returns text language plpgsql security definer set search_path to ''
+as $$
+begin
+  if not public.is_admin() then raise exception 'not allowed'; end if;
+  if p_status not in ('active','declined') then return 'bad_status'; end if;
+  update public.providers set status = p_status,
+    sponsor_start = case when p_status = 'active' and sponsor_id is not null and sponsor_start is null then now() else sponsor_start end,
+    sponsor_end   = case when p_status = 'active' and sponsor_id is not null and sponsor_start is null then now() + interval '12 months' else sponsor_end end
+  where id = p_id;
+  return 'ok';
+end $$;
+grant execute on function public.admin_set_provider_status(uuid, text) to authenticated;
+
+-- The draw: one active affiliate chosen at random for an approved direct provider. Winning before does not matter.
+create or replace function public.admin_run_provider_draw(p_id uuid)
+ returns jsonb language plpgsql security definer set search_path to ''
+as $$
+declare
+  v_pr public.providers;
+  v_entrants uuid[];
+  v_winner uuid;
+begin
+  if not public.is_admin() then raise exception 'not allowed'; end if;
+  select * into v_pr from public.providers where id = p_id for update;
+  if v_pr.id is null then return jsonb_build_object('result', 'not_found'); end if;
+  if v_pr.status <> 'active' then return jsonb_build_object('result', 'not_active'); end if;
+  if v_pr.sponsor_id is not null then return jsonb_build_object('result', 'has_sponsor'); end if;
+  select array_agg(id) into v_entrants from public.active_affiliates(v_pr.owner_id) as id;
+  if coalesce(cardinality(v_entrants), 0) = 0 then return jsonb_build_object('result', 'no_entrants'); end if;
+  v_winner := v_entrants[1 + floor(random() * cardinality(v_entrants))::int];
+  insert into public.provider_draws (provider_id, winner_id, entrant_count, entrants, drawn_by)
+  values (p_id, v_winner, cardinality(v_entrants), v_entrants, (select auth.uid()));
+  update public.providers set sponsor_id = v_winner, sponsor_via = 'draw',
+    sponsor_start = now(), sponsor_end = now() + interval '12 months' where id = p_id;
+  return jsonb_build_object('result', 'ok', 'entrants', cardinality(v_entrants),
+    'winner', (select display_name from public.profiles where id = v_winner));
+end $$;
+grant execute on function public.admin_run_provider_draw(uuid) to authenticated;
+
+-- Record advertising money once it has cleared into the Wao! account.
+create or replace function public.admin_record_payment(p_id uuid, p_amount_cents integer, p_cleared_at timestamptz default now(), p_note text default null)
+ returns text language plpgsql security definer set search_path to ''
+as $$
+begin
+  if not public.is_admin() then raise exception 'not allowed'; end if;
+  if coalesce(p_amount_cents, 0) <= 0 then return 'bad_amount'; end if;
+  insert into public.ad_payments (provider_id, amount_cents, cleared_at, note, recorded_by)
+  values (p_id, p_amount_cents, coalesce(p_cleared_at, now()), nullif(trim(p_note), ''), (select auth.uid()));
+  return 'ok';
+end $$;
+grant execute on function public.admin_record_payment(uuid, integer, timestamptz, text) to authenticated;
+
+-- Community numbers for the banner now include the size of the provider bank.
+create or replace function public.affiliate_community_stats()
+ returns jsonb language sql stable security definer set search_path to ''
+as $function$
+  select jsonb_build_object(
+    'members', count(*),
+    'members_week', count(*) filter (where created_at >= now() - interval '7 days'),
+    'invited', count(*) filter (where referred_by is not null),
+    'invited_week', count(*) filter (where referred_by is not null and created_at >= now() - interval '7 days'),
+    'providers', (select count(*) from public.providers where status = 'active')
+  ) from public.profiles;
+$function$;
