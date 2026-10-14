@@ -7,7 +7,7 @@ createRoot(document.getElementById('root')).render(<App />)
 
 // Keep the home-screen app up to date.
 // An iPhone keeps a home-screen app's old page in memory and does not reload it,
-// so it never sees new versions. Whenever Wao! opens or comes back to the screen,
+// so it never sees new versions. Whenever Wepawao opens or comes back to the screen,
 // ask the server which version is current and reload once if it is newer.
 if (import.meta.env.PROD) {
   const scriptOf = (html) => (html.match(/\/assets\/index-[\w-]+\.js/) || [])[0]

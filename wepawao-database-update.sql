@@ -1,4 +1,4 @@
--- Wao! database update (safe to run more than once).
+-- Wepawao database update (safe to run more than once).
 -- Paste ALL of it into Supabase > SQL Editor > New query, then tap Run.
 --
 -- 1. Up to 4 photos per post + "edited" marker
@@ -334,11 +334,11 @@ grant execute on function public.affiliate_community_stats() to anon, authentica
 -- Every advertiser (provider) is sponsored by one affiliate for 12 months.
 --   referred: the advertiser came in through an affiliate's advertiser link -> that affiliate sponsors it.
 --             An affiliate's own business is a common provider: he can bring it in with his own link.
---   direct:   the advertiser came straight to Wao! -> it goes into a Wao Face Challenge.
--- Wao Face Challenge: opens only when an approved direct advertiser is waiting for a sponsor and runs 7 days.
+--   direct:   the advertiser came straight to Wepawao -> it goes into a Wepawao Face Challenge.
+-- Wepawao Face Challenge: opens only when an approved direct advertiser is waiting for a sponsor and runs 7 days.
 --   Active affiliates enter with a public photo moment; members vote. There are as many winners as
 --   direct advertisers in the challenge. No direct advertisers, no challenge. Anyone can win again.
---   The winner's 12 months count from the day Wao! approved the advertiser, so no payment is missed.
+--   The winner's 12 months count from the day Wepawao approved the advertiser, so no payment is missed.
 -- Cleared advertising payments inside the 12 months pay 20% / 10% / 5% up the sponsor's tiers.
 
 create table if not exists public.app_admins (
@@ -435,7 +435,7 @@ create or replace view public.affiliate_commissions with (security_invoker = tru
   from base b join public.affiliate_upline u on u.profile_id = b.sponsor_id and u.tier <= 2;
 revoke all on public.affiliate_commissions from anon, authenticated;
 
--- Active affiliate: a member (not on the Wao! team) who signed in, posted or commented in the last 30 days.
+-- Active affiliate: a member (not on the Wepawao team) who signed in, posted or commented in the last 30 days.
 create or replace function public.is_active_affiliate(p_id uuid)
  returns boolean language sql stable security definer set search_path to ''
 as $$
@@ -645,7 +645,7 @@ as $$
 $$;
 grant execute on function public.my_provider_bank() to authenticated;
 
--- Wao! Team: the full bank and the challenge.
+-- Wepawao Team: the full bank and the challenge.
 create or replace function public.admin_provider_bank()
  returns jsonb language plpgsql volatile security definer set search_path to ''
 as $$
@@ -672,7 +672,7 @@ end $$;
 grant execute on function public.admin_provider_bank() to authenticated;
 
 -- Approve or decline. Approving a referred provider starts its sponsor's 12 months;
--- approving a direct one puts it into the Wao Face Challenge (opening one if needed).
+-- approving a direct one puts it into the Wepawao Face Challenge (opening one if needed).
 create or replace function public.admin_set_provider_status(p_id uuid, p_status text)
  returns text language plpgsql security definer set search_path to ''
 as $$
@@ -693,7 +693,7 @@ begin
 end $$;
 grant execute on function public.admin_set_provider_status(uuid, text) to authenticated;
 
--- End the open challenge now (the Wao! Team can close it early).
+-- End the open challenge now (the Wepawao Team can close it early).
 create or replace function public.admin_end_contest()
  returns text language plpgsql security definer set search_path to ''
 as $$
@@ -705,7 +705,7 @@ begin
 end $$;
 grant execute on function public.admin_end_contest() to authenticated;
 
--- Record advertising money once it has cleared into the Wao! account.
+-- Record advertising money once it has cleared into the Wepawao account.
 create or replace function public.admin_record_payment(p_id uuid, p_amount_cents integer, p_cleared_at timestamptz default now(), p_note text default null)
  returns text language plpgsql security definer set search_path to ''
 as $$
@@ -731,5 +731,5 @@ as $function$
   ) from public.profiles;
 $function$;
 
--- The founder's account runs the Wao! Team panel.
+-- The founder's account runs the Wepawao Team panel.
 insert into public.app_admins (profile_id) values ('f157918e-fb1e-4063-899e-251f172e8669') on conflict do nothing;

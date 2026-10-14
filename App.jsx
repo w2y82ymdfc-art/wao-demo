@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import heroImg from './wao-hero.jpeg'
+import heroImg from './wepawao-hero.jpeg'
 
 // ---------- Supabase ----------
 const supabase = createClient(
@@ -12,7 +12,7 @@ const I18N = {
   en: {
     signIn: 'Join free', profile: 'Profile', signOut: 'Sign out',
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
-    share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wao!',
+    share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wepawao',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
     visContacts: 'Contacts only', visPublic: 'Public',
@@ -30,10 +30,10 @@ const I18N = {
     notPublic: 'Not public:',
     report: 'Report', reportedThanks: 'Reported. Thank you.', alreadyReported: 'You already reported this.',
     confirmReport: 'Report this moment for breaking the community rules?',
-    inviteTitle: 'Invite people to Wao!',
+    inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
-    inviteBtn: 'Share my invite link', inviteShareText: 'Join me on Wao! New social media, new moments to remember.',
-    invitedBy: (n) => `${n} invited you to Wao! Join below and you will be connected.`,
+    inviteBtn: 'Share my invite link', inviteShareText: 'Join me on Wepawao! New social media, new moments to remember.',
+    invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
     requestsTitle: 'Contact requests', accept: 'Accept', decline: 'Decline',
     myContacts: 'My contacts', noContacts: 'No contacts yet. Share your invite link to start!',
@@ -42,33 +42,33 @@ const I18N = {
     needUpdate: 'Contacts are being set up. Please check back soon.',
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
     photoLimit: (n) => `You've reached the maximum of ${n} photos per post.`,
-    members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wao!`,
+    members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wepawao`,
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
-    homeTipIos: 'Put Wao! on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
-    homeTipInstall: 'Put Wao! on your home screen so it opens like an app.', install: 'Add to home screen',
-    banner: 'Wao! is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
+    homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
+    homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
+    banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
     aff: {
       bannerTitle: 'Your Affiliate network',
       bannerOutTitle: 'Free Three-Tier Affiliate Program',
-      bannerOutNote: 'Invite people and share in the advertising revenue Wao! receives. Joining is always free.',
+      bannerOutNote: 'Invite people and share in the advertising revenue Wepawao receives. Joining is always free.',
       tierShort: ['Your invites', 'Their invites', 'Next level'],
       join: 'Start my network',
       yourTier: (n) => `Your Tier ${n}`,
       people: (n) => (n === 1 ? 'person' : 'people'),
-      communityTitle: 'Wao! community growth',
+      communityTitle: 'Wepawao community growth',
       membersLbl: 'members', invitedLbl: 'joined through an invite',
       howTitle: 'How your network grows',
       howSteps: ['You share your invite link', 'They join: your Tier 1', 'They invite: your Tier 2', 'And again: your Tier 3'],
       slide: (i, n) => `Slide ${i} of ${n}`,
-      teaserTitle: 'Coming soon: the Wao Face Challenge',
+      teaserTitle: 'Coming soon: the Wepawao Face Challenge',
       teaserText: 'Feel the excitement in advance! When advertisers arrive, affiliates will show their funniest face and members will vote. The winners will sponsor those advertisers, with the opportunity to receive the corresponding commission compensation.',
       teaserCta: 'You might want to be part of what is coming!',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
       title: 'Affiliate dashboard', back: '← Back',
-      intro: 'Your network grows when someone joins Wao! through your invite link, and again when they invite others.',
+      intro: 'Your network grows when someone joins Wepawao through your invite link, and again when they invite others.',
       tierDesc: ['People you invited', 'Invited by your Tier 1', 'Invited by your Tier 2'],
       shareOf: (r) => `${r}% share of ad revenue`,
       total: (n) => `${n.toLocaleString('en')} in your network`,
@@ -78,73 +78,73 @@ const I18N = {
       noneYet: 'No sub-affiliates yet. Share your invite link to start your network.',
       joined: (d) => `Joined ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
       earningsTitle: 'Commissions',
-      earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wao! actually receives and has cleared, are paid monthly, and are never guaranteed.',
+      earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wepawao actually receives and has cleared, are paid monthly, and are never guaranteed.',
       loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
       providersLbl: 'advertisers in the provider bank',
     },
     contest: {
-      title: 'Wao Face Challenge',
-      bannerTitle: 'Wao Face Challenge is on!',
+      title: 'Wepawao Face Challenge',
+      bannerTitle: 'Wepawao Face Challenge is on!',
       prizes: (n) => `${n} ${n === 1 ? 'advertiser' : 'advertisers'} up for grabs`,
       winners: (n) => `${n} ${n === 1 ? 'winner' : 'winners'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `${Math.ceil(h / 24)} days left` : `${h} ${h === 1 ? 'hour' : 'hours'} left` },
       seeEntries: 'Vote now',
-      intro: 'A company came to Wao! directly to advertise. Active affiliates post their funniest face, and members vote. The entries with the most votes win: each winner sponsors one advertiser for 12 months (20% for you, 10% and 5% for your upline).',
+      intro: 'A company came to Wepawao directly to advertise. Active affiliates post their funniest face, and members vote. The entries with the most votes win: each winner sponsors one advertiser for 12 months (20% for you, 10% and 5% for your upline).',
       rules: ['Enter with a public moment with a photo of your own face, posted after the challenge opened.', 'Nothing offensive or unsafe, no children, and nobody else\'s face without their permission.', 'Members vote once per entry; accounts must be at least 7 days old, and you cannot vote for yourself.', 'Ties go to whoever entered first. Moments hidden by reports leave the challenge.'],
       enterTitle: 'Enter the challenge',
-      enterHow: 'First share your Wao Face as a public moment with a photo. Then choose it here.',
+      enterHow: 'First share your Wepawao Face as a public moment with a photo. Then choose it here.',
       pick: 'Choose your moment', noneEligible: 'No eligible moment yet. Post a public moment with a photo of your face, then come back.',
       agree: 'I agree that my photo is shown publicly for this challenge, and it follows the rules above.',
-      enter: 'Enter with this moment', entered: 'You are in! Share Wao! so people can vote for you.',
+      enter: 'Enter with this moment', entered: 'You are in! Share Wepawao so people can vote for you.',
       notActive: 'Only active affiliates can enter (signed in, posted or commented in the last 30 days).',
       signIn: 'Sign in to enter or vote.',
       vote: 'Vote', voted: 'Voted', votes: (n) => `${n} ${n === 1 ? 'vote' : 'votes'}`, yours: 'Your entry',
       tooNew: 'Your account can vote once it is 7 days old.',
       noEntries: 'No entries yet. Be the first!',
       closedTitle: 'No challenge right now',
-      closedText: 'The Wao Face Challenge opens only when a company comes to Wao! directly to advertise. Watch the banner at the top: it will tell you when it opens.',
+      closedText: 'The Wepawao Face Challenge opens only when a company comes to Wepawao directly to advertise. Watch the banner at the top: it will tell you when it opens.',
       lastWinners: (names) => `Last winners: ${names}`,
       errors: { agree: 'Please check the box to agree.', closed: 'The challenge has closed.', not_active: 'Only active affiliates can enter.', already: 'You already entered this challenge.', not_yours: 'Choose one of your own moments.', not_public: 'The moment must be public and follow the public rules.', no_photo: 'The moment needs a photo.', too_old: 'Choose a moment posted after the challenge opened.', own: 'You cannot vote for yourself.', too_new: 'Your account can vote once it is 7 days old.', sign_in: 'Sign in first.', other: 'Something went wrong. Please try again.' },
     },
     prov: {
       bankTitle: 'Provider bank',
-      bankIntro: 'Bring an advertiser to Wao! with your advertiser link. For 12 months, the advertising they pay for shares 20% with you, 10% with your Tier 2 and 5% with your Tier 3. Your own business counts too: bring it in with your link like any other advertiser.',
-      linkBtn: 'Share my advertiser link', linkShareText: 'Advertise your business on Wao!, the new social network for entrepreneurs.',
-      contestNote: 'Advertisers who come straight to Wao! are won in the Wao Face Challenge: active affiliates post a fun photo of their face and members vote. There are as many winners as direct advertisers waiting. You can win again and again.',
+      bankIntro: 'Bring an advertiser to Wepawao with your advertiser link. For 12 months, the advertising they pay for shares 20% with you, 10% with your Tier 2 and 5% with your Tier 3. Your own business counts too: bring it in with your link like any other advertiser.',
+      linkBtn: 'Share my advertiser link', linkShareText: 'Advertise your business on Wepawao, the new social network for entrepreneurs.',
+      contestNote: 'Advertisers who come straight to Wepawao are won in the Wepawao Face Challenge: active affiliates post a fun photo of their face and members vote. There are as many winners as direct advertisers waiting. You can win again and again.',
       mine: 'Advertisers you sponsor', noneMine: 'None yet. Share your advertiser link to bring in your first one.',
-      viaReferral: 'Your advertiser link', viaContest: 'Won in the Wao Face Challenge',
-      pending: 'Waiting for Wao! approval', until: (d) => `Sponsored until ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
+      viaReferral: 'Your advertiser link', viaContest: 'Won in the Wepawao Face Challenge',
+      pending: 'Waiting for Wepawao approval', until: (d) => `Sponsored until ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
       earned: 'Commissions from cleared advertising', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'advertiser' : 'advertisers'} in the bank`,
       contestsWon: (n) => `${n} ${n === 1 ? 'challenge' : 'challenges'} won`,
-      teamBtn: 'Wao! Team: manage the provider bank',
+      teamBtn: 'Wepawao Team: manage the provider bank',
       unavailable: 'The provider bank is being set up. Please check back soon.',
-      formTitle: 'Advertise on Wao!',
-      formIntro: 'Reach an organic audience of new entrepreneurs. Tell us about your business and the Wao! Team will contact you.',
+      formTitle: 'Advertise on Wepawao',
+      formIntro: 'Reach an organic audience of new entrepreneurs. Tell us about your business and the Wepawao Team will contact you.',
       referredBy: (n) => `Recommended by ${n}`,
       fBusiness: 'Business name', fContact: 'Your name', fEmail: 'Email', fPhone: 'Phone (optional)',
       fWebsite: 'Website or social page (optional)', fOffer: 'What do you offer?',
       send: 'Send', sending: 'Sending…',
-      sent: 'Thank you! The Wao! Team will contact you soon.',
+      sent: 'Thank you! The Wepawao Team will contact you soon.',
       errors: { missing_business: 'Please enter your business name.', bad_email: 'Please enter a valid email.', already_sent: 'We already received a request from this email today. We will contact you soon.', other: 'It could not be sent right now. Please try again soon.' },
-      close: 'Back to Wao!',
-      teamTitle: 'Provider bank: Wao! Team',
-      contestOpen: (d, n) => `Wao Face Challenge open until ${d} · ${n} ${n === 1 ? 'entry' : 'entries'}`, contestNone: 'No challenge open: it opens when you approve a direct advertiser.',
+      close: 'Back to Wepawao',
+      teamTitle: 'Provider bank: Wepawao Team',
+      contestOpen: (d, n) => `Wepawao Face Challenge open until ${d} · ${n} ${n === 1 ? 'entry' : 'entries'}`, contestNone: 'No challenge open: it opens when you approve a direct advertiser.',
       endContest: 'End the challenge now', confirmEnd: 'End the challenge now? The top entries win the waiting advertisers.',
       filters: { new: 'New', active: 'Active', declined: 'Declined' },
       empty: 'No advertisers here yet.',
-      referred: (n) => `Referred by ${n}`, direct: 'Came directly to Wao!',
-      sponsor: (n, via) => `Sponsor: ${n} (${via === 'contest' ? 'Wao Face Challenge' : 'advertiser link'})`,
-      inContest: 'In the Wao Face Challenge',
+      referred: (n) => `Referred by ${n}`, direct: 'Came directly to Wepawao',
+      sponsor: (n, via) => `Sponsor: ${n} (${via === 'contest' ? 'Wepawao Face Challenge' : 'advertiser link'})`,
+      inContest: 'In the Wepawao Face Challenge',
       approve: 'Approve', decline: 'Decline',
       paid: (c) => `Cleared advertising: $${(c / 100).toFixed(2)}`,
       recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
-      payNote: 'Only record money that has already cleared into the Wao! account.',
+      payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
-    pwHint: 'Already set a Wao! password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wao! icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'You are not signed in on this screen', outText: 'On iPhone, Wao! opened from the home-screen icon, from Safari, or from an email app each keeps its own sign-in. Sign in once here with your email and password, and Profile and your welcome come back. It stays signed in after that.', outBtn: 'Sign in here', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wao!? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
-    wowTitle: "What's your Wao moment?", wowPlaceholder: "Tell your community what's happening…",
+    pwHint: 'Already set a Wepawao password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wepawao icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'You are not signed in on this screen', outText: 'On iPhone, Wepawao opened from the home-screen icon, from Safari, or from an email app each keeps its own sign-in. Sign in once here with your email and password, and Profile and your welcome come back. It stays signed in after that.', outBtn: 'Sign in here', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wepawao? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
+    wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
     photoConsent: 'This is a photo of me, and I agree to show it on my public profile.',
@@ -154,7 +154,7 @@ const I18N = {
     ongoing: 'Inventory or service', ongoingSub: 'Listed 30 days at a time', ongoingPriced: '$5.00 / 30 days',
     oneTimeNote: 'For a single item, like a mattress or a bicycle. It stays up until you mark it fulfilled.',
     ongoingNote: 'For products in stock and services that need ongoing advertising. Listed 30 days at a time. Billing is not live yet, so listings are free during the demo.',
-    ongoingNotePriced: 'For products in stock and services that need ongoing advertising. Listed 30 days at a time. Introductory offer: once Wao! reaches its launch member goal, your first 30 days are free. Billing is not live yet, so listings are free during the demo.',
+    ongoingNotePriced: 'For products in stock and services that need ongoing advertising. Listed 30 days at a time. Introductory offer: once Wepawao reaches its launch member goal, your first 30 days are free. Billing is not live yet, so listings are free during the demo.',
     offeringPh: 'What are you offering?', describePh: 'Describe it…', pricePh: 'Price (blank = free/swap)',
     areaPh: 'Area (e.g. Southeast Portland)', attachLoc: 'Attach my approximate location so nearby people can find this',
     kinds: { update: 'update', offer: 'offer', request: 'request' },
@@ -177,7 +177,7 @@ const I18N = {
     offers: 'Offers', requests: 'Requests', allCategories: 'All categories', nearMe: 'Near me',
     within: (r) => `Within ${r} km`, clear: 'clear',
     discoverNote: 'Browse by type, category and distance. Always newest first.', noLocation: 'Could not get your location.',
-    peopleTitle: 'People on Wao!', newestFirst: 'Newest members first.',
+    peopleTitle: 'People on Wepawao', newestFirst: 'Newest members first.',
     promiseTitle: 'Our promise',
     promiseItems: [
       ['No black boxes.', "Your feed is newest first. We don't rank, score, or reorder it."],
@@ -187,54 +187,54 @@ const I18N = {
       ['Your email stays private.', 'It is never shown on your public profile.'],
       ['Less noise.', 'Real moments from real people, without a machine deciding what keeps you scrolling.'],
       ['Transparency.', 'Our rules are published here. When they change, we tell you what changed and why.'],
-      ['You share in what Wao! earns.', 'Through our free Three-Tier Affiliate Program, members who help Wao! grow will receive a share of the advertising revenue Wao! actually receives. It costs nothing to join, and it starts paying once advertising begins.'],
+      ['You share in what Wepawao earns.', 'Through our free Three-Tier Affiliate Program, members who help Wepawao grow will receive a share of the advertising revenue Wepawao actually receives. It costs nothing to join, and it starts paying once advertising begins.'],
     ],
-    differentTitle: 'Why Wao! is different',
-    differentText: 'Most big social networks are built to keep you scrolling and to sell your attention. Wao! shows you what is happening, newest first, and shares the advertising revenue with the members who build the community.',
+    differentTitle: 'Why Wepawao is different',
+    differentText: 'Most big social networks are built to keep you scrolling and to sell your attention. Wepawao shows you what is happening, newest first, and shares the advertising revenue with the members who build the community.',
     policiesTitle: 'Policies',
     policiesNote: 'Plain-language summary for the demo. Full legal versions will be published before launch.',
     policies: [
       ['Privacy', [
-        'We collect only what Wao! needs to work: your email, your name and username, and what you choose to post.',
+        'We collect only what Wepawao needs to work: your email, your name and username, and what you choose to post.',
         'Your email is never shown publicly and is never sold.',
         'Location is attached only when you tick the box, and only as an approximate point.',
         'You can edit or delete your posts and your photo at any time.',
       ]],
       ['Terms of use', [
         'You must be at least 18 to join.',
-        'You own what you post. You allow Wao! to show it to the audience you chose.',
+        'You own what you post. You allow Wepawao to show it to the audience you chose.',
         'Do not post things you do not have the right to share.',
-        'Wao! can remove content or accounts that break these rules.',
+        'Wepawao can remove content or accounts that break these rules.',
       ]],
       ['Community rules', [
         'Be respectful. No harassment, hate, threats or scams.',
         'No adult content, violence or illegal goods or services.',
         'Moments are for moments. Selling goes in What I offer.',
         'Moments are for your contacts by default. A public moment appears in Everyone only if it has no prices or dollar amounts, no web links and no phone numbers, and you have shared fewer than 3 public moments in the last 24 hours.',
-        'If a moment breaks a rule, it stays visible to your contacts and Wao! tells you exactly which rule it broke. Nothing is hidden quietly.',
+        'If a moment breaks a rule, it stays visible to your contacts and Wepawao tells you exactly which rule it broke. Nothing is hidden quietly.',
         'A public moment reported by 3 different members leaves Everyone. Your contacts can still see it.',
         'Use Report on any moment that breaks these rules.',
       ]],
       ['Affiliate Program', [
         'Joining is free, and nobody ever has to buy anything.',
-        'Shares come only from advertising revenue Wao! actually receives: 20% to your first tier, 10% to your second, 5% to your third.',
+        'Shares come only from advertising revenue Wepawao actually receives: 20% to your first tier, 10% to your second, 5% to your third.',
         'Earnings depend on real advertising revenue and are never guaranteed.',
         'Payments are calculated at the end of each month and sent through Stripe. Taxes are each member\'s responsibility.',
         'Provider bank: every advertiser is sponsored by one affiliate for 12 months. Bring one in with your advertiser link (your own business counts too) and you sponsor it.',
-        'Advertisers who come directly to Wao! are won in the Wao Face Challenge, open only while direct advertisers are waiting: one winner per advertiser, chosen by member votes. Wao! does not have to share these, and does it in good faith. Anyone can win more than once.',
+        'Advertisers who come directly to Wepawao are won in the Wepawao Face Challenge, open only while direct advertisers are waiting: one winner per advertiser, chosen by member votes. Wepawao does not have to share these, and does it in good faith. Anyone can win more than once.',
       ]],
     ],
     pricingTitle: 'Pricing',
     pricing1: ['One-time sales are always free.', ' A mattress, a bicycle, a piece of equipment: post it, and close it when it is sold.'],
     pricing2: ['Inventory and services: $5.00 per 30 days', ' (about 17¢ a day). Listings run in 30-day cycles, with a 30-day minimum.'],
-    pricing3: ['Introductory offer:', ' once Wao! reaches its launch member goal, the first 30 days of an inventory or service listing are free.'],
+    pricing3: ['Introductory offer:', ' once Wepawao reaches its launch member goal, the first 30 days of an inventory or service listing are free.'],
     pricingNote: 'Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.',
     comingTitle: "What's coming",
-    comingToday: ['Today:', ' Wao! is a place to connect. Share your Wao moment and see what is happening, newest first.'],
+    comingToday: ['Today:', ' Wepawao is a place to connect. Share your Wepawao moment and see what is happening, newest first.'],
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
-    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wao moment', hide: 'Close' },
+    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wepawao moment', hide: 'Close' },
     welcome: {
-      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wao!', replay: 'Welcome message',
+      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
       scenes: [
         { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
@@ -248,7 +248,7 @@ const I18N = {
   es: {
     signIn: 'Únete gratis', profile: 'Perfil', signOut: 'Cerrar sesión',
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
-    share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wao!',
+    share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wepawao',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
     visContacts: 'Solo contactos', visPublic: 'Público',
@@ -266,10 +266,10 @@ const I18N = {
     notPublic: 'No es público:',
     report: 'Reportar', reportedThanks: 'Reportado. Gracias.', alreadyReported: 'Ya reportaste esto.',
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
-    inviteTitle: 'Invita personas a Wao!',
+    inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
-    inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Únete a Wao! Una nueva red social, nuevos momentos para recordar.',
-    invitedBy: (n) => `${n} te invitó a Wao! Únete abajo y quedarán conectados.`,
+    inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Únete a Wepawao! Una nueva red social, nuevos momentos para recordar.',
+    invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
     requestsTitle: 'Solicitudes de contacto', accept: 'Aceptar', decline: 'Rechazar',
     myContacts: 'Mis contactos', noContacts: 'Aún no tienes contactos. ¡Comparte tu enlace de invitación para empezar!',
@@ -278,33 +278,33 @@ const I18N = {
     needUpdate: 'Los contactos se están configurando. Vuelve pronto.',
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
     photoLimit: (n) => `Llegaste al máximo de ${n} fotos por publicación.`,
-    members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wao!`,
+    members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wepawao`,
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
-    homeTipIos: 'Pon Wao! en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
-    homeTipInstall: 'Pon Wao! en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
-    banner: 'Wao! está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
+    homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
+    homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
+    banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
       bannerOutTitle: 'Programa de Afiliados de Tres Niveles',
-      bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wao! Unirse siempre es gratis.',
+      bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wepawao. Unirse siempre es gratis.',
       tierShort: ['Tus invitados', 'Sus invitados', 'Siguiente nivel'],
       join: 'Empezar mi red',
       yourTier: (n) => `Tu Nivel ${n}`,
       people: (n) => (n === 1 ? 'persona' : 'personas'),
-      communityTitle: 'Crecimiento de la comunidad Wao!',
+      communityTitle: 'Crecimiento de la comunidad Wepawao',
       membersLbl: 'miembros', invitedLbl: 'se unieron con una invitación',
       howTitle: 'Cómo crece tu red',
       howSteps: ['Compartes tu enlace de invitación', 'Se unen: tu Nivel 1', 'Invitan: tu Nivel 2', 'Y otra vez: tu Nivel 3'],
       slide: (i, n) => `Diapositiva ${i} de ${n}`,
-      teaserTitle: 'Muy pronto: La Cara Wao',
+      teaserTitle: 'Muy pronto: La Cara Wepawao',
       teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes, con la oportunidad de recibir la compensación por comisiones correspondiente.',
       teaserCta: '¡Querrás ser parte de lo que viene!',
       tier: (n) => `Nivel ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
       title: 'Panel de Afiliados', back: '← Volver',
-      intro: 'Tu red crece cuando alguien se une a Wao! con tu enlace de invitación, y otra vez cuando esa persona invita a otros.',
+      intro: 'Tu red crece cuando alguien se une a Wepawao con tu enlace de invitación, y otra vez cuando esa persona invita a otros.',
       tierDesc: ['Personas que invitaste', 'Invitados por tu Nivel 1', 'Invitados por tu Nivel 2'],
       shareOf: (r) => `${r}% de los ingresos por publicidad`,
       total: (n) => `${n.toLocaleString('es')} en tu red`,
@@ -314,73 +314,73 @@ const I18N = {
       noneYet: 'Aún no tienes subafiliados. Comparte tu enlace de invitación para empezar tu red.',
       joined: (d) => `Se unió el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
       earningsTitle: 'Comisiones',
-      earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wao! recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
+      earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wepawao recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
       loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
       providersLbl: 'anunciantes en el banco de proveedores',
     },
     contest: {
-      title: 'La Cara Wao',
-      bannerTitle: '¡La Cara Wao comenzó!',
+      title: 'La Cara Wepawao',
+      bannerTitle: '¡La Cara Wepawao comenzó!',
       prizes: (n) => `${n} ${n === 1 ? 'anunciante' : 'anunciantes'} en juego`,
       winners: (n) => `${n} ${n === 1 ? 'ganador' : 'ganadores'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `quedan ${Math.ceil(h / 24)} días` : `${h === 1 ? 'queda 1 hora' : `quedan ${h} horas`}` },
       seeEntries: 'Vota ya',
-      intro: 'Una empresa llegó directamente a Wao! para anunciarse. Los afiliados activos publican su cara más divertida y los miembros votan. Las participaciones con más votos ganan: cada ganador patrocina a un anunciante por 12 meses (20% para ti, 10% y 5% para tu línea).',
+      intro: 'Una empresa llegó directamente a Wepawao para anunciarse. Los afiliados activos publican su cara más divertida y los miembros votan. Las participaciones con más votos ganan: cada ganador patrocina a un anunciante por 12 meses (20% para ti, 10% y 5% para tu línea).',
       rules: ['Participa con un momento público con una foto de tu propia cara, publicado después de abrir el reto.', 'Nada ofensivo ni peligroso, sin niños, y sin la cara de otra persona sin su permiso.', 'Cada miembro vota una vez por participación; la cuenta debe tener al menos 7 días y no puedes votar por ti.', 'Los empates los gana quien participó primero. Los momentos ocultos por reportes salen del reto.'],
       enterTitle: 'Participa en el reto',
-      enterHow: 'Primero comparte tu Cara Wao como un momento público con foto. Luego elígelo aquí.',
+      enterHow: 'Primero comparte tu Cara Wepawao como un momento público con foto. Luego elígelo aquí.',
       pick: 'Elige tu momento', noneEligible: 'Aún no tienes un momento que califique. Publica un momento público con una foto de tu cara y vuelve.',
       agree: 'Acepto que mi foto se muestre públicamente en este reto y que cumple las reglas de arriba.',
-      enter: 'Participar con este momento', entered: '¡Ya estás participando! Comparte Wao! para que voten por ti.',
+      enter: 'Participar con este momento', entered: '¡Ya estás participando! Comparte Wepawao para que voten por ti.',
       notActive: 'Solo pueden participar afiliados activos (iniciaron sesión, publicaron o comentaron en los últimos 30 días).',
       signIn: 'Inicia sesión para participar o votar.',
       vote: 'Votar', voted: 'Votaste', votes: (n) => `${n} ${n === 1 ? 'voto' : 'votos'}`, yours: 'Tu participación',
       tooNew: 'Tu cuenta podrá votar cuando tenga 7 días.',
       noEntries: 'Aún no hay participaciones. ¡Sé el primero!',
-      closedTitle: 'La Cara Wao no está abierta ahora',
-      closedText: 'La Cara Wao solo se abre cuando una empresa llega directamente a Wao! para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
+      closedTitle: 'La Cara Wepawao no está abierta ahora',
+      closedText: 'La Cara Wepawao solo se abre cuando una empresa llega directamente a Wepawao para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
       lastWinners: (names) => `Últimos ganadores: ${names}`,
       errors: { agree: 'Marca la casilla para aceptar.', closed: 'El reto ya cerró.', not_active: 'Solo pueden participar afiliados activos.', already: 'Ya participas en este reto.', not_yours: 'Elige uno de tus propios momentos.', not_public: 'El momento debe ser público y cumplir las reglas públicas.', no_photo: 'El momento necesita una foto.', too_old: 'Elige un momento publicado después de abrir el reto.', own: 'No puedes votar por ti.', too_new: 'Tu cuenta podrá votar cuando tenga 7 días.', sign_in: 'Inicia sesión primero.', other: 'Algo salió mal. Inténtalo de nuevo.' },
     },
     prov: {
       bankTitle: 'Banco de proveedores',
-      bankIntro: 'Trae un anunciante a Wao! con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
-      linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wao!, la nueva red social para emprendedores.',
-      contestNote: 'Los anunciantes que llegan directamente a Wao! se ganan en La Cara Wao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
+      bankIntro: 'Trae un anunciante a Wepawao con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
+      linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wepawao, la nueva red social para emprendedores.',
+      contestNote: 'Los anunciantes que llegan directamente a Wepawao se ganan en La Cara Wepawao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
       mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
-      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en La Cara Wao',
-      pending: 'Esperando aprobación de Wao!', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
+      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en La Cara Wepawao',
+      pending: 'Esperando aprobación de Wepawao', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
       earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
       contestsWon: (n) => `${n} ${n === 1 ? 'reto ganado' : 'retos ganados'}`,
-      teamBtn: 'Equipo Wao!: administrar el banco de proveedores',
+      teamBtn: 'Equipo Wepawao: administrar el banco de proveedores',
       unavailable: 'El banco de proveedores se está preparando. Vuelve pronto.',
-      formTitle: 'Anúnciate en Wao!',
-      formIntro: 'Llega a una audiencia orgánica de nuevos emprendedores. Cuéntanos de tu negocio y el Equipo Wao! te contactará.',
+      formTitle: 'Anúnciate en Wepawao',
+      formIntro: 'Llega a una audiencia orgánica de nuevos emprendedores. Cuéntanos de tu negocio y el Equipo Wepawao te contactará.',
       referredBy: (n) => `Recomendado por ${n}`,
       fBusiness: 'Nombre del negocio', fContact: 'Tu nombre', fEmail: 'Correo electrónico', fPhone: 'Teléfono (opcional)',
       fWebsite: 'Sitio web o red social (opcional)', fOffer: '¿Qué ofreces?',
       send: 'Enviar', sending: 'Enviando…',
-      sent: '¡Gracias! El Equipo Wao! te contactará pronto.',
+      sent: '¡Gracias! El Equipo Wepawao te contactará pronto.',
       errors: { missing_business: 'Escribe el nombre de tu negocio.', bad_email: 'Escribe un correo válido.', already_sent: 'Ya recibimos una solicitud de este correo hoy. Te contactaremos pronto.', other: 'No se pudo enviar en este momento. Inténtalo de nuevo pronto.' },
-      close: 'Volver a Wao!',
-      teamTitle: 'Banco de proveedores: Equipo Wao!',
-      contestOpen: (d, n) => `La Cara Wao abierta hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'La Cara Wao no está abierta: se abre cuando apruebas un anunciante directo.',
-      endContest: 'Terminar La Cara Wao ahora', confirmEnd: '¿Terminar La Cara Wao ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
+      close: 'Volver a Wepawao',
+      teamTitle: 'Banco de proveedores: Equipo Wepawao',
+      contestOpen: (d, n) => `La Cara Wepawao abierta hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'La Cara Wepawao no está abierta: se abre cuando apruebas un anunciante directo.',
+      endContest: 'Terminar La Cara Wepawao ahora', confirmEnd: '¿Terminar La Cara Wepawao ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
       filters: { new: 'Nuevos', active: 'Activos', declined: 'Rechazados' },
       empty: 'Todavía no hay anunciantes aquí.',
-      referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wao!',
-      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'La Cara Wao' : 'enlace de anunciante'})`,
-      inContest: 'En La Cara Wao',
+      referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wepawao',
+      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'La Cara Wepawao' : 'enlace de anunciante'})`,
+      inContest: 'En La Cara Wepawao',
       approve: 'Aprobar', decline: 'Rechazar',
       paid: (c) => `Publicidad acreditada: $${(c / 100).toFixed(2)}`,
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
-      payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wao!.',
+      payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
-    pwHint: '¿Ya creaste una contraseña de Wao!? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wao! en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'No has iniciado sesión en esta pantalla', outText: 'En iPhone, Wao! abierto desde el ícono de la pantalla de inicio, desde Safari o desde una app de correo guarda su propia sesión. Entra una vez aquí con tu correo y contraseña, y vuelven tu Perfil y tu bienvenida. Después se queda con la sesión abierta.', outBtn: 'Entrar aquí', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wao!? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
-    wowTitle: '¿Cuál es tu momento Wao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
+    pwHint: '¿Ya creaste una contraseña de Wepawao? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wepawao en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'No has iniciado sesión en esta pantalla', outText: 'En iPhone, Wepawao abierto desde el ícono de la pantalla de inicio, desde Safari o desde una app de correo guarda su propia sesión. Entra una vez aquí con tu correo y contraseña, y vuelven tu Perfil y tu bienvenida. Después se queda con la sesión abierta.', outBtn: 'Entrar aquí', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wepawao? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
+    wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
     photoConsent: 'Esta es una foto mía y acepto mostrarla en mi perfil público.',
@@ -390,7 +390,7 @@ const I18N = {
     ongoing: 'Inventario o servicio', ongoingSub: 'Publicado por periodos de 30 días', ongoingPriced: '$5.00 / 30 días',
     oneTimeNote: 'Para un solo artículo, como un colchón o una bicicleta. Se mantiene hasta que lo marques como cumplido.',
     ongoingNote: 'Para productos en existencia y servicios que necesitan publicidad continua. Se publica por periodos de 30 días. La facturación aún no está activa, así que las publicaciones son gratis durante la demostración.',
-    ongoingNotePriced: 'Para productos en existencia y servicios que necesitan publicidad continua. Se publica por periodos de 30 días. Oferta de lanzamiento: cuando Wao! alcance su meta de miembros, tus primeros 30 días son gratis. La facturación aún no está activa, así que las publicaciones son gratis durante la demostración.',
+    ongoingNotePriced: 'Para productos en existencia y servicios que necesitan publicidad continua. Se publica por periodos de 30 días. Oferta de lanzamiento: cuando Wepawao alcance su meta de miembros, tus primeros 30 días son gratis. La facturación aún no está activa, así que las publicaciones son gratis durante la demostración.',
     offeringPh: '¿Qué ofreces?', describePh: 'Descríbelo…', pricePh: 'Precio (vacío = gratis/trueque)',
     areaPh: 'Zona (p. ej., sureste de Portland)', attachLoc: 'Adjuntar mi ubicación aproximada para que personas cercanas lo encuentren',
     kinds: { update: 'momento', offer: 'oferta', request: 'solicitud' },
@@ -413,7 +413,7 @@ const I18N = {
     offers: 'Ofertas', requests: 'Solicitudes', allCategories: 'Todas las categorías', nearMe: 'Cerca de mí',
     within: (r) => `A menos de ${r} km`, clear: 'borrar',
     discoverNote: 'Explora por tipo, categoría y distancia. Siempre lo más reciente primero.', noLocation: 'No se pudo obtener tu ubicación.',
-    peopleTitle: 'Personas en Wao!', newestFirst: 'Miembros más recientes primero.',
+    peopleTitle: 'Personas en Wepawao', newestFirst: 'Miembros más recientes primero.',
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
       ['Sin cajas negras.', 'Tu feed va de lo más reciente a lo más antiguo. No clasificamos, puntuamos ni reordenamos nada.'],
@@ -423,54 +423,54 @@ const I18N = {
       ['Tu correo es privado.', 'Nunca se muestra en tu perfil público.'],
       ['Menos ruido.', 'Momentos reales de personas reales, sin una máquina que decida qué te mantiene deslizando.'],
       ['Transparencia.', 'Nuestras reglas están publicadas aquí. Cuando cambien, te diremos qué cambió y por qué.'],
-      ['Compartes lo que Wao! gana.', 'Con nuestro Programa de Afiliados de Tres Niveles, gratuito, los miembros que ayuden a Wao! a crecer recibirán una parte de los ingresos por publicidad que Wao! realmente reciba. Unirse no cuesta nada y empieza a pagar cuando comience la publicidad.'],
+      ['Compartes lo que Wepawao gana.', 'Con nuestro Programa de Afiliados de Tres Niveles, gratuito, los miembros que ayuden a Wepawao a crecer recibirán una parte de los ingresos por publicidad que Wepawao realmente reciba. Unirse no cuesta nada y empieza a pagar cuando comience la publicidad.'],
     ],
-    differentTitle: 'Por qué Wao! es diferente',
-    differentText: 'La mayoría de las grandes redes sociales están hechas para mantenerte deslizando y vender tu atención. Wao! te muestra lo que está pasando, lo más reciente primero, y comparte los ingresos por publicidad con los miembros que construyen la comunidad.',
+    differentTitle: 'Por qué Wepawao es diferente',
+    differentText: 'La mayoría de las grandes redes sociales están hechas para mantenerte deslizando y vender tu atención. Wepawao te muestra lo que está pasando, lo más reciente primero, y comparte los ingresos por publicidad con los miembros que construyen la comunidad.',
     policiesTitle: 'Políticas',
     policiesNote: 'Resumen en lenguaje sencillo para la demostración. Las versiones legales completas se publicarán antes del lanzamiento.',
     policies: [
       ['Privacidad', [
-        'Solo recopilamos lo que Wao! necesita para funcionar: tu correo, tu nombre y usuario, y lo que decidas publicar.',
+        'Solo recopilamos lo que Wepawao necesita para funcionar: tu correo, tu nombre y usuario, y lo que decidas publicar.',
         'Tu correo nunca se muestra en público y nunca se vende.',
         'La ubicación solo se adjunta si marcas la casilla, y solo como un punto aproximado.',
         'Puedes editar o borrar tus publicaciones y tu foto en cualquier momento.',
       ]],
       ['Condiciones de uso', [
         'Debes tener al menos 18 años para unirte.',
-        'Lo que publicas es tuyo. Permites que Wao! lo muestre al público que elegiste.',
+        'Lo que publicas es tuyo. Permites que Wepawao lo muestre al público que elegiste.',
         'No publiques cosas que no tienes derecho a compartir.',
-        'Wao! puede quitar contenido o cuentas que no cumplan estas reglas.',
+        'Wepawao puede quitar contenido o cuentas que no cumplan estas reglas.',
       ]],
       ['Reglas de la comunidad', [
         'Sé respetuoso. Nada de acoso, odio, amenazas ni estafas.',
         'Nada de contenido para adultos, violencia ni bienes o servicios ilegales.',
         'Los momentos son para momentos. Las ventas van en Lo que ofrezco.',
         'Por defecto, los momentos son para tus contactos. Un momento público aparece en Todos solo si no tiene precios ni cantidades de dinero, ni enlaces web, ni números de teléfono, y has compartido menos de 3 momentos públicos en las últimas 24 horas.',
-        'Si un momento no cumple una regla, sigue visible para tus contactos y Wao! te dice exactamente qué regla no cumplió. Nada se oculta en silencio.',
+        'Si un momento no cumple una regla, sigue visible para tus contactos y Wepawao te dice exactamente qué regla no cumplió. Nada se oculta en silencio.',
         'Un momento público reportado por 3 miembros distintos sale de Todos. Tus contactos aún pueden verlo.',
         'Usa Reportar en cualquier momento que no cumpla estas reglas.',
       ]],
       ['Programa de Afiliados', [
         'Unirse es gratis y nadie tiene que comprar nada nunca.',
-        'Las partes salen solo de los ingresos por publicidad que Wao! realmente reciba: 20% por tu primer nivel, 10% por el segundo y 5% por el tercero.',
+        'Las partes salen solo de los ingresos por publicidad que Wepawao realmente reciba: 20% por tu primer nivel, 10% por el segundo y 5% por el tercero.',
         'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
         'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
         'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
-        'Los anunciantes que llegan directamente a Wao! se ganan en La Cara Wao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
+        'Los anunciantes que llegan directamente a Wepawao se ganan en La Cara Wepawao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wepawao no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
       ]],
     ],
     pricingTitle: 'Precios',
     pricing1: ['Las ventas únicas siempre son gratis.', ' Un colchón, una bicicleta, un equipo: publícalo y ciérralo cuando se venda.'],
     pricing2: ['Inventario y servicios: $5.00 por 30 días', ' (unos 17¢ al día). Las publicaciones funcionan en ciclos de 30 días, con un mínimo de 30 días.'],
-    pricing3: ['Oferta de lanzamiento:', ' cuando Wao! alcance su meta de miembros, los primeros 30 días de una publicación de inventario o servicio serán gratis.'],
+    pricing3: ['Oferta de lanzamiento:', ' cuando Wepawao alcance su meta de miembros, los primeros 30 días de una publicación de inventario o servicio serán gratis.'],
     pricingNote: 'La facturación aún no está activa, así que todo es gratis durante la demostración. Pagas por el tiempo publicado, nunca por la posición: el feed siempre muestra lo más reciente primero.',
     comingTitle: 'Lo que viene',
-    comingToday: ['Hoy:', ' Wao! es un lugar para conectar. Comparte tu momento Wao y mira lo que está pasando, lo más reciente primero.'],
+    comingToday: ['Hoy:', ' Wepawao es un lugar para conectar. Comparte tu momento Wepawao y mira lo que está pasando, lo más reciente primero.'],
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
-    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wao', hide: 'Cerrar' },
+    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wepawao', hide: 'Cerrar' },
     welcome: {
-      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wao!', replay: 'Mensaje de bienvenida',
+      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
       scenes: [
         { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
@@ -590,7 +590,7 @@ async function sharePost(p, t, lang) {
   const url = postLink(p.id, lang)
   const text = (p.title || p.body || t.shareText).slice(0, 140)
   if (navigator.share) {
-    try { await navigator.share({ title: 'Wao!', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
+    try { await navigator.share({ title: 'Wepawao', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
   }
   try { await navigator.clipboard.writeText(url); return t.linkCopied } catch { window.prompt('', url); return null }
 }
@@ -1446,7 +1446,7 @@ function Feed({ mode, session, refreshKey, onChanged }) {
   )
 }
 
-// ---------- People on Wao! ----------
+// ---------- People on Wepawao ----------
 function PersonRow({ p, children }) {
   return (
     <div className="flex items-center gap-3">
@@ -1519,7 +1519,7 @@ function Contacts({ me, conn, onChanged, ready }) {
   async function shareInvite() {
     const url = inviteLink(me, lang)
     if (navigator.share) {
-      try { await navigator.share({ title: 'Wao!', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+      try { await navigator.share({ title: 'Wepawao', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
     }
     try { await navigator.clipboard.writeText(url); setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) } catch { window.prompt('', url) }
   }
@@ -1604,7 +1604,7 @@ function SharedPost({ id, me, onClose, onChanged }) {
 }
 
 // ---------- Home-screen tip ----------
-// Phones (iPhone and Android): show how to add Wao! from the browser's Share button. Where the browser offers it, also show an install button.
+// Phones (iPhone and Android): show how to add Wepawao from the browser's Share button. Where the browser offers it, also show an install button.
 function HomeScreenTip() {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
@@ -1658,7 +1658,7 @@ function useAffiliateTiers(me, refreshKey) {
 async function shareInviteLink(me, lang, t, onCopied) {
   const url = inviteLink(me, lang)
   if (navigator.share) {
-    try { await navigator.share({ title: 'Wao!', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+    try { await navigator.share({ title: 'Wepawao', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
   }
   try { await navigator.clipboard.writeText(url); onCopied?.() } catch { window.prompt('', url) }
 }
@@ -1797,7 +1797,7 @@ function CommunitySlide({ stats, active }) {
   )
 }
 
-// Cartoon faces for the Wao Face teaser (original drawings, brand colors).
+// Cartoon faces for the Wepawao Face teaser (original drawings, brand colors).
 const INK = '#14123a'
 const FACES = [
   { bg: '#f6d155', draw: ( // big laugh
@@ -1839,11 +1839,11 @@ const FACES = [
   ) },
 ]
 
-function WaoFaces({ size = 44 }) {
+function WepawaoFaces({ size = 44 }) {
   return (
     <div className="flex items-end gap-1.5" aria-hidden="true">
       {FACES.map((f, i) => (
-        <svg key={i} viewBox="0 0 40 40" width={size} height={size} className="wao-face shrink-0" style={{ animationDelay: `${i * 0.35}s` }}>
+        <svg key={i} viewBox="0 0 40 40" width={size} height={size} className="wepawao-face shrink-0" style={{ animationDelay: `${i * 0.35}s` }}>
           <circle cx="20" cy="20" r="18.5" fill={f.bg} stroke={INK} strokeWidth="1.5" />
           {f.draw}
         </svg>
@@ -1852,7 +1852,7 @@ function WaoFaces({ size = 44 }) {
   )
 }
 
-// "Coming soon" card for the Wao Face Challenge, shown under the hero (where the member count was).
+// "Coming soon" card for the Wepawao Face Challenge, shown under the hero (where the member count was).
 function TeaserCard({ onJoin, onContest, refreshKey }) {
   const { t } = useLang()
   const [contest] = useContest(refreshKey)
@@ -1860,7 +1860,7 @@ function TeaserCard({ onJoin, onContest, refreshKey }) {
   if (contest?.open) {
     return (
       <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-4">
-        <div className="flex justify-center"><WaoFaces size={52} /></div>
+        <div className="flex justify-center"><WepawaoFaces size={52} /></div>
         <h3 className="text-center text-lg font-extrabold text-[#4a3af0]">{t.contest.bannerTitle}</h3>
         <p className="text-center text-sm text-stone-700">
           {t.contest.prizes(contest.prizes)} · {t.contest.endsIn(new Date(contest.ends_at) - Date.now())}
@@ -1871,7 +1871,7 @@ function TeaserCard({ onJoin, onContest, refreshKey }) {
   }
   return (
     <div className="space-y-2 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-4">
-      <div className="flex justify-center"><WaoFaces size={52} /></div>
+      <div className="flex justify-center"><WepawaoFaces size={52} /></div>
       <h3 className="text-center text-lg font-extrabold text-[#4a3af0]">{t.aff.teaserTitle}</h3>
       <p className="text-center text-sm text-stone-600">{t.aff.teaserText}</p>
       <p className="text-center font-bold">{t.aff.teaserCta}</p>
@@ -2088,7 +2088,7 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
   )
 }
 
-// ---------- Wao Face Challenge ----------
+// ---------- Wepawao Face Challenge ----------
 // Opens only while direct advertisers are waiting for a sponsor. As many winners as advertisers.
 function useContest(refreshKey) {
   const [data, setData] = useState(null)
@@ -2261,7 +2261,7 @@ function ProviderBankSection({ me, refreshKey, isAdmin, onTeam }) {
   async function share() {
     const url = advertiserLink(me, lang)
     if (navigator.share) {
-      try { await navigator.share({ title: 'Wao!', text: t.prov.linkShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+      try { await navigator.share({ title: 'Wepawao', text: t.prov.linkShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
     }
     try { await navigator.clipboard.writeText(url); setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) } catch { window.prompt('', url) }
   }
@@ -2373,7 +2373,7 @@ function AdvertiseForm({ linkFrom, onClose }) {
   )
 }
 
-// Wao! Team only: approve advertisers, follow the Wao Face Challenge, record cleared payments.
+// Wepawao Team only: approve advertisers, follow the Wepawao Face Challenge, record cleared payments.
 function ProviderTeamPanel({ onBack }) {
   const { t, lang } = useLang()
   const [data, setData] = useState(null)
@@ -2541,7 +2541,7 @@ function Welcome({ name, number, onDone }) {
   }, [i, last, reduce])
 
   const s = w.scenes[i]
-  const rise = (delay) => (reduce ? {} : { animation: `wao-rise .8s cubic-bezier(.2,.7,.2,1) ${delay}s both` })
+  const rise = (delay) => (reduce ? {} : { animation: `wepawao-rise .8s cubic-bezier(.2,.7,.2,1) ${delay}s both` })
   const orb = { position: 'absolute', borderRadius: '9999px', filter: 'blur(60px)', pointerEvents: 'none', transition: reduce ? 'none' : 'transform 1.6s cubic-bezier(.2,.7,.2,1)' }
 
   return (
@@ -2555,7 +2555,7 @@ function Welcome({ name, number, onDone }) {
         paddingBottom: 'max(22px, env(safe-area-inset-bottom))',
         WebkitTapHighlightColor: 'transparent',
       }}>
-      <style>{`@keyframes wao-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes wao-fill{from{width:0}to{width:100%}}`}</style>
+      <style>{`@keyframes wepawao-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes wepawao-fill{from{width:0}to{width:100%}}`}</style>
 
       <div aria-hidden="true" style={{ ...orb, width: '70vmin', height: '70vmin', background: '#4a3af0', left: '-20vmin', top: '10%', opacity: 0.55, transform: ORB_POS[i][0] }} />
       <div aria-hidden="true" style={{ ...orb, width: '55vmin', height: '55vmin', background: '#f6d155', right: '-25vmin', bottom: '8%', opacity: 0.28, transform: ORB_POS[i][1] }} />
@@ -2565,7 +2565,7 @@ function Welcome({ name, number, onDone }) {
           {w.scenes.map((_, k) => (
             <span key={k} className="h-[3px] flex-1 overflow-hidden rounded-full bg-[#eef0fc]/25">
               <span className="block h-full bg-[#eef0fc]"
-                style={{ width: k < i || last || reduce ? '100%' : k === i ? undefined : '0%', animation: k === i && !last && !reduce ? `wao-fill ${WELCOME_MS}ms linear forwards` : undefined }} />
+                style={{ width: k < i || last || reduce ? '100%' : k === i ? undefined : '0%', animation: k === i && !last && !reduce ? `wepawao-fill ${WELCOME_MS}ms linear forwards` : undefined }} />
             </span>
           ))}
         </div>
@@ -2784,8 +2784,8 @@ export default function App() {
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
         <header className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#dcdff5] bg-white px-4 py-3">
-          <div className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-[#4a3af0]">
-            Wao<span className="grid h-8 w-8 place-items-center rounded-full bg-[#f6d155] text-xl text-[#14123a]">!</span>
+          <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
+            Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
           </div>
           <div className="flex items-center gap-2">
             <LangToggle lang={lang} setLang={setLang} />

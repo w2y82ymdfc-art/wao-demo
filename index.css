@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-/* Wao Face teaser: each face bobs and tilts in turn */
-@keyframes wao-face-bob {
+/* Wepawao Face teaser: each face bobs and tilts in turn */
+@keyframes wepawao-face-bob {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
   20% { transform: translateY(-6px) rotate(-8deg) scale(1.12); }
   40% { transform: translateY(0) rotate(6deg) scale(1); }
 }
-.wao-face { animation: wao-face-bob 2.5s ease-in-out infinite; transform-origin: 50% 80%; }
-@media (prefers-reduced-motion: reduce) { .wao-face { animation: none; } }
+.wepawao-face { animation: wepawao-face-bob 2.5s ease-in-out infinite; transform-origin: 50% 80%; }
+@media (prefers-reduced-motion: reduce) { .wepawao-face { animation: none; } }
