@@ -1603,24 +1603,6 @@ function SharedPost({ id, me, onClose, onChanged }) {
   )
 }
 
-// ---------- Member counter ----------
-function MemberCount({ refreshKey }) {
-  const { t } = useLang()
-  const [n, setN] = useState(null)
-  useEffect(() => {
-    supabase.from('profiles').select('id', { count: 'exact', head: true })
-      .then(({ count }) => setN(count ?? null))
-  }, [refreshKey])
-  if (n == null) return null
-  return (
-    <div className="flex justify-center">
-      <span className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-[#4a3af0] ring-2 ring-[#dcdff5]">
-        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500 align-middle" />{t.members(n)}
-      </span>
-    </div>
-  )
-}
-
 // ---------- Home-screen tip ----------
 // Phones (iPhone and Android): show how to add Wao! from the browser's Share button. Where the browser offers it, also show an install button.
 function HomeScreenTip() {
@@ -1870,21 +1852,31 @@ function WaoFaces({ size = 44 }) {
   )
 }
 
-function TeaserSlide({ cta, onCta }) {
+// "Coming soon" card for the Wao Face Challenge, shown under the hero (where the member count was).
+function TeaserCard({ onJoin, onContest, refreshKey }) {
   const { t } = useLang()
-  return (
-    <>
-      <SlideHead title={t.aff.teaserTitle} />
-      <div className="mt-2"><WaoFaces /></div>
-      <p className="mt-2 text-xs leading-snug text-white/85">{t.aff.teaserText}</p>
-      <div className="mt-2 flex items-center gap-3">
-        <p className="min-w-0 flex-1 text-sm font-bold text-[#f6d155]">{t.aff.teaserCta}</p>
-        {cta && (
-          <button className="shrink-0 rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]"
-            onClick={(e) => { e.stopPropagation(); onCta() }}>{cta}</button>
-        )}
+  const [contest] = useContest(refreshKey)
+  // While a challenge is open, the card invites everyone to vote instead.
+  if (contest?.open) {
+    return (
+      <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-4">
+        <div className="flex justify-center"><WaoFaces size={52} /></div>
+        <h3 className="text-center text-lg font-extrabold text-[#4a3af0]">{t.contest.bannerTitle}</h3>
+        <p className="text-center text-sm text-stone-700">
+          {t.contest.prizes(contest.prizes)} · {t.contest.endsIn(new Date(contest.ends_at) - Date.now())}
+        </p>
+        <div className="flex justify-center"><button className={primary} onClick={onContest}>{t.contest.seeEntries}</button></div>
       </div>
-    </>
+    )
+  }
+  return (
+    <div className="space-y-2 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-4">
+      <div className="flex justify-center"><WaoFaces size={52} /></div>
+      <h3 className="text-center text-lg font-extrabold text-[#4a3af0]">{t.aff.teaserTitle}</h3>
+      <p className="text-center text-sm text-stone-600">{t.aff.teaserText}</p>
+      <p className="text-center font-bold">{t.aff.teaserCta}</p>
+      {onJoin && <div className="flex justify-center"><button className={primary} onClick={onJoin}>{t.aff.join}</button></div>}
+    </div>
   )
 }
 
@@ -1909,7 +1901,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
 
   if (!me) {
     const slides = [
-      ...(contestSlide.length ? contestSlide : [() => <TeaserSlide cta={t.aff.join} onCta={onSignIn} />]),
+      ...contestSlide,
       () => (
         <>
           <SlideHead title={t.aff.bannerOutTitle} />
@@ -1946,7 +1938,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
   const fresh = [data?.week1 ?? 0, data?.week2 ?? 0, data?.week3 ?? 0]
   const total = data ? counts[0] + counts[1] + counts[2] : null
   const slides = [
-    ...(contestSlide.length ? contestSlide : [() => <TeaserSlide />]),
+    ...contestSlide,
     (active) => (
       <>
         <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
@@ -2829,7 +2821,8 @@ export default function App() {
               <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
                 onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
               <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
-              <MemberCount refreshKey={refreshKey} />
+              <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
               <HomeScreenTip />
             </>
           )}
