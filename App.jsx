@@ -77,20 +77,43 @@ const I18N = {
       earningsTitle: 'Commissions',
       earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wao! actually receives and has cleared, are paid monthly, and are never guaranteed.',
       loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
-
       providersLbl: 'advertisers in the provider bank',
+    },
+    contest: {
+      title: 'Wao Face Challenge',
+      bannerTitle: 'Wao Face Challenge is on!',
+      prizes: (n) => `${n} ${n === 1 ? 'advertiser' : 'advertisers'} up for grabs`,
+      winners: (n) => `${n} ${n === 1 ? 'winner' : 'winners'}`,
+      endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `${Math.ceil(h / 24)} days left` : `${h} ${h === 1 ? 'hour' : 'hours'} left` },
+      seeEntries: 'Vote now',
+      intro: 'A company came to Wao! directly to advertise. Active affiliates post their funniest face, and members vote. The entries with the most votes win: each winner sponsors one advertiser for 12 months (20% for you, 10% and 5% for your upline).',
+      rules: ['Enter with a public moment with a photo of your own face, posted after the challenge opened.', 'Nothing offensive or unsafe, no children, and nobody else\'s face without their permission.', 'Members vote once per entry; accounts must be at least 7 days old, and you cannot vote for yourself.', 'Ties go to whoever entered first. Moments hidden by reports leave the challenge.'],
+      enterTitle: 'Enter the challenge',
+      enterHow: 'First share your Wao Face as a public moment with a photo. Then choose it here.',
+      pick: 'Choose your moment', noneEligible: 'No eligible moment yet. Post a public moment with a photo of your face, then come back.',
+      agree: 'I agree that my photo is shown publicly for this challenge, and it follows the rules above.',
+      enter: 'Enter with this moment', entered: 'You are in! Share Wao! so people can vote for you.',
+      notActive: 'Only active affiliates can enter (signed in, posted or commented in the last 30 days).',
+      signIn: 'Sign in to enter or vote.',
+      vote: 'Vote', voted: 'Voted', votes: (n) => `${n} ${n === 1 ? 'vote' : 'votes'}`, yours: 'Your entry',
+      tooNew: 'Your account can vote once it is 7 days old.',
+      noEntries: 'No entries yet. Be the first!',
+      closedTitle: 'No challenge right now',
+      closedText: 'The Wao Face Challenge opens only when a company comes to Wao! directly to advertise. Watch the banner at the top: it will tell you when it opens.',
+      lastWinners: (names) => `Last winners: ${names}`,
+      errors: { agree: 'Please check the box to agree.', closed: 'The challenge has closed.', not_active: 'Only active affiliates can enter.', already: 'You already entered this challenge.', not_yours: 'Choose one of your own moments.', not_public: 'The moment must be public and follow the public rules.', no_photo: 'The moment needs a photo.', too_old: 'Choose a moment posted after the challenge opened.', own: 'You cannot vote for yourself.', too_new: 'Your account can vote once it is 7 days old.', sign_in: 'Sign in first.', other: 'Something went wrong. Please try again.' },
     },
     prov: {
       bankTitle: 'Provider bank',
       bankIntro: 'Bring an advertiser to Wao! with your advertiser link. For 12 months, the advertising they pay for shares 20% with you, 10% with your Tier 2 and 5% with your Tier 3. Your own business counts too: bring it in with your link like any other advertiser.',
       linkBtn: 'Share my advertiser link', linkShareText: 'Advertise your business on Wao!, the new social network for entrepreneurs.',
-      drawNote: 'Advertisers who come straight to Wao! are given by draw to one active affiliate (active = signed in, posted or commented in the last 30 days). Every draw is a new chance, even if you have won before.',
+      contestNote: 'Advertisers who come straight to Wao! are won in the Wao Face Challenge: active affiliates post a fun photo of their face and members vote. There are as many winners as direct advertisers waiting. You can win again and again.',
       mine: 'Advertisers you sponsor', noneMine: 'None yet. Share your advertiser link to bring in your first one.',
-      viaReferral: 'Your advertiser link', viaDraw: 'Won in a draw',
+      viaReferral: 'Your advertiser link', viaContest: 'Won in the Wao Face Challenge',
       pending: 'Waiting for Wao! approval', until: (d) => `Sponsored until ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
       earned: 'Commissions from cleared advertising', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'advertiser' : 'advertisers'} in the bank`,
-      drawsWon: (n) => `${n} ${n === 1 ? 'draw' : 'draws'} won`,
+      contestsWon: (n) => `${n} ${n === 1 ? 'challenge' : 'challenges'} won`,
       teamBtn: 'Wao! Team: manage the provider bank',
       unavailable: 'The provider bank is being set up. Please check back soon.',
       formTitle: 'Advertise on Wao!',
@@ -103,16 +126,14 @@ const I18N = {
       errors: { missing_business: 'Please enter your business name.', bad_email: 'Please enter a valid email.', already_sent: 'We already received a request from this email today. We will contact you soon.', other: 'It could not be sent right now. Please try again soon.' },
       close: 'Back to Wao!',
       teamTitle: 'Provider bank: Wao! Team',
-      activeAffs: (n) => `${n} active ${n === 1 ? 'affiliate' : 'affiliates'} can enter a draw`,
+      contestOpen: (d, n) => `Wao Face Challenge open until ${d} · ${n} ${n === 1 ? 'entry' : 'entries'}`, contestNone: 'No challenge open: it opens when you approve a direct advertiser.',
+      endContest: 'End the challenge now', confirmEnd: 'End the challenge now? The top entries win the waiting advertisers.',
       filters: { new: 'New', active: 'Active', declined: 'Declined' },
       empty: 'No advertisers here yet.',
       referred: (n) => `Referred by ${n}`, direct: 'Came directly to Wao!',
-      sponsor: (n, via) => `Sponsor: ${n} (${via === 'draw' ? 'draw' : 'advertiser link'})`,
-      noSponsor: 'No sponsor yet: run the draw',
-      approve: 'Approve', decline: 'Decline', runDraw: 'Run the draw',
-      confirmDraw: (n) => `Run the draw for ${n}? One active affiliate will be chosen at random and will sponsor this advertiser for 12 months.`,
-      drawResult: (w, n) => `${w} won the draw (${n} ${n === 1 ? 'entrant' : 'entrants'}).`,
-      drawErrors: { no_entrants: 'There are no active affiliates to enter the draw yet.', not_active: 'Approve the advertiser first.', has_sponsor: 'This advertiser already has a sponsor.' },
+      sponsor: (n, via) => `Sponsor: ${n} (${via === 'contest' ? 'Wao Face Challenge' : 'advertiser link'})`,
+      inContest: 'In the Wao Face Challenge',
+      approve: 'Approve', decline: 'Decline',
       paid: (c) => `Cleared advertising: $${(c / 100).toFixed(2)}`,
       recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
       payNote: 'Only record money that has already cleared into the Wao! account.',
@@ -197,7 +218,7 @@ const I18N = {
         'Earnings depend on real advertising revenue and are never guaranteed.',
         'Payments are calculated at the end of each month and sent through Stripe. Taxes are each member\'s responsibility.',
         'Provider bank: every advertiser is sponsored by one affiliate for 12 months. Bring one in with your advertiser link (your own business counts too) and you sponsor it.',
-        'Advertisers who come directly to Wao! are given by draw to one active affiliate. Wao! does not have to share these, and does it in good faith. Anyone can win more than once.',
+        'Advertisers who come directly to Wao! are won in the Wao Face Challenge, open only while direct advertisers are waiting: one winner per advertiser, chosen by member votes. Wao! does not have to share these, and does it in good faith. Anyone can win more than once.',
       ]],
     ],
     pricingTitle: 'Pricing',
@@ -289,20 +310,43 @@ const I18N = {
       earningsTitle: 'Comisiones',
       earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wao! recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
       loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
-
       providersLbl: 'anunciantes en el banco de proveedores',
+    },
+    contest: {
+      title: 'Reto Cara Wao',
+      bannerTitle: '¡El Reto Cara Wao está abierto!',
+      prizes: (n) => `${n} ${n === 1 ? 'anunciante' : 'anunciantes'} en juego`,
+      winners: (n) => `${n} ${n === 1 ? 'ganador' : 'ganadores'}`,
+      endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `quedan ${Math.ceil(h / 24)} días` : `${h === 1 ? 'queda 1 hora' : `quedan ${h} horas`}` },
+      seeEntries: 'Vota ya',
+      intro: 'Una empresa llegó directamente a Wao! para anunciarse. Los afiliados activos publican su cara más divertida y los miembros votan. Las participaciones con más votos ganan: cada ganador patrocina a un anunciante por 12 meses (20% para ti, 10% y 5% para tu línea).',
+      rules: ['Participa con un momento público con una foto de tu propia cara, publicado después de abrir el reto.', 'Nada ofensivo ni peligroso, sin niños, y sin la cara de otra persona sin su permiso.', 'Cada miembro vota una vez por participación; la cuenta debe tener al menos 7 días y no puedes votar por ti.', 'Los empates los gana quien participó primero. Los momentos ocultos por reportes salen del reto.'],
+      enterTitle: 'Participa en el reto',
+      enterHow: 'Primero comparte tu Cara Wao como un momento público con foto. Luego elígelo aquí.',
+      pick: 'Elige tu momento', noneEligible: 'Aún no tienes un momento que califique. Publica un momento público con una foto de tu cara y vuelve.',
+      agree: 'Acepto que mi foto se muestre públicamente en este reto y que cumple las reglas de arriba.',
+      enter: 'Participar con este momento', entered: '¡Ya estás participando! Comparte Wao! para que voten por ti.',
+      notActive: 'Solo pueden participar afiliados activos (iniciaron sesión, publicaron o comentaron en los últimos 30 días).',
+      signIn: 'Inicia sesión para participar o votar.',
+      vote: 'Votar', voted: 'Votaste', votes: (n) => `${n} ${n === 1 ? 'voto' : 'votos'}`, yours: 'Tu participación',
+      tooNew: 'Tu cuenta podrá votar cuando tenga 7 días.',
+      noEntries: 'Aún no hay participaciones. ¡Sé el primero!',
+      closedTitle: 'No hay reto ahora',
+      closedText: 'El Reto Cara Wao solo se abre cuando una empresa llega directamente a Wao! para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
+      lastWinners: (names) => `Últimos ganadores: ${names}`,
+      errors: { agree: 'Marca la casilla para aceptar.', closed: 'El reto ya cerró.', not_active: 'Solo pueden participar afiliados activos.', already: 'Ya participas en este reto.', not_yours: 'Elige uno de tus propios momentos.', not_public: 'El momento debe ser público y cumplir las reglas públicas.', no_photo: 'El momento necesita una foto.', too_old: 'Elige un momento publicado después de abrir el reto.', own: 'No puedes votar por ti.', too_new: 'Tu cuenta podrá votar cuando tenga 7 días.', sign_in: 'Inicia sesión primero.', other: 'Algo salió mal. Inténtalo de nuevo.' },
     },
     prov: {
       bankTitle: 'Banco de proveedores',
       bankIntro: 'Trae un anunciante a Wao! con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
       linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wao!, la nueva red social para emprendedores.',
-      drawNote: 'Los anunciantes que llegan directamente a Wao! se asignan por sorteo a un afiliado activo (activo = inició sesión, publicó o comentó en los últimos 30 días). Cada sorteo es una nueva oportunidad, aunque ya hayas ganado antes.',
+      contestNote: 'Los anunciantes que llegan directamente a Wao! se ganan en el Reto Cara Wao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
       mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
-      viaReferral: 'Tu enlace de anunciante', viaDraw: 'Ganado en sorteo',
+      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en el Reto Cara Wao',
       pending: 'Esperando aprobación de Wao!', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
       earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
-      drawsWon: (n) => `${n} ${n === 1 ? 'sorteo ganado' : 'sorteos ganados'}`,
+      contestsWon: (n) => `${n} ${n === 1 ? 'reto ganado' : 'retos ganados'}`,
       teamBtn: 'Equipo Wao!: administrar el banco de proveedores',
       unavailable: 'El banco de proveedores se está preparando. Vuelve pronto.',
       formTitle: 'Anúnciate en Wao!',
@@ -315,16 +359,14 @@ const I18N = {
       errors: { missing_business: 'Escribe el nombre de tu negocio.', bad_email: 'Escribe un correo válido.', already_sent: 'Ya recibimos una solicitud de este correo hoy. Te contactaremos pronto.', other: 'No se pudo enviar en este momento. Inténtalo de nuevo pronto.' },
       close: 'Volver a Wao!',
       teamTitle: 'Banco de proveedores: Equipo Wao!',
-      activeAffs: (n) => `${n} ${n === 1 ? 'afiliado activo puede' : 'afiliados activos pueden'} entrar en un sorteo`,
+      contestOpen: (d, n) => `Reto Cara Wao abierto hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'No hay reto abierto: se abre cuando apruebas un anunciante directo.',
+      endContest: 'Terminar el reto ahora', confirmEnd: '¿Terminar el reto ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
       filters: { new: 'Nuevos', active: 'Activos', declined: 'Rechazados' },
       empty: 'Todavía no hay anunciantes aquí.',
       referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wao!',
-      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'draw' ? 'sorteo' : 'enlace de anunciante'})`,
-      noSponsor: 'Sin patrocinador: realiza el sorteo',
-      approve: 'Aprobar', decline: 'Rechazar', runDraw: 'Realizar el sorteo',
-      confirmDraw: (n) => `¿Realizar el sorteo para ${n}? Se elegirá al azar un afiliado activo que patrocinará a este anunciante por 12 meses.`,
-      drawResult: (w, n) => `${w} ganó el sorteo (${n} ${n === 1 ? 'participante' : 'participantes'}).`,
-      drawErrors: { no_entrants: 'Todavía no hay afiliados activos para el sorteo.', not_active: 'Primero aprueba al anunciante.', has_sponsor: 'Este anunciante ya tiene patrocinador.' },
+      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'Reto Cara Wao' : 'enlace de anunciante'})`,
+      inContest: 'En el Reto Cara Wao',
+      approve: 'Aprobar', decline: 'Rechazar',
       paid: (c) => `Publicidad acreditada: $${(c / 100).toFixed(2)}`,
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wao!.',
@@ -409,7 +451,7 @@ const I18N = {
         'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
         'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
         'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
-        'Los anunciantes que llegan directamente a Wao! se asignan por sorteo a un afiliado activo. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
+        'Los anunciantes que llegan directamente a Wao! se ganan en el Reto Cara Wao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
       ]],
     ],
     pricingTitle: 'Precios',
@@ -1767,13 +1809,28 @@ function CommunitySlide({ stats, active }) {
   )
 }
 
-function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
+function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
   const { t } = useLang()
   const { data } = useAffiliateTiers(me, refreshKey)
   const community = useCommunityStats(refreshKey)
+  const [contest] = useContest(refreshKey)
+  const contestSlide = contest?.open ? [() => (
+    <div onClick={(e) => { e.stopPropagation(); onContest() }}>
+      <SlideHead title={t.contest.bannerTitle} right={`${t.contest.seeEntries} →`} />
+      <div className="mt-2 flex items-end gap-3">
+        <div className="text-5xl font-extrabold leading-none text-[#f6d155]">{contest.prizes}</div>
+        <div className="pb-1 text-sm text-white/80">{t.contest.prizes(contest.prizes).replace(/^\d+\s*/, '')}</div>
+      </div>
+      <div className="mt-2 flex items-center justify-between text-xs">
+        <span className="text-white/70">{t.contest.votes(contest.entries.reduce((n, e) => n + e.votes, 0))} · {contest.entries.length} 😜</span>
+        <span className="font-bold text-emerald-300">{t.contest.endsIn(new Date(contest.ends_at) - Date.now())}</span>
+      </div>
+    </div>
+  )] : []
 
   if (!me) {
     const slides = [
+      ...contestSlide,
       () => (
         <>
           <SlideHead title={t.aff.bannerOutTitle} />
@@ -1810,6 +1867,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
   const fresh = [data?.week1 ?? 0, data?.week2 ?? 0, data?.week3 ?? 0]
   const total = data ? counts[0] + counts[1] + counts[2] : null
   const slides = [
+    ...contestSlide,
     (active) => (
       <>
         <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
@@ -1959,6 +2017,160 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
   )
 }
 
+// ---------- Wao Face Challenge ----------
+// Opens only while direct advertisers are waiting for a sponsor. As many winners as advertisers.
+function useContest(refreshKey) {
+  const [data, setData] = useState(null)
+  const [tick, setTick] = useState(0)
+  const reload = useCallback(() => setTick((n) => n + 1), [])
+  useEffect(() => {
+    let live = true
+    supabase.rpc('contest_current').then(({ data, error }) => { if (live && !error) setData(data) })
+    return () => { live = false }
+  }, [refreshKey, tick])
+  return [data, reload]
+}
+
+function ContestPage({ me, refreshKey, onBack, onSignIn }) {
+  const { t, lang } = useLang()
+  const [c, reload] = useContest(refreshKey)
+  const [mine, setMine] = useState([])
+  const [pick, setPick] = useState(null)
+  const [agree, setAgree] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    if (!me || !c?.open || !c.can_enter) { setMine([]); return }
+    supabase.from('posts').select('id,body,image_path,image_paths,created_at')
+      .eq('user_id', me).eq('status', 'active').eq('visibility', 'public').is('public_block_reason', null)
+      .gte('created_at', c.opened_at).order('created_at', { ascending: false }).limit(12)
+      .then(({ data }) => setMine((data || []).filter((p) => postImages(p).length > 0)))
+  }, [me, c?.open, c?.can_enter, c?.opened_at])
+
+  async function enter() {
+    if (!pick) return
+    setBusy(true); setMsg('')
+    const { data, error } = await supabase.rpc('contest_enter', { p_post: pick, p_agree: agree })
+    setBusy(false)
+    if (!error && data === 'ok') { setMsg(t.contest.entered); setPick(null); reload(); return }
+    setMsg(t.contest.errors[data] || t.contest.errors.other)
+  }
+  async function vote(e) {
+    if (!me) { onSignIn(); return }
+    const { data, error } = await supabase.rpc('contest_vote', { p_entry: e.id, p_on: !e.my_vote })
+    if (!error && data === 'ok') { reload(); return }
+    setMsg(t.contest.errors[data] || t.contest.errors.other)
+  }
+
+  if (!c) return <div className={`${card} text-stone-600`}>{t.aff.loading}</div>
+  const endDate = c.ends_at && new Date(c.ends_at).toLocaleString(loc(lang), { dateStyle: 'medium', timeStyle: 'short' })
+  return (
+    <div className="space-y-4">
+      <div className="space-y-3 rounded-3xl bg-[#14123a] p-5 text-white">
+        <button className="text-sm font-bold text-[#f6d155]" onClick={onBack}>{t.aff.back}</button>
+        <h2 className="text-3xl font-extrabold">{t.contest.title}</h2>
+        {c.open ? (
+          <>
+            <div className="flex flex-wrap gap-2 text-sm font-bold">
+              <span className="rounded-full bg-[#f6d155] px-3 py-1 text-[#14123a]">{t.contest.prizes(c.prizes)}</span>
+              <span className="rounded-full bg-white/15 px-3 py-1">{t.contest.winners(c.prizes)}</span>
+              <span className="rounded-full bg-white/15 px-3 py-1">{t.contest.endsIn(new Date(c.ends_at) - Date.now())} · {endDate}</span>
+            </div>
+            <p className="text-white/85">{t.contest.intro}</p>
+          </>
+        ) : (
+          <>
+            <p className="font-bold">{t.contest.closedTitle}</p>
+            <p className="text-white/85">{t.contest.closedText}</p>
+          </>
+        )}
+        {c.last_winners?.length > 0 && <p className="text-sm text-[#f6d155]">{t.contest.lastWinners(c.last_winners.join(', '))}</p>}
+      </div>
+
+      {c.open && (
+        <>
+          <div className={`${card} space-y-2`}>
+            <ul className="list-disc space-y-1 pl-5 text-sm text-stone-700">
+              {t.contest.rules.map((r) => <li key={r}>{r}</li>)}
+            </ul>
+          </div>
+
+          {msg && <p className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm font-semibold">{msg}</p>}
+
+          {!me && (
+            <div className={`${card} space-y-2`}>
+              <p className="text-stone-600">{t.contest.signIn}</p>
+              <button className={primary} onClick={onSignIn}>{t.signIn}</button>
+            </div>
+          )}
+          {me && c.can_enter && (
+            <div className={`${card} space-y-3`}>
+              <h3 className="text-xl font-bold">{t.contest.enterTitle}</h3>
+              <p className="text-stone-600">{t.contest.enterHow}</p>
+              {mine.length === 0
+                ? <p className="text-sm text-stone-500">{t.contest.noneEligible}</p>
+                : (
+                  <>
+                    <p className="text-sm font-bold">{t.contest.pick}</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {mine.map((p) => (
+                        <button key={p.id} onClick={() => setPick(p.id)}
+                          className={`overflow-hidden rounded-2xl border-4 ${pick === p.id ? 'border-[#4a3af0]' : 'border-transparent'}`}>
+                          <img src={photoUrl(postImages(p)[0])} alt="" className="aspect-square w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                    <label className="flex items-start gap-2 text-sm">
+                      <input type="checkbox" className="mt-1" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+                      <span>{t.contest.agree}</span>
+                    </label>
+                    <button className={primary} disabled={!pick || !agree || busy} onClick={enter}>{t.contest.enter}</button>
+                  </>
+                )}
+            </div>
+          )}
+          {me && !c.can_enter && !c.entries.some((e) => e.mine) && (
+            <p className="px-2 text-sm text-stone-500">{t.contest.notActive}</p>
+          )}
+          {me && !c.can_vote && <p className="px-2 text-sm text-stone-500">{t.contest.tooNew}</p>}
+
+          {c.entries.length === 0
+            ? <div className={`${card} text-stone-600`}>{t.contest.noEntries}</div>
+            : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {c.entries.map((e, i) => (
+                  <div key={e.id} className={`${card} !p-0 overflow-hidden ${i < c.prizes ? 'ring-4 ring-[#f6d155]' : ''}`}>
+                    {e.image_paths?.[0] && <img src={photoUrl(e.image_paths[0])} alt="" className="aspect-square w-full object-cover" />}
+                    <div className="space-y-2 p-4">
+                      <div className="flex items-center gap-2">
+                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#14123a] text-xs font-extrabold text-white">{i + 1}</span>
+                        <Avatar url={e.avatar_url} name={e.name} />
+                        <span className="min-w-0 flex-1 truncate font-bold">{e.name}</span>
+                      </div>
+                      {e.body && <p className="line-clamp-2 text-sm text-stone-600">{e.body}</p>}
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-lg font-extrabold tabular-nums">{t.contest.votes(e.votes)}</span>
+                        {e.mine
+                          ? <span className={chip}>{t.contest.yours}</span>
+                          : (
+                            <button onClick={() => vote(e)} disabled={me && !c.can_vote}
+                              className={e.my_vote ? 'rounded-full bg-[#4a3af0] px-5 py-2 font-bold text-white' : ghost}>
+                              {e.my_vote ? `✓ ${t.contest.voted}` : t.contest.vote}
+                            </button>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+        </>
+      )}
+    </div>
+  )
+}
+
 // ---------- Provider bank ----------
 // Advertiser link: ?advertise=1&pref=<affiliate id>. The affiliate who brings in an advertiser sponsors it for 12 months.
 // An affiliate's own business is a common provider: he can bring it in with his own link.
@@ -1994,7 +2206,7 @@ function ProviderBankSection({ me, refreshKey, isAdmin, onTeam }) {
         <button className={primary} onClick={share}>{t.prov.linkBtn}</button>
         {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
       </div>
-      <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.prov.drawNote}</p>
+      <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.prov.contestNote}</p>
 
       {failed && <p className="text-sm text-stone-500">{t.prov.unavailable}</p>}
       {data && (
@@ -2002,7 +2214,7 @@ function ProviderBankSection({ me, refreshKey, isAdmin, onTeam }) {
           <div>
             <div className="flex items-baseline justify-between gap-2">
               <h4 className="font-bold">{t.prov.mine}</h4>
-              {data.draws_won > 0 && <span className="text-xs font-bold text-emerald-700">{t.prov.drawsWon(data.draws_won)}</span>}
+              {data.contests_won > 0 && <span className="text-xs font-bold text-emerald-700">{t.prov.contestsWon(data.contests_won)}</span>}
             </div>
             {data.providers.length === 0
               ? <p className="mt-1 text-sm text-stone-500">{t.prov.noneMine}</p>
@@ -2012,7 +2224,7 @@ function ProviderBankSection({ me, refreshKey, isAdmin, onTeam }) {
                     <li key={p.id} className="rounded-2xl border-2 border-[#dcdff5] px-3 py-2">
                       <div className="font-bold">{p.business_name}</div>
                       <div className="flex flex-wrap gap-x-3 text-xs text-stone-500">
-                        <span>{p.via === 'draw' ? t.prov.viaDraw : t.prov.viaReferral}</span>
+                        <span>{p.via === 'contest' ? t.prov.viaContest : t.prov.viaReferral}</span>
                         <span>{p.status === 'active' && p.end ? t.prov.until(p.end) : t.prov.pending}</span>
                       </div>
                     </li>
@@ -2090,7 +2302,7 @@ function AdvertiseForm({ linkFrom, onClose }) {
   )
 }
 
-// Wao! Team only: approve advertisers, run draws, record cleared payments.
+// Wao! Team only: approve advertisers, follow the Wao Face Challenge, record cleared payments.
 function ProviderTeamPanel({ onBack }) {
   const { t, lang } = useLang()
   const [data, setData] = useState(null)
@@ -2110,13 +2322,11 @@ function ProviderTeamPanel({ onBack }) {
     await supabase.rpc('admin_set_provider_status', { p_id: p.id, p_status: status })
     setBusy(false); setMsg(''); load()
   }
-  async function draw(p) {
-    if (!window.confirm(t.prov.confirmDraw(p.business_name))) return
+  async function endContest() {
+    if (!window.confirm(t.prov.confirmEnd)) return
     setBusy(true)
-    const { data: r, error } = await supabase.rpc('admin_run_provider_draw', { p_id: p.id })
-    setBusy(false)
-    setMsg(error ? t.prov.errors.other : r?.result === 'ok' ? t.prov.drawResult(r.winner, r.entrants) : (t.prov.drawErrors[r?.result] || t.prov.errors.other))
-    load()
+    await supabase.rpc('admin_end_contest')
+    setBusy(false); load()
   }
   async function pay(p) {
     const cents = Math.round(parseFloat(String(amount).replace(/[$,\s]/g, '')) * 100)
@@ -2134,7 +2344,14 @@ function ProviderTeamPanel({ onBack }) {
       <div className={`${card} space-y-2`}>
         <button className="text-sm font-bold text-[#4a3af0]" onClick={onBack}>{t.aff.back}</button>
         <h2 className="text-2xl font-extrabold">{t.prov.teamTitle}</h2>
-        {data && <p className="text-sm font-bold text-[#4a3af0]">{t.prov.activeAffs(data.active_affiliates)}</p>}
+        {data && (data.contest
+          ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-bold text-[#4a3af0]">{t.prov.contestOpen(when(data.contest.ends_at, lang), data.contest.entries)}</span>
+              <button className={ghostSm} disabled={busy} onClick={endContest}>{t.prov.endContest}</button>
+            </div>
+          )
+          : <p className="text-sm text-stone-500">{t.prov.contestNone}</p>)}
         {failed && <p className="text-stone-600">{t.prov.unavailable}</p>}
         <div className="flex flex-wrap gap-2">
           {['new', 'active', 'declined'].map((k) => (
@@ -2162,14 +2379,13 @@ function ProviderTeamPanel({ onBack }) {
             <span className={chip}>{p.source === 'referred' ? t.prov.referred(p.link_name || '?') : t.prov.direct}</span>
             {p.sponsor_name
               ? <span className={`${chip} !bg-[#14123a] !text-white`}>{t.prov.sponsor(p.sponsor_name, p.sponsor_via)}</span>
-              : p.status === 'active' && <span className={`${chip} !bg-[#fff8dc]`}>{t.prov.noSponsor}</span>}
+              : p.in_contest && <span className={`${chip} !bg-[#fff8dc]`}>{t.prov.inContest}</span>}
             {p.end && <span className={chip}>{t.prov.until(p.end)}</span>}
             {p.paid_cents > 0 && <span className={chip}>{t.prov.paid(p.paid_cents)}</span>}
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
             {p.status !== 'active' && <button className={ghostSm} disabled={busy} onClick={() => setStatus(p, 'active')}>{t.prov.approve}</button>}
             {p.status !== 'declined' && <button className="rounded-full px-4 py-1.5 text-sm font-bold text-stone-500" disabled={busy} onClick={() => setStatus(p, 'declined')}>{t.prov.decline}</button>}
-            {p.status === 'active' && !p.sponsor_name && <button className={`${primary} !py-1.5 !text-sm`} disabled={busy} onClick={() => draw(p)}>{t.prov.runDraw}</button>}
             {p.status === 'active' && paying !== p.id && <button className={ghostSm} disabled={busy} onClick={() => { setPaying(p.id); setAmount('') }}>{t.prov.recordPay}</button>}
           </div>
           {paying === p.id && (
@@ -2532,7 +2748,7 @@ export default function App() {
           {tab === 'everyone' && (
             <>
               <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
-                onSignIn={() => setShowSignIn(true)} />
+                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
               <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
               <MemberCount refreshKey={refreshKey} />
               <HomeScreenTip />
@@ -2587,6 +2803,10 @@ export default function App() {
               isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />
           )}
           {tab === 'team' && isAdmin && <ProviderTeamPanel onBack={() => setTab('affiliate')} />}
+          {tab === 'contest' && (
+            <ContestPage me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
+              onSignIn={() => { setShowSignIn(true); window.scrollTo(0, 0) }} />
+          )}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
