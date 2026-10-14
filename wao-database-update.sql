@@ -334,8 +334,8 @@ grant execute on function public.affiliate_community_stats() to anon, authentica
 -- Every advertiser (provider) is sponsored by one affiliate for 12 months.
 --   referred: the advertiser came in through an affiliate's advertiser link -> that affiliate sponsors it.
 --   direct:   the advertiser came straight to Wao! -> a draw among active affiliates picks the sponsor.
--- An affiliate's own business goes into the bank like any provider, but it can never be sponsored
--- by its owner: it is treated as direct and the owner is left out of its draw.
+-- An affiliate's own business is a common provider ("his business is not him"): if he brings it in
+-- through his advertiser link, he sponsors it and earns the 20% like with any other provider.
 -- Cleared advertising payments inside the 12 months pay 20% / 10% / 5% up the sponsor's tiers.
 
 create table if not exists public.app_admins (
@@ -442,8 +442,7 @@ begin
     return 'already_sent';
   end if;
   if v_link is not null and not exists (select 1 from public.profiles where id = v_link) then v_link := null; end if;
-  -- Nobody sponsors their own business: it is treated as direct.
-  v_src := case when v_link is not null and v_link is distinct from v_owner then 'referred' else 'direct' end;
+  v_src := case when v_link is not null then 'referred' else 'direct' end;
   insert into public.providers (business_name, contact_name, contact_email, contact_phone, website, offer, lang,
                                 owner_id, link_from, source, sponsor_id, sponsor_via)
   values (trim(p_business), nullif(trim(p_contact), ''), v_email, nullif(trim(p_phone), ''), nullif(trim(p_website), ''),
@@ -527,7 +526,7 @@ begin
   if v_pr.id is null then return jsonb_build_object('result', 'not_found'); end if;
   if v_pr.status <> 'active' then return jsonb_build_object('result', 'not_active'); end if;
   if v_pr.sponsor_id is not null then return jsonb_build_object('result', 'has_sponsor'); end if;
-  select array_agg(id) into v_entrants from public.active_affiliates(v_pr.owner_id) as id;
+  select array_agg(id) into v_entrants from public.active_affiliates(null) as id;
   if coalesce(cardinality(v_entrants), 0) = 0 then return jsonb_build_object('result', 'no_entrants'); end if;
   v_winner := v_entrants[1 + floor(random() * cardinality(v_entrants))::int];
   insert into public.provider_draws (provider_id, winner_id, entrant_count, entrants, drawn_by)

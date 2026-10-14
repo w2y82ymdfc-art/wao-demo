@@ -77,6 +77,45 @@ const I18N = {
       earningsTitle: 'Commissions',
       earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wao! actually receives and has cleared, are paid monthly, and are never guaranteed.',
       loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
+
+      providersLbl: 'advertisers in the provider bank',
+    },
+    prov: {
+      bankTitle: 'Provider bank',
+      bankIntro: 'Bring an advertiser to Wao! with your advertiser link. For 12 months, the advertising they pay for shares 20% with you, 10% with your Tier 2 and 5% with your Tier 3. Your own business counts too: bring it in with your link like any other advertiser.',
+      linkBtn: 'Share my advertiser link', linkShareText: 'Advertise your business on Wao!, the new social network for entrepreneurs.',
+      drawNote: 'Advertisers who come straight to Wao! are given by draw to one active affiliate (active = signed in, posted or commented in the last 30 days). Every draw is a new chance, even if you have won before.',
+      mine: 'Advertisers you sponsor', noneMine: 'None yet. Share your advertiser link to bring in your first one.',
+      viaReferral: 'Your advertiser link', viaDraw: 'Won in a draw',
+      pending: 'Waiting for Wao! approval', until: (d) => `Sponsored until ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
+      earned: 'Commissions from cleared advertising', earnedTotal: 'Total',
+      bankSize: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'advertiser' : 'advertisers'} in the bank`,
+      drawsWon: (n) => `${n} ${n === 1 ? 'draw' : 'draws'} won`,
+      teamBtn: 'Wao! Team: manage the provider bank',
+      unavailable: 'The provider bank is being set up. Please check back soon.',
+      formTitle: 'Advertise on Wao!',
+      formIntro: 'Reach an organic audience of new entrepreneurs. Tell us about your business and the Wao! Team will contact you.',
+      referredBy: (n) => `Recommended by ${n}`,
+      fBusiness: 'Business name', fContact: 'Your name', fEmail: 'Email', fPhone: 'Phone (optional)',
+      fWebsite: 'Website or social page (optional)', fOffer: 'What do you offer?',
+      send: 'Send', sending: 'Sending…',
+      sent: 'Thank you! The Wao! Team will contact you soon.',
+      errors: { missing_business: 'Please enter your business name.', bad_email: 'Please enter a valid email.', already_sent: 'We already received a request from this email today. We will contact you soon.', other: 'It could not be sent right now. Please try again soon.' },
+      close: 'Back to Wao!',
+      teamTitle: 'Provider bank: Wao! Team',
+      activeAffs: (n) => `${n} active ${n === 1 ? 'affiliate' : 'affiliates'} can enter a draw`,
+      filters: { new: 'New', active: 'Active', declined: 'Declined' },
+      empty: 'No advertisers here yet.',
+      referred: (n) => `Referred by ${n}`, direct: 'Came directly to Wao!',
+      sponsor: (n, via) => `Sponsor: ${n} (${via === 'draw' ? 'draw' : 'advertiser link'})`,
+      noSponsor: 'No sponsor yet: run the draw',
+      approve: 'Approve', decline: 'Decline', runDraw: 'Run the draw',
+      confirmDraw: (n) => `Run the draw for ${n}? One active affiliate will be chosen at random and will sponsor this advertiser for 12 months.`,
+      drawResult: (w, n) => `${w} won the draw (${n} ${n === 1 ? 'entrant' : 'entrants'}).`,
+      drawErrors: { no_entrants: 'There are no active affiliates to enter the draw yet.', not_active: 'Approve the advertiser first.', has_sponsor: 'This advertiser already has a sponsor.' },
+      paid: (c) => `Cleared advertising: $${(c / 100).toFixed(2)}`,
+      recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
+      payNote: 'Only record money that has already cleared into the Wao! account.',
     },
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
@@ -157,6 +196,8 @@ const I18N = {
         'Shares come only from advertising revenue Wao! actually receives: 20% to your first tier, 10% to your second, 5% to your third.',
         'Earnings depend on real advertising revenue and are never guaranteed.',
         'Payments are calculated at the end of each month and sent through Stripe. Taxes are each member\'s responsibility.',
+        'Provider bank: every advertiser is sponsored by one affiliate for 12 months. Bring one in with your advertiser link (your own business counts too) and you sponsor it.',
+        'Advertisers who come directly to Wao! are given by draw to one active affiliate. Wao! does not have to share these, and does it in good faith. Anyone can win more than once.',
       ]],
     ],
     pricingTitle: 'Pricing',
@@ -248,6 +289,45 @@ const I18N = {
       earningsTitle: 'Comisiones',
       earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wao! recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
       loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
+
+      providersLbl: 'anunciantes en el banco de proveedores',
+    },
+    prov: {
+      bankTitle: 'Banco de proveedores',
+      bankIntro: 'Trae un anunciante a Wao! con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
+      linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wao!, la nueva red social para emprendedores.',
+      drawNote: 'Los anunciantes que llegan directamente a Wao! se asignan por sorteo a un afiliado activo (activo = inició sesión, publicó o comentó en los últimos 30 días). Cada sorteo es una nueva oportunidad, aunque ya hayas ganado antes.',
+      mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
+      viaReferral: 'Tu enlace de anunciante', viaDraw: 'Ganado en sorteo',
+      pending: 'Esperando aprobación de Wao!', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
+      earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
+      bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
+      drawsWon: (n) => `${n} ${n === 1 ? 'sorteo ganado' : 'sorteos ganados'}`,
+      teamBtn: 'Equipo Wao!: administrar el banco de proveedores',
+      unavailable: 'El banco de proveedores se está preparando. Vuelve pronto.',
+      formTitle: 'Anúnciate en Wao!',
+      formIntro: 'Llega a una audiencia orgánica de nuevos emprendedores. Cuéntanos de tu negocio y el Equipo Wao! te contactará.',
+      referredBy: (n) => `Recomendado por ${n}`,
+      fBusiness: 'Nombre del negocio', fContact: 'Tu nombre', fEmail: 'Correo electrónico', fPhone: 'Teléfono (opcional)',
+      fWebsite: 'Sitio web o red social (opcional)', fOffer: '¿Qué ofreces?',
+      send: 'Enviar', sending: 'Enviando…',
+      sent: '¡Gracias! El Equipo Wao! te contactará pronto.',
+      errors: { missing_business: 'Escribe el nombre de tu negocio.', bad_email: 'Escribe un correo válido.', already_sent: 'Ya recibimos una solicitud de este correo hoy. Te contactaremos pronto.', other: 'No se pudo enviar en este momento. Inténtalo de nuevo pronto.' },
+      close: 'Volver a Wao!',
+      teamTitle: 'Banco de proveedores: Equipo Wao!',
+      activeAffs: (n) => `${n} ${n === 1 ? 'afiliado activo puede' : 'afiliados activos pueden'} entrar en un sorteo`,
+      filters: { new: 'Nuevos', active: 'Activos', declined: 'Rechazados' },
+      empty: 'Todavía no hay anunciantes aquí.',
+      referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wao!',
+      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'draw' ? 'sorteo' : 'enlace de anunciante'})`,
+      noSponsor: 'Sin patrocinador: realiza el sorteo',
+      approve: 'Aprobar', decline: 'Rechazar', runDraw: 'Realizar el sorteo',
+      confirmDraw: (n) => `¿Realizar el sorteo para ${n}? Se elegirá al azar un afiliado activo que patrocinará a este anunciante por 12 meses.`,
+      drawResult: (w, n) => `${w} ganó el sorteo (${n} ${n === 1 ? 'participante' : 'participantes'}).`,
+      drawErrors: { no_entrants: 'Todavía no hay afiliados activos para el sorteo.', not_active: 'Primero aprueba al anunciante.', has_sponsor: 'Este anunciante ya tiene patrocinador.' },
+      paid: (c) => `Publicidad acreditada: $${(c / 100).toFixed(2)}`,
+      recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
+      payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wao!.',
     },
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
@@ -328,6 +408,8 @@ const I18N = {
         'Las partes salen solo de los ingresos por publicidad que Wao! realmente reciba: 20% por tu primer nivel, 10% por el segundo y 5% por el tercero.',
         'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
         'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
+        'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
+        'Los anunciantes que llegan directamente a Wao! se asignan por sorteo a un afiliado activo. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
       ]],
     ],
     pricingTitle: 'Precios',
@@ -1678,6 +1760,9 @@ function CommunitySlide({ stats, active }) {
           </div>
         ))}
       </div>
+      {stats?.providers > 0 && (
+        <div className="mt-2 text-xs text-white/75"><b className="text-[#f6d155]"><CountUp value={stats.providers} active={active} /></b> {t.aff.providersLbl}</div>
+      )}
     </>
   )
 }
@@ -1800,7 +1885,7 @@ function TierGrowthChart({ weeks }) {
   )
 }
 
-function AffiliateDashboard({ me, refreshKey, onBack }) {
+function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
   const { t, lang } = useLang()
   const { data, error, loading } = useAffiliateTiers(me, refreshKey)
   const [note, setNote] = useState('')
@@ -1864,10 +1949,241 @@ function AffiliateDashboard({ me, refreshKey, onBack }) {
         </>
       )}
 
+      <ProviderBankSection me={me} refreshKey={refreshKey} isAdmin={isAdmin} onTeam={onTeam} />
+
       <div className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm">
         <p className="font-bold">{t.aff.earningsTitle}</p>
         <p className="text-stone-700">{t.aff.earningsText}</p>
       </div>
+    </div>
+  )
+}
+
+// ---------- Provider bank ----------
+// Advertiser link: ?advertise=1&pref=<affiliate id>. The affiliate who brings in an advertiser sponsors it for 12 months.
+// An affiliate's own business is a common provider: he can bring it in with his own link.
+function advertiserLink(me, lang) {
+  return `${window.location.origin}/?advertise=1&pref=${me}&lang=${lang}`
+}
+const dollars = (c) => `$${((c || 0) / 100).toFixed(2)}`
+
+function ProviderBankSection({ me, refreshKey, isAdmin, onTeam }) {
+  const { t, lang } = useLang()
+  const [data, setData] = useState(null)
+  const [failed, setFailed] = useState(false)
+  const [note, setNote] = useState('')
+  useEffect(() => {
+    supabase.rpc('my_provider_bank').then(({ data, error }) => { setFailed(!!error); setData(error ? null : data) })
+  }, [me, refreshKey])
+  async function share() {
+    const url = advertiserLink(me, lang)
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Wao!', text: t.prov.linkShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    try { await navigator.clipboard.writeText(url); setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) } catch { window.prompt('', url) }
+  }
+  const c = data?.commission_cents || { t1: 0, t2: 0, t3: 0 }
+  return (
+    <div className={`${card} space-y-3`}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="text-xl font-bold">{t.prov.bankTitle}</h3>
+        {data && <span className="text-sm font-bold text-[#4a3af0]">{t.prov.bankSize(data.bank_size)}</span>}
+      </div>
+      <p className="text-stone-600">{t.prov.bankIntro}</p>
+      <div className="flex flex-wrap items-center gap-3">
+        <button className={primary} onClick={share}>{t.prov.linkBtn}</button>
+        {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
+      </div>
+      <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.prov.drawNote}</p>
+
+      {failed && <p className="text-sm text-stone-500">{t.prov.unavailable}</p>}
+      {data && (
+        <>
+          <div>
+            <div className="flex items-baseline justify-between gap-2">
+              <h4 className="font-bold">{t.prov.mine}</h4>
+              {data.draws_won > 0 && <span className="text-xs font-bold text-emerald-700">{t.prov.drawsWon(data.draws_won)}</span>}
+            </div>
+            {data.providers.length === 0
+              ? <p className="mt-1 text-sm text-stone-500">{t.prov.noneMine}</p>
+              : (
+                <ul className="mt-2 space-y-2">
+                  {data.providers.map((p) => (
+                    <li key={p.id} className="rounded-2xl border-2 border-[#dcdff5] px-3 py-2">
+                      <div className="font-bold">{p.business_name}</div>
+                      <div className="flex flex-wrap gap-x-3 text-xs text-stone-500">
+                        <span>{p.via === 'draw' ? t.prov.viaDraw : t.prov.viaReferral}</span>
+                        <span>{p.status === 'active' && p.end ? t.prov.until(p.end) : t.prov.pending}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+          </div>
+          <div>
+            <h4 className="font-bold">{t.prov.earned}</h4>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+              {[['t1', 0], ['t2', 1], ['t3', 2]].map(([k, i]) => (
+                <div key={k} className="rounded-2xl bg-[#eef0fc] px-2 py-2">
+                  <div className="flex items-center justify-center gap-1.5 text-xs text-stone-600"><TierDot i={i} />{t.aff.tier(i + 1)}</div>
+                  <div className="font-extrabold tabular-nums">{dollars(c[k])}</div>
+                </div>
+              ))}
+              <div className="rounded-2xl bg-[#14123a] px-2 py-2 text-white">
+                <div className="text-xs text-white/70">{t.prov.earnedTotal}</div>
+                <div className="font-extrabold tabular-nums text-[#f6d155]">{dollars(c.t1 + c.t2 + c.t3)}</div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {isAdmin && <button className={ghostSm} onClick={onTeam}>{t.prov.teamBtn}</button>}
+    </div>
+  )
+}
+
+// Public form for advertisers. Works signed in or not.
+function AdvertiseForm({ linkFrom, onClose }) {
+  const { t, lang } = useLang()
+  const [f, setF] = useState({ business: '', contact: '', email: '', phone: '', website: '', offer: '' })
+  const [state, setState] = useState('idle')
+  const [err, setErr] = useState('')
+  const [sponsorName, setSponsorName] = useState(null)
+  useEffect(() => {
+    if (!linkFrom) return
+    supabase.from('profiles').select('display_name').eq('id', linkFrom).maybeSingle()
+      .then(({ data }) => setSponsorName(data?.display_name || null))
+  }, [linkFrom])
+  const set = (k) => (e) => setF((v) => ({ ...v, [k]: e.target.value }))
+  async function send(e) {
+    e.preventDefault()
+    setErr(''); setState('sending')
+    const { data, error } = await supabase.rpc('submit_provider', {
+      p_business: f.business, p_contact: f.contact, p_email: f.email, p_phone: f.phone,
+      p_website: f.website, p_offer: f.offer, p_link: linkFrom || null, p_lang: lang,
+    })
+    if (!error && data === 'ok') { setState('sent'); try { localStorage.removeItem('wao_pref') } catch { /* ignore */ } return }
+    setState('idle')
+    setErr(t.prov.errors[data] || t.prov.errors.other)
+  }
+  return (
+    <div className={`${card} space-y-3`}>
+      <h2 className="text-2xl font-extrabold">{t.prov.formTitle}</h2>
+      {sponsorName && <p className="inline-block rounded-full bg-[#14123a] px-3 py-1 text-sm font-bold text-white">{t.prov.referredBy(sponsorName)}</p>}
+      {state === 'sent'
+        ? <p className="rounded-2xl bg-emerald-50 px-3 py-3 font-semibold text-emerald-800">{t.prov.sent}</p>
+        : (
+          <form className="space-y-3" onSubmit={send}>
+            <p className="text-stone-600">{t.prov.formIntro}</p>
+            <input className={field} placeholder={t.prov.fBusiness} value={f.business} onChange={set('business')} maxLength={120} required />
+            <input className={field} placeholder={t.prov.fContact} value={f.contact} onChange={set('contact')} maxLength={80} autoComplete="name" />
+            <input className={field} type="email" placeholder={t.prov.fEmail} value={f.email} onChange={set('email')} maxLength={200} autoComplete="email" required />
+            <input className={field} type="tel" placeholder={t.prov.fPhone} value={f.phone} onChange={set('phone')} maxLength={40} autoComplete="tel" />
+            <input className={field} placeholder={t.prov.fWebsite} value={f.website} onChange={set('website')} maxLength={200} />
+            <textarea className={field} rows={3} placeholder={t.prov.fOffer} value={f.offer} onChange={set('offer')} maxLength={1000} />
+            {err && <p className="text-sm font-semibold text-red-700">{err}</p>}
+            <button className={primary} disabled={state === 'sending'}>{state === 'sending' ? t.prov.sending : t.prov.send}</button>
+          </form>
+        )}
+      <button className="text-sm font-bold text-[#4a3af0]" onClick={onClose}>{t.prov.close}</button>
+    </div>
+  )
+}
+
+// Wao! Team only: approve advertisers, run draws, record cleared payments.
+function ProviderTeamPanel({ onBack }) {
+  const { t, lang } = useLang()
+  const [data, setData] = useState(null)
+  const [failed, setFailed] = useState(false)
+  const [filter, setFilter] = useState('new')
+  const [msg, setMsg] = useState('')
+  const [paying, setPaying] = useState(null)
+  const [amount, setAmount] = useState('')
+  const [busy, setBusy] = useState(false)
+  const load = useCallback(() => {
+    supabase.rpc('admin_provider_bank').then(({ data, error }) => { setFailed(!!error); setData(error ? null : data) })
+  }, [])
+  useEffect(() => { load() }, [load])
+
+  async function setStatus(p, status) {
+    setBusy(true)
+    await supabase.rpc('admin_set_provider_status', { p_id: p.id, p_status: status })
+    setBusy(false); setMsg(''); load()
+  }
+  async function draw(p) {
+    if (!window.confirm(t.prov.confirmDraw(p.business_name))) return
+    setBusy(true)
+    const { data: r, error } = await supabase.rpc('admin_run_provider_draw', { p_id: p.id })
+    setBusy(false)
+    setMsg(error ? t.prov.errors.other : r?.result === 'ok' ? t.prov.drawResult(r.winner, r.entrants) : (t.prov.drawErrors[r?.result] || t.prov.errors.other))
+    load()
+  }
+  async function pay(p) {
+    const cents = Math.round(parseFloat(String(amount).replace(/[$,\s]/g, '')) * 100)
+    if (!(cents > 0)) return
+    setBusy(true)
+    await supabase.rpc('admin_record_payment', { p_id: p.id, p_amount_cents: cents })
+    setBusy(false); setPaying(null); setAmount(''); load()
+  }
+
+  const all = data?.providers || []
+  const list = all.filter((p) => p.status === filter)
+  const count = (k) => all.filter((p) => p.status === k).length
+  return (
+    <div className="space-y-4">
+      <div className={`${card} space-y-2`}>
+        <button className="text-sm font-bold text-[#4a3af0]" onClick={onBack}>{t.aff.back}</button>
+        <h2 className="text-2xl font-extrabold">{t.prov.teamTitle}</h2>
+        {data && <p className="text-sm font-bold text-[#4a3af0]">{t.prov.activeAffs(data.active_affiliates)}</p>}
+        {failed && <p className="text-stone-600">{t.prov.unavailable}</p>}
+        <div className="flex flex-wrap gap-2">
+          {['new', 'active', 'declined'].map((k) => (
+            <button key={k} onClick={() => setFilter(k)}
+              className={`rounded-full px-4 py-1.5 text-sm font-bold ${filter === k ? 'bg-[#4a3af0] text-white' : 'bg-[#eef0fc] text-[#6b6f93]'}`}>
+              {t.prov.filters[k]} <span className="tabular-nums opacity-75">{count(k)}</span>
+            </button>
+          ))}
+        </div>
+        {msg && <p className="rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm font-semibold">{msg}</p>}
+      </div>
+      {data && list.length === 0 && <div className={`${card} text-stone-600`}>{t.prov.empty}</div>}
+      {list.map((p) => (
+        <div key={p.id} className={`${card} space-y-2`}>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="text-lg font-bold">{p.business_name}</h3>
+            <span className="text-xs text-stone-500">{when(p.created_at, lang)}</span>
+          </div>
+          <div className="text-sm text-stone-700">
+            {[p.contact_name, p.contact_email, p.contact_phone].filter(Boolean).join(' · ')}
+            {p.website && <div className="truncate text-[#4a3af0]">{p.website}</div>}
+          </div>
+          {p.offer && <p className="whitespace-pre-wrap rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm">{p.offer}</p>}
+          <div className="flex flex-wrap gap-2">
+            <span className={chip}>{p.source === 'referred' ? t.prov.referred(p.link_name || '?') : t.prov.direct}</span>
+            {p.sponsor_name
+              ? <span className={`${chip} !bg-[#14123a] !text-white`}>{t.prov.sponsor(p.sponsor_name, p.sponsor_via)}</span>
+              : p.status === 'active' && <span className={`${chip} !bg-[#fff8dc]`}>{t.prov.noSponsor}</span>}
+            {p.end && <span className={chip}>{t.prov.until(p.end)}</span>}
+            {p.paid_cents > 0 && <span className={chip}>{t.prov.paid(p.paid_cents)}</span>}
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {p.status !== 'active' && <button className={ghostSm} disabled={busy} onClick={() => setStatus(p, 'active')}>{t.prov.approve}</button>}
+            {p.status !== 'declined' && <button className="rounded-full px-4 py-1.5 text-sm font-bold text-stone-500" disabled={busy} onClick={() => setStatus(p, 'declined')}>{t.prov.decline}</button>}
+            {p.status === 'active' && !p.sponsor_name && <button className={`${primary} !py-1.5 !text-sm`} disabled={busy} onClick={() => draw(p)}>{t.prov.runDraw}</button>}
+            {p.status === 'active' && paying !== p.id && <button className={ghostSm} disabled={busy} onClick={() => { setPaying(p.id); setAmount('') }}>{t.prov.recordPay}</button>}
+          </div>
+          {paying === p.id && (
+            <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] p-3">
+              <p className="text-xs text-stone-500">{t.prov.payNote}</p>
+              <input className={field} inputMode="decimal" placeholder={t.prov.amount} value={amount} onChange={(e) => setAmount(e.target.value)} />
+              <div className="flex gap-2">
+                <button className={ghostSm} disabled={busy} onClick={() => pay(p)}>{t.prov.save}</button>
+                <button className="text-sm text-stone-500" onClick={() => setPaying(null)}>{t.prov.cancel}</button>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   )
 }
@@ -2065,6 +2381,15 @@ export default function App() {
   const [composerOpen, setComposerOpen] = useState(false)
   const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
   const [flash, setFlash] = useState('')
+  // Advertiser link (?advertise=1&pref=<affiliate id>): show the advertiser form and remember who sent it.
+  const [advertise, setAdvertise] = useState(() => new URLSearchParams(window.location.search).has('advertise'))
+  const [advLink] = useState(() => {
+    let id = new URLSearchParams(window.location.search).get('pref')
+    if (id && UUID_RE.test(id)) { try { localStorage.setItem('wao_pref', id) } catch { /* ignore */ } return id }
+    try { id = localStorage.getItem('wao_pref') } catch { id = null }
+    return id && UUID_RE.test(id) ? id : null
+  })
+  const [isAdmin, setIsAdmin] = useState(false)
   const [inviter, setInviter] = useState(null)
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
@@ -2085,6 +2410,16 @@ export default function App() {
     try { localStorage.setItem('wao_lang', l) } catch { /* ignore */ }
   }
   useEffect(() => { document.documentElement.lang = lang }, [lang])
+  useEffect(() => {
+    if (!me) { setIsAdmin(false); return }
+    supabase.rpc('is_admin').then(({ data, error }) => setIsAdmin(!error && data === true))
+  }, [me])
+  function closeAdvertise() {
+    setAdvertise(false)
+    const url = new URL(window.location.href)
+    url.searchParams.delete('advertise'); url.searchParams.delete('pref')
+    window.history.replaceState(null, '', url.pathname + url.search)
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
@@ -2190,6 +2525,7 @@ export default function App() {
               onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
           )}
 
+          {advertise && <AdvertiseForm linkFrom={advLink} onClose={closeAdvertise} />}
           {sharedId && tab === 'everyone' && (
             <SharedPost key={`${sharedId}-${refreshKey}`} id={sharedId} me={me} onClose={closeShared} onChanged={posted} />
           )}
@@ -2246,7 +2582,11 @@ export default function App() {
               <Feed mode="offer" {...feedProps} />
             </>
           )}
-          {tab === 'affiliate' && <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')} />}
+          {tab === 'affiliate' && (
+            <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
+              isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />
+          )}
+          {tab === 'team' && isAdmin && <ProviderTeamPanel onBack={() => setTab('affiliate')} />}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
