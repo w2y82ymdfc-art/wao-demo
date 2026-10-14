@@ -61,6 +61,9 @@ const I18N = {
       howTitle: 'How your network grows',
       howSteps: ['You share your invite link', 'They join: your Tier 1', 'They invite: your Tier 2', 'And again: your Tier 3'],
       slide: (i, n) => `Slide ${i} of ${n}`,
+      teaserTitle: 'Coming soon: the Wao Face Challenge',
+      teaserText: 'Feel the excitement in advance! When advertisers arrive, affiliates will show their funniest face and members will vote. The winners will sponsor those advertisers.',
+      teaserCta: 'You might want to be part of what is coming!',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
@@ -294,6 +297,9 @@ const I18N = {
       howTitle: 'Cómo crece tu red',
       howSteps: ['Compartes tu enlace de invitación', 'Se unen: tu Nivel 1', 'Invitan: tu Nivel 2', 'Y otra vez: tu Nivel 3'],
       slide: (i, n) => `Diapositiva ${i} de ${n}`,
+      teaserTitle: 'Muy pronto: La Cara Wao',
+      teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes.',
+      teaserCta: '¡Querrás ser parte de lo que viene!',
       tier: (n) => `Nivel ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
@@ -313,8 +319,8 @@ const I18N = {
       providersLbl: 'anunciantes en el banco de proveedores',
     },
     contest: {
-      title: 'Reto Cara Wao',
-      bannerTitle: '¡El Reto Cara Wao está abierto!',
+      title: 'La Cara Wao',
+      bannerTitle: '¡La Cara Wao comenzó!',
       prizes: (n) => `${n} ${n === 1 ? 'anunciante' : 'anunciantes'} en juego`,
       winners: (n) => `${n} ${n === 1 ? 'ganador' : 'ganadores'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `quedan ${Math.ceil(h / 24)} días` : `${h === 1 ? 'queda 1 hora' : `quedan ${h} horas`}` },
@@ -331,8 +337,8 @@ const I18N = {
       vote: 'Votar', voted: 'Votaste', votes: (n) => `${n} ${n === 1 ? 'voto' : 'votos'}`, yours: 'Tu participación',
       tooNew: 'Tu cuenta podrá votar cuando tenga 7 días.',
       noEntries: 'Aún no hay participaciones. ¡Sé el primero!',
-      closedTitle: 'No hay reto ahora',
-      closedText: 'El Reto Cara Wao solo se abre cuando una empresa llega directamente a Wao! para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
+      closedTitle: 'La Cara Wao no está abierta ahora',
+      closedText: 'La Cara Wao solo se abre cuando una empresa llega directamente a Wao! para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
       lastWinners: (names) => `Últimos ganadores: ${names}`,
       errors: { agree: 'Marca la casilla para aceptar.', closed: 'El reto ya cerró.', not_active: 'Solo pueden participar afiliados activos.', already: 'Ya participas en este reto.', not_yours: 'Elige uno de tus propios momentos.', not_public: 'El momento debe ser público y cumplir las reglas públicas.', no_photo: 'El momento necesita una foto.', too_old: 'Elige un momento publicado después de abrir el reto.', own: 'No puedes votar por ti.', too_new: 'Tu cuenta podrá votar cuando tenga 7 días.', sign_in: 'Inicia sesión primero.', other: 'Algo salió mal. Inténtalo de nuevo.' },
     },
@@ -340,9 +346,9 @@ const I18N = {
       bankTitle: 'Banco de proveedores',
       bankIntro: 'Trae un anunciante a Wao! con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
       linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wao!, la nueva red social para emprendedores.',
-      contestNote: 'Los anunciantes que llegan directamente a Wao! se ganan en el Reto Cara Wao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
+      contestNote: 'Los anunciantes que llegan directamente a Wao! se ganan en La Cara Wao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
       mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
-      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en el Reto Cara Wao',
+      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en La Cara Wao',
       pending: 'Esperando aprobación de Wao!', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
       earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
@@ -359,13 +365,13 @@ const I18N = {
       errors: { missing_business: 'Escribe el nombre de tu negocio.', bad_email: 'Escribe un correo válido.', already_sent: 'Ya recibimos una solicitud de este correo hoy. Te contactaremos pronto.', other: 'No se pudo enviar en este momento. Inténtalo de nuevo pronto.' },
       close: 'Volver a Wao!',
       teamTitle: 'Banco de proveedores: Equipo Wao!',
-      contestOpen: (d, n) => `Reto Cara Wao abierto hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'No hay reto abierto: se abre cuando apruebas un anunciante directo.',
-      endContest: 'Terminar el reto ahora', confirmEnd: '¿Terminar el reto ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
+      contestOpen: (d, n) => `La Cara Wao abierta hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'La Cara Wao no está abierta: se abre cuando apruebas un anunciante directo.',
+      endContest: 'Terminar La Cara Wao ahora', confirmEnd: '¿Terminar La Cara Wao ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
       filters: { new: 'Nuevos', active: 'Activos', declined: 'Rechazados' },
       empty: 'Todavía no hay anunciantes aquí.',
       referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wao!',
-      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'Reto Cara Wao' : 'enlace de anunciante'})`,
-      inContest: 'En el Reto Cara Wao',
+      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'La Cara Wao' : 'enlace de anunciante'})`,
+      inContest: 'En La Cara Wao',
       approve: 'Aprobar', decline: 'Rechazar',
       paid: (c) => `Publicidad acreditada: $${(c / 100).toFixed(2)}`,
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
@@ -451,7 +457,7 @@ const I18N = {
         'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
         'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
         'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
-        'Los anunciantes que llegan directamente a Wao! se ganan en el Reto Cara Wao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
+        'Los anunciantes que llegan directamente a Wao! se ganan en La Cara Wao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wao! no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
       ]],
     ],
     pricingTitle: 'Precios',
@@ -1809,6 +1815,79 @@ function CommunitySlide({ stats, active }) {
   )
 }
 
+// Cartoon faces for the Wao Face teaser (original drawings, brand colors).
+const INK = '#14123a'
+const FACES = [
+  { bg: '#f6d155', draw: ( // big laugh
+    <>
+      <path d="M11 16q3-4 6 0M23 16q3-4 6 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M10 22h20q-1 11-10 11T10 22z" fill={INK} />
+      <path d="M15 29q5-4 10 0q-5 4-10 0z" fill="#ff7a93" />
+    </>
+  ) },
+  { bg: '#9a8ff7', draw: ( // wink with tongue out
+    <>
+      <circle cx="14" cy="16" r="2.6" fill={INK} />
+      <path d="M23 16h6" stroke={INK} strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M12 24q8 7 16 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M21 27h6v4a3 3 0 0 1-6 0z" fill="#ff7a93" stroke={INK} strokeWidth="1.5" />
+    </>
+  ) },
+  { bg: '#ff9eb5', draw: ( // shocked
+    <>
+      <circle cx="14" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="14" cy="16" r="1.8" fill={INK} />
+      <circle cx="26" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="26" cy="16" r="1.8" fill={INK} />
+      <path d="M9 8.5q4-3.5 8-1M31 8.5q-4-3.5-8-1" stroke={INK} strokeWidth="2" fill="none" strokeLinecap="round" />
+      <ellipse cx="20" cy="29" rx="4" ry="5" fill={INK} />
+    </>
+  ) },
+  { bg: '#7fd6c2', draw: ( // goofy cross-eyed
+    <>
+      <circle cx="14" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="16.3" cy="17" r="1.8" fill={INK} />
+      <circle cx="26" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="23.7" cy="17" r="1.8" fill={INK} />
+      <path d="M11 27q3-3 6 0t6 0t6 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+    </>
+  ) },
+  { bg: '#f6d155', draw: ( // cool shades
+    <>
+      <path d="M8 14h24" stroke={INK} strokeWidth="2" />
+      <rect x="9" y="13" width="9" height="6" rx="2.5" fill={INK} /><rect x="22" y="13" width="9" height="6" rx="2.5" fill={INK} />
+      <path d="M14 27q6 3 12-2" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+    </>
+  ) },
+]
+
+function WaoFaces({ size = 44 }) {
+  return (
+    <div className="flex items-end gap-1.5" aria-hidden="true">
+      {FACES.map((f, i) => (
+        <svg key={i} viewBox="0 0 40 40" width={size} height={size} className="wao-face shrink-0" style={{ animationDelay: `${i * 0.35}s` }}>
+          <circle cx="20" cy="20" r="18.5" fill={f.bg} stroke={INK} strokeWidth="1.5" />
+          {f.draw}
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+function TeaserSlide({ cta, onCta }) {
+  const { t } = useLang()
+  return (
+    <>
+      <SlideHead title={t.aff.teaserTitle} />
+      <div className="mt-2"><WaoFaces /></div>
+      <p className="mt-2 text-xs leading-snug text-white/85">{t.aff.teaserText}</p>
+      <div className="mt-2 flex items-center gap-3">
+        <p className="min-w-0 flex-1 text-sm font-bold text-[#f6d155]">{t.aff.teaserCta}</p>
+        {cta && (
+          <button className="shrink-0 rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]"
+            onClick={(e) => { e.stopPropagation(); onCta() }}>{cta}</button>
+        )}
+      </div>
+    </>
+  )
+}
+
 function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
   const { t } = useLang()
   const { data } = useAffiliateTiers(me, refreshKey)
@@ -1830,7 +1909,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
 
   if (!me) {
     const slides = [
-      ...contestSlide,
+      ...(contestSlide.length ? contestSlide : [() => <TeaserSlide cta={t.aff.join} onCta={onSignIn} />]),
       () => (
         <>
           <SlideHead title={t.aff.bannerOutTitle} />
@@ -1867,7 +1946,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
   const fresh = [data?.week1 ?? 0, data?.week2 ?? 0, data?.week3 ?? 0]
   const total = data ? counts[0] + counts[1] + counts[2] : null
   const slides = [
-    ...contestSlide,
+    ...(contestSlide.length ? contestSlide : [() => <TeaserSlide />]),
     (active) => (
       <>
         <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
