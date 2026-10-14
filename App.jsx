@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import heroImg from './wepawao-hero.jpeg'
 
@@ -32,7 +32,7 @@ const I18N = {
     confirmReport: 'Report this moment for breaking the community rules?',
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
-    inviteBtn: 'Share my invite link', inviteShareText: 'Join me on Wepawao! New social media, new moments to remember.',
+    inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
     invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
     requestsTitle: 'Contact requests', accept: 'Accept', decline: 'Decline',
@@ -81,6 +81,20 @@ const I18N = {
       earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wepawao actually receives and has cleared, are paid monthly, and are never guaranteed.',
       loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
       providersLbl: 'advertisers in the provider bank',
+    },
+    grow: {
+      startTitle: 'Your network starts now',
+      startText: 'Share your link once. Every person who joins with it shows up here right away, and you watch your network grow in front of you.',
+      startSteps: ['You', 'Tier 1', 'Tier 2', 'Tier 3'],
+      startNote: 'When they invite others, your network keeps growing on its own: up to 3 levels.',
+      shareBtn: 'Share my link now', later: 'Later',
+      joinedOne: (n) => `Wepa! ${n} joined your network`,
+      joinedMany: (n) => `Wepa! ${n} people joined your network`,
+      grew: 'Wepa! Your network is growing',
+      tierLine: (n, tier) => `+${n} in your Tier ${tier}`,
+      totalNow: (n) => `Now you have ${n.toLocaleString('en')} ${n === 1 ? 'person' : 'people'} in your network`,
+      milestone: (n) => n === 1 ? 'Your very first person!' : `Milestone: ${n.toLocaleString('en')} people!`,
+      seeNetwork: 'See my network', shareAgain: 'Share again', keepGoing: 'Keep going',
     },
     contest: {
       title: 'Wepawao Face Challenge',
@@ -268,7 +282,7 @@ const I18N = {
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
-    inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Únete a Wepawao! Una nueva red social, nuevos momentos para recordar.',
+    inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
     invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
     requestsTitle: 'Solicitudes de contacto', accept: 'Aceptar', decline: 'Rechazar',
@@ -317,6 +331,20 @@ const I18N = {
       earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wepawao recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
       loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
       providersLbl: 'anunciantes en el banco de proveedores',
+    },
+    grow: {
+      startTitle: 'Tu red empieza ahora',
+      startText: 'Comparte tu enlace una vez. Cada persona que se una con él aparece aquí al instante, y ves tu red crecer frente a tus ojos.',
+      startSteps: ['Tú', 'Nivel 1', 'Nivel 2', 'Nivel 3'],
+      startNote: 'Cuando ellos invitan a otros, tu red sigue creciendo sola: hasta 3 niveles.',
+      shareBtn: 'Compartir mi enlace ahora', later: 'Más tarde',
+      joinedOne: (n) => `¡Wepa! ${n} se unió a tu red`,
+      joinedMany: (n) => `¡Wepa! ${n} personas se unieron a tu red`,
+      grew: '¡Wepa! Tu red está creciendo',
+      tierLine: (n, tier) => `+${n} en tu Nivel ${tier}`,
+      totalNow: (n) => `Ahora tienes ${n.toLocaleString('es')} ${n === 1 ? 'persona' : 'personas'} en tu red`,
+      milestone: (n) => n === 1 ? '¡Tu primera persona!' : `¡Meta alcanzada: ${n.toLocaleString('es')} personas!`,
+      seeNetwork: 'Ver mi red', shareAgain: 'Compartir otra vez', keepGoing: 'Seguir',
     },
     contest: {
       title: 'La Cara Wepawao',
@@ -2527,6 +2555,150 @@ const ORB_POS = [
   ['translate(14vmin,-6vmin) scale(1.35)', 'translate(-12vmin,-20vmin) scale(1.5)'],
 ]
 
+// ---------- Watching your network grow ----------
+// "Your network starts now": shown once per member, right after joining (after the welcome message).
+// The watcher checks the member's network every 30 seconds while Wepawao is on screen and again
+// whenever it comes back to the screen. When it grew, a celebration appears right away.
+const NET_MILESTONES = [1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]
+const netKey = (me) => `wepawao_net_${me}`
+const startKey = (me) => `wepawao_netstart_${me}`
+
+function Confetti() {
+  if (reducedMotion()) return null
+  const colors = ['#f6d155', '#4a3af0', '#9a8ff7', '#ffffff', '#e0a800']
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <style>{`@keyframes wepawao-confetti{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(110vh) rotate(720deg)}}`}</style>
+      {Array.from({ length: 36 }, (_, i) => (
+        <span key={i} style={{
+          position: 'absolute', top: 0, left: `${(i * 37) % 100}%`, width: 8 + (i % 3) * 3, height: 12 + (i % 4) * 2,
+          background: colors[i % colors.length], borderRadius: i % 2 ? 9999 : 2, opacity: 0.9,
+          animation: `wepawao-confetti ${2.6 + (i % 5) * 0.45}s linear ${(i % 9) * 0.18}s 2 both`,
+        }} />
+      ))}
+    </div>
+  )
+}
+
+function Overlay({ children, onClose }) {
+  return (
+    <div role="dialog" aria-modal="true" onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#14123a]/70 px-4"
+      style={{ paddingTop: 'max(16px, env(safe-area-inset-top))', paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+      <div onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm overflow-hidden rounded-3xl px-5 pb-5 pt-6 text-white shadow-2xl"
+        style={{ background: 'linear-gradient(160deg,#14123a 0%,#2a1fa8 60%,#4a3af0 100%)' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function NetworkStart({ me, onClose }) {
+  const { t, lang } = useLang()
+  const g = t.grow
+  const [note, setNote] = useState('')
+  const dot = ['#f6d155', ...TIER_COLORS]
+  return (
+    <Overlay onClose={onClose}>
+      <h2 className="text-center text-2xl font-extrabold leading-tight">{g.startTitle}</h2>
+      <div className="mt-5 flex items-center justify-between">
+        {g.startSteps.map((label, i) => (
+          <Fragment key={i}>
+            {i > 0 && <span className="mb-5 h-0.5 flex-1 bg-white/25" />}
+            <div className="flex flex-col items-center gap-1.5">
+              <span className="grid h-11 place-items-center">
+                <span className="grid place-items-center rounded-full font-extrabold text-[#14123a]"
+                  style={{ background: dot[i], width: 44 - i * 6, height: 44 - i * 6, fontSize: 18 }}>
+                  {i === 0 ? '!' : ''}
+                </span>
+              </span>
+              <span className="text-[11px] text-white/80">{label}</span>
+            </div>
+          </Fragment>
+        ))}
+      </div>
+      <p className="mt-5 text-center text-[15px] leading-snug text-white/90">{g.startText}</p>
+      <p className="mt-2 text-center text-xs leading-snug text-white/65">{g.startNote}</p>
+      <button className="mt-5 w-full rounded-full bg-[#f6d155] px-4 py-3 text-base font-extrabold text-[#14123a]"
+        onClick={async () => { await shareInviteLink(me, lang, t, () => setNote(t.linkCopied)); onClose() }}>{g.shareBtn}</button>
+      {note && <p className="mt-2 text-center text-sm font-bold text-[#f6d155]">{note}</p>}
+      <button className="mt-2 w-full py-2 text-sm font-bold text-white/70" onClick={onClose}>{g.later}</button>
+    </Overlay>
+  )
+}
+
+function NetworkCelebration({ me, event, onClose, onOpen }) {
+  const { t, lang } = useLang()
+  const g = t.grow
+  const [note, setNote] = useState('')
+  const names = event.names
+  const title = names.length === 1 && event.added === 1 ? g.joinedOne(names[0])
+    : event.deltas[0] > 1 ? g.joinedMany(event.deltas[0]) : g.grew
+  return (
+    <Overlay onClose={onClose}>
+      <Confetti />
+      <div className="relative text-center">
+        <div className="text-6xl font-extrabold leading-none text-[#f6d155]">+{event.added}</div>
+        <h2 className="mt-3 text-xl font-extrabold leading-tight">{title}</h2>
+        {event.milestone && (
+          <p className="mx-auto mt-3 inline-block rounded-full bg-[#f6d155] px-3 py-1 text-sm font-extrabold text-[#14123a]">{g.milestone(event.milestone)}</p>
+        )}
+        <ul className="mt-4 space-y-1.5 text-sm">
+          {event.deltas.map((d, i) => d > 0 && (
+            <li key={i} className="flex items-center justify-center gap-2"><TierDot i={i} />{g.tierLine(d, i + 1)}</li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm text-white/75">{g.totalNow(event.total)}</p>
+        <div className="mt-5 grid grid-cols-2 gap-2">
+          <button className="rounded-full border-2 border-white/40 px-3 py-2.5 text-sm font-bold" onClick={onOpen}>{g.seeNetwork}</button>
+          <button className="rounded-full bg-[#f6d155] px-3 py-2.5 text-sm font-extrabold text-[#14123a]"
+            onClick={() => shareInviteLink(me, lang, t, () => setNote(t.linkCopied))}>{g.shareAgain}</button>
+        </div>
+        {note && <p className="mt-2 text-sm font-bold text-[#f6d155]">{note}</p>}
+        <button className="mt-2 w-full py-2 text-sm font-bold text-white/70" onClick={onClose}>{g.keepGoing}</button>
+      </div>
+    </Overlay>
+  )
+}
+
+// Checks the member's network and reports growth since the last time this device looked.
+function useNetworkWatcher(me, onGrow) {
+  const cb = useRef(onGrow)
+  cb.current = onGrow
+  useEffect(() => {
+    if (!me) return
+    let live = true, busy = false
+    async function check() {
+      if (busy || document.visibilityState !== 'visible') return
+      busy = true
+      const { data, error } = await supabase.rpc('my_affiliate_tiers', { p_weeks: 1 })
+      busy = false
+      if (!live || error || !data) return
+      const now = { t: [data.tier1 || 0, data.tier2 || 0, data.tier3 || 0], ids: (data.first_tier || []).map((p) => p.id) }
+      let before = null
+      try { before = JSON.parse(localStorage.getItem(netKey(me)) || 'null') } catch { /* ignore */ }
+      try { localStorage.setItem(netKey(me), JSON.stringify(now)) } catch { /* ignore */ }
+      if (!before || !Array.isArray(before.t)) return // first look on this device: just remember
+      const deltas = now.t.map((v, i) => Math.max(0, v - (before.t[i] || 0)))
+      const added = deltas[0] + deltas[1] + deltas[2]
+      if (!added) return
+      const total = now.t[0] + now.t[1] + now.t[2]
+      const prevTotal = before.t.reduce((a, b) => a + (b || 0), 0)
+      const milestone = [...NET_MILESTONES].reverse().find((m) => prevTotal < m && total >= m) || null
+      const seen = new Set(before.ids || [])
+      const names = (data.first_tier || []).filter((p) => !seen.has(p.id)).map((p) => p.display_name || '').filter(Boolean)
+      try { navigator.vibrate?.([60, 40, 60]) } catch { /* ignore */ }
+      cb.current({ deltas, added, total, milestone, names })
+    }
+    check()
+    const id = setInterval(check, 30000)
+    const onVis = () => { if (document.visibilityState === 'visible') check() }
+    document.addEventListener('visibilitychange', onVis)
+    return () => { live = false; clearInterval(id); document.removeEventListener('visibilitychange', onVis) }
+  }, [me])
+}
+
 function Welcome({ name, number, onDone }) {
   const { t, lang, setLang } = useLang()
   const w = t.welcome
@@ -2665,6 +2837,8 @@ export default function App() {
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [welcome, setWelcome] = useState(null)
+  const [netStart, setNetStart] = useState(false)
+  const [netEvent, setNetEvent] = useState(null)
   const [composerOpen, setComposerOpen] = useState(false)
   const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
   const [flash, setFlash] = useState('')
@@ -2718,7 +2892,7 @@ export default function App() {
   async function openWelcome(force) {
     let seen = false
     try { seen = localStorage.getItem('wao_welcome_seen') === '1' } catch { /* ignore */ }
-    if (seen && !force) return
+    if (seen && !force) { maybeNetStart(); return }
     const { data } = await supabase.from('profiles').select('display_name,created_at').eq('id', me).single()
     if (!data) return
     const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).lte('created_at', data.created_at)
@@ -2729,11 +2903,24 @@ export default function App() {
     setWelcome(null)
     setTab('everyone')
     window.scrollTo(0, 0)
+    maybeNetStart()
+  }
+  // "Your network starts now": once per member on this device, only while their network is still empty.
+  async function maybeNetStart() {
+    if (!me) return
+    try { if (localStorage.getItem(startKey(me)) === '1') return } catch { return }
+    const { data } = await supabase.rpc('my_affiliate_tiers', { p_weeks: 1 })
+    if (data && (data.tier1 || 0) > 0) { try { localStorage.setItem(startKey(me), '1') } catch { /* ignore */ } return }
+    setNetStart(true)
+  }
+  function closeNetStart() {
+    try { localStorage.setItem(startKey(me), '1') } catch { /* ignore */ }
+    setNetStart(false)
   }
 
   // After sign-in, go straight to the home screen and load the member's profile photo.
   useEffect(() => {
-    if (!me) { setShowProfile(false); setAvatarUrl(null); setWelcome(null); setComposerOpen(false); return }
+    if (!me) { setShowProfile(false); setAvatarUrl(null); setWelcome(null); setComposerOpen(false); setNetStart(false); setNetEvent(null); return }
     setShowSignIn(false)
     setTab('everyone')
     supabase.from('profiles').select('avatar_url').eq('id', me).single()
@@ -2742,6 +2929,7 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
+  useNetworkWatcher(me, (ev) => { setNetEvent(ev); posted() })
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
   // and connect the two of you as soon as you are signed in.
@@ -2882,6 +3070,11 @@ export default function App() {
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
+        {!welcome && netStart && me && <NetworkStart me={me} onClose={closeNetStart} />}
+        {!welcome && !netStart && netEvent && me && (
+          <NetworkCelebration me={me} event={netEvent} onClose={() => setNetEvent(null)}
+            onOpen={() => { setNetEvent(null); setTab('affiliate'); window.scrollTo(0, 0) }} />
+        )}
       </div>
     </LangCtx.Provider>
   )
