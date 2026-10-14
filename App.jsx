@@ -1474,7 +1474,7 @@ function Feed({ mode, session, refreshKey, onChanged }) {
   )
 }
 
-// ---------- People on Wepawao ----------
+// ---------- Contact rows ----------
 function PersonRow({ p, children }) {
   return (
     <div className="flex items-center gap-3">
@@ -1505,29 +1505,6 @@ function ContactButton({ me, person, conn, onChanged }) {
   }
   if (c.status === 'pending') return <span className={chip}>{t.requested}</span>
   return <span className={`${chip} !bg-emerald-100`}>{t.isContact}</span>
-}
-
-function People({ me, conn, onChanged, ready }) {
-  const { t } = useLang()
-  const [people, setPeople] = useState([])
-  useEffect(() => {
-    supabase.from('profiles').select('id,username,display_name,avatar_url,location_text,created_at')
-      .order('created_at', { ascending: false }).limit(12)
-      .then(({ data }) => setPeople(data || []))
-  }, [])
-  return (
-    <div className={card}>
-      <h2 className="mb-3 text-xl font-bold">{t.peopleTitle}</h2>
-      <div className="space-y-3">
-        {people.map((p) => (
-          <PersonRow key={p.id} p={p}>
-            {ready && <ContactButton me={me} person={p} conn={conn} onChanged={onChanged} />}
-          </PersonRow>
-        ))}
-      </div>
-      <p className="mt-3 text-sm text-stone-500">{t.newestFirst}</p>
-    </div>
-  )
 }
 
 // ---------- Contacts tab ----------
@@ -3046,7 +3023,6 @@ export default function App() {
           {tab === 'everyone' && (
             <>
               <Feed mode="everyone" {...feedProps} />
-              <People key={refreshKey} me={me} conn={conn} onChanged={reloadConn} ready={ready} />
             </>
           )}
           {tab === 'mine' && <Feed mode="mine" {...feedProps} />}
