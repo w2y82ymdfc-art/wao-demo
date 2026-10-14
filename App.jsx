@@ -61,6 +61,9 @@ const I18N = {
       howTitle: 'How your network grows',
       howSteps: ['You share your invite link', 'They join: your Tier 1', 'They invite: your Tier 2', 'And again: your Tier 3'],
       slide: (i, n) => `Slide ${i} of ${n}`,
+      teaserTitle: 'Coming soon: the Wao Face Challenge',
+      teaserText: 'Feel the excitement in advance! When advertisers arrive, affiliates will show their funniest face and members will vote. The winners will sponsor those advertisers.',
+      teaserCta: 'You might want to be part of what is coming!',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
@@ -232,6 +235,9 @@ const I18N = {
       howTitle: 'Cómo crece tu red',
       howSteps: ['Compartes tu enlace de invitación', 'Se unen: tu Nivel 1', 'Invitan: tu Nivel 2', 'Y otra vez: tu Nivel 3'],
       slide: (i, n) => `Diapositiva ${i} de ${n}`,
+      teaserTitle: 'Muy pronto: La Cara Wao',
+      teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes.',
+      teaserCta: '¡Querrás ser parte de lo que viene!',
       tier: (n) => `Nivel ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
@@ -1682,6 +1688,79 @@ function CommunitySlide({ stats, active }) {
   )
 }
 
+// Cartoon faces for the Wao Face teaser (original drawings, brand colors).
+const INK = '#14123a'
+const FACES = [
+  { bg: '#f6d155', draw: ( // big laugh
+    <>
+      <path d="M11 16q3-4 6 0M23 16q3-4 6 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M10 22h20q-1 11-10 11T10 22z" fill={INK} />
+      <path d="M15 29q5-4 10 0q-5 4-10 0z" fill="#ff7a93" />
+    </>
+  ) },
+  { bg: '#9a8ff7', draw: ( // wink with tongue out
+    <>
+      <circle cx="14" cy="16" r="2.6" fill={INK} />
+      <path d="M23 16h6" stroke={INK} strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M12 24q8 7 16 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+      <path d="M21 27h6v4a3 3 0 0 1-6 0z" fill="#ff7a93" stroke={INK} strokeWidth="1.5" />
+    </>
+  ) },
+  { bg: '#ff9eb5', draw: ( // shocked
+    <>
+      <circle cx="14" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="14" cy="16" r="1.8" fill={INK} />
+      <circle cx="26" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="26" cy="16" r="1.8" fill={INK} />
+      <path d="M9 8.5q4-3.5 8-1M31 8.5q-4-3.5-8-1" stroke={INK} strokeWidth="2" fill="none" strokeLinecap="round" />
+      <ellipse cx="20" cy="29" rx="4" ry="5" fill={INK} />
+    </>
+  ) },
+  { bg: '#7fd6c2', draw: ( // goofy cross-eyed
+    <>
+      <circle cx="14" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="16.3" cy="17" r="1.8" fill={INK} />
+      <circle cx="26" cy="16" r="4.5" fill="#fff" stroke={INK} strokeWidth="1.8" /><circle cx="23.7" cy="17" r="1.8" fill={INK} />
+      <path d="M11 27q3-3 6 0t6 0t6 0" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+    </>
+  ) },
+  { bg: '#f6d155', draw: ( // cool shades
+    <>
+      <path d="M8 14h24" stroke={INK} strokeWidth="2" />
+      <rect x="9" y="13" width="9" height="6" rx="2.5" fill={INK} /><rect x="22" y="13" width="9" height="6" rx="2.5" fill={INK} />
+      <path d="M14 27q6 3 12-2" stroke={INK} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+    </>
+  ) },
+]
+
+function WaoFaces({ size = 44 }) {
+  return (
+    <div className="flex items-end gap-1.5" aria-hidden="true">
+      {FACES.map((f, i) => (
+        <svg key={i} viewBox="0 0 40 40" width={size} height={size} className="wao-face shrink-0" style={{ animationDelay: `${i * 0.35}s` }}>
+          <circle cx="20" cy="20" r="18.5" fill={f.bg} stroke={INK} strokeWidth="1.5" />
+          {f.draw}
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+function TeaserSlide({ cta, onCta }) {
+  const { t } = useLang()
+  return (
+    <>
+      <SlideHead title={t.aff.teaserTitle} />
+      <div className="mt-2"><WaoFaces /></div>
+      <p className="mt-2 text-xs leading-snug text-white/85">{t.aff.teaserText}</p>
+      <div className="mt-2 flex items-center gap-3">
+        <p className="min-w-0 flex-1 text-sm font-bold text-[#f6d155]">{t.aff.teaserCta}</p>
+        {cta && (
+          <button className="shrink-0 rounded-full bg-[#f6d155] px-4 py-1.5 text-sm font-bold text-[#14123a]"
+            onClick={(e) => { e.stopPropagation(); onCta() }}>{cta}</button>
+        )}
+      </div>
+    </>
+  )
+}
+
 function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
   const { t } = useLang()
   const { data } = useAffiliateTiers(me, refreshKey)
@@ -1689,6 +1768,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
 
   if (!me) {
     const slides = [
+      () => <TeaserSlide cta={t.aff.join} onCta={onSignIn} />,
       () => (
         <>
           <SlideHead title={t.aff.bannerOutTitle} />
@@ -1725,6 +1805,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn }) {
   const fresh = [data?.week1 ?? 0, data?.week2 ?? 0, data?.week3 ?? 0]
   const total = data ? counts[0] + counts[1] + counts[2] : null
   const slides = [
+    () => <TeaserSlide />,
     (active) => (
       <>
         <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
