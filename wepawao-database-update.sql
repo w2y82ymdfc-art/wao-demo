@@ -849,3 +849,8 @@ AS $function$
   limit least(coalesce(p_limit, 20), 100);
 $function$;
 grant execute on function public.get_feed(post_kind, text, double precision, double precision, double precision, timestamptz, uuid, integer, boolean) to anon, authenticated;
+
+------------------------------------------------------------------ Shared posts for visitors (October 15, 2026)
+-- Visitors (and WhatsApp/Messages link previews) can read the second photo and the AI Moment details
+-- of PUBLIC posts. Row rules still hide contacts-only and private moments.
+grant select (image_paths, edited_at, visibility, public_block_reason, ai_moment, ai_prompt, ai_tool) on public.posts to anon;
