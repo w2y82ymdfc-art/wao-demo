@@ -32,6 +32,8 @@ const I18N = {
     confirmReport: 'Report this moment for breaking the community rules?',
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
+    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share',
+    calloutShareText: 'Wepa! Check out Wepawao, a new social network for new moments. Use it, share it, and be ready to enjoy what is coming!',
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
     invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
@@ -282,6 +284,8 @@ const I18N = {
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
+    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir',
+    calloutShareText: '¡Wepa! Mira Wepawao, una nueva red social para nuevos momentos. Úsala, compártela y prepárate para disfrutar lo que viene.',
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
     invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
@@ -581,6 +585,30 @@ function useSchemaReady() {
   return ready
 }
 const NEW_COLS = 'image_paths,edited_at,visibility,public_block_reason,'
+
+// "Use me, share me" strip under the top bar, on every screen. Members share their own invite link
+// (so new people join their network); visitors share the site.
+function ShareCallout({ me }) {
+  const { t, lang } = useLang()
+  const [note, setNote] = useState('')
+  async function share() {
+    const url = me ? inviteLink(me, lang) : `${window.location.origin}/?lang=${lang}`
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Wepawao', text: t.calloutShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    try { await navigator.clipboard.writeText(url); setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) } catch { window.prompt('', url) }
+  }
+  return (
+    <div className="flex items-center justify-center gap-3 bg-[#14123a] px-4 py-2 text-sm text-white">
+      <p className="min-w-0 text-center leading-snug">
+        <b className="text-[#f6d155]">{lang === 'es' ? '¡' : ''}{t.callout[0]}</b>{t.callout[1]}
+      </p>
+      <button onClick={share} className="shrink-0 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]">
+        {note || t.calloutShare}
+      </button>
+    </div>
+  )
+}
 
 function inviteLink(me, lang) {
   return `${window.location.origin}/?invite=${me}&ref=${me}&lang=${lang}`
@@ -2966,6 +2994,7 @@ export default function App() {
               : <button className={ghostSm} onClick={() => setShowSignIn((v) => !v)}>{t.signIn}</button>}
           </div>
         </header>
+        <ShareCallout me={me} />
 
         <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
           {showSignIn && !me && inviter && (
