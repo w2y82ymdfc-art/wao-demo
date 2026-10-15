@@ -3305,6 +3305,19 @@ export default function App() {
     try { localStorage.setItem('wao_lang', l) } catch { /* ignore */ }
   }
   useEffect(() => { document.documentElement.lang = lang }, [lang])
+  // Back button: each section (My page, a tab, the dashboard…) is a step in the browser history,
+  // so Back returns to the previous section instead of leaving Wepawao.
+  const fromHistory = useRef(false)
+  useEffect(() => {
+    const onPop = (e) => { fromHistory.current = true; setTab(e.state?.wpTab || 'everyone') }
+    window.addEventListener('popstate', onPop)
+    if (!window.history.state?.wpTab) window.history.replaceState({ ...(window.history.state || {}), wpTab: 'everyone' }, '')
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+  useEffect(() => {
+    if (fromHistory.current) { fromHistory.current = false; return }
+    if (window.history.state?.wpTab !== tab) window.history.pushState({ wpTab: tab }, '')
+  }, [tab])
   // Signed in from "Join or sign in" / "open my page": go straight to My page.
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
@@ -3317,7 +3330,7 @@ export default function App() {
     setAdvertise(false)
     const url = new URL(window.location.href)
     url.searchParams.delete('advertise'); url.searchParams.delete('pref')
-    window.history.replaceState(null, '', url.pathname + url.search)
+    window.history.replaceState(window.history.state, '', url.pathname + url.search)
   }
 
   useEffect(() => {
@@ -3393,7 +3406,7 @@ export default function App() {
       const url = new URL(window.location.href)
       url.searchParams.delete('invite')
       url.searchParams.delete('ref')
-      window.history.replaceState(null, '', url.pathname + url.search)
+      window.history.replaceState(window.history.state, '', url.pathname + url.search)
       if (!error && data === 'connected') { setFlash(t.nowContacts(inviter.display_name)); posted() }
       setInviter(null)
     })
@@ -3402,7 +3415,7 @@ export default function App() {
     setSharedId(null)
     const url = new URL(window.location.href)
     url.searchParams.delete('post')
-    window.history.replaceState(null, '', url.pathname + url.search)
+    window.history.replaceState(window.history.state, '', url.pathname + url.search)
   }
   const feedProps = { session, refreshKey, onChanged: posted }
 
@@ -3435,7 +3448,7 @@ export default function App() {
           {resetting && me && <PasswordReset onDone={() => {
             setResetting(false)
             const url = new URL(window.location.href); url.searchParams.delete('reset')
-            window.history.replaceState(null, '', url.pathname + url.search)
+            window.history.replaceState(window.history.state, '', url.pathname + url.search)
           }} />}
 
           {advertise && <AdvertiseForm linkFrom={advLink} onClose={closeAdvertise} />}
