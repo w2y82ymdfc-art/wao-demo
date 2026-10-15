@@ -12,6 +12,7 @@ const I18N = {
   en: {
     signIn: 'Join free', profile: 'Profile', signOut: 'Sign out',
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
+    tr: { btn: 'Translate', back: 'See original', busy: 'Translating…', note: 'Translated automatically', fail: 'Could not translate right now.', google: 'Open in Google Translate' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wepawao',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
@@ -294,6 +295,7 @@ const I18N = {
   es: {
     signIn: 'Únete gratis', profile: 'Perfil', signOut: 'Cerrar sesión',
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
+    tr: { btn: 'Traducir', back: 'Ver original', busy: 'Traduciendo…', note: 'Traducido automáticamente', fail: 'No se pudo traducir ahora.', google: 'Abrir en Google Traductor' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wepawao',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
@@ -1415,6 +1417,83 @@ function AiHow({ p }) {
   )
 }
 
+// ---------- Post text with "Translate" ----------
+// Members write in English or Spanish; readers can translate a post into the language Wepawao is set to.
+// Uses the free MyMemory service straight from the reader's browser (no key; each reader has their own daily allowance).
+const ES_WORDS = new Set('el la los las que de del y en un una es por para con mi mis tu su muy pero como más ya hoy está estoy soy al lo le se no sí también porque cuando donde gracias hola'.split(' '))
+const EN_WORDS = new Set('the and to of is are for with my your you i it this that in on at be was were have has not but so just very today love what when where thanks hello'.split(' '))
+function guessLang(text) {
+  if (!text) return null
+  let es = (text.match(/[áéíóúñ¿¡]/gi) || []).length * 2, en = 0
+  for (const w of text.toLowerCase().match(/[a-záéíóúñü']+/g) || []) {
+    if (ES_WORDS.has(w)) es++
+    if (EN_WORDS.has(w)) en++
+  }
+  if (es === en) return null
+  return es > en ? 'es' : 'en'
+}
+const trCache = new Map()
+function chunks(text, maxBytes = 450) {
+  const enc = new TextEncoder()
+  const parts = text.split(/(?<=[.!?\n])\s+/)
+  const out = []
+  let cur = ''
+  for (const part of parts) {
+    for (const piece of enc.encode(part).length > maxBytes ? part.split(/\s+/) : [part]) {
+      const next = cur ? `${cur} ${piece}` : piece
+      if (enc.encode(next).length > maxBytes && cur) { out.push(cur); cur = piece } else cur = next
+    }
+  }
+  if (cur) out.push(cur)
+  return out
+}
+async function translateText(text, from, to) {
+  const key = `${from}|${to}|${text}`
+  if (trCache.has(key)) return trCache.get(key)
+  const results = []
+  for (const c of chunks(text)) {
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(c)}&langpair=${from}|${to}`)
+    const j = await r.json()
+    const out = j?.responseData?.translatedText
+    if (!r.ok || j?.responseStatus !== 200 || !out) throw new Error('translate')
+    results.push(out)
+  }
+  const done = results.join(' ')
+  trCache.set(key, done)
+  return done
+}
+
+function PostText({ text }) {
+  const { t, lang } = useLang()
+  const target = loc(lang)
+  const from = guessLang(text)
+  const [shown, setShown] = useState(null)
+  const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
+  useEffect(() => { setShown(null); setFailed(false) }, [text, target])
+  if (!text) return null
+  const canTranslate = from && from !== target
+  async function go() {
+    setBusy(true); setFailed(false)
+    try { setShown(await translateText(text, from, target)) } catch { setFailed(true) }
+    setBusy(false)
+  }
+  const gt = `https://translate.google.com/?sl=auto&tl=${target}&text=${encodeURIComponent(text)}&op=translate`
+  return (
+    <div className="mt-2">
+      <p className="whitespace-pre-wrap">{shown ?? text}</p>
+      {canTranslate && (
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          {shown
+            ? (<><span className="text-stone-400">{t.tr.note}</span><button className="font-bold text-[#4a3af0]" onClick={() => setShown(null)}>{t.tr.back}</button></>)
+            : <button className="font-bold text-[#4a3af0]" disabled={busy} onClick={go}>🌐 {busy ? t.tr.busy : t.tr.btn}</button>}
+          {failed && (<><span className="text-stone-500">{t.tr.fail}</span><a className="font-bold text-[#4a3af0] underline" href={gt} target="_blank" rel="noreferrer">{t.tr.google}</a></>)}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ---------- Comments ----------
 function Comments({ postId, me }) {
   const { t, lang } = useLang()
@@ -1617,7 +1696,7 @@ function PostCard({ p, me, onChanged }) {
       ) : (
         <>
           {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
-          <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
+          <PostText text={p.body} />
           {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
           {p.ai_moment && images.length >= 2 && (
             <>
