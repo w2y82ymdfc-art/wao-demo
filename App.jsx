@@ -2167,14 +2167,16 @@ function SharedPost({ id, me, onClose, onChanged }) {
   const [p, setP] = useState(undefined)
   useEffect(() => {
     let cancelled = false
-    Promise.all([supportsMultiPhoto(), supportsAi()]).then(([multi, ai]) =>
-      supabase.from('posts')
-        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${multi && ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles!posts_user_id_fkey(username,display_name,avatar_url)`)
-        .eq('id', id).maybeSingle()
-    ).then(({ data }) => {
+    // All photo and AI columns exist now, so ask for them directly. Right after a link is opened,
+    // sign-in may still be settling and the first request can fail: try a few times before giving up.
+    const cols = `id,user_id,kind,category,title,body,price_cents,location_text,image_path,${NEW_COLS}ai_moment,ai_prompt,ai_tool,caricature_image_url,status,listing_type,expires_at,created_at,profiles!posts_user_id_fkey(username,display_name,avatar_url)`
+    const load = async (tries) => {
+      const { data, error } = await supabase.from('posts').select(cols).eq('id', id).maybeSingle()
       if (cancelled) return
+      if (error && tries > 0) { setTimeout(() => load(tries - 1), 900); return }
       setP(data ? { ...data, author_username: data.profiles?.username, author_display_name: data.profiles?.display_name, author_avatar_url: data.profiles?.avatar_url } : null)
-    })
+    }
+    load(3)
     return () => { cancelled = true }
   }, [id])
   if (p === undefined) return null
