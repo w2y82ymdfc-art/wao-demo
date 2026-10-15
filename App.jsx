@@ -3452,6 +3452,14 @@ export default function App() {
   })
   const [isAdmin, setIsAdmin] = useState(false)
   const [afterSignIn, setAfterSignIn] = useState(false)
+  // "Share your AI Moment": open the posting box right under the slideshow and bring it into view.
+  // Visitors sign in first; the box then opens by itself.
+  const [shareAfterSignIn, setShareAfterSignIn] = useState(false)
+  const composerRef = useRef(null)
+  const openShare = useCallback(() => {
+    setComposerOpen(true)
+    setTimeout(() => composerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+  }, [])
   const [resetting, setResetting] = useState(() => new URLSearchParams(window.location.search).has('reset'))
   const [inviter, setInviter] = useState(null)
   const [lang, setLangState] = useState(() => {
@@ -3490,6 +3498,9 @@ export default function App() {
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
   }, [me, afterSignIn])
+  useEffect(() => {
+    if (me && shareAfterSignIn) { setShareAfterSignIn(false); setShowSignIn(false); setTab('everyone'); openShare() }
+  }, [me, shareAfterSignIn, openShare])
   useEffect(() => {
     if (!me) { setIsAdmin(false); return }
     supabase.rpc('is_admin').then(({ data, error }) => setIsAdmin(!error && data === true))
@@ -3631,7 +3642,14 @@ export default function App() {
             <>
               {!wide && <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
                 onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
-              <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
+              <Hero signedIn={!!me} open={composerOpen} onShare={() => (composerOpen ? setComposerOpen(false) : openShare())}
+                onSignIn={() => { setShareAfterSignIn(true); setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />
+              {me && composerOpen && (
+                <div ref={composerRef} className="scroll-mt-20">
+                  <MomentComposer userId={me}
+                    onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
+                </div>
+              )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
@@ -3642,7 +3660,7 @@ export default function App() {
               <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
             </div>
           )}
-          {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
+          {me && tab === 'mine' && (
             <MomentComposer userId={me}
               onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
           )}
