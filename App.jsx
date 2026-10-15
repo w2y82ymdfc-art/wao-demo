@@ -3505,14 +3505,14 @@ export default function App() {
           )}
           {tab === 'mypage' && me && (
             <>
-              <div className={`${card} space-y-3`}>
+              <div className="space-y-4 rounded-3xl bg-gradient-to-br from-[#14123a] to-[#2a2370] p-5 text-white">
                 <div className="flex items-center gap-3">
-                  {avatarUrl ? <img src={avatarUrl} alt="" className="h-14 w-14 rounded-full object-cover" /> : <span className="grid h-14 w-14 place-items-center rounded-full bg-[#e8e9fb] text-2xl">👤</span>}
+                  {avatarUrl ? <img src={avatarUrl} alt="" className="h-14 w-14 rounded-full object-cover ring-4 ring-[#f6d155]" /> : <span className="grid h-14 w-14 place-items-center rounded-full bg-white/15 text-2xl ring-4 ring-[#f6d155]">👤</span>}
                   <h2 className="text-2xl font-extrabold">{t.myPage.title}</h2>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button className={primary} onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
-                  <button className={ghost} onClick={() => { setTab('mine'); window.scrollTo(0, 0) }}>{t.myPage.posts}</button>
+                  <button className="rounded-full bg-[#f6d155] px-6 py-3 font-bold text-[#14123a]" onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
+                  <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('mine'); window.scrollTo(0, 0) }}>{t.myPage.posts}</button>
                 </div>
               </div>
               <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
