@@ -2291,7 +2291,7 @@ function Slideshow({ slides, onOpen }) {
       <div className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
         style={{ transform: `translateX(-${idx * 100}%)` }}>
         {slides.map((render, i) => (
-          <div key={i} className={`w-full shrink-0 px-4 pt-3 pb-7 ${onOpen ? 'cursor-pointer' : ''}`} aria-hidden={i !== idx}
+          <div key={i} className={`flex w-full shrink-0 flex-col justify-center px-4 pt-3 pb-7 ${onOpen ? 'cursor-pointer' : ''}`} aria-hidden={i !== idx}
             role="group" aria-label={t.aff.slide(i + 1, count)} onClick={onOpen}>
             {render(i === idx)}
           </div>
