@@ -1467,27 +1467,40 @@ function PostText({ text }) {
   const { t, lang } = useLang()
   const target = loc(lang)
   const from = guessLang(text)
+  const canTranslate = !!text && !!from && from !== target
   const [shown, setShown] = useState(null)
+  const [original, setOriginal] = useState(false)
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  useEffect(() => { setShown(null); setFailed(false) }, [text, target])
-  if (!text) return null
-  const canTranslate = from && from !== target
-  async function go() {
+  const box = useRef(null)
+  const go = useCallback(async () => {
     setBusy(true); setFailed(false)
     try { setShown(await translateText(text, from, target)) } catch { setFailed(true) }
     setBusy(false)
-  }
+  }, [text, from, target])
+  // Translate automatically when the post comes into view.
+  useEffect(() => {
+    setShown(null); setOriginal(false); setFailed(false)
+    if (!canTranslate) return
+    const el = box.current
+    if (!el || !('IntersectionObserver' in window)) { go(); return }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); go() } }, { rootMargin: '200px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [canTranslate, go])
+  if (!text) return null
   const gt = `https://translate.google.com/?sl=auto&tl=${target}&text=${encodeURIComponent(text)}&op=translate`
+  const showTr = shown && !original
   return (
-    <div className="mt-2">
-      <p className="whitespace-pre-wrap">{shown ?? text}</p>
+    <div ref={box} className="mt-2">
+      <p className="whitespace-pre-wrap">{showTr ? shown : text}</p>
       {canTranslate && (
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          {shown
-            ? (<><span className="text-stone-400">{t.tr.note}</span><button className="font-bold text-[#4a3af0]" onClick={() => setShown(null)}>{t.tr.back}</button></>)
-            : <button className="font-bold text-[#4a3af0]" disabled={busy} onClick={go}>🌐 {busy ? t.tr.busy : t.tr.btn}</button>}
-          {failed && (<><span className="text-stone-500">{t.tr.fail}</span><a className="font-bold text-[#4a3af0] underline" href={gt} target="_blank" rel="noreferrer">{t.tr.google}</a></>)}
+          {busy && <span className="text-stone-400">🌐 {t.tr.busy}</span>}
+          {shown && (showTr
+            ? (<><span className="text-stone-400">🌐 {t.tr.note}</span><button className="font-bold text-[#4a3af0]" onClick={() => setOriginal(true)}>{t.tr.back}</button></>)
+            : <button className="font-bold text-[#4a3af0]" onClick={() => setOriginal(false)}>🌐 {t.tr.btn}</button>)}
+          {failed && (<><span className="text-stone-500">{t.tr.fail}</span><button className="font-bold text-[#4a3af0]" onClick={go}>{t.tr.btn}</button><a className="font-bold text-[#4a3af0] underline" href={gt} target="_blank" rel="noreferrer">{t.tr.google}</a></>)}
         </div>
       )}
     </div>
