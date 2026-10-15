@@ -678,6 +678,20 @@ function ShareCallout({ me, onJoin }) {
   )
 }
 
+// True on laptop/desktop-width screens (1024px and up), where Wepawao shows a side column.
+function useWide() {
+  const q = '(min-width: 1024px)'
+  const [wide, setWide] = useState(() => window.matchMedia?.(q).matches ?? false)
+  useEffect(() => {
+    const m = window.matchMedia?.(q)
+    if (!m) return
+    const on = () => setWide(m.matches)
+    m.addEventListener?.('change', on)
+    return () => m.removeEventListener?.('change', on)
+  }, [])
+  return wide
+}
+
 function inviteLink(me, lang) {
   return `${window.location.origin}/?invite=${me}&ref=${me}&lang=${lang}`
 }
@@ -3363,11 +3377,13 @@ export default function App() {
     window.history.replaceState(null, '', url.pathname + url.search)
   }
   const feedProps = { session, refreshKey, onChanged: posted }
+  const wide = useWide()
 
   return (
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
-        <header className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
             Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
           </div>
@@ -3377,10 +3393,12 @@ export default function App() {
               ? <button className={ghostSm} onClick={() => setShowProfile((v) => !v)}>{t.profile}</button>
               : <button className={ghostSm} onClick={() => setShowSignIn((v) => !v)}>{t.signIn}</button>}
           </div>
+          </div>
         </header>
         <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setShowSignIn(true); window.scrollTo(0, 0) }} />
 
-        <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
+        <div className="mx-auto max-w-2xl px-4 py-4 pb-20 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
+        <main className="min-w-0 space-y-4">
           {showSignIn && !me && inviter && (
             <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
           )}
@@ -3403,11 +3421,11 @@ export default function App() {
           )}
           {tab === 'everyone' && (
             <>
-              <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
-                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+              {!wide && <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
               <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
-              <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
-                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+              {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
               <HomeScreenTip />
             </>
           )}
@@ -3429,7 +3447,7 @@ export default function App() {
             </div>
           )}
 
-          <nav className={`${card} grid grid-cols-3 gap-1 !p-3`}>
+          <nav className={`${card} grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
             {TABS.map((k) => (
               <button key={k} onClick={() => setTab(k)}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
@@ -3465,6 +3483,15 @@ export default function App() {
           )}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
+        {wide && (
+          <aside className="sticky top-4 space-y-4">
+            <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+              onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+            <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+              onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+          </aside>
+        )}
+        </div>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
         {!welcome && netStart && me && <NetworkStart me={me} onClose={closeNetStart} />}
         {!welcome && !netStart && netEvent && me && (
