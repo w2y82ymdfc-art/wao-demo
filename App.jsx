@@ -3478,6 +3478,8 @@ export default function App() {
   // Visitors sign in first; the box then opens by itself.
   const [shareAfterSignIn, setShareAfterSignIn] = useState(false)
   const composerRef = useRef(null)
+  // Tapping a section button brings that section's posts into view (even the one already open).
+  const tabsRef = useRef(null)
   const openShare = useCallback(() => {
     setComposerOpen(true)
     setTimeout(() => composerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
@@ -3694,9 +3696,9 @@ export default function App() {
             </div>
           )}
 
-          <nav className={`${card} grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
+          <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
             {TABS.map((k) => (
-              <button key={k} onClick={() => setTab(k)}
+              <button key={k} onClick={() => { setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
                 {t.tabs[k]}
               </button>
