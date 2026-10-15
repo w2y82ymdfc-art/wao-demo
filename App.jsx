@@ -1378,59 +1378,66 @@ function MomentComposer({ userId, onPosted }) {
   )
 }
 
-// Before/after view: drag the handle to reveal the original over the AI version.
-// Before/after reveal: starts on the full original photo; when it scrolls into view, the divider
-// sweeps slowly across to reveal the AI version. Members can drag it any time, or tap replay.
+// Before/after reveal, nonstop like the landing slideshow: the original photo, then the divider sweeps
+// across to the AI version, holds it, fades back to the original and starts again. It only moves while
+// the post is on screen. Dragging pauses it; it carries on a few seconds after the member lets go.
 function BeforeAfter({ original, aiVersion }) {
   const { t } = useLang()
   const [pos, setPos] = useState(100)
+  const [round, setRound] = useState(0)
   const box = useRef(null)
   const raf = useRef(0)
-  const played = useRef(false)
-  const stop = () => cancelAnimationFrame(raf.current)
-  const play = useCallback(() => {
+  const timer = useRef(0)
+  const visible = useRef(false)
+  const held = useRef(false)
+  const stop = () => { cancelAnimationFrame(raf.current); clearTimeout(timer.current) }
+  const loop = useCallback(() => {
     stop()
     if (reducedMotion()) { setPos(0); return }
+    if (!visible.current || held.current) return
     setPos(100)
     let start
-    const HOLD = 900, DUR = 3200
+    const HOLD = 1500, DUR = 2800, AFTER = 3200
     const step = (ts) => {
       start ??= ts
       const k = Math.min(1, Math.max(0, (ts - start - HOLD) / DUR))
       const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
       setPos(100 - 100 * eased)
       if (k < 1) raf.current = requestAnimationFrame(step)
+      else timer.current = setTimeout(() => { setRound((r) => r + 1); loop() }, AFTER)
     }
     raf.current = requestAnimationFrame(step)
   }, [])
   useEffect(() => {
     const el = box.current
-    if (!el || !('IntersectionObserver' in window)) { play(); return }
+    if (!el || !('IntersectionObserver' in window)) { visible.current = true; loop(); return stop }
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && e.intersectionRatio > 0.6 && !played.current) { played.current = true; play() }
-    }, { threshold: [0, 0.6, 1] })
+      const on = e.isIntersecting && e.intersectionRatio > 0.5
+      if (on && !visible.current) { visible.current = true; loop() }
+      else if (!on && visible.current) { visible.current = false; stop() }
+    }, { threshold: [0, 0.5, 1] })
     io.observe(el)
     return () => { io.disconnect(); stop() }
-  }, [play])
+  }, [loop])
+  const grab = () => { held.current = true; stop() }
+  const letGo = () => { clearTimeout(timer.current); timer.current = setTimeout(() => { held.current = false; loop() }, 5000) }
   return (
     <div className="mt-3 space-y-1">
       <div ref={box} className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
         <img loading="lazy" alt="" src={photoUrl(aiVersion)} className="absolute inset-0 h-full w-full object-cover" />
-        <img loading="lazy" alt="" src={photoUrl(original)} className="absolute inset-0 h-full w-full object-cover"
+        <img key={round} loading="lazy" alt="" src={photoUrl(original)} className={`absolute inset-0 h-full w-full object-cover ${round ? 'wp-fade-in' : ''}`}
           style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
         <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${pos}% - 2px)`, opacity: pos > 98 || pos < 2 ? 0 : 1 }}>
-          <div className="absolute top-1/2 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">⇆</div>
+          <div className="absolute top-1/3 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">✨</div>
         </div>
         {pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
         {pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
-        <input type="range" min="0" max="100" value={pos} onPointerDown={stop} onTouchStart={stop}
-          onChange={(e) => { stop(); setPos(Number(e.target.value)) }}
+        <input type="range" min="0" max="100" value={pos}
+          onPointerDown={grab} onTouchStart={grab} onPointerUp={letGo} onTouchEnd={letGo}
+          onChange={(e) => { grab(); setPos(Number(e.target.value)); letGo() }}
           aria-label={t.ai.drag} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>
-      <div className="flex items-center justify-center gap-3 text-xs text-stone-400">
-        <span>{t.ai.drag}</span>
-        <button type="button" onClick={play} className="font-bold text-[#4a3af0]">↻ {t.ai.replay}</button>
-      </div>
+      <p className="text-center text-xs text-stone-400">{t.ai.drag}</p>
     </div>
   )
 }
