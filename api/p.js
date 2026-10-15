@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   const KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
   if (UUID_RE.test(id) && SB && KEY) {
     try {
-      const r = await fetch(`${SB}/rest/v1/posts?id=eq.${id}&status=eq.active&select=title,body,image_path,image_paths,ai_moment,profiles(display_name)`, {
+      const r = await fetch(`${SB}/rest/v1/posts?id=eq.${id}&status=eq.active&select=title,body,image_path,image_paths,ai_moment,profiles!posts_user_id_fkey(display_name)`, {
         headers: { apikey: KEY, Authorization: `Bearer ${KEY}` },
         signal: AbortSignal.timeout(4000),
       })
