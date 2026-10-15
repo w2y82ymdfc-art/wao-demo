@@ -1,6 +1,11 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import heroImg from './wepawao-hero.jpeg'
+import hero1a from './hero/1-before.jpg'
+import hero1b from './hero/1-ai.jpg'
+import hero2a from './hero/2-before.jpg'
+import hero2b from './hero/2-ai.jpg'
+import hero3a from './hero/3-before.jpg'
+import hero3b from './hero/3-ai.jpg'
 
 // ---------- Supabase ----------
 const supabase = createClient(
@@ -279,7 +284,7 @@ const I18N = {
       filterAll: 'All moments', filterAi: 'AI Moments ✨',
       noAi: 'No AI Moments yet. Be the first!',
     },
-    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your AI Moment ✨', hide: 'Close' },
+    hero: { l1: 'New social media,', l2: 'new moments to remember!', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your AI Moment ✨', hide: 'Close' },
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -562,7 +567,7 @@ const I18N = {
       filterAll: 'Todos los momentos', filterAi: 'Momentos IA ✨',
       noAi: 'Aún no hay Momentos IA. ¡Sé el primero!',
     },
-    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
+    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
@@ -3053,20 +3058,77 @@ function RoadmapBanner() {
   )
 }
 
+// ---------- Hero slideshow: three AI Moments (fictional people) ----------
+// Each scene starts on the everyday photo, the divider sweeps across to reveal the AI version,
+// holds it, then the next scene fades in.
+const HERO_SCENES = [[hero1a, hero1b], [hero2a, hero2b], [hero3a, hero3b]]
+function HeroShow() {
+  const { t } = useLang()
+  const [i, setI] = useState(0)
+  const [pos, setPos] = useState(100)
+  const go = useCallback((n) => { setPos(100); setI(n) }, [])
+  useEffect(() => {
+    const next = () => go((i + 1) % HERO_SCENES.length)
+    if (reducedMotion()) { setPos(0); const id = setTimeout(next, 6000); return () => clearTimeout(id) }
+    let raf, timer, start
+    const HOLD = 1500, DUR = 2800, AFTER = 3200
+    const step = (ts) => {
+      start ??= ts
+      const k = Math.min(1, Math.max(0, (ts - start - HOLD) / DUR))
+      const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
+      setPos(100 - 100 * eased)
+      if (k < 1) raf = requestAnimationFrame(step)
+      else timer = setTimeout(next, AFTER)
+    }
+    raf = requestAnimationFrame(step)
+    return () => { cancelAnimationFrame(raf); clearTimeout(timer) }
+  }, [i, go])
+  return (
+    <div>
+      <div className="px-5 pb-3">
+        <p key={i} className="wp-fade-in min-h-[1.5rem] font-bold text-white/90">{t.hero.scenes[i]}</p>
+      </div>
+      <div className="relative aspect-square w-full select-none overflow-hidden bg-[#14123a]">
+        {HERO_SCENES.map(([before, after], k) => {
+          const p = k === i ? pos : 0
+          return (
+            <div key={k} aria-hidden={k !== i} className={`absolute inset-0 transition-opacity duration-700 ${k === i ? 'opacity-100' : 'opacity-0'}`}>
+              <img src={after} alt="" loading={k ? 'lazy' : 'eager'} className="absolute inset-0 h-full w-full object-cover" />
+              <img src={before} alt="" loading={k ? 'lazy' : 'eager'} className="absolute inset-0 h-full w-full object-cover"
+                style={{ clipPath: `inset(0 ${100 - p}% 0 0)` }} />
+              <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${p}% - 2px)`, opacity: p > 98 || p < 2 ? 0 : 1 }}>
+                <div className="absolute top-1/3 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">✨</div>
+              </div>
+              {p > 8 && <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
+              {p < 92 && <span className="absolute right-3 top-3 rounded-full bg-[#4a3af0] px-2.5 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
+            </div>
+          )
+        })}
+        <div className="absolute inset-x-0 bottom-[5.5rem] z-10 flex flex-col items-center gap-1.5">
+          <div className="flex gap-2">
+            {HERO_SCENES.map((_, k) => (
+              <button key={k} type="button" aria-label={t.hero.scene(k + 1)} onClick={() => go(k)}
+                className={`h-2.5 rounded-full transition-all ${k === i ? 'w-7 bg-[#f6d155]' : 'w-2.5 bg-white/60'}`} />
+            ))}
+          </div>
+          <span className="text-[11px] text-white/70">{t.hero.fictional}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ---------- Hero (top of the Everyone tab) ----------
 function Hero({ signedIn, open, onShare, onSignIn }) {
   const { t } = useLang()
   return (
     <section className="relative overflow-hidden rounded-3xl bg-[#14123a] text-white">
-      <div className="px-5 pb-4 pt-5">
+      <div className="px-5 pb-2 pt-5">
         <h2 className="text-[clamp(1.5rem,6.4vw,2.25rem)] font-black leading-tight tracking-tight">
           {t.hero.l1}<br /><span className="text-[#f6d155]">{t.hero.l2}</span>
         </h2>
       </div>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#14123a] to-transparent" />
-        <img src={heroImg} alt="" className="block w-full" />
-      </div>
+      <HeroShow />
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14123a] via-[#14123a]/70 to-transparent px-5 pb-5 pt-16">
         <button className="w-full rounded-full bg-[#f6d155] px-6 py-3.5 text-lg font-black text-[#14123a]" onClick={signedIn ? onShare : onSignIn}>
           {signedIn ? (open ? t.hero.hide : t.hero.share) : t.signInToShare}
