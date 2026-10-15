@@ -32,7 +32,7 @@ const I18N = {
     confirmReport: 'Report this moment for breaking the community rules?',
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
-    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share',
+    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: ['Start my network', 'or open my page'],
     calloutShareText: 'Wepa! Check out Wepawao, a new social network for new moments. Use it, share it, and be ready to enjoy what is coming!',
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
     invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
@@ -284,7 +284,7 @@ const I18N = {
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
-    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir',
+    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: ['Empezar mi red', 'o abrir mi página'],
     calloutShareText: '¡Wepa! Mira Wepawao, una nueva red social para nuevos momentos. Úsala, compártela y prepárate para disfrutar lo que viene.',
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
     invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
@@ -603,9 +603,17 @@ function ShareCallout({ me, onJoin }) {
       <p className="min-w-0 text-center leading-snug">
         <b className="text-[#f6d155]">{lang === 'es' ? '¡' : ''}{t.callout[0]}</b>{t.callout[1]}
       </p>
-      <button onClick={me ? share : onJoin} className="shrink-0 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]">
-        {me ? (note || t.calloutShare) : t.aff.join}
-      </button>
+      {me
+        ? (
+          <button onClick={share} className="shrink-0 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]">
+            {note || t.calloutShare}
+          </button>
+        )
+        : (
+          <button onClick={onJoin} className="shrink-0 rounded-2xl bg-[#f6d155] px-3 py-1 text-center text-xs font-bold leading-tight text-[#14123a]">
+            {t.calloutJoin[0]}<br /><span className="font-semibold opacity-75">{t.calloutJoin[1]}</span>
+          </button>
+        )}
     </div>
   )
 }
@@ -2994,7 +3002,7 @@ export default function App() {
               : <button className={ghostSm} onClick={() => setShowSignIn((v) => !v)}>{t.signIn}</button>}
           </div>
         </header>
-        <ShareCallout me={me} onJoin={() => { setShowSignIn(true); window.scrollTo(0, 0) }} />
+        <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setShowSignIn(true); window.scrollTo(0, 0) }} />
 
         <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
           {showSignIn && !me && inviter && (
