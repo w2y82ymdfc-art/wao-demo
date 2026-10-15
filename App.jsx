@@ -284,7 +284,7 @@ const I18N = {
       filterAll: 'All moments', filterAi: 'AI Moments ✨',
       noAi: 'No AI Moments yet. Be the first!',
     },
-    hero: { l1: 'New social media,', l2: 'new moments to remember!', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your AI Moment ✨', hide: 'Close' },
+    hero: { l1: 'New Social Media,', l2: 'new AI Moments combined to remember!', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your AI Moment ✨', hide: 'Close' },
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -567,7 +567,7 @@ const I18N = {
       filterAll: 'Todos los momentos', filterAi: 'Momentos IA ✨',
       noAi: 'Aún no hay Momentos IA. ¡Sé el primero!',
     },
-    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
+    hero: { l1: 'Nueva red social,', l2: '¡nuevos Momentos IA combinados para recordar!', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
