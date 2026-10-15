@@ -158,7 +158,10 @@ const I18N = {
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
     joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
-    emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.',
+    emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
+    sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in link to',
+    sentSteps: ['Open the email from Wepawao and tap "Sign in".', 'Open it on this same phone or computer.', 'Not there in a minute? Check Spam or Promotions.'],
+    sentAgain: 'Send it again', sentWait: (s) => `You can send it again in ${s}s`, sentOther: 'Use a different email',
     pwHint: 'Already set a Wepawao password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wepawao icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'You are not signed in on this screen', outText: 'On iPhone, Wepawao opened from the home-screen icon, from Safari, or from an email app each keeps its own sign-in. Sign in once here with your email and password, and Profile and your welcome come back. It stays signed in after that.', outBtn: 'Sign in here', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wepawao? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
     wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
@@ -437,7 +440,10 @@ const I18N = {
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
     joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
-    emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.',
+    emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
+    sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un enlace de acceso a',
+    sentSteps: ['Abre el correo de Wepawao y toca "Sign in".', 'Ábrelo en este mismo teléfono o computadora.', '¿No llega en un minuto? Revisa Spam o Promociones.'],
+    sentAgain: 'Enviarlo otra vez', sentWait: (s) => `Puedes enviarlo otra vez en ${s}s`, sentOther: 'Usar otro correo',
     pwHint: '¿Ya creaste una contraseña de Wepawao? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wepawao en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'No has iniciado sesión en esta pantalla', outText: 'En iPhone, Wepawao abierto desde el ícono de la pantalla de inicio, desde Safari o desde una app de correo guarda su propia sesión. Entra una vez aquí con tu correo y contraseña, y vuelven tu Perfil y tu bienvenida. Después se queda con la sesión abierta.', outBtn: 'Entrar aquí', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wepawao? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
     wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
@@ -769,6 +775,14 @@ function SignIn({ startWithPassword = false }) {
   const [msg, setMsg] = useState('')
   const [password, setPassword] = useState('')
   const [pwOpen, setPwOpen] = useState(startWithPassword)
+  const [sentTo, setSentTo] = useState('')
+  const [sending, setSending] = useState(false)
+  const [wait, setWait] = useState(0)
+  useEffect(() => {
+    if (wait <= 0) return
+    const id = setTimeout(() => setWait((w) => w - 1), 1000)
+    return () => clearTimeout(id)
+  }, [wait])
 
   async function signInPw() {
     if (!email.trim()) return setMsg(t.pwNeedEmail)
@@ -778,7 +792,9 @@ function SignIn({ startWithPassword = false }) {
   }
 
   async function submit(e) {
-    e.preventDefault()
+    e?.preventDefault()
+    if (sending) return
+    setSending(true); setMsg('')
     let ref = new URLSearchParams(window.location.search).get('ref')
     try { ref = ref || localStorage.getItem('wao_invite') } catch { /* ignore */ }
     const { error } = await supabase.auth.signInWithOtp({
@@ -788,7 +804,34 @@ function SignIn({ startWithPassword = false }) {
         emailRedirectTo: `${window.location.origin}/?lang=${lang}`,
       },
     })
-    setMsg(error ? error.message : t.checkEmail)
+    setSending(false)
+    if (error) { setMsg(error.message); return }
+    setSentTo(email.trim()); setWait(60)
+  }
+
+  // After sending: the form steps aside and a clear "check your email" card takes its place.
+  if (sentTo) {
+    return (
+      <div className={`${card} space-y-3`}>
+        <h2 className="text-2xl font-extrabold">{t.sentTitle}</h2>
+        <p className="text-stone-700">{t.sentTo} <b className="break-all text-[#14123a]">{sentTo}</b>.</p>
+        <ol className="space-y-2 text-sm text-stone-600">
+          {t.sentSteps.map((s, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold text-[#14123a]">{i + 1}</span>
+              <span>{s}</span>
+            </li>
+          ))}
+        </ol>
+        {msg && <p className="text-sm text-red-600">{msg}</p>}
+        <div className="flex flex-wrap items-center gap-3 border-t border-[#dcdff5] pt-3">
+          <button type="button" className={ghostSm} disabled={wait > 0 || sending} onClick={() => submit()}>
+            {wait > 0 ? t.sentWait(wait) : sending ? t.sending : t.sentAgain}
+          </button>
+          <button type="button" className="text-sm font-bold text-[#4a3af0] underline" onClick={() => { setSentTo(''); setMsg('') }}>{t.sentOther}</button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -797,7 +840,7 @@ function SignIn({ startWithPassword = false }) {
       <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
-      <button className={primary}>{t.emailLink}</button>
+      <button className={primary} disabled={sending}>{sending ? t.sending : t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
       <div className="space-y-2 border-t border-[#dcdff5] pt-3">
         {!pwOpen ? (
