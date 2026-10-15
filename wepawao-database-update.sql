@@ -854,3 +854,21 @@ grant execute on function public.get_feed(post_kind, text, double precision, dou
 -- Visitors (and WhatsApp/Messages link previews) can read the second photo and the AI Moment details
 -- of PUBLIC posts. Row rules still hide contacts-only and private moments.
 grant select (image_paths, edited_at, visibility, public_block_reason, ai_moment, ai_prompt, ai_tool) on public.posts to anon;
+
+------------------------------------------------------------------ Wao! button (October 15, 2026)
+
+revoke all on public.waos from anon;
+
+drop policy if exists "Members read waos" on public.waos;
+drop policy if exists "Members read own and received waos" on public.waos;
+create policy "Members read own and received waos" on public.waos for select to authenticated
+  using (user_id = (select auth.uid())
+         or exists (select 1 from public.posts p where p.id = post_id and p.user_id = (select auth.uid())));
+
+-- Only on posts the member can see, and not on their own posts.
+drop policy if exists "Members add own waos" on public.waos;
+create policy "Members add own waos" on public.waos for insert to authenticated
+  with check (user_id = (select auth.uid())
+              and exists (select 1 from public.posts p where p.id = post_id and p.user_id <> (select auth.uid())));
+
+create index if not exists waos_post_id_idx on public.waos (post_id);

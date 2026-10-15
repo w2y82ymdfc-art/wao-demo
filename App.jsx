@@ -184,6 +184,7 @@ const I18N = {
     areaPh: 'Area (e.g. Southeast Portland)', attachLoc: 'Attach my approximate location so nearby people can find this',
     kinds: { update: 'update', offer: 'offer', request: 'request' },
     cats: { general: 'general', produce: 'produce', tools: 'tools', services: 'services', household: 'household', free: 'free' },
+    wao: { btn: 'Wao!', done: 'You said Wao!', received: (n) => (n === 1 ? '1 person said Wao!' : `${n} people said Wao!`), onlyYou: 'Only you see this' },
     comments: 'Comments', hideComments: 'Hide comments', markFulfilled: 'Mark fulfilled', closeListing: 'Close listing',
     reopen: 'Reopen', renew: 'Renew for 30 days',
     confirmFulfil: 'Mark this as fulfilled? It will leave the public feed. You can reopen it later.',
@@ -467,6 +468,7 @@ const I18N = {
     areaPh: 'Zona (p. ej., sureste de Portland)', attachLoc: 'Adjuntar mi ubicación aproximada para que personas cercanas lo encuentren',
     kinds: { update: 'momento', offer: 'oferta', request: 'solicitud' },
     cats: { general: 'general', produce: 'productos frescos', tools: 'herramientas', services: 'servicios', household: 'hogar', free: 'gratis' },
+    wao: { btn: 'Wao!', done: 'Dijiste Wao!', received: (n) => (n === 1 ? '1 persona dijo Wao!' : `${n} personas dijeron Wao!`), onlyYou: 'Solo tú lo ves' },
     comments: 'Comentarios', hideComments: 'Ocultar comentarios', markFulfilled: 'Marcar como cumplido', closeListing: 'Cerrar publicación',
     reopen: 'Reabrir', renew: 'Renovar por 30 días',
     confirmFulfil: '¿Marcar como cumplido? Saldrá del feed público. Puedes reabrirlo después.',
@@ -1672,6 +1674,93 @@ function PostEditor({ p, me, onDone, onCancel }) {
 }
 
 // ---------- One post ----------
+// ---------- Wao! button ----------
+// Members tap Wao! on other people's posts. Each member sees only their own Wao!s, and on their
+// own posts how many people said Wao! (nobody else sees the numbers). The feed order never changes.
+// The Wao!s for every post on screen are loaded together in one request.
+const waoCache = new Map() // `${me}:${postId}` -> { mine, count }
+let waoPending = new Map() // me -> Map(postId -> [resolve])
+let waoTimer = null
+function queueWao(me, postId) {
+  const key = `${me}:${postId}`
+  if (waoCache.has(key)) return Promise.resolve(waoCache.get(key))
+  return new Promise((resolve) => {
+    if (!waoPending.has(me)) waoPending.set(me, new Map())
+    const m = waoPending.get(me)
+    m.set(postId, [...(m.get(postId) || []), resolve])
+    clearTimeout(waoTimer)
+    waoTimer = setTimeout(flushWaos, 40)
+  })
+}
+async function flushWaos() {
+  const batches = waoPending
+  waoPending = new Map()
+  for (const [me, m] of batches) {
+    const ids = [...m.keys()]
+    for (let i = 0; i < ids.length; i += 100) {
+      const chunk = ids.slice(i, i + 100)
+      const { data, error } = await supabase.from('waos').select('post_id,user_id').in('post_id', chunk)
+      for (const id of chunk) {
+        const rows = (data || []).filter((r) => r.post_id === id)
+        const v = { mine: rows.some((r) => r.user_id === me), count: rows.length }
+        if (!error) waoCache.set(`${me}:${id}`, v)
+        for (const resolve of m.get(id)) resolve(v)
+      }
+    }
+  }
+}
+
+function WaoButton({ p, me, mine }) {
+  const { t } = useLang()
+  const [s, setS] = useState(() => (me ? waoCache.get(`${me}:${p.id}`) || null : null))
+  const [pop, setPop] = useState(false)
+  const busy = useRef(false)
+  useEffect(() => {
+    if (!me) { setS(null); return }
+    let live = true
+    queueWao(me, p.id).then((v) => live && setS(v))
+    return () => { live = false }
+  }, [me, p.id])
+
+  // The poster sees how many people said Wao! (only when there is at least one).
+  if (mine) {
+    if (!s?.count) return null
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fff8dc] px-3 py-1.5 text-sm font-bold text-[#14123a]" title={t.wao.onlyYou}>
+        <span className="grid h-5 w-5 place-items-center rounded-full bg-[#f6d155] text-xs font-black">!</span>
+        {t.wao.received(s.count)}
+        <span className="text-xs font-normal text-stone-500">· {t.wao.onlyYou}</span>
+      </span>
+    )
+  }
+
+  async function toggle() {
+    if (!me) { window.dispatchEvent(new Event('wp-signin')); return }
+    if (busy.current) return
+    busy.current = true
+    const was = !!s?.mine
+    const next = { mine: !was, count: Math.max(0, (s?.count || 0) + (was ? -1 : 1)) }
+    setS(next); waoCache.set(`${me}:${p.id}`, next)
+    if (!was) { setPop(true); setTimeout(() => setPop(false), 600) }
+    const { error } = was
+      ? await supabase.from('waos').delete().eq('post_id', p.id).eq('user_id', me)
+      : await supabase.from('waos').insert({ post_id: p.id, user_id: me })
+    if (error && error.code !== '23505') {
+      const back = { mine: was, count: s?.count || 0 }
+      setS(back); waoCache.set(`${me}:${p.id}`, back)
+    }
+    busy.current = false
+  }
+  const on = !!s?.mine
+  return (
+    <button type="button" onClick={toggle} aria-pressed={on} aria-label={on ? t.wao.done : t.wao.btn}
+      className={`inline-flex items-center gap-1.5 rounded-full border-2 px-4 py-1.5 text-sm font-extrabold transition-colors ${on ? 'border-[#f6d155] bg-[#f6d155] text-[#14123a]' : 'border-[#4a3af0] text-[#4a3af0]'}`}>
+      <span className={`grid h-5 w-5 place-items-center rounded-full text-xs font-black ${on ? 'bg-[#14123a] text-[#f6d155]' : 'bg-[#f6d155] text-[#14123a]'} ${pop ? 'wp-wao-pop' : ''}`}>!</span>
+      {t.wao.btn}
+    </button>
+  )
+}
+
 function PostCard({ p, me, onChanged }) {
   const { t, lang } = useLang()
   const [open, setOpen] = useState(false)
@@ -1777,6 +1866,7 @@ function PostCard({ p, me, onChanged }) {
         </div>
       )}
       <div className="mt-3 flex flex-wrap items-center gap-2">
+        {!inactive && <WaoButton p={p} me={me} mine={mine} />}
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
         {canShare && <button className={ghostSm} onClick={share}>{t.share}</button>}
         {canReport && <button className={ghostSm} onClick={report}>{t.report}</button>}
@@ -3512,9 +3602,11 @@ export default function App() {
   const fromHistory = useRef(false)
   useEffect(() => {
     const onPop = (e) => { fromHistory.current = true; setTab(e.state?.wpTab || 'everyone') }
+    const onJoinAsk = () => { setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+    window.addEventListener('wp-signin', onJoinAsk)
     window.addEventListener('popstate', onPop)
     if (!window.history.state?.wpTab) window.history.replaceState({ ...(window.history.state || {}), wpTab: 'everyone' }, '')
-    return () => window.removeEventListener('popstate', onPop)
+    return () => { window.removeEventListener('popstate', onPop); window.removeEventListener('wp-signin', onJoinAsk) }
   }, [])
   useEffect(() => {
     if (fromHistory.current) { fromHistory.current = false; return }
