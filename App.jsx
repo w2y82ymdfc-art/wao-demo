@@ -248,7 +248,7 @@ const I18N = {
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
     hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wepawao moment', hide: 'Close' },
     welcome: {
-      skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
+      wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
       scenes: [
         { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
@@ -498,7 +498,7 @@ const I18N = {
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
     hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wepawao', hide: 'Cerrar' },
     welcome: {
-      skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
+      wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
       scenes: [
         { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
@@ -2690,6 +2690,7 @@ function Welcome({ name, number, onDone }) {
   }, [i, last, reduce])
 
   const s = w.scenes[i]
+  useEffect(() => { if (last) { try { navigator.vibrate?.([60, 40, 60]) } catch { /* ignore */ } } }, [last])
   const rise = (delay) => (reduce ? {} : { animation: `wepawao-rise .8s cubic-bezier(.2,.7,.2,1) ${delay}s both` })
   const orb = { position: 'absolute', borderRadius: '9999px', filter: 'blur(60px)', pointerEvents: 'none', transition: reduce ? 'none' : 'transform 1.6s cubic-bezier(.2,.7,.2,1)' }
 
@@ -2704,10 +2705,12 @@ function Welcome({ name, number, onDone }) {
         paddingBottom: 'max(22px, env(safe-area-inset-bottom))',
         WebkitTapHighlightColor: 'transparent',
       }}>
-      <style>{`@keyframes wepawao-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes wepawao-fill{from{width:0}to{width:100%}}`}</style>
+      <style>{`@keyframes wepawao-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}@keyframes wepawao-fill{from{width:0}to{width:100%}}@keyframes wepawao-pop{0%{opacity:0;transform:scale(.3) rotate(-12deg)}60%{opacity:1;transform:scale(1.18) rotate(4deg)}100%{transform:scale(1) rotate(-3deg)}}`}</style>
 
       <div aria-hidden="true" style={{ ...orb, width: '70vmin', height: '70vmin', background: '#4a3af0', left: '-20vmin', top: '10%', opacity: 0.55, transform: ORB_POS[i][0] }} />
       <div aria-hidden="true" style={{ ...orb, width: '55vmin', height: '55vmin', background: '#f6d155', right: '-25vmin', bottom: '8%', opacity: 0.28, transform: ORB_POS[i][1] }} />
+
+      {last && <div className="pointer-events-none absolute inset-0 z-0"><Confetti /></div>}
 
       <div className="relative z-10 flex flex-col gap-3">
         <div className="flex gap-1.5" aria-hidden="true">
@@ -2730,6 +2733,10 @@ function Welcome({ name, number, onDone }) {
       </div>
 
       <div key={`${lang}-${i}`} className="relative z-10 flex min-h-0 flex-1 flex-col justify-center gap-3">
+        {last && (
+          <span className="self-start rounded-full bg-[#f6d155] px-5 py-1.5 text-[clamp(1.5rem,7vw,2.25rem)] font-black text-[#14123a] shadow-lg"
+            style={reduce ? { transform: 'rotate(-3deg)' } : { animation: 'wepawao-pop .7s cubic-bezier(.2,.8,.2,1.2) .15s both' }}>{w.wepa}</span>
+        )}
         <p className="max-w-[18ch] text-[clamp(1.25rem,5.6vw,2rem)] font-semibold leading-tight text-[#b9bde6]" style={rise(0)}>{s.a}</p>
         <h1 className="max-w-[11ch] break-words text-[clamp(2.5rem,12.5vw,4.75rem)] font-black leading-[1.02] tracking-tight" style={rise(0.35)}>
           {s.b[0]}<span className="text-[#f6d155]">{s.b[1]}</span>{s.b[2]}
