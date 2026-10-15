@@ -248,7 +248,34 @@ const I18N = {
     comingTitle: "What's coming",
     comingToday: ['Today:', ' Wepawao is a place to connect. Share your Wepawao moment and see what is happening, newest first.'],
     comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
-    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your Wepawao moment', hide: 'Close' },
+    ai: {
+      tab: 'AI Moment ✨', regular: 'Regular moment',
+      title: 'Share your AI Moment',
+      intro: 'Take a photo from your gallery, make an AI version of it with any AI app, and post both. Everyone sees the before and after.',
+      original: '1. Your original photo', aiVersion: '2. Your AI version', choose: 'Choose photo', change: 'Change',
+      captionPh: 'Tell the story of your AI Moment…',
+      howTitle: 'How I made it (optional)', toolPh: 'AI app you used (e.g. ChatGPT, Gemini)', promptPh: 'The prompt you used, so others can try it',
+      needBoth: 'Add both photos: the original and its AI version.',
+      helpBtn: 'Never used AI? Help me make it', helpHide: 'Hide the guide',
+      guideTitle: 'Make your first AI Moment in 3 steps',
+      steps: ['Pick a clear photo of yourself from your gallery.', 'Open a free AI app that edits images (ChatGPT, Google Gemini, Meta AI or Microsoft Copilot all have a free option), upload your photo and paste one of the ideas below.', 'Save the image it makes, come back here and post both photos.'],
+      ideasTitle: 'Ideas you can copy',
+      ideas: [
+        ['Superhero', 'Turn the person in this photo into a superhero with an original costume and cape, flying over a city at sunset. Keep their face recognizable.'],
+        ['1950s Puerto Rico', 'Turn this photo into a vintage 1950s photograph taken in Old San Juan, Puerto Rico, with period clothes and colorful colonial buildings.'],
+        ['My future business', 'Show the person in this photo as the proud owner of their own successful small business, standing at the front door on opening day.'],
+        ['Cartoon me', 'Turn this photo into a 3D animated cartoon character with big expressive eyes, bright colors and a happy expression.'],
+        ['Astronaut', 'Show the person in this photo as an astronaut on the Moon, with Earth glowing in the sky behind them.'],
+        ['Classic painting', 'Turn this photo into a classic oil painting portrait, like a masterpiece hanging in a museum.'],
+      ],
+      copy: 'Copy', copied: 'Copied!',
+      rules: 'Only your own face, or people who said yes. No photos of children. No real brands, logos or famous characters.',
+      badge: 'AI Moment ✨', labelOriginal: 'Original', labelAi: 'AI', drag: 'Slide to compare',
+      madeWith: (tool) => `Made with ${tool}`, showHow: 'How I made it', hideHow: 'Hide', tryPrompt: 'Copy the prompt and try it',
+      filterAll: 'All moments', filterAi: 'AI Moments ✨',
+      noAi: 'No AI Moments yet. Be the first!',
+    },
+    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your AI Moment ✨', hide: 'Close' },
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -500,7 +527,34 @@ const I18N = {
     comingTitle: 'Lo que viene',
     comingToday: ['Hoy:', ' Wepawao es un lugar para conectar. Comparte tu momento Wepawao y mira lo que está pasando, lo más reciente primero.'],
     comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
-    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu momento Wepawao', hide: 'Cerrar' },
+    ai: {
+      tab: 'Momento IA ✨', regular: 'Momento normal',
+      title: 'Comparte tu Momento IA',
+      intro: 'Toma una foto de tu galería, crea su versión con IA en cualquier app de IA y publica las dos. Todos verán el antes y el después.',
+      original: '1. Tu foto original', aiVersion: '2. Tu versión con IA', choose: 'Elegir foto', change: 'Cambiar',
+      captionPh: 'Cuenta la historia de tu Momento IA…',
+      howTitle: 'Cómo lo hice (opcional)', toolPh: 'App de IA que usaste (ej. ChatGPT, Gemini)', promptPh: 'La instrucción (prompt) que usaste, para que otros la prueben',
+      needBoth: 'Añade las dos fotos: la original y su versión con IA.',
+      helpBtn: '¿Nunca has usado IA? Ayúdame a hacerlo', helpHide: 'Ocultar la guía',
+      guideTitle: 'Haz tu primer Momento IA en 3 pasos',
+      steps: ['Elige una foto clara de ti en tu galería.', 'Abre una app de IA gratis que edite imágenes (ChatGPT, Google Gemini, Meta AI o Microsoft Copilot tienen opción gratis), sube tu foto y pega una de las ideas de abajo.', 'Guarda la imagen que crea, vuelve aquí y publica las dos fotos.'],
+      ideasTitle: 'Ideas que puedes copiar',
+      ideas: [
+        ['Superhéroe', 'Convierte a la persona de esta foto en un superhéroe con un traje y capa originales, volando sobre una ciudad al atardecer. Mantén su cara reconocible.'],
+        ['Puerto Rico en los 50', 'Convierte esta foto en una fotografía antigua de los años 50 tomada en el Viejo San Juan, Puerto Rico, con ropa de la época y edificios coloniales coloridos.'],
+        ['Mi negocio futuro', 'Muestra a la persona de esta foto como la orgullosa dueña de su propio negocio exitoso, parada en la puerta el día de la apertura.'],
+        ['Yo en caricatura', 'Convierte esta foto en un personaje de caricatura animada en 3D, con ojos grandes y expresivos, colores brillantes y una expresión feliz.'],
+        ['Astronauta', 'Muestra a la persona de esta foto como astronauta en la Luna, con la Tierra brillando en el cielo detrás.'],
+        ['Pintura clásica', 'Convierte esta foto en un retrato clásico al óleo, como una obra maestra colgada en un museo.'],
+      ],
+      copy: 'Copiar', copied: '¡Copiado!',
+      rules: 'Solo tu propia cara, o personas que dijeron que sí. Sin fotos de niños. Sin marcas, logos ni personajes famosos reales.',
+      badge: 'Momento IA ✨', labelOriginal: 'Original', labelAi: 'IA', drag: 'Desliza para comparar',
+      madeWith: (tool) => `Hecho con ${tool}`, showHow: 'Cómo lo hice', hideHow: 'Ocultar', tryPrompt: 'Copia la instrucción y pruébala',
+      filterAll: 'Todos los momentos', filterAi: 'Momentos IA ✨',
+      noAi: 'Aún no hay Momentos IA. ¡Sé el primero!',
+    },
+    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
@@ -654,9 +708,10 @@ async function sharePost(p, t, lang) {
 // A member's own posts (My posts / My offer). Newest first. Shows every status so owners can manage them.
 async function fetchMine(me, cursor, kind) {
   const multi = await supportsMultiPhoto()
+  const ai = multi && await supportsAi()
   let q = supabase
     .from('posts')
-    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
+    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
     .eq('user_id', me)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
@@ -1038,6 +1093,229 @@ function Composer({ userId, mode, onPosted }) {
   )
 }
 
+// ---------- AI Moments ----------
+// An AI Moment is a moment with two photos: the original (first) and its AI version (second),
+// plus an optional "How I made it" (the AI app and the prompt), so others can try it too.
+let aiCheck = null
+function supportsAi() {
+  if (!aiCheck) {
+    aiCheck = supabase.from('posts').select('ai_moment,ai_prompt,ai_tool').limit(1)
+      .then(({ error }) => !error).catch(() => false)
+      .then((ok) => { if (!ok) aiCheck = null; return ok })
+  }
+  return aiCheck
+}
+function useAiReady() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { let alive = true; supportsAi().then((ok) => alive && setReady(ok)); return () => { alive = false } }, [])
+  return ready
+}
+
+function CopyButton({ text, className = ghostSm }) {
+  const { t } = useLang()
+  const [done, setDone] = useState(false)
+  async function copy() {
+    try { await navigator.clipboard.writeText(text); setDone(true); setTimeout(() => setDone(false), 2000) } catch { window.prompt('', text) }
+  }
+  return <button type="button" className={className} onClick={copy}>{done ? t.ai.copied : t.ai.copy}</button>
+}
+
+// "Help me make it": a beginner's guide with free tools and prompt ideas to copy.
+function AiGuide() {
+  const { t } = useLang()
+  return (
+    <div className="space-y-3 rounded-3xl bg-[#14123a] p-4 text-white">
+      <div className="flex items-center gap-3">
+        <WaoFaces size={30} />
+      </div>
+      <h3 className="text-lg font-extrabold text-[#f6d155]">{t.ai.guideTitle}</h3>
+      <ol className="space-y-2 text-sm">
+        {t.ai.steps.map((s, i) => (
+          <li key={i} className="flex gap-2">
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold text-[#14123a]">{i + 1}</span>
+            <span className="text-white/90">{s}</span>
+          </li>
+        ))}
+      </ol>
+      <h4 className="pt-1 font-bold">{t.ai.ideasTitle}</h4>
+      <div className="space-y-2">
+        {t.ai.ideas.map(([name, prompt]) => (
+          <div key={name} className="rounded-2xl bg-white/10 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <b className="text-[#f6d155]">{name}</b>
+              <CopyButton text={prompt} className="rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]" />
+            </div>
+            <p className="mt-1 text-sm text-white/80">{prompt}</p>
+          </div>
+        ))}
+      </div>
+      <p className="rounded-2xl bg-white/10 px-3 py-2 text-xs text-white/80">{t.ai.rules}</p>
+    </div>
+  )
+}
+
+// One photo slot (original or AI version).
+function PhotoSlot({ label, picker }) {
+  const { t } = useLang()
+  const item = picker.items[0]
+  return (
+    <div className="space-y-2">
+      <div className="text-sm font-bold">{label}</div>
+      {picker.input}
+      {item
+        ? (
+          <div className="relative">
+            <img src={item.url} alt="" className="aspect-square w-full rounded-2xl object-cover" />
+            <button type="button" onClick={() => picker.removeAt(0)}
+              className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white">{t.ai.change}</button>
+          </div>
+        )
+        : (
+          <button type="button" onClick={picker.open}
+            className="grid aspect-square w-full place-items-center rounded-2xl border-2 border-dashed border-[#b4adf8] bg-[#eef0fc] text-sm font-bold text-[#4a3af0]">
+            + {t.ai.choose}
+          </button>
+        )}
+    </div>
+  )
+}
+
+function AiComposer({ userId, onPosted }) {
+  const { t } = useLang()
+  const [body, setBody] = useState('')
+  const [tool, setTool] = useState('')
+  const [prompt, setPrompt] = useState('')
+  const [visibility, setVisibility] = useState('public')
+  const [guide, setGuide] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const original = usePhotoPicker([], 1, () => setError(t.couldNotRead))
+  const aiVersion = usePhotoPicker([], 1, () => setError(t.couldNotRead))
+  const both = original.items.length === 1 && aiVersion.items.length === 1
+
+  async function submit(e) {
+    e.preventDefault()
+    if (!both) { setError(t.ai.needBoth); return }
+    setBusy(true); setError('')
+    const postId = crypto.randomUUID()
+    let uploaded = []
+    try {
+      const up = await uploadPhotos([original.items[0], aiVersion.items[0]], userId, postId)
+      uploaded = up.uploaded
+      const { error: postErr } = await supabase.from('posts').insert({
+        id: postId, user_id: userId, kind: 'update', listing_type: 'one_time', category: 'general',
+        body: body.trim(), ...imageFields(up.paths, true), visibility,
+        ai_moment: true, ai_tool: tool.trim() || null, ai_prompt: prompt.trim() || null,
+      })
+      if (postErr) throw postErr
+      let notice = ''
+      if (visibility === 'public') {
+        const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
+        if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
+      }
+      setBody(''); setTool(''); setPrompt(''); original.reset(); aiVersion.reset()
+      onPosted(notice)
+    } catch (err) {
+      if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <form onSubmit={submit} className={`${card} space-y-3`}>
+      <h2 className="text-2xl font-extrabold">{t.ai.title}</h2>
+      <p className="text-sm text-stone-600">{t.ai.intro}</p>
+      <button type="button" className="text-sm font-bold text-[#4a3af0] underline" onClick={() => setGuide((v) => !v)}>
+        {guide ? t.ai.helpHide : t.ai.helpBtn}
+      </button>
+      {guide && <AiGuide />}
+      <div className="grid grid-cols-2 gap-3">
+        <PhotoSlot label={t.ai.original} picker={original} />
+        <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} />
+      </div>
+      <textarea className={`${field} min-h-20`} required maxLength={500} placeholder={t.ai.captionPh}
+        value={body} onChange={(e) => setBody(e.target.value)} />
+      <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] p-3">
+        <div className="text-sm font-bold">{t.ai.howTitle}</div>
+        <input className={field} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
+        <textarea className={`${field} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+      </div>
+      <VisibilityPicker value={visibility} onChange={setVisibility} />
+      <p className="text-xs text-stone-500">{t.ai.rules}</p>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-stone-500">{body.length} / 500</span>
+        <button disabled={busy || !body.trim() || !both} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
+      </div>
+    </form>
+  )
+}
+
+// Moments composer: AI Moment first, regular moment second.
+function MomentComposer({ userId, onPosted }) {
+  const { t } = useLang()
+  const ready = useAiReady()
+  const [ai, setAi] = useState(true)
+  return (
+    <div className="space-y-2">
+      {ready && (
+        <div className="grid grid-cols-2 gap-1 rounded-full bg-white p-1 ring-2 ring-[#dcdff5]">
+          {[[true, t.ai.tab], [false, t.ai.regular]].map(([v, l]) => (
+            <button key={l} type="button" onClick={() => setAi(v)}
+              className={`rounded-full px-3 py-2 text-sm font-bold ${ai === v ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>{l}</button>
+          ))}
+        </div>
+      )}
+      {ready && ai ? <AiComposer userId={userId} onPosted={onPosted} /> : <Composer userId={userId} mode="update" onPosted={onPosted} />}
+    </div>
+  )
+}
+
+// Before/after view: drag the handle to reveal the original over the AI version.
+function BeforeAfter({ original, aiVersion }) {
+  const { t } = useLang()
+  const [pos, setPos] = useState(50)
+  return (
+    <div className="mt-3 space-y-1">
+      <div className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
+        <img loading="lazy" alt="" src={photoUrl(aiVersion)} className="absolute inset-0 h-full w-full object-cover" />
+        <img loading="lazy" alt="" src={photoUrl(original)} className="absolute inset-0 h-full w-full object-cover"
+          style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
+        <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${pos}% - 2px)` }}>
+          <div className="absolute top-1/2 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">⇆</div>
+        </div>
+        <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>
+        <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>
+        <input type="range" min="0" max="100" value={pos} onChange={(e) => setPos(Number(e.target.value))}
+          aria-label={t.ai.drag} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
+      </div>
+      <p className="text-center text-xs text-stone-400">{t.ai.drag}</p>
+    </div>
+  )
+}
+
+function AiHow({ p }) {
+  const { t } = useLang()
+  const [open, setOpen] = useState(false)
+  if (!p.ai_prompt && !p.ai_tool) return null
+  return (
+    <div className="mt-2 rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-bold">{p.ai_tool ? t.ai.madeWith(p.ai_tool) : t.ai.showHow}</span>
+        {p.ai_prompt && <button className="text-xs font-bold text-[#4a3af0]" onClick={() => setOpen((v) => !v)}>{open ? t.ai.hideHow : t.ai.showHow}</button>}
+      </div>
+      {open && p.ai_prompt && (
+        <div className="mt-2 space-y-2">
+          <p className="whitespace-pre-wrap rounded-xl bg-white px-3 py-2 text-stone-700">{p.ai_prompt}</p>
+          <div className="flex items-center gap-2"><CopyButton text={p.ai_prompt} /><span className="text-xs text-stone-500">{t.ai.tryPrompt}</span></div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ---------- Comments ----------
 function Comments({ postId, me }) {
   const { t, lang } = useLang()
@@ -1152,13 +1430,13 @@ function PostEditor({ p, me, onDone, onCancel }) {
       {p.caricature_image_url && !keepCaricature && (
         <button type="button" className="text-sm text-stone-500 underline" onClick={() => setKeepCaricature(true)}>{t.undoRemove}</button>
       )}
-      <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
+      {!p.ai_moment && <PhotoGrid items={photos.items} onRemove={photos.removeAt} />}
       {photos.input}
       {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
       {canChooseVisibility && <VisibilityPicker value={visibility} onChange={setVisibility} />}
       {err && <p className="text-sm text-red-600">{err}</p>}
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" className={ghostSm} onClick={photos.open}>{t.addPhoto}</button>
+        {!p.ai_moment && <button type="button" className={ghostSm} onClick={photos.open}>{t.addPhoto}</button>}
         <button type="button" className={ghostSm} onClick={() => { photos.reset(); onCancel() }}>{t.cancel}</button>
         <button disabled={busy || !body.trim()} className={`${primary} ml-auto !py-2`}>{busy ? t.saving : t.save}</button>
       </div>
@@ -1227,6 +1505,7 @@ function PostCard({ p, me, onChanged }) {
           <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
           <time className="text-xs text-stone-500">{when(p.created_at, lang)}{p.edited_at && ` · ${t.edited}`}</time>
         </div>
+        {p.ai_moment && <span className={`${chip} shrink-0 !bg-[#14123a] !text-[#f6d155]`}>{t.ai.badge}</span>}
         {moment && mine && (
           <span className={`${chip} shrink-0 ${isPublic ? '!bg-emerald-100' : ''}`}>{isPublic ? t.visPublic : t.visContacts}</span>
         )}
@@ -1241,7 +1520,13 @@ function PostCard({ p, me, onChanged }) {
           {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
           <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
           {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
-          {images.length > 0 && (
+          {p.ai_moment && images.length >= 2 && (
+            <>
+              <BeforeAfter original={images[0]} aiVersion={images[1]} />
+              <AiHow p={p} />
+            </>
+          )}
+          {!(p.ai_moment && images.length >= 2) && images.length > 0 && (
             <div className={`mt-3 grid gap-2 ${images.length > 1 ? 'grid-cols-2' : ''}`}>
               {images.map((path) => (
                 <a key={path} href={photoUrl(path)} target="_blank" rel="noreferrer">
@@ -1413,6 +1698,8 @@ function Feed({ mode, session, refreshKey, onChanged }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const needsLogin = ['mine', 'offer'].includes(mode) && !me
+  const aiReady = useAiReady()
+  const [aiOnly, setAiOnly] = useState(false)
 
   const fetchPage = useCallback(async (cursor) => {
     if (mode === 'mine') return fetchMine(me, cursor, null)
@@ -1427,10 +1714,11 @@ function Feed({ mode, session, refreshKey, onChanged }) {
       p_before_created_at: cursor?.created_at ?? null,
       p_before_id: cursor?.id ?? null,
       p_limit: PAGE,
+      ...(mode === 'everyone' && aiOnly ? { p_ai: true } : {}),
     })
     if (error) throw error
     return data
-  }, [mode, filters, coords, me])
+  }, [mode, filters, coords, me, aiOnly])
 
   useEffect(() => {
     if (needsLogin) { setPosts([]); setHasMore(false); setLoading(false); return }
@@ -1464,6 +1752,17 @@ function Feed({ mode, session, refreshKey, onChanged }) {
 
   return (
     <section className="space-y-4">
+      {mode === 'everyone' && aiReady && (
+        <div className="flex gap-2">
+          {[[true, t.ai.filterAi], [false, t.ai.filterAll]].map(([v, l]) => (
+            <button key={l} onClick={() => setAiOnly(v)}
+              className={`rounded-full px-4 py-2 text-sm font-bold ${aiOnly === v ? 'bg-[#14123a] text-[#f6d155]' : 'bg-white text-[#6b6f93] ring-2 ring-[#dcdff5]'}`}>{l}</button>
+          ))}
+        </div>
+      )}
+      {mode === 'everyone' && aiOnly && !loading && posts.length === 0 && (
+        <div className={`${card} text-center text-stone-600`}>{t.ai.noAi}</div>
+      )}
       {mode === 'discover' && (
         <div className={`${card} space-y-2`}>
           <div className="flex flex-wrap items-center gap-2">
@@ -1614,9 +1913,9 @@ function SharedPost({ id, me, onClose, onChanged }) {
   const [p, setP] = useState(undefined)
   useEffect(() => {
     let cancelled = false
-    supportsMultiPhoto().then((multi) =>
+    Promise.all([supportsMultiPhoto(), supportsAi()]).then(([multi, ai]) =>
       supabase.from('posts')
-        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
+        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${multi && ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
         .eq('id', id).maybeSingle()
     ).then(({ data }) => {
       if (cancelled) return
@@ -3034,7 +3333,7 @@ export default function App() {
             </div>
           )}
           {me && ((tab === 'everyone' && composerOpen) || tab === 'mine') && (
-            <Composer userId={me} mode="update"
+            <MomentComposer userId={me}
               onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
           )}
           {!me && !showSignIn && tab === 'discover' && (
