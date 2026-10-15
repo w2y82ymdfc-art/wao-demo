@@ -700,7 +700,7 @@ function useWide() {
 }
 
 function inviteLink(me, lang) {
-  return `${window.location.origin}/?invite=${me}&ref=${me}&lang=${lang}`
+  return `${shareOrigin()}/?invite=${me}&ref=${me}&lang=${lang}`
 }
 
 // Connections of the signed-in member: { [otherId]: { id, status, incoming } }
@@ -724,12 +724,14 @@ function useMaxPhotos() {
   useEffect(() => { supportsMultiPhoto().then((ok) => setMax(ok ? 4 : 1)) }, [])
   return max
 }
+// Links people share always use wepawao.com when shared from the live site's old Vercel address.
+const shareOrigin = () => (/^wepawao-demo-afd4\.vercel\.app$|^wepawao\.com$/i.test(window.location.hostname) ? 'https://www.wepawao.com' : window.location.origin)
 const postImages = (p) => (p.image_paths?.length ? p.image_paths : p.image_path ? [p.image_path] : [])
 const imageFields = (paths, multi) => (multi ? { image_path: paths[0] || null, image_paths: paths } : { image_path: paths[0] || null })
 
 function postLink(id, lang) {
   // /p/… shows the post's own photo and words in WhatsApp/Messages previews, then opens the post here.
-  return `${window.location.origin}/p/${id}?lang=${lang}`
+  return `${shareOrigin()}/p/${id}?lang=${lang}`
 }
 // Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
 async function sharePost(p, t, lang) {
@@ -2811,7 +2813,7 @@ function ContestPage({ me, refreshKey, onBack, onSignIn }) {
 // Advertiser link: ?advertise=1&pref=<affiliate id>. The affiliate who brings in an advertiser sponsors it for 12 months.
 // An affiliate's own business is a common provider: he can bring it in with his own link.
 function advertiserLink(me, lang) {
-  return `${window.location.origin}/?advertise=1&pref=${me}&lang=${lang}`
+  return `${shareOrigin()}/?advertise=1&pref=${me}&lang=${lang}`
 }
 const dollars = (c) => `$${((c || 0) / 100).toFixed(2)}`
 
