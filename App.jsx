@@ -2169,7 +2169,7 @@ function SharedPost({ id, me, onClose, onChanged }) {
     let cancelled = false
     Promise.all([supportsMultiPhoto(), supportsAi()]).then(([multi, ai]) =>
       supabase.from('posts')
-        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${multi && ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles(username,display_name,avatar_url)`)
+        .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${multi && ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles!posts_user_id_fkey(username,display_name,avatar_url)`)
         .eq('id', id).maybeSingle()
     ).then(({ data }) => {
       if (cancelled) return
