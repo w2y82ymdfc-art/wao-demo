@@ -163,7 +163,7 @@ const I18N = {
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in link to',
     sentSteps: ['Open the email from Wepawao and tap "Sign in".', 'Open it on this same phone or computer.', 'Not there in a minute? Check Spam or Promotions.'],
     sentAgain: 'Send it again', sentWait: (s) => `You can send it again in ${s}s`, sentOther: 'Use a different email',
-    pwHint: 'Already set a Wepawao password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wepawao icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'Sign in once here', outText: 'On iPhone, the Wepawao icon on your home screen keeps its own sign-in, separate from Safari. Tap "Sign in with my password", enter your email and your Wepawao password, and you stay signed in here from then on.', outBtn: 'Sign in with my password', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wepawao? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.',
+    pwHint: 'Already set a Wepawao password? Sign in here (works in the home-screen app).', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'Password for the home-screen app', pwSetHint: 'Set a password so you can sign in from the Wepawao icon on your home screen. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'Sign in once here', outText: 'On iPhone, the Wepawao icon on your home screen keeps its own sign-in, separate from Safari. Tap "Sign in with my password", enter your email and your Wepawao password, and you stay signed in here from then on.', outBtn: 'Sign in with my password', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wepawao? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.', forgot: 'Forgot your password?', forgotSent: (e) => `We sent a link to ${e} to choose a new password. Open it on this same phone or computer.`, resetTitle: 'Choose a new password', resetHint: 'You opened the password link from your email. Type a new password (at least 8 characters).', resetDone: 'New password saved. You are signed in.',
     wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
@@ -446,7 +446,7 @@ const I18N = {
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un enlace de acceso a',
     sentSteps: ['Abre el correo de Wepawao y toca "Sign in".', 'Ábrelo en este mismo teléfono o computadora.', '¿No llega en un minuto? Revisa Spam o Promociones.'],
     sentAgain: 'Enviarlo otra vez', sentWait: (s) => `Puedes enviarlo otra vez en ${s}s`, sentOther: 'Usar otro correo',
-    pwHint: '¿Ya creaste una contraseña de Wepawao? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wepawao en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'Entra una vez aquí', outText: 'En iPhone, el ícono de Wepawao en tu pantalla de inicio guarda su propia sesión, aparte de Safari. Toca "Entrar con mi contraseña", escribe tu correo y tu contraseña de Wepawao, y quedarás con la sesión abierta aquí desde entonces.', outBtn: 'Entrar con mi contraseña', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wepawao? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.',
+    pwHint: '¿Ya creaste una contraseña de Wepawao? Entra aquí (funciona en la app de tu pantalla de inicio).', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Contraseña para la app de la pantalla de inicio', pwSetHint: 'Crea una contraseña para entrar desde el ícono de Wepawao en tu pantalla de inicio. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'Entra una vez aquí', outText: 'En iPhone, el ícono de Wepawao en tu pantalla de inicio guarda su propia sesión, aparte de Safari. Toca "Entrar con mi contraseña", escribe tu correo y tu contraseña de Wepawao, y quedarás con la sesión abierta aquí desde entonces.', outBtn: 'Entrar con mi contraseña', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wepawao? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.', forgot: '¿Olvidaste tu contraseña?', forgotSent: (e) => `Enviamos un enlace a ${e} para crear una contraseña nueva. Ábrelo en este mismo teléfono o computadora.`, resetTitle: 'Crea una contraseña nueva', resetHint: 'Abriste el enlace de contraseña de tu correo. Escribe una contraseña nueva (mínimo 8 caracteres).', resetDone: 'Contraseña nueva guardada. Ya entraste.',
     wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
@@ -807,6 +807,14 @@ function SignIn({ startWithPassword = false }) {
     if (error) setMsg(t.pwBad)
   }
 
+  // Forgot password: email a link that brings the member back here to choose a new one.
+  async function forgot() {
+    const addr = email.trim().toLowerCase()
+    if (!addr) return setMsg(t.pwNeedEmail)
+    const { error } = await supabase.auth.resetPasswordForEmail(addr, { redirectTo: `${window.location.origin}/?reset=1&lang=${lang}` })
+    setMsg(error ? error.message : t.forgotSent(addr))
+  }
+
   async function submit(e) {
     e?.preventDefault()
     if (sending) return
@@ -866,6 +874,7 @@ function SignIn({ startWithPassword = false }) {
           <PasswordInput autoComplete="current-password" placeholder={t.pwPlaceholder}
             value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="button" className={primary} onClick={signInPw}>{t.pwSignIn}</button>
+          <button type="button" className="block text-sm font-bold text-[#4a3af0] underline" onClick={forgot}>{t.forgot}</button>
         </>)}
       </div>
     </form>
@@ -1874,6 +1883,33 @@ function PasswordSetter() {
       <PasswordInput autoComplete="new-password" placeholder={t.pwNew} value={pw} onChange={(e) => setPw(e.target.value)} />
       <button disabled={busy} className={primary}>{t.pwSave}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
+    </form>
+  )
+}
+
+// Shown after opening the "forgot password" email link: choose a new password.
+function PasswordReset({ onDone }) {
+  const { t } = useLang()
+  const [pw, setPw] = useState('')
+  const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
+  async function save(e) {
+    e.preventDefault()
+    if (pw.length < 8) return setMsg(t.pwShort)
+    setBusy(true)
+    const { error } = await supabase.auth.updateUser({ password: pw })
+    setBusy(false)
+    if (error && error.code !== 'same_password') return setMsg(error.message)
+    setMsg(t.resetDone); setPw('')
+    setTimeout(onDone, 2500)
+  }
+  return (
+    <form onSubmit={save} className={`${card} space-y-3 !border-[#f6d155]`}>
+      <h2 className="text-xl font-bold">{t.resetTitle}</h2>
+      <p className="text-sm text-stone-600">{t.resetHint}</p>
+      <PasswordInput autoComplete="new-password" placeholder={t.pwNew} value={pw} onChange={(e) => setPw(e.target.value)} />
+      <button disabled={busy} className={primary}>{t.pwSave}</button>
+      {msg && <p className="text-sm font-semibold text-emerald-700">{msg}</p>}
     </form>
   )
 }
@@ -3353,6 +3389,7 @@ export default function App() {
     return id && UUID_RE.test(id) ? id : null
   })
   const [isAdmin, setIsAdmin] = useState(false)
+  const [resetting, setResetting] = useState(() => new URLSearchParams(window.location.search).has('reset'))
   const [inviter, setInviter] = useState(null)
   const [lang, setLangState] = useState(() => {
     const fromLink = new URLSearchParams(window.location.search).get('lang')
@@ -3386,7 +3423,7 @@ export default function App() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
+    const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => { setSession(s); if (ev === 'PASSWORD_RECOVERY') setResetting(true) })
     return () => sub.subscription.unsubscribe()
   }, [])
 
@@ -3502,6 +3539,11 @@ export default function App() {
             </div>
           )}
           {showSignIn && !me && <SignIn startWithPassword={pwFirst} />}
+          {resetting && me && <PasswordReset onDone={() => {
+            setResetting(false)
+            const url = new URL(window.location.href); url.searchParams.delete('reset')
+            window.history.replaceState(null, '', url.pathname + url.search)
+          }} />}
           {showProfile && me && (
             <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
               onSaved={posted} onClose={() => setShowProfile(false)} onSignOut={() => supabase.auth.signOut()} />
