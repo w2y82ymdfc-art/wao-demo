@@ -728,7 +728,8 @@ const postImages = (p) => (p.image_paths?.length ? p.image_paths : p.image_path 
 const imageFields = (paths, multi) => (multi ? { image_path: paths[0] || null, image_paths: paths } : { image_path: paths[0] || null })
 
 function postLink(id, lang) {
-  return `${window.location.origin}/?post=${id}&lang=${lang}`
+  // /p/… shows the post's own photo and words in WhatsApp/Messages previews, then opens the post here.
+  return `${window.location.origin}/p/${id}?lang=${lang}`
 }
 // Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
 async function sharePost(p, t, lang) {

@@ -41,17 +41,17 @@ function wepawaoSiteFiles() {
 
 const meta = (k, v, content) => ['meta', { [k]: v, content }]
 const HEAD_TAGS = [
-  meta('name', 'description', 'New social media, new moments to remember! No algorithm. Newest first. Always.'),
+  meta('name', 'description', 'New Social Media, new AI Moments combined to remember! No algorithm. Newest first. Always.'),
   // Link preview (WhatsApp, iMessage, Facebook, X)
   meta('property', 'og:type', 'website'),
   meta('property', 'og:site_name', 'Wepawao'),
-  meta('property', 'og:title', 'Wepawao New social media, new moments to remember!'),
-  meta('property', 'og:description', 'No algorithm. Newest first. Always. Una nueva red social, nuevos momentos para recordar.'),
+  meta('property', 'og:title', 'Wepawao · New Social Media, new AI Moments combined to remember!'),
+  meta('property', 'og:description', 'Your photo + AI = your AI Moment. Nueva red social, ¡nuevos Momentos IA combinados para recordar!'),
   meta('property', 'og:url', `${SITE}/`),
   meta('property', 'og:image', `${SITE}/wepawao-share.jpg`),
   meta('property', 'og:image:width', '1200'),
   meta('property', 'og:image:height', '630'),
-  meta('property', 'og:image:alt', 'Two friends laughing over a game of pool, with the Wepawao logo'),
+  meta('property', 'og:image:alt', 'A woman in her home kitchen and, made with AI, as the owner of her own bakery'),
   meta('name', 'twitter:card', 'summary_large_image'),
   meta('name', 'twitter:image', `${SITE}/wepawao-share.jpg`),
   // Home-screen app
