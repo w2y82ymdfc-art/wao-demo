@@ -273,7 +273,7 @@ const I18N = {
       ],
       copy: 'Copy', copied: 'Copied!',
       rules: 'Only your own face, or people who said yes. No photos of children. No real brands, logos or famous characters.',
-      badge: 'AI Moment ✨', labelOriginal: 'Original', labelAi: 'AI', drag: 'Slide to compare',
+      badge: 'AI Moment ✨', labelOriginal: 'Original', labelAi: 'AI', drag: 'Slide to compare', replay: 'Replay',
       madeWith: (tool) => `Made with ${tool}`, showHow: 'How I made it', hideHow: 'Hide', tryPrompt: 'Copy the prompt and try it',
       filterAll: 'All moments', filterAi: 'AI Moments ✨',
       noAi: 'No AI Moments yet. Be the first!',
@@ -555,7 +555,7 @@ const I18N = {
       ],
       copy: 'Copiar', copied: '¡Copiado!',
       rules: 'Solo tu propia cara, o personas que dijeron que sí. Sin fotos de niños. Sin marcas, logos ni personajes famosos reales.',
-      badge: 'Momento IA ✨', labelOriginal: 'Original', labelAi: 'IA', drag: 'Desliza para comparar',
+      badge: 'Momento IA ✨', labelOriginal: 'Original', labelAi: 'IA', drag: 'Desliza para comparar', replay: 'Repetir',
       madeWith: (tool) => `Hecho con ${tool}`, showHow: 'Cómo lo hice', hideHow: 'Ocultar', tryPrompt: 'Copia la instrucción y pruébala',
       filterAll: 'Todos los momentos', filterAi: 'Momentos IA ✨',
       noAi: 'Aún no hay Momentos IA. ¡Sé el primero!',
@@ -1325,24 +1325,58 @@ function MomentComposer({ userId, onPosted }) {
 }
 
 // Before/after view: drag the handle to reveal the original over the AI version.
+// Before/after reveal: starts on the full original photo; when it scrolls into view, the divider
+// sweeps slowly across to reveal the AI version. Members can drag it any time, or tap replay.
 function BeforeAfter({ original, aiVersion }) {
   const { t } = useLang()
-  const [pos, setPos] = useState(50)
+  const [pos, setPos] = useState(100)
+  const box = useRef(null)
+  const raf = useRef(0)
+  const played = useRef(false)
+  const stop = () => cancelAnimationFrame(raf.current)
+  const play = useCallback(() => {
+    stop()
+    if (reducedMotion()) { setPos(0); return }
+    setPos(100)
+    let start
+    const HOLD = 900, DUR = 3200
+    const step = (ts) => {
+      start ??= ts
+      const k = Math.min(1, Math.max(0, (ts - start - HOLD) / DUR))
+      const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
+      setPos(100 - 100 * eased)
+      if (k < 1) raf.current = requestAnimationFrame(step)
+    }
+    raf.current = requestAnimationFrame(step)
+  }, [])
+  useEffect(() => {
+    const el = box.current
+    if (!el || !('IntersectionObserver' in window)) { play(); return }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && e.intersectionRatio > 0.6 && !played.current) { played.current = true; play() }
+    }, { threshold: [0, 0.6, 1] })
+    io.observe(el)
+    return () => { io.disconnect(); stop() }
+  }, [play])
   return (
     <div className="mt-3 space-y-1">
-      <div className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
+      <div ref={box} className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
         <img loading="lazy" alt="" src={photoUrl(aiVersion)} className="absolute inset-0 h-full w-full object-cover" />
         <img loading="lazy" alt="" src={photoUrl(original)} className="absolute inset-0 h-full w-full object-cover"
           style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
-        <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${pos}% - 2px)` }}>
+        <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${pos}% - 2px)`, opacity: pos > 98 || pos < 2 ? 0 : 1 }}>
           <div className="absolute top-1/2 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">⇆</div>
         </div>
-        <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>
-        <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>
-        <input type="range" min="0" max="100" value={pos} onChange={(e) => setPos(Number(e.target.value))}
+        {pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
+        {pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
+        <input type="range" min="0" max="100" value={pos} onPointerDown={stop} onTouchStart={stop}
+          onChange={(e) => { stop(); setPos(Number(e.target.value)) }}
           aria-label={t.ai.drag} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>
-      <p className="text-center text-xs text-stone-400">{t.ai.drag}</p>
+      <div className="flex items-center justify-center gap-3 text-xs text-stone-400">
+        <span>{t.ai.drag}</span>
+        <button type="button" onClick={play} className="font-bold text-[#4a3af0]">↻ {t.ai.replay}</button>
+      </div>
     </div>
   )
 }
