@@ -1,6 +1,11 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import heroImg from './wepawao-hero.jpeg'
+import hero1a from './hero/1-before.jpg'
+import hero1b from './hero/1-ai.jpg'
+import hero2a from './hero/2-before.jpg'
+import hero2b from './hero/2-ai.jpg'
+import hero3a from './hero/3-before.jpg'
+import hero3b from './hero/3-ai.jpg'
 
 // ---------- Supabase ----------
 const supabase = createClient(
@@ -12,6 +17,7 @@ const I18N = {
   en: {
     signIn: 'Join or sign in', profile: 'My page', signOut: 'Sign out', myPage: { title: 'My page', network: 'My network dashboard', posts: 'My posts', edit: 'Edit my profile' },
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
+    tr: { btn: 'Translate', back: 'See original', busy: 'Translating…', note: 'Translated automatically', fail: 'Could not translate right now.', google: 'Open in Google Translate' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wepawao',
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
@@ -278,7 +284,7 @@ const I18N = {
       filterAll: 'All moments', filterAi: 'AI Moments ✨',
       noAi: 'No AI Moments yet. Be the first!',
     },
-    hero: { l1: 'New social media,', l2: 'new moments to remember!', share: 'Share your AI Moment ✨', hide: 'Close' },
+    hero: { l1: 'New Social Media,', l2: 'new AI Moments combined to remember!', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your AI Moment ✨', hide: 'Close' },
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -294,6 +300,7 @@ const I18N = {
   es: {
     signIn: 'Únete o entra', profile: 'Mi página', signOut: 'Cerrar sesión', myPage: { title: 'Mi página', network: 'Panel de mi red', posts: 'Mis publicaciones', edit: 'Editar mi perfil' },
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
+    tr: { btn: 'Traducir', back: 'Ver original', busy: 'Traduciendo…', note: 'Traducido automáticamente', fail: 'No se pudo traducir ahora.', google: 'Abrir en Google Traductor' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wepawao',
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
@@ -560,7 +567,7 @@ const I18N = {
       filterAll: 'Todos los momentos', filterAi: 'Momentos IA ✨',
       noAi: 'Aún no hay Momentos IA. ¡Sé el primero!',
     },
-    hero: { l1: 'Una nueva red social,', l2: 'nuevos momentos para recordar.', share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
+    hero: { l1: 'Nueva red social,', l2: '¡nuevos Momentos IA combinados para recordar!', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu Momento IA ✨', hide: 'Cerrar' },
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
@@ -676,6 +683,20 @@ function ShareCallout({ me, onJoin }) {
         )}
     </div>
   )
+}
+
+// True on laptop/desktop-width screens (1024px and up), where Wepawao shows a side column.
+function useWide() {
+  const q = '(min-width: 1024px)'
+  const [wide, setWide] = useState(() => window.matchMedia?.(q).matches ?? false)
+  useEffect(() => {
+    const m = window.matchMedia?.(q)
+    if (!m) return
+    const on = () => setWide(m.matches)
+    m.addEventListener?.('change', on)
+    return () => m.removeEventListener?.('change', on)
+  }, [])
+  return wide
 }
 
 function inviteLink(me, lang) {
@@ -1410,6 +1431,96 @@ function AiHow({ p }) {
   )
 }
 
+// ---------- Post text with "Translate" ----------
+// Members write in English or Spanish; readers can translate a post into the language Wepawao is set to.
+// Uses the free MyMemory service straight from the reader's browser (no key; each reader has their own daily allowance).
+const ES_WORDS = new Set('el la los las que de del y en un una es por para con mi mis tu su muy pero como más ya hoy está estoy soy al lo le se no sí también porque cuando donde gracias hola'.split(' '))
+const EN_WORDS = new Set('the and to of is are for with my your you i it this that in on at be was were have has not but so just very today love what when where thanks hello'.split(' '))
+function guessLang(text) {
+  if (!text) return null
+  let es = (text.match(/[áéíóúñ¿¡]/gi) || []).length * 2, en = 0
+  for (const w of text.toLowerCase().match(/[a-záéíóúñü']+/g) || []) {
+    if (ES_WORDS.has(w)) es++
+    if (EN_WORDS.has(w)) en++
+  }
+  if (es === en) return null
+  return es > en ? 'es' : 'en'
+}
+const trCache = new Map()
+function chunks(text, maxBytes = 450) {
+  const enc = new TextEncoder()
+  const parts = text.split(/(?<=[.!?\n])\s+/)
+  const out = []
+  let cur = ''
+  for (const part of parts) {
+    for (const piece of enc.encode(part).length > maxBytes ? part.split(/\s+/) : [part]) {
+      const next = cur ? `${cur} ${piece}` : piece
+      if (enc.encode(next).length > maxBytes && cur) { out.push(cur); cur = piece } else cur = next
+    }
+  }
+  if (cur) out.push(cur)
+  return out
+}
+async function translateText(text, from, to) {
+  const key = `${from}|${to}|${text}`
+  if (trCache.has(key)) return trCache.get(key)
+  const results = []
+  for (const c of chunks(text)) {
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(c)}&langpair=${from}|${to}`)
+    const j = await r.json()
+    const out = j?.responseData?.translatedText
+    if (!r.ok || j?.responseStatus !== 200 || !out) throw new Error('translate')
+    results.push(out)
+  }
+  const done = results.join(' ')
+  trCache.set(key, done)
+  return done
+}
+
+function PostText({ text }) {
+  const { t, lang } = useLang()
+  const target = loc(lang)
+  const from = guessLang(text)
+  const canTranslate = !!text && !!from && from !== target
+  const [shown, setShown] = useState(null)
+  const [original, setOriginal] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
+  const box = useRef(null)
+  const go = useCallback(async () => {
+    setBusy(true); setFailed(false)
+    try { setShown(await translateText(text, from, target)) } catch { setFailed(true) }
+    setBusy(false)
+  }, [text, from, target])
+  // Translate automatically when the post comes into view.
+  useEffect(() => {
+    setShown(null); setOriginal(false); setFailed(false)
+    if (!canTranslate) return
+    const el = box.current
+    if (!el || !('IntersectionObserver' in window)) { go(); return }
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); go() } }, { rootMargin: '200px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [canTranslate, go])
+  if (!text) return null
+  const gt = `https://translate.google.com/?sl=auto&tl=${target}&text=${encodeURIComponent(text)}&op=translate`
+  const showTr = shown && !original
+  return (
+    <div ref={box} className="mt-2">
+      <p className="whitespace-pre-wrap">{showTr ? shown : text}</p>
+      {canTranslate && (
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          {busy && <span className="text-stone-400">🌐 {t.tr.busy}</span>}
+          {shown && (showTr
+            ? (<><span className="text-stone-400">🌐 {t.tr.note}</span><button className="font-bold text-[#4a3af0]" onClick={() => setOriginal(true)}>{t.tr.back}</button></>)
+            : <button className="font-bold text-[#4a3af0]" onClick={() => setOriginal(false)}>🌐 {t.tr.btn}</button>)}
+          {failed && (<><span className="text-stone-500">{t.tr.fail}</span><button className="font-bold text-[#4a3af0]" onClick={go}>{t.tr.btn}</button><a className="font-bold text-[#4a3af0] underline" href={gt} target="_blank" rel="noreferrer">{t.tr.google}</a></>)}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ---------- Comments ----------
 function Comments({ postId, me }) {
   const { t, lang } = useLang()
@@ -1612,7 +1723,7 @@ function PostCard({ p, me, onChanged }) {
       ) : (
         <>
           {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
-          <p className="mt-2 whitespace-pre-wrap">{p.body}</p>
+          <PostText text={p.body} />
           {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
           {p.ai_moment && images.length >= 2 && (
             <>
@@ -2947,20 +3058,77 @@ function RoadmapBanner() {
   )
 }
 
+// ---------- Hero slideshow: three AI Moments (fictional people) ----------
+// Each scene starts on the everyday photo, the divider sweeps across to reveal the AI version,
+// holds it, then the next scene fades in.
+const HERO_SCENES = [[hero1a, hero1b], [hero2a, hero2b], [hero3a, hero3b]]
+function HeroShow() {
+  const { t } = useLang()
+  const [i, setI] = useState(0)
+  const [pos, setPos] = useState(100)
+  const go = useCallback((n) => { setPos(100); setI(n) }, [])
+  useEffect(() => {
+    const next = () => go((i + 1) % HERO_SCENES.length)
+    if (reducedMotion()) { setPos(0); const id = setTimeout(next, 6000); return () => clearTimeout(id) }
+    let raf, timer, start
+    const HOLD = 1500, DUR = 2800, AFTER = 3200
+    const step = (ts) => {
+      start ??= ts
+      const k = Math.min(1, Math.max(0, (ts - start - HOLD) / DUR))
+      const eased = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
+      setPos(100 - 100 * eased)
+      if (k < 1) raf = requestAnimationFrame(step)
+      else timer = setTimeout(next, AFTER)
+    }
+    raf = requestAnimationFrame(step)
+    return () => { cancelAnimationFrame(raf); clearTimeout(timer) }
+  }, [i, go])
+  return (
+    <div>
+      <div className="px-5 pb-3">
+        <p key={i} className="wp-fade-in min-h-[1.5rem] font-bold text-white/90">{t.hero.scenes[i]}</p>
+      </div>
+      <div className="relative aspect-square w-full select-none overflow-hidden bg-[#14123a]">
+        {HERO_SCENES.map(([before, after], k) => {
+          const p = k === i ? pos : 0
+          return (
+            <div key={k} aria-hidden={k !== i} className={`absolute inset-0 transition-opacity duration-700 ${k === i ? 'opacity-100' : 'opacity-0'}`}>
+              <img src={after} alt="" loading={k ? 'lazy' : 'eager'} className="absolute inset-0 h-full w-full object-cover" />
+              <img src={before} alt="" loading={k ? 'lazy' : 'eager'} className="absolute inset-0 h-full w-full object-cover"
+                style={{ clipPath: `inset(0 ${100 - p}% 0 0)` }} />
+              <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${p}% - 2px)`, opacity: p > 98 || p < 2 ? 0 : 1 }}>
+                <div className="absolute top-1/3 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">✨</div>
+              </div>
+              {p > 8 && <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
+              {p < 92 && <span className="absolute right-3 top-3 rounded-full bg-[#4a3af0] px-2.5 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
+            </div>
+          )
+        })}
+        <div className="absolute inset-x-0 bottom-[5.5rem] z-10 flex flex-col items-center gap-1.5">
+          <div className="flex gap-2">
+            {HERO_SCENES.map((_, k) => (
+              <button key={k} type="button" aria-label={t.hero.scene(k + 1)} onClick={() => go(k)}
+                className={`h-2.5 rounded-full transition-all ${k === i ? 'w-7 bg-[#f6d155]' : 'w-2.5 bg-white/60'}`} />
+            ))}
+          </div>
+          <span className="text-[11px] text-white/70">{t.hero.fictional}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ---------- Hero (top of the Everyone tab) ----------
 function Hero({ signedIn, open, onShare, onSignIn }) {
   const { t } = useLang()
   return (
     <section className="relative overflow-hidden rounded-3xl bg-[#14123a] text-white">
-      <div className="px-5 pb-4 pt-5">
+      <div className="px-5 pb-2 pt-5">
         <h2 className="text-[clamp(1.5rem,6.4vw,2.25rem)] font-black leading-tight tracking-tight">
           {t.hero.l1}<br /><span className="text-[#f6d155]">{t.hero.l2}</span>
         </h2>
       </div>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#14123a] to-transparent" />
-        <img src={heroImg} alt="" className="block w-full" />
-      </div>
+      <HeroShow />
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14123a] via-[#14123a]/70 to-transparent px-5 pb-5 pt-16">
         <button className="w-full rounded-full bg-[#f6d155] px-6 py-3.5 text-lg font-black text-[#14123a]" onClick={signedIn ? onShare : onSignIn}>
           {signedIn ? (open ? t.hero.hide : t.hero.share) : t.signInToShare}
@@ -3418,11 +3586,13 @@ export default function App() {
     window.history.replaceState(window.history.state, '', url.pathname + url.search)
   }
   const feedProps = { session, refreshKey, onChanged: posted }
+  const wide = useWide()
 
   return (
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
-        <header className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
             Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
           </div>
@@ -3437,10 +3607,12 @@ export default function App() {
               )
               : <button className={ghostSm} onClick={() => { setAfterSignIn(true); setShowSignIn((v) => !v); window.scrollTo(0, 0) }}>{t.signIn}</button>}
           </div>
+          </div>
         </header>
         <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setAfterSignIn(true); setShowSignIn(true); window.scrollTo(0, 0) }} />
 
-        <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
+        <div className="mx-auto max-w-2xl px-4 py-4 pb-20 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
+        <main className="min-w-0 space-y-4">
           {showSignIn && !me && inviter && (
             <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
           )}
@@ -3457,11 +3629,11 @@ export default function App() {
           )}
           {tab === 'everyone' && (
             <>
-              <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
-                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+              {!wide && <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
               <Hero signedIn={!!me} open={composerOpen} onShare={() => setComposerOpen((v) => !v)} onSignIn={() => setShowSignIn(true)} />
-              <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
-                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+              {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
           )}
           {flash && (
@@ -3482,7 +3654,7 @@ export default function App() {
             </div>
           )}
 
-          <nav className={`${card} grid grid-cols-3 gap-1 !p-3`}>
+          <nav className={`${card} grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
             {TABS.map((k) => (
               <button key={k} onClick={() => setTab(k)}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
@@ -3534,6 +3706,15 @@ export default function App() {
           )}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
         </main>
+        {wide && (
+          <aside className="sticky top-4 space-y-4">
+            <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+              onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+            <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+              onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+          </aside>
+        )}
+        </div>
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
         {!welcome && netStart && me && <NetworkStart me={me} onClose={closeNetStart} />}
         {!welcome && !netStart && netEvent && me && (

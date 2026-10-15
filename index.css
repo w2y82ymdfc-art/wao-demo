@@ -8,3 +8,7 @@
 }
 .wepawao-face { animation: wepawao-face-bob 2.5s ease-in-out infinite; transform-origin: 50% 80%; }
 @media (prefers-reduced-motion: reduce) { .wepawao-face { animation: none; } }
+
+@keyframes wp-fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.wp-fade-in { animation: wp-fade-in .6s ease both; }
+@media (prefers-reduced-motion: reduce) { .wp-fade-in { animation: none; } }
