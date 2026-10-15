@@ -587,12 +587,12 @@ function useSchemaReady() {
 const NEW_COLS = 'image_paths,edited_at,visibility,public_block_reason,'
 
 // "Use me, share me" strip under the top bar, on every screen. Members share their own invite link
-// (so new people join their network); visitors share the site.
-function ShareCallout({ me }) {
+// (so new people join their network). Visitors are invited to join first, so they have a link of their own.
+function ShareCallout({ me, onJoin }) {
   const { t, lang } = useLang()
   const [note, setNote] = useState('')
   async function share() {
-    const url = me ? inviteLink(me, lang) : `${window.location.origin}/?lang=${lang}`
+    const url = inviteLink(me, lang)
     if (navigator.share) {
       try { await navigator.share({ title: 'Wepawao', text: t.calloutShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
     }
@@ -603,8 +603,8 @@ function ShareCallout({ me }) {
       <p className="min-w-0 text-center leading-snug">
         <b className="text-[#f6d155]">{lang === 'es' ? '¡' : ''}{t.callout[0]}</b>{t.callout[1]}
       </p>
-      <button onClick={share} className="shrink-0 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]">
-        {note || t.calloutShare}
+      <button onClick={me ? share : onJoin} className="shrink-0 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]">
+        {me ? (note || t.calloutShare) : t.aff.join}
       </button>
     </div>
   )
@@ -2994,7 +2994,7 @@ export default function App() {
               : <button className={ghostSm} onClick={() => setShowSignIn((v) => !v)}>{t.signIn}</button>}
           </div>
         </header>
-        <ShareCallout me={me} />
+        <ShareCallout me={me} onJoin={() => { setShowSignIn(true); window.scrollTo(0, 0) }} />
 
         <main className="mx-auto max-w-2xl space-y-4 px-4 py-4 pb-20">
           {showSignIn && !me && inviter && (
