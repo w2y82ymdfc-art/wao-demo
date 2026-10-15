@@ -21,7 +21,8 @@ export default async function handler(req, res) {
   if (UUID_RE.test(id) && SB && KEY) {
     try {
       const r = await fetch(`${SB}/rest/v1/posts?id=eq.${id}&status=eq.active&select=title,body,image_path,image_paths,ai_moment,profiles!posts_user_id_fkey(display_name)`, {
-        headers: { apikey: KEY, Authorization: `Bearer ${KEY}` },
+        // New-style keys (sb_publishable_…) go only in the apikey header; older keys also as Bearer.
+        headers: KEY.startsWith('sb_') ? { apikey: KEY } : { apikey: KEY, Authorization: `Bearer ${KEY}` },
         signal: AbortSignal.timeout(4000),
       })
       const p = r.ok ? (await r.json())[0] : null
@@ -40,7 +41,7 @@ export default async function handler(req, res) {
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400')
+  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
   res.status(200).send(`<!doctype html>
 <html lang="${lang}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
