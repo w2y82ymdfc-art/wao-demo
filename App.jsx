@@ -3853,9 +3853,18 @@ export default function App() {
   useEffect(() => {
     // Read the saved sign-in from storage. The home-screen app runs this on every launch,
     // and again when iOS brings it back from the background, so a member never lands as a visitor.
-    const restore = () => supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
+    // A momentarily empty read (iOS can be slow to hand back storage when the app wakes) must never
+    // sign the member out: only a real SIGNED_OUT event (below) clears the session.
+    const restore = () => supabase.auth.getSession()
+      .then(({ data, error }) => { if (!error && data.session) setSession(data.session); setAuthChecked(true) })
+      .catch(() => setAuthChecked(true))
     restore()
-    const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => { setSession(s); if (ev === 'PASSWORD_RECOVERY') setResetting(true) })
+    const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => {
+      if (s) setSession(s)
+      else if (ev === 'SIGNED_OUT') setSession(null)
+      if (ev === 'INITIAL_SESSION') setAuthChecked(true)
+      if (ev === 'PASSWORD_RECOVERY') setResetting(true)
+    })
     const onShow = () => { if (document.visibilityState === 'visible') restore() }
     window.addEventListener('pageshow', onShow)
     document.addEventListener('visibilitychange', onShow)
