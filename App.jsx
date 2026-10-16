@@ -1457,8 +1457,8 @@ function MomentComposer({ userId, onPosted }) {
 }
 
 // Before/after reveal, nonstop like the landing slideshow: the original photo, then the divider sweeps
-// across to the AI version, holds it, fades back to the original and starts again. It only moves while
-// the post is on screen. Dragging pauses it; it carries on a few seconds after the member lets go.
+// across to the AI version, holds it, fades back to the original and starts again, constantly.
+// It pauses only while the post is off screen (to save battery) and picks up again when it comes back.
 function BeforeAfter({ original, aiVersion }) {
   const { t } = useLang()
   const [pos, setPos] = useState(100)
@@ -1467,12 +1467,11 @@ function BeforeAfter({ original, aiVersion }) {
   const raf = useRef(0)
   const timer = useRef(0)
   const visible = useRef(false)
-  const held = useRef(false)
   const stop = () => { cancelAnimationFrame(raf.current); clearTimeout(timer.current) }
   const loop = useCallback(() => {
     stop()
     if (reducedMotion()) { setPos(0); return }
-    if (!visible.current || held.current) return
+    if (!visible.current) return
     setPos(100)
     let start
     const HOLD = 1500, DUR = 2800, AFTER = 3200
@@ -1490,15 +1489,13 @@ function BeforeAfter({ original, aiVersion }) {
     const el = box.current
     if (!el || !('IntersectionObserver' in window)) { visible.current = true; loop(); return stop }
     const io = new IntersectionObserver(([e]) => {
-      const on = e.isIntersecting && e.intersectionRatio > 0.5
+      const on = e.isIntersecting && e.intersectionRatio > 0.25
       if (on && !visible.current) { visible.current = true; loop() }
       else if (!on && visible.current) { visible.current = false; stop() }
-    }, { threshold: [0, 0.5, 1] })
+    }, { threshold: [0, 0.25, 0.5, 1] })
     io.observe(el)
     return () => { io.disconnect(); stop() }
   }, [loop])
-  const grab = () => { held.current = true; stop() }
-  const letGo = () => { clearTimeout(timer.current); timer.current = setTimeout(() => { held.current = false; loop() }, 5000) }
   return (
     <div className="mt-3 space-y-1">
       <div ref={box} className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
@@ -1510,12 +1507,7 @@ function BeforeAfter({ original, aiVersion }) {
         </div>
         {pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
         {pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
-        <input type="range" min="0" max="100" value={pos}
-          onPointerDown={grab} onTouchStart={grab} onPointerUp={letGo} onTouchEnd={letGo}
-          onChange={(e) => { grab(); setPos(Number(e.target.value)); letGo() }}
-          aria-label={t.ai.drag} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>
-      <p className="text-center text-xs text-stone-400">{t.ai.drag}</p>
     </div>
   )
 }
