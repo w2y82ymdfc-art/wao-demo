@@ -3367,10 +3367,10 @@ function RoadmapBanner() {
   })
   if (hidden) return null
   return (
-    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white/70 px-4 py-3 text-sm">
-      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold">!</span>
+    <div className="flex items-start gap-3 rounded-3xl bg-[#4a3af0] px-4 py-3 text-sm font-semibold text-white">
+      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold text-[#14123a]">!</span>
       <p className="flex-1">{t.banner}</p>
-      <button className="text-xs text-stone-500 underline" onClick={() => {
+      <button className="text-xs font-bold text-white/85 underline" onClick={() => {
         try { localStorage.setItem('wao_roadmap_hidden', '1') } catch { /* ignore */ }
         setHidden(true)
       }}>{t.gotIt}</button>
