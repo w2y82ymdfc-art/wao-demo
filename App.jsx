@@ -3360,20 +3360,13 @@ function ProviderTeamPanel({ onBack }) {
 }
 
 // ---------- Roadmap banner (follows the language toggle) ----------
+// Always shown above the Everyone feed: what Wepawao is today and what is coming. No way to hide it.
 function RoadmapBanner() {
   const { t } = useLang()
-  const [hidden, setHidden] = useState(() => {
-    try { return localStorage.getItem('wao_roadmap_hidden') === '1' } catch { return false }
-  })
-  if (hidden) return null
   return (
-    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white/70 px-4 py-3 text-sm">
-      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold">!</span>
+    <div className="flex items-start gap-3 rounded-3xl bg-[#4a3af0] px-4 py-3.5 text-[15px] font-semibold leading-snug text-white shadow-sm">
+      <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f6d155] text-sm font-black text-[#14123a]">!</span>
       <p className="flex-1">{t.banner}</p>
-      <button className="text-xs text-stone-500 underline" onClick={() => {
-        try { localStorage.setItem('wao_roadmap_hidden', '1') } catch { /* ignore */ }
-        setHidden(true)
-      }}>{t.gotIt}</button>
     </div>
   )
 }
