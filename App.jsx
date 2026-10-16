@@ -203,7 +203,7 @@ const I18N = {
       recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
-    joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
+    joinOrSignIn: 'Join or sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a code', codePh: 'Code from the email', codeBtn: 'Sign in', checking: 'Checking…', codeBad: 'That code is not right or has expired. Check it, or tap "Send it again".', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in code to',
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
@@ -503,7 +503,7 @@ const I18N = {
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
-    joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
+    joinOrSignIn: 'Únete o inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un código', codePh: 'Código del correo', codeBtn: 'Entrar', checking: 'Verificando…', codeBad: 'Ese código no es correcto o ya expiró. Revísalo o toca "Enviarlo otra vez".', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un código de acceso a',
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
@@ -968,6 +968,7 @@ function SignIn({ startWithPassword = false }) {
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
       <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
+      <p className="text-lg font-extrabold text-[#4a3af0]">{t.itsFree}</p>
       <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
