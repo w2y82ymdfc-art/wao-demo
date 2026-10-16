@@ -328,6 +328,7 @@ const I18N = {
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
+      contact: 'Questions or ideas? Write us at',
       scenes: [
         { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
         { a: 'Too often,', b: ['whoever ', 'pays', ' gets seen.'] },
@@ -622,6 +623,7 @@ const I18N = {
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
+      contact: '¿Preguntas o ideas? Escríbenos a',
       scenes: [
         { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
         { a: 'Demasiadas veces,', b: ['se ve a quien ', 'paga.', ''] },
@@ -3621,6 +3623,13 @@ function Welcome({ name, number, onDone }) {
           <p className="mt-2 text-[clamp(1rem,4.4vw,1.25rem)] font-bold" style={rise(0.8)}>
             {w.hello(name)}<br />
             {w.memberPre}<span className="text-[#f6d155]">{number}</span>{w.memberPost}
+          </p>
+        )}
+        {last && (
+          <p className="text-[clamp(0.9rem,3.8vw,1.05rem)] text-[#b9bde6]" style={rise(1.1)}>
+            {w.contact}{' '}
+            <a href="mailto:support@wepawao.com" className="font-bold text-[#eef0fc] underline underline-offset-4"
+              onClick={(e) => e.stopPropagation()}>support@wepawao.com</a>
           </p>
         )}
       </div>
