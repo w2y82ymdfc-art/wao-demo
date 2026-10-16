@@ -221,6 +221,7 @@ const I18N = {
     cats: { general: 'general', produce: 'produce', tools: 'tools', services: 'services', household: 'household', free: 'free' },
     wao: { btn: 'Wao!', done: 'You said Wao!', received: (n) => (n === 1 ? '1 person said Wao!' : `${n} people said Wao!`), onlyYou: 'Only you see this' },
     wepa: { btn: 'Wepa!', done: 'You said Wepa!' },
+    reactBubble: { wao: 'Wao! = that is amazing 😮', wepa: 'Wepa! = go you! 🎉 A Puerto Rican cheer' },
     reactTip: 'Wao! = that is amazing 😮 · Wepa! = go you! 🎉 (a Puerto Rican cheer). Tap one or both.',
     reactReceived: (wao, wepa) => [wao ? `${wao} Wao!` : '', wepa ? `${wepa} Wepa!` : ''].filter(Boolean).join(' · '),
     comments: 'Comments', hideComments: 'Hide comments', markFulfilled: 'Mark fulfilled', closeListing: 'Close listing',
@@ -514,6 +515,7 @@ const I18N = {
     cats: { general: 'general', produce: 'productos frescos', tools: 'herramientas', services: 'servicios', household: 'hogar', free: 'gratis' },
     wao: { btn: 'Wao!', done: 'Dijiste Wao!', received: (n) => (n === 1 ? '1 persona dijo Wao!' : `${n} personas dijeron Wao!`), onlyYou: 'Solo tú lo ves' },
     wepa: { btn: 'Wepa!', done: 'Dijiste Wepa!' },
+    reactBubble: { wao: 'Wao! = ¡qué impresionante! 😮', wepa: 'Wepa! = ¡vamos, felicidades! 🎉' },
     reactTip: 'Wao! = ¡qué impresionante! 😮 · Wepa! = ¡vamos, felicidades! 🎉 Toca uno o los dos.',
     reactReceived: (wao, wepa) => [wao ? `${wao} Wao!` : '', wepa ? `${wepa} Wepa!` : ''].filter(Boolean).join(' · '),
     comments: 'Comentarios', hideComments: 'Ocultar comentarios', markFulfilled: 'Marcar como cumplido', closeListing: 'Cerrar publicación',
@@ -1824,7 +1826,9 @@ function WaoButton({ p, me, mine }) {
   const { t } = useLang()
   const [s, setS] = useState(() => (me ? waoCache.get(`${me}:${p.id}`) || null : null))
   const [pop, setPop] = useState('')
-  const [tipSeen, setTipSeen] = useState(() => { try { return localStorage.getItem('wao_react_tip_seen') === '1' } catch { return true } })
+  const [bubble, setBubble] = useState('')
+  const bubbleTimer = useRef(null)
+  useEffect(() => () => clearTimeout(bubbleTimer.current), [])
   const busy = useRef(false)
   useEffect(() => {
     if (!me) { setS(null); return }
@@ -1850,12 +1854,16 @@ function WaoButton({ p, me, mine }) {
     if (!me) { window.dispatchEvent(new Event('wp-signin')); return }
     if (busy.current) return
     busy.current = true
-    if (!tipSeen) { setTipSeen(true); try { localStorage.setItem('wao_react_tip_seen', '1') } catch { /* ignore */ } }
     const before = s || emptyReact()
     const was = before[kind].mine
     const next = { ...before, [kind]: { mine: !was, count: Math.max(0, before[kind].count + (was ? -1 : 1)) } }
     setS(next); waoCache.set(`${me}:${p.id}`, next)
-    if (!was) { setPop(kind); setTimeout(() => setPop(''), 600) }
+    if (!was) {
+      setPop(kind); setTimeout(() => setPop(''), 600)
+      // A small bubble says what this reaction means, then fades away.
+      clearTimeout(bubbleTimer.current); setBubble(kind)
+      bubbleTimer.current = setTimeout(() => setBubble(''), 2600)
+    } else setBubble('')
     const { error } = was
       ? await supabase.from('waos').delete().eq('post_id', p.id).eq('user_id', me).eq('kind', kind)
       : await supabase.from('waos').insert({ post_id: p.id, user_id: me, kind })
@@ -1868,14 +1876,21 @@ function WaoButton({ p, me, mine }) {
         const on = !!s?.[kind].mine
         const st = REACT_STYLE[kind]
         return (
-          <button key={kind} type="button" onClick={() => toggle(kind)} aria-pressed={on} aria-label={on ? t[kind].done : t[kind].btn}
-            className={`inline-flex items-center gap-1.5 rounded-full border-2 px-4 py-1.5 text-sm font-extrabold transition-colors ${on ? st.on : st.off}`}>
-            <span className={`grid h-5 w-5 place-items-center rounded-full text-xs font-black ${on ? st.dotOn : st.dotOff} ${pop === kind ? 'wp-wao-pop' : ''}`}>{st.badge}</span>
-            {t[kind].btn}
-          </button>
+          <span key={kind} className="relative inline-flex">
+            {bubble === kind && (
+              <span role="status" className="wp-bubble pointer-events-none absolute bottom-full left-0 z-20 mb-2 w-max max-w-[220px] rounded-2xl bg-[#14123a] px-3 py-2 text-xs font-bold leading-snug text-white shadow-lg">
+                {t.reactBubble[kind]}
+                <span className="absolute left-5 top-full h-0 w-0 border-x-[6px] border-t-[6px] border-x-transparent border-t-[#14123a]" />
+              </span>
+            )}
+            <button type="button" onClick={() => toggle(kind)} aria-pressed={on} aria-label={on ? t[kind].done : t[kind].btn}
+              className={`inline-flex items-center gap-1.5 rounded-full border-2 px-4 py-1.5 text-sm font-extrabold transition-colors ${on ? st.on : st.off}`}>
+              <span className={`grid h-5 w-5 place-items-center rounded-full text-xs font-black ${on ? st.dotOn : st.dotOff} ${pop === kind ? 'wp-wao-pop' : ''}`}>{st.badge}</span>
+              {t[kind].btn}
+            </button>
+          </span>
         )
       })}
-      {!tipSeen && <span className="basis-full text-xs text-stone-500">{t.reactTip}</span>}
     </span>
   )
 }
