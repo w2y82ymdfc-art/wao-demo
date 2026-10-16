@@ -1270,7 +1270,7 @@ function PhotoSlot({ label, picker }) {
       {item
         ? (
           <div className="relative">
-            <img src={item.url} alt="" className="aspect-square w-full rounded-2xl object-cover" />
+            <img src={item.url || photoUrl(item.path)} alt="" className="aspect-square w-full rounded-2xl object-cover" />
             <button type="button" onClick={() => picker.removeAt(0)}
               className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white">{t.ai.change}</button>
           </div>
@@ -1622,6 +1622,19 @@ function PostEditor({ p, me, onDone, onCancel }) {
   const maxPhotos = useMaxPhotos()
   const original = postImages(p)
   const photos = usePhotoPicker(original.map((path) => ({ path })), Math.max(maxPhotos, original.length), () => setErr(t.couldNotRead))
+  // Caricature posts: the photo and the caricature can each be replaced, and "How I made it" edited.
+  const aiPost = !!p.ai_moment
+  const aiOrig = usePhotoPicker(original[0] ? [{ path: original[0] }] : [], 1, () => setErr(t.couldNotRead))
+  const aiPic = usePhotoPicker(original[1] ? [{ path: original[1] }] : [], 1, () => setErr(t.couldNotRead))
+  const [tool, setTool] = useState(p.ai_tool || '')
+  const [prompt, setPrompt] = useState(p.ai_prompt || '')
+  const box = useRef(null)
+  const text = useRef(null)
+  const grow = () => { const el = text.current; if (el) { el.style.height = 'auto'; el.style.height = `${el.scrollHeight + 4}px` } }
+  useEffect(() => {
+    grow()
+    box.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [])
 
   async function save(e) {
     e.preventDefault()
@@ -1629,7 +1642,8 @@ function PostEditor({ p, me, onDone, onCancel }) {
     setErr('')
     let uploaded = []
     try {
-      const up = await uploadPhotos(photos.items, me, p.id)
+      if (aiPost && (aiOrig.items.length !== 1 || aiPic.items.length !== 1)) throw new Error(t.ai.needBoth)
+      const up = await uploadPhotos(aiPost ? [aiOrig.items[0], aiPic.items[0]] : photos.items, me, p.id)
       uploaded = up.uploaded
       const multi = await supportsMultiPhoto()
       const { error } = await supabase.from('posts').update({
@@ -1638,11 +1652,12 @@ function PostEditor({ p, me, onDone, onCancel }) {
         ...(p.caricature_image_url && !keepCaricature ? { caricature_image_url: null } : {}),
         ...(canChooseVisibility ? { visibility } : {}),
         ...imageFields(up.paths, multi),
+        ...(aiPost ? { ai_tool: tool.trim() || null, ai_prompt: prompt.trim() || null } : {}),
       }).eq('id', p.id).eq('user_id', me)
       if (error) throw error
       const dropped = original.filter((path) => !up.paths.includes(path))
       if (dropped.length) supabase.storage.from(BUCKET).remove(dropped)
-      photos.reset()
+      photos.reset(); aiOrig.reset(); aiPic.reset()
       onDone()
     } catch (e2) {
       if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
@@ -1653,10 +1668,24 @@ function PostEditor({ p, me, onDone, onCancel }) {
   }
 
   return (
-    <form onSubmit={save} className="mt-3 space-y-3 rounded-2xl bg-[#eef0fc] p-3">
+    <form ref={box} onSubmit={save} className="mt-3 scroll-mt-4 space-y-3 rounded-2xl bg-[#eef0fc] p-3">
       <h3 className="font-bold text-[#4a3af0]">{t.editTitle}</h3>
       {p.kind !== 'update' && <input className={`${field} !bg-white`} maxLength={120} placeholder={t.offeringPh} value={title} onChange={(e) => setTitle(e.target.value)} />}
-      <textarea className={`${field} min-h-24 !bg-white`} required maxLength={500} value={body} onChange={(e) => setBody(e.target.value)} />
+      <textarea ref={text} className={`${field} min-h-32 !bg-white leading-relaxed`} required maxLength={500} value={body}
+        onChange={(e) => { setBody(e.target.value); grow() }} />
+      {aiPost && (
+        <>
+          <div className="grid grid-cols-2 gap-3">
+            <PhotoSlot label={t.ai.original} picker={aiOrig} />
+            <PhotoSlot label={t.ai.aiVersion} picker={aiPic} />
+          </div>
+          <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] bg-white p-3">
+            <div className="text-sm font-bold">{t.ai.howTitle}</div>
+            <input className={field} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
+            <textarea className={`${field} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+          </div>
+        </>
+      )}
       {p.caricature_image_url && keepCaricature && (
         <div className="relative max-w-sm">
           <img src={p.caricature_image_url} alt="" className="w-full rounded-2xl bg-white" />
@@ -1673,7 +1702,7 @@ function PostEditor({ p, me, onDone, onCancel }) {
       {err && <p className="text-sm text-red-600">{err}</p>}
       <div className="flex flex-wrap items-center gap-2">
         {!p.ai_moment && <button type="button" className={ghostSm} onClick={photos.open}>{t.addPhoto}</button>}
-        <button type="button" className={ghostSm} onClick={() => { photos.reset(); onCancel() }}>{t.cancel}</button>
+        <button type="button" className={ghostSm} onClick={() => { photos.reset(); aiOrig.reset(); aiPic.reset(); onCancel() }}>{t.cancel}</button>
         <button disabled={busy || !body.trim()} className={`${primary} ml-auto !py-2`}>{busy ? t.saving : t.save}</button>
       </div>
     </form>
