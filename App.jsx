@@ -83,6 +83,12 @@ const I18N = {
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
+    homeTipTitle: 'Open Wepawao like an app 📲',
+    homeTipStepsIos: ['Open Wepawao in Safari.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
+    homeTipStepsAndroid: ['Open Wepawao in Chrome.', 'Tap the menu (⋮) at the top right.', 'Tap "Add to Home screen" or "Install app", then "Add".'],
+    homeTipAfter: 'Then open Wepawao from its icon and sign in once. It remembers you from then on.',
+    pasteCode: 'Paste code',
+    codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
     aff: {
@@ -367,6 +373,12 @@ const I18N = {
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
+    homeTipTitle: 'Abre Wepawao como una app 📲',
+    homeTipStepsIos: ['Abre Wepawao en Safari.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
+    homeTipStepsAndroid: ['Abre Wepawao en Chrome.', 'Toca el menú (⋮) arriba a la derecha.', 'Toca "Agregar a la pantalla principal" o "Instalar app" y luego "Agregar".'],
+    homeTipAfter: 'Luego abre Wepawao desde su ícono e inicia sesión una vez. Desde ahí te recuerda.',
+    pasteCode: 'Pegar código',
+    codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
     aff: {
@@ -875,9 +887,9 @@ function SignIn({ startWithPassword = false }) {
   }
 
   // The code from the email signs the member in right here, in this same browser.
-  async function verify(e) {
+  async function verify(e, given) {
     e?.preventDefault()
-    const token = code.replace(/\D/g, '')
+    const token = (given ?? code).replace(/\D/g, '')
     if (token.length < 6 || checking) return
     setChecking(true); setMsg('')
     const { error } = await supabase.auth.verifyOtp({ email: sentTo, token, type: 'email' })
@@ -902,9 +914,24 @@ function SignIn({ startWithPassword = false }) {
         <form onSubmit={verify} className="flex gap-2">
           <input className={`${field} min-w-0 flex-1 text-center text-2xl font-extrabold tracking-[0.3em] placeholder:text-base placeholder:font-normal placeholder:tracking-normal`} inputMode="numeric" autoComplete="one-time-code"
             maxLength={10} placeholder={t.codePh} aria-label={t.codePh} value={code} autoFocus
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} />
+            onChange={(e) => {
+              const next = e.target.value.replace(/\D/g, '')
+              // A whole code arriving at once (pasted, or filled in from the keyboard suggestion): sign in right away.
+              const filledAtOnce = next.length >= 6 && next.length - code.length >= 4
+              setCode(next)
+              if (filledAtOnce) verify(null, next)
+            }} />
           <button className={primary} disabled={checking || code.length < 6}>{checking ? t.checking : t.codeBtn}</button>
         </form>
+        {navigator.clipboard?.readText && (
+          <button type="button" className={ghostSm} disabled={checking} onClick={async () => {
+            try {
+              const pasted = (await navigator.clipboard.readText()).replace(/\D/g, '').slice(0, 10)
+              if (pasted.length >= 6) { setCode(pasted); verify(null, pasted) }
+            } catch { /* paste not allowed: they can still type it */ }
+          }}>📋 {t.pasteCode}</button>
+        )}
+        <p className="text-xs text-stone-500">{t.codeTip}</p>
         {msg && <p className="text-sm text-red-600">{msg}</p>}
         <div className="flex flex-wrap items-center gap-3 border-t border-[#dcdff5] pt-3">
           <button type="button" className={ghostSm} disabled={wait > 0 || sending} onClick={() => submit()}>
@@ -2352,28 +2379,40 @@ function HomeScreenTip() {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
   const [hidden, setHidden] = useState(() => {
-    try { return localStorage.getItem('wao_home_tip_hidden') === '1' } catch { return false }
+    try { return localStorage.getItem('wao_home_tip_hidden_v2') === '1' } catch { return false }
   })
   const standalone = window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
-  const mobile = ios || /android/i.test(navigator.userAgent)
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  const android = /android/i.test(navigator.userAgent)
   useEffect(() => {
     const onPrompt = (e) => { e.preventDefault(); setInstallEvt(e) }
     window.addEventListener('beforeinstallprompt', onPrompt)
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
-  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden', '1') } catch { /* ignore */ } setHidden(true) }
-  if (hidden || standalone || (!mobile && !installEvt)) return null
+  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
+  // Already opened from the home screen, dismissed, or a computer: nothing to show.
+  if (hidden || standalone || (!ios && !android && !installEvt)) return null
+  const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
   return (
-    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-3 text-sm">
-      <img src="/apple-touch-icon.png" alt="" className="h-10 w-10 shrink-0 rounded-xl" />
-      <div className="flex-1 space-y-2">
-        <p>{mobile ? t.homeTipIos : t.homeTipInstall}</p>
-        {installEvt && (
-          <button className={ghostSm} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
-        )}
+    <div className={`${card} space-y-3`}>
+      <div className="flex items-center gap-3">
+        <img src="/apple-touch-icon.png" alt="" className="h-12 w-12 shrink-0 rounded-2xl" />
+        <h2 className="flex-1 text-xl font-extrabold">{t.homeTipTitle}</h2>
       </div>
-      <button className="text-xs text-stone-500 underline" onClick={hide}>{t.gotIt}</button>
+      {installEvt ? (
+        <button className={primary} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
+      ) : (
+        <ol className="space-y-2 text-stone-700">
+          {steps.map((step, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-sm font-extrabold text-[#14123a]">{i + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <p className="text-sm text-stone-600">{t.homeTipAfter}</p>
+      <button className="text-sm font-bold text-[#4a3af0] underline" onClick={hide}>{t.gotIt}</button>
     </div>
   )
 }
@@ -3866,6 +3905,7 @@ export default function App() {
               )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
+              <HomeScreenTip />
             </>
           )}
           {flash && (
