@@ -60,6 +60,8 @@ const HEAD_TAGS = [
   ['link', { rel: 'icon', type: 'image/png', href: '/wepawao-icon-192.png' }],
   meta('name', 'theme-color', '#4a3af0'),
   meta('name', 'apple-mobile-web-app-capable', 'yes'),
+  // Home-screen app: keep the page below the iPhone status bar instead of under the clock.
+  meta('name', 'apple-mobile-web-app-status-bar-style', 'default'),
   meta('name', 'mobile-web-app-capable', 'yes'),
   meta('name', 'apple-mobile-web-app-title', 'Wepawao'),
 ]

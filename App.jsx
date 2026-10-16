@@ -196,6 +196,8 @@ const I18N = {
     emailLink: 'Email me a link', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in link to',
     sentSteps: ['Open the email from Wepawao and tap "Sign in".', 'Open it on this same phone or computer.', 'Not there in a minute? Check Spam or Promotions.'],
+    codeLabel: 'Got a code in the email? Type it here:', codePlaceholder: 'Code from the email', codeSubmit: 'Sign in with code',
+    codeChecking: 'Checking…', codeBad: 'That code did not work. Check it, or send a new one.',
     sentAgain: 'Send it again', sentWait: (s) => `You can send it again in ${s}s`, sentOther: 'Use a different email',
     pwHint: 'Already have a Wepawao password? Sign in with it here.', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'My password', pwSetHint: 'Set a password so you can sign in quickly on any phone or computer. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'Sign in once here', outText: 'On iPhone, the Wepawao icon on your home screen keeps its own sign-in, separate from Safari. Tap "Sign in with my password", enter your email and your Wepawao password, and you stay signed in here from then on.', outBtn: 'Sign in with my password', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Already a member with a password? Sign in here', newHere: 'New to Wepawao? Enter your name and email, then tap "Email me a link". Open the link in that email to finish joining.', pwSame: 'That is already your password. You can sign in with it now.', forgot: 'Forgot your password?', forgotSent: (e) => `We sent a link to ${e} to choose a new password. Open it on this same phone or computer.`, resetTitle: 'Choose a new password', resetHint: 'You opened the password link from your email. Type a new password (at least 8 characters).', resetDone: 'New password saved. You are signed in.',
     wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…",
@@ -479,6 +481,8 @@ const I18N = {
     emailLink: 'Envíame un enlace', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un enlace de acceso a',
     sentSteps: ['Abre el correo de Wepawao y toca "Sign in".', 'Ábrelo en este mismo teléfono o computadora.', '¿No llega en un minuto? Revisa Spam o Promociones.'],
+    codeLabel: '¿Recibiste un código en el correo? Escríbelo aquí:', codePlaceholder: 'Código del correo', codeSubmit: 'Entrar con el código',
+    codeChecking: 'Verificando…', codeBad: 'Ese código no funcionó. Revísalo o envía uno nuevo.',
     sentAgain: 'Enviarlo otra vez', sentWait: (s) => `Puedes enviarlo otra vez en ${s}s`, sentOther: 'Usar otro correo',
     pwHint: '¿Ya tienes contraseña de Wepawao? Entra con ella aquí.', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Mi contraseña', pwSetHint: 'Crea una contraseña para entrar rápido desde cualquier teléfono o computadora. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'Entra una vez aquí', outText: 'En iPhone, el ícono de Wepawao en tu pantalla de inicio guarda su propia sesión, aparte de Safari. Toca "Entrar con mi contraseña", escribe tu correo y tu contraseña de Wepawao, y quedarás con la sesión abierta aquí desde entonces.', outBtn: 'Entrar con mi contraseña', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Ya eres miembro y tienes contraseña? Entra aquí', newHere: '¿Nuevo en Wepawao? Escribe tu nombre y correo, y toca "Envíame un enlace". Abre el enlace de ese correo para terminar de unirte.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.', forgot: '¿Olvidaste tu contraseña?', forgotSent: (e) => `Enviamos un enlace a ${e} para crear una contraseña nueva. Ábrelo en este mismo teléfono o computadora.`, resetTitle: 'Crea una contraseña nueva', resetHint: 'Abriste el enlace de contraseña de tu correo. Escribe una contraseña nueva (mínimo 8 caracteres).', resetDone: 'Contraseña nueva guardada. Ya entraste.',
     wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
@@ -831,6 +835,19 @@ function SignIn({ startWithPassword = false }) {
   const [sentTo, setSentTo] = useState('')
   const [sending, setSending] = useState(false)
   const [wait, setWait] = useState(0)
+  // The home-screen app on iPhone can't receive the email link (it opens in Safari instead),
+  // so members can type the code from the email right here.
+  const [code, setCode] = useState('')
+  const [checking, setChecking] = useState(false)
+  async function verifyCode(e) {
+    e?.preventDefault()
+    const token = code.replace(/\D/g, '')
+    if (token.length < 6 || checking) return
+    setChecking(true); setMsg('')
+    const { error } = await supabase.auth.verifyOtp({ email: sentTo.trim().toLowerCase(), token, type: 'email' })
+    setChecking(false)
+    if (error) setMsg(t.codeBad)
+  }
   useEffect(() => {
     if (wait <= 0) return
     const id = setTimeout(() => setWait((w) => w - 1), 1000)
@@ -884,6 +901,13 @@ function SignIn({ startWithPassword = false }) {
             </li>
           ))}
         </ol>
+        <form onSubmit={verifyCode} className="space-y-2 border-t border-[#dcdff5] pt-3">
+          <label className="block text-sm font-bold text-[#14123a]" htmlFor="wao-code">{t.codeLabel}</label>
+          <input id="wao-code" className={`${field} text-center text-2xl font-bold tracking-[0.3em]`}
+            inputMode="numeric" autoComplete="one-time-code" maxLength={10}
+            placeholder={t.codePlaceholder} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} />
+          <button className={primary} disabled={checking || code.length < 6}>{checking ? t.codeChecking : t.codeSubmit}</button>
+        </form>
         {msg && <p className="text-sm text-red-600">{msg}</p>}
         <div className="flex flex-wrap items-center gap-3 border-t border-[#dcdff5] pt-3">
           <button type="button" className={ghostSm} disabled={wait > 0 || sending} onClick={() => submit()}>
