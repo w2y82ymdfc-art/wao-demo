@@ -8,10 +8,39 @@ import hero3a from './hero/3-before.jpg'
 import hero3b from './hero/3-ai.jpg'
 
 // ---------- Supabase ----------
+// Sign-in is kept in localStorage so it survives closing the app. This matters most for the
+// iPhone home-screen app, which otherwise could open as a visitor. If storage is blocked
+// (some private modes), fall back to memory so the page still works for this visit.
+const authStorage = (() => {
+  try {
+    const k = '__wao_storage_test__'
+    window.localStorage.setItem(k, '1'); window.localStorage.removeItem(k)
+    return window.localStorage
+  } catch {
+    const mem = new Map()
+    return { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => { mem.set(k, v) }, removeItem: (k) => { mem.delete(k) } }
+  }
+})()
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      storage: authStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  }
 )
+// iOS freezes a home-screen app in the background, which pauses the token refresh timer.
+// When Wepawao comes back to the screen, restart the refresh so the saved session stays valid.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') supabase.auth.startAutoRefresh()
+    else supabase.auth.stopAutoRefresh()
+  })
+}
 // ---------- Languages (EN / ES) ----------
 const I18N = {
   en: {
@@ -3652,6 +3681,21 @@ export default function App() {
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
   }, [me, afterSignIn])
+  // Visitors can't open "My posts": send them to Everyone and show "Join or sign in" instead.
+  // After they sign in, open My posts for them.
+  const [mineAfterSignIn, setMineAfterSignIn] = useState(false)
+  const openMineOrSignIn = useCallback(() => {
+    if (me) return false
+    setMineAfterSignIn(true); setAfterSignIn(false); setTab('everyone'); setShowSignIn(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return true
+  }, [me])
+  useEffect(() => {
+    if (authChecked && !me && tab === 'mine') openMineOrSignIn()
+  }, [authChecked, me, tab, openMineOrSignIn])
+  useEffect(() => {
+    if (me && mineAfterSignIn) { setMineAfterSignIn(false); setShowSignIn(false); setTab('mine'); window.scrollTo(0, 0) }
+  }, [me, mineAfterSignIn])
   useEffect(() => {
     if (me && shareAfterSignIn) { setShareAfterSignIn(false); setShowSignIn(false); setTab('everyone'); openShare() }
   }, [me, shareAfterSignIn, openShare])
@@ -3667,9 +3711,19 @@ export default function App() {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
+    // Read the saved sign-in from storage. The home-screen app runs this on every launch,
+    // and again when iOS brings it back from the background, so a member never lands as a visitor.
+    const restore = () => supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
+    restore()
     const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => { setSession(s); if (ev === 'PASSWORD_RECOVERY') setResetting(true) })
-    return () => sub.subscription.unsubscribe()
+    const onShow = () => { if (document.visibilityState === 'visible') restore() }
+    window.addEventListener('pageshow', onShow)
+    document.addEventListener('visibilitychange', onShow)
+    return () => {
+      sub.subscription.unsubscribe()
+      window.removeEventListener('pageshow', onShow)
+      document.removeEventListener('visibilitychange', onShow)
+    }
   }, [])
 
   // Loads the member's name and number, then opens the welcome. Automatic only the first time.
@@ -3756,7 +3810,13 @@ export default function App() {
   return (
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
-        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+        {/* Keeps the logo and buttons below the iPhone status bar clock in the home-screen app. */}
+        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3"
+          style={{
+            paddingTop: 'max(12px, env(safe-area-inset-top, 20px))',
+            paddingLeft: 'max(16px, env(safe-area-inset-left))',
+            paddingRight: 'max(16px, env(safe-area-inset-right))',
+          }}>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
             Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
@@ -3828,7 +3888,7 @@ export default function App() {
 
           <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
             {TABS.map((k) => (
-              <button key={k} onClick={() => { setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
+              <button key={k} onClick={() => { if (k === 'mine' && openMineOrSignIn()) return; setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
                 {t.tabs[k]}
               </button>
