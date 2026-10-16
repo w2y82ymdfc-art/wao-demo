@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         const imgs = p.image_paths?.length ? p.image_paths : p.image_path ? [p.image_path] : []
         const ai = p.ai_moment && imgs.length > 1
         title = ai
-          ? (es ? `Momento IA ✨${who ? ` de ${who}` : ''} · Wepawao` : `${who ? `${who}'s ` : ''}AI Moment ✨ · Wepawao`)
+          ? (es ? `Caricatura ✨${who ? ` de ${who}` : ''} · Wepawao` : `${who ? `${who}'s ` : ''}caricature ✨ · Wepawao`)
           : `${p.title || (who ? (es ? `Momento de ${who}` : `${who}'s moment`) : 'Wepawao')} · Wepawao`
         if (p.body || p.title) desc = clip(p.body || p.title, 180)
         const pick = ai ? imgs[1] : imgs[0]
