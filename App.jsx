@@ -3920,6 +3920,9 @@ export default function App() {
     const ref = q.get('invite') || q.get('ref')
     if (!ref || !UUID_RE.test(ref)) return
     visitLogged.current = true
+    // A browser that has signed in to Wepawao before belongs to a member (often the sharer testing
+    // their own link), not a new prospect, so it does not count.
+    try { if (localStorage.getItem('wao_signin_email') || localStorage.getItem('wao_member')) return } catch { /* ignore */ }
     let visitor = null
     try {
       visitor = localStorage.getItem('wao_visitor')
@@ -3938,7 +3941,7 @@ export default function App() {
     if (ref && UUID_RE.test(ref)) { try { localStorage.setItem('wao_ref', ref) } catch { /* ignore */ } }
   }, [])
   // Once signed in, the remembered sharer has done its job (it only counts when a new member joins).
-  useEffect(() => { if (me) { try { localStorage.removeItem('wao_ref') } catch { /* ignore */ } } }, [me])
+  useEffect(() => { if (me) { try { localStorage.removeItem('wao_ref'); localStorage.setItem('wao_member', '1') } catch { /* ignore */ } } }, [me])
   useEffect(() => {
     const fromLink = new URLSearchParams(window.location.search).get('invite')
     if (fromLink && UUID_RE.test(fromLink)) {
