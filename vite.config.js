@@ -51,7 +51,7 @@ const HEAD_TAGS = [
   meta('property', 'og:image', `${SITE}/wepawao-share.jpg`),
   meta('property', 'og:image:width', '1200'),
   meta('property', 'og:image:height', '630'),
-  meta('property', 'og:image:alt', 'A woman in her home kitchen and, made with AI, as the owner of her own bakery'),
+  meta('property', 'og:image:alt', 'A woman in her home kitchen and her AI caricature as the owner of her own bakery'),
   meta('name', 'twitter:card', 'summary_large_image'),
   meta('name', 'twitter:image', `${SITE}/wepawao-share.jpg`),
   // Home-screen app
