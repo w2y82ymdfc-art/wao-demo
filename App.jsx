@@ -93,6 +93,11 @@ const I18N = {
     gotIt: 'Got it',
     aff: {
       bannerTitle: 'Your Affiliate network',
+      linkTitle: 'Who opened your links',
+      linkOpened: 'opened your link', linkJoined: 'joined', linkRate: 'joined after opening',
+      linkWeek: (n) => `${n} this week`,
+      linkSince: (d) => `Counting since ${new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Counts people who were not signed in, once a day each, from your invite link and the posts you share.`,
+      linkNone: 'No one has opened your links yet. Share your invite link or a post to start.',
       bannerOutTitle: 'Free Three-Tier Affiliate Program',
       bannerOutNote: 'Invite people and share in the advertising revenue Wepawao receives. Joining is always free.',
       tierShort: ['Your invites', 'Their invites', 'Next level'],
@@ -388,6 +393,11 @@ const I18N = {
     gotIt: 'Entendido',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
+      linkTitle: 'Quién abrió tus enlaces',
+      linkOpened: 'abrieron tu enlace', linkJoined: 'se unieron', linkRate: 'se unió después de abrirlo',
+      linkWeek: (n) => `${n} esta semana`,
+      linkSince: (d) => `Contando desde el ${new Date(d).toLocaleDateString('es-PR', { day: 'numeric', month: 'short', year: 'numeric' })}. Cuenta a personas que no habían iniciado sesión, una vez al día cada una, desde tu enlace de invitación y las publicaciones que compartes.`,
+      linkNone: 'Nadie ha abierto tus enlaces todavía. Comparte tu enlace de invitación o una publicación para empezar.',
       bannerOutTitle: 'Programa de Afiliados de Tres Niveles',
       bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wepawao. Unirse siempre es gratis.',
       tierShort: ['Tus invitados', 'Sus invitados', 'Siguiente nivel'],
@@ -2842,9 +2852,53 @@ function TierGrowthChart({ weeks }) {
   )
 }
 
+// How many people opened a member's links, and how many of them joined.
+function useLinkStats(me, refreshKey) {
+  const [stats, setStats] = useState(null)
+  useEffect(() => {
+    if (!me) { setStats(null); return }
+    let live = true
+    supabase.rpc('my_link_stats').then(({ data, error }) => { if (live && !error) setStats(data) })
+    return () => { live = false }
+  }, [me, refreshKey])
+  return stats
+}
+
+function LinkStatsCard({ stats }) {
+  const { t } = useLang()
+  if (!stats) return null
+  const visitors = stats.visitors || 0
+  const joined = stats.joined || 0
+  const rate = visitors ? Math.min(100, Math.round((joined / visitors) * 100)) : null
+  return (
+    <div className={`${card} space-y-3`}>
+      <h3 className="font-bold">{t.aff.linkTitle}</h3>
+      {visitors === 0 && !joined ? <p className="text-stone-600">{t.aff.linkNone}</p> : (
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-2xl bg-[#eef0fc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums">{visitors}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkOpened}</div>
+            <div className={`text-xs tabular-nums ${stats.opens_week ? 'font-bold text-emerald-700' : 'text-stone-500'}`}>{t.aff.linkWeek(stats.opens_week || 0)}</div>
+          </div>
+          <div className="rounded-2xl bg-[#eef0fc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums">{joined}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkJoined}</div>
+          </div>
+          <div className="rounded-2xl bg-[#fff8dc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums text-[#4a3af0]">{rate == null ? '–' : `${rate}%`}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkRate}</div>
+          </div>
+        </div>
+      )}
+      {stats.since && <p className="text-xs text-stone-500">{t.aff.linkSince(stats.since)}</p>}
+    </div>
+  )
+}
+
 function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
   const { t, lang } = useLang()
   const { data, error, loading } = useAffiliateTiers(me, refreshKey)
+  const linkStats = useLinkStats(me, refreshKey)
   const [note, setNote] = useState('')
   if (!me) return <div className={`${card} text-stone-600`}>{t.needLogin}</div>
   const counts = [data?.tier1 ?? 0, data?.tier2 ?? 0, data?.tier3 ?? 0]
@@ -2875,6 +2929,8 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
               </div>
             ))}
           </div>
+
+          <LinkStatsCard stats={linkStats} />
 
           <div className={`${card} space-y-2`}>
             <h3 className="font-bold">{t.aff.growth}</h3>
@@ -3863,6 +3919,26 @@ export default function App() {
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
   // and connect the two of you as soon as you are signed in.
+  // Count the open for the member who shared the link (Affiliate dashboard), once per page load.
+  // Only visitors who are not signed in count; the database skips repeats from the same visitor that day.
+  const visitLogged = useRef(false)
+  useEffect(() => {
+    if (!authChecked || me || visitLogged.current) return
+    const q = new URLSearchParams(window.location.search)
+    const ref = q.get('invite') || q.get('ref')
+    if (!ref || !UUID_RE.test(ref)) return
+    visitLogged.current = true
+    let visitor = null
+    try {
+      visitor = localStorage.getItem('wao_visitor')
+      if (!visitor) { visitor = (crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`); localStorage.setItem('wao_visitor', visitor) }
+    } catch { visitor = `${Date.now()}-${Math.random().toString(36).slice(2)}` }
+    const post = q.get('post')
+    supabase.rpc('record_link_visit', {
+      p_ref: ref, p_visitor: visitor, p_source: q.get('invite') ? 'invite' : (post ? 'post' : 'invite'),
+      p_post: post && UUID_RE.test(post) ? post : null,
+    }).then(() => {}, () => {})
+  }, [authChecked, me])
   // Shared post links (?ref=<member id>): remember who shared it, so if this visitor joins later
   // they count in that member's Affiliate Program. No banner; the post simply opens.
   useEffect(() => {
