@@ -909,6 +909,7 @@ function SignIn({ startWithPassword = false }) {
   }
 
   // The code from the email signs the member in right here, in this same browser.
+  const codeRef = useRef(null)
   async function verify(e, given) {
     e?.preventDefault()
     const token = (given ?? code).replace(/\D/g, '')
@@ -934,7 +935,7 @@ function SignIn({ startWithPassword = false }) {
           ))}
         </ol>
         <form onSubmit={verify} className="flex gap-2">
-          <input className={`${field} min-w-0 flex-1 text-center text-2xl font-extrabold tracking-[0.3em] placeholder:text-base placeholder:font-normal placeholder:tracking-normal`} inputMode="numeric" autoComplete="one-time-code"
+          <input className={`${field} min-w-0 flex-1 text-center text-2xl font-extrabold tracking-[0.3em] placeholder:text-base placeholder:font-normal placeholder:tracking-normal`} ref={codeRef} inputMode="numeric" autoComplete="one-time-code"
             maxLength={10} placeholder={t.codePh} aria-label={t.codePh} value={code} autoFocus
             onChange={(e) => {
               const next = e.target.value.replace(/\D/g, '')
@@ -945,14 +946,14 @@ function SignIn({ startWithPassword = false }) {
             }} />
           <button className={primary} disabled={checking || code.length < 6}>{checking ? t.checking : t.codeBtn}</button>
         </form>
-        {navigator.clipboard?.readText && (
-          <button type="button" className={ghostSm} disabled={checking} onClick={async () => {
-            try {
-              const pasted = (await navigator.clipboard.readText()).replace(/\D/g, '').slice(0, 10)
-              if (pasted.length >= 6) { setCode(pasted); verify(null, pasted) }
-            } catch { /* paste not allowed: they can still type it */ }
-          }}>📋 {t.pasteCode}</button>
-        )}
+        <button type="button" className={ghostSm} disabled={checking} onClick={async () => {
+          try {
+            const pasted = (await navigator.clipboard.readText()).replace(/\D/g, '').slice(0, 10)
+            if (pasted.length >= 6) { setCode(pasted); verify(null, pasted); return }
+          } catch { /* this browser does not allow reading the clipboard */ }
+          // Fallback: put the cursor in the code box so a long-press shows Paste.
+          codeRef.current?.focus()
+        }}>📋 {t.pasteCode}</button>
         <p className="text-xs text-stone-500">{t.codeTip}</p>
         {msg && <p className="text-sm text-red-600">{msg}</p>}
         <div className="flex flex-wrap items-center gap-3 border-t border-[#dcdff5] pt-3">
