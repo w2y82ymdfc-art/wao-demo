@@ -778,17 +778,18 @@ function useMaxPhotos() {
   return max
 }
 // Links people share always use wepawao.com when shared from the live site's old Vercel address.
-const shareOrigin = () => (/^wepawao-demo-afd4\.vercel\.app$|^wepawao\.com$/i.test(window.location.hostname) ? 'https://www.wepawao.com' : window.location.origin)
+const shareOrigin = () => (/^(wepawao|wao)-demo-afd4\.vercel\.app$|^wepawao\.com$/i.test(window.location.hostname) ? 'https://www.wepawao.com' : window.location.origin)
 const postImages = (p) => (p.image_paths?.length ? p.image_paths : p.image_path ? [p.image_path] : [])
 const imageFields = (paths, multi) => (multi ? { image_path: paths[0] || null, image_paths: paths } : { image_path: paths[0] || null })
 
-function postLink(id, lang) {
+function postLink(id, lang, me) {
   // /p/… shows the post's own photo and words in WhatsApp/Messages previews, then opens the post here.
-  return `${shareOrigin()}/p/${id}?lang=${lang}`
+  // A member's shared link also carries their id (ref), so anyone who joins from it counts in their Affiliate Program.
+  return `${shareOrigin()}/p/${id}?lang=${lang}${me ? `&ref=${me}` : ''}`
 }
 // Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
-async function sharePost(p, t, lang) {
-  const url = postLink(p.id, lang)
+async function sharePost(p, t, lang, me) {
+  const url = postLink(p.id, lang, me)
   const text = (p.title || p.body || t.shareText).slice(0, 140)
   if (navigator.share) {
     try { await navigator.share({ title: 'Wepawao', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
@@ -883,7 +884,8 @@ function SignIn({ startWithPassword = false }) {
     if (sending) return
     setSending(true); setMsg('')
     let ref = new URLSearchParams(window.location.search).get('ref')
-    try { ref = ref || localStorage.getItem('wao_invite') } catch { /* ignore */ }
+    try { ref = ref || localStorage.getItem('wao_invite') || localStorage.getItem('wao_ref') } catch { /* ignore */ }
+    if (ref && !UUID_RE.test(ref)) ref = null
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -1945,7 +1947,7 @@ function PostCard({ p, me, onChanged }) {
     setNote(msg); setTimeout(() => setNote(''), 3000)
   }
   async function share() {
-    const msg = await sharePost(p, t, lang)
+    const msg = await sharePost(p, t, lang, me)
     if (msg) { setNote(msg); setTimeout(() => setNote(''), 2500) }
   }
 
@@ -3861,6 +3863,14 @@ export default function App() {
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
   // and connect the two of you as soon as you are signed in.
+  // Shared post links (?ref=<member id>): remember who shared it, so if this visitor joins later
+  // they count in that member's Affiliate Program. No banner; the post simply opens.
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get('ref')
+    if (ref && UUID_RE.test(ref)) { try { localStorage.setItem('wao_ref', ref) } catch { /* ignore */ } }
+  }, [])
+  // Once signed in, the remembered sharer has done its job (it only counts when a new member joins).
+  useEffect(() => { if (me) { try { localStorage.removeItem('wao_ref') } catch { /* ignore */ } } }, [me])
   useEffect(() => {
     const fromLink = new URLSearchParams(window.location.search).get('invite')
     if (fromLink && UUID_RE.test(fromLink)) {
