@@ -8,10 +8,39 @@ import hero3a from './hero/3-before.jpg'
 import hero3b from './hero/3-ai.jpg'
 
 // ---------- Supabase ----------
+// Sign-in is kept in localStorage so it survives closing the app. This matters most for the
+// iPhone home-screen app, which otherwise could open as a visitor. If storage is blocked
+// (some private modes), fall back to memory so the page still works for this visit.
+const authStorage = (() => {
+  try {
+    const k = '__wao_storage_test__'
+    window.localStorage.setItem(k, '1'); window.localStorage.removeItem(k)
+    return window.localStorage
+  } catch {
+    const mem = new Map()
+    return { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => { mem.set(k, v) }, removeItem: (k) => { mem.delete(k) } }
+  }
+})()
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      storage: authStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  }
 )
+// iOS freezes a home-screen app in the background, which pauses the token refresh timer.
+// When Wepawao comes back to the screen, restart the refresh so the saved session stays valid.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') supabase.auth.startAutoRefresh()
+    else supabase.auth.stopAutoRefresh()
+  })
+}
 // ---------- Languages (EN / ES) ----------
 const I18N = {
   en: {
@@ -39,7 +68,7 @@ const I18N = {
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: ['Start my network', 'or open my page'],
-    calloutShareText: 'Wepa! Check out Wepawao, a new social network for new moments. Use it, share it, and be ready to enjoy what is coming!',
+    calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
     invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
@@ -54,10 +83,21 @@ const I18N = {
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
+    homeTipTitle: 'Open Wepawao like an app 📲',
+    homeTipStepsIos: ['Open Wepawao in Safari.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
+    homeTipStepsAndroid: ['Open Wepawao in Chrome.', 'Tap the menu (⋮) at the top right.', 'Tap "Add to Home screen" or "Install app", then "Add".'],
+    homeTipAfter: 'Then open Wepawao from its icon and sign in once. It remembers you from then on.',
+    pasteCode: 'Paste code',
+    codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
     aff: {
       bannerTitle: 'Your Affiliate network',
+      linkTitle: 'Who opened your links',
+      linkOpened: 'opened your link', linkJoined: 'joined', linkRate: 'joined after opening',
+      linkWeek: (n) => `${n} this week`,
+      linkSince: (d) => `Counting since ${new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Counts people who were not signed in, once a day each, from your invite link and the posts you share.`,
+      linkNone: 'No one has opened your links yet. Share your invite link or a post to start.',
       bannerOutTitle: 'Free Three-Tier Affiliate Program',
       bannerOutNote: 'Invite people and share in the advertising revenue Wepawao receives. Joining is always free.',
       tierShort: ['Your invites', 'Their invites', 'Next level'],
@@ -163,7 +203,7 @@ const I18N = {
       recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
-    joinOrSignIn: 'Join or sign in', yourNameNew: 'Your name (new members)', email: 'Email',
+    joinOrSignIn: 'Join or sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
     emailLink: 'Email me a code', codePh: 'Code from the email', codeBtn: 'Sign in', checking: 'Checking…', codeBad: 'That code is not right or has expired. Check it, or tap "Send it again".', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in code to',
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
@@ -185,6 +225,10 @@ const I18N = {
     kinds: { update: 'update', offer: 'offer', request: 'request' },
     cats: { general: 'general', produce: 'produce', tools: 'tools', services: 'services', household: 'household', free: 'free' },
     wao: { btn: 'Wao!', done: 'You said Wao!', received: (n) => (n === 1 ? '1 person said Wao!' : `${n} people said Wao!`), onlyYou: 'Only you see this' },
+    wepa: { btn: 'Wepa!', done: 'You said Wepa!' },
+    reactBubble: { wao: 'Wao! = that is amazing 😮', wepa: 'Wepa! = go you! 🎉 A Puerto Rican cheer' },
+    reactTip: 'Wao! = that is amazing 😮 · Wepa! = go you! 🎉 (a Puerto Rican cheer). Tap one or both.',
+    reactReceived: (wao, wepa) => [wao ? `${wao} Wao!` : '', wepa ? `${wepa} Wepa!` : ''].filter(Boolean).join(' · '),
     comments: 'Comments', hideComments: 'Hide comments', markFulfilled: 'Mark fulfilled', closeListing: 'Close listing',
     reopen: 'Reopen', renew: 'Renew for 30 days',
     confirmFulfil: 'Mark this as fulfilled? It will leave the public feed. You can reopen it later.',
@@ -289,6 +333,7 @@ const I18N = {
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
+      contact: 'Questions or ideas? Write us at',
       scenes: [
         { a: 'Many feeds decide', b: ['', 'what you see.', ''] },
         { a: 'Too often,', b: ['whoever ', 'pays', ' gets seen.'] },
@@ -323,7 +368,7 @@ const I18N = {
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: ['Empezar mi red', 'o abrir mi página'],
-    calloutShareText: '¡Wepa! Mira Wepawao, una nueva red social para nuevos momentos. Úsala, compártela y prepárate para disfrutar lo que viene.',
+    calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
     invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
@@ -338,10 +383,21 @@ const I18N = {
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
+    homeTipTitle: 'Abre Wepawao como una app 📲',
+    homeTipStepsIos: ['Abre Wepawao en Safari.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
+    homeTipStepsAndroid: ['Abre Wepawao en Chrome.', 'Toca el menú (⋮) arriba a la derecha.', 'Toca "Agregar a la pantalla principal" o "Instalar app" y luego "Agregar".'],
+    homeTipAfter: 'Luego abre Wepawao desde su ícono e inicia sesión una vez. Desde ahí te recuerda.',
+    pasteCode: 'Pegar código',
+    codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
+      linkTitle: 'Quién abrió tus enlaces',
+      linkOpened: 'abrieron tu enlace', linkJoined: 'se unieron', linkRate: 'se unió después de abrirlo',
+      linkWeek: (n) => `${n} esta semana`,
+      linkSince: (d) => `Contando desde el ${new Date(d).toLocaleDateString('es-PR', { day: 'numeric', month: 'short', year: 'numeric' })}. Cuenta a personas que no habían iniciado sesión, una vez al día cada una, desde tu enlace de invitación y las publicaciones que compartes.`,
+      linkNone: 'Nadie ha abierto tus enlaces todavía. Comparte tu enlace de invitación o una publicación para empezar.',
       bannerOutTitle: 'Programa de Afiliados de Tres Niveles',
       bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wepawao. Unirse siempre es gratis.',
       tierShort: ['Tus invitados', 'Sus invitados', 'Siguiente nivel'],
@@ -353,7 +409,7 @@ const I18N = {
       howTitle: 'Cómo crece tu red',
       howSteps: ['Compartes tu enlace de invitación', 'Se unen: tu Nivel 1', 'Invitan: tu Nivel 2', 'Y otra vez: tu Nivel 3'],
       slide: (i, n) => `Diapositiva ${i} de ${n}`,
-      teaserTitle: 'Muy pronto: La Cara Wepawao',
+      teaserTitle: 'Muy pronto: El Reto de la Cara Wepawao',
       teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes, con la oportunidad de recibir la compensación por comisiones correspondiente.',
       teaserCta: '¡Querrás ser parte de lo que viene!',
       tier: (n) => `Nivel ${n}`,
@@ -389,8 +445,8 @@ const I18N = {
       seeNetwork: 'Ver mi red', shareAgain: 'Compartir otra vez', keepGoing: 'Seguir',
     },
     contest: {
-      title: 'La Cara Wepawao',
-      bannerTitle: '¡La Cara Wepawao comenzó!',
+      title: 'El Reto de la Cara Wepawao',
+      bannerTitle: '¡El Reto de la Cara Wepawao comenzó!',
       prizes: (n) => `${n} ${n === 1 ? 'anunciante' : 'anunciantes'} en juego`,
       winners: (n) => `${n} ${n === 1 ? 'ganador' : 'ganadores'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `quedan ${Math.ceil(h / 24)} días` : `${h === 1 ? 'queda 1 hora' : `quedan ${h} horas`}` },
@@ -407,8 +463,8 @@ const I18N = {
       vote: 'Votar', voted: 'Votaste', votes: (n) => `${n} ${n === 1 ? 'voto' : 'votos'}`, yours: 'Tu participación',
       tooNew: 'Tu cuenta podrá votar cuando tenga 7 días.',
       noEntries: 'Aún no hay participaciones. ¡Sé el primero!',
-      closedTitle: 'La Cara Wepawao no está abierta ahora',
-      closedText: 'La Cara Wepawao solo se abre cuando una empresa llega directamente a Wepawao para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
+      closedTitle: 'El Reto de la Cara Wepawao no está abierto ahora',
+      closedText: 'El Reto de la Cara Wepawao solo se abre cuando una empresa llega directamente a Wepawao para anunciarse. Mira el banner de arriba: te avisará cuando se abra.',
       lastWinners: (names) => `Últimos ganadores: ${names}`,
       errors: { agree: 'Marca la casilla para aceptar.', closed: 'El reto ya cerró.', not_active: 'Solo pueden participar afiliados activos.', already: 'Ya participas en este reto.', not_yours: 'Elige uno de tus propios momentos.', not_public: 'El momento debe ser público y cumplir las reglas públicas.', no_photo: 'El momento necesita una foto.', too_old: 'Elige un momento publicado después de abrir el reto.', own: 'No puedes votar por ti.', too_new: 'Tu cuenta podrá votar cuando tenga 7 días.', sign_in: 'Inicia sesión primero.', other: 'Algo salió mal. Inténtalo de nuevo.' },
     },
@@ -416,9 +472,9 @@ const I18N = {
       bankTitle: 'Banco de proveedores',
       bankIntro: 'Trae un anunciante a Wepawao con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Nivel 2 y 5% con tu Nivel 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
       linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wepawao, la nueva red social para emprendedores.',
-      contestNote: 'Los anunciantes que llegan directamente a Wepawao se ganan en La Cara Wepawao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
+      contestNote: 'Los anunciantes que llegan directamente a Wepawao se ganan en el Reto de la Cara Wepawao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
       mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
-      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en La Cara Wepawao',
+      viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en el Reto de la Cara Wepawao',
       pending: 'Esperando aprobación de Wepawao', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
       earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
@@ -435,19 +491,19 @@ const I18N = {
       errors: { missing_business: 'Escribe el nombre de tu negocio.', bad_email: 'Escribe un correo válido.', already_sent: 'Ya recibimos una solicitud de este correo hoy. Te contactaremos pronto.', other: 'No se pudo enviar en este momento. Inténtalo de nuevo pronto.' },
       close: 'Volver a Wepawao',
       teamTitle: 'Banco de proveedores: Equipo Wepawao',
-      contestOpen: (d, n) => `La Cara Wepawao abierta hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'La Cara Wepawao no está abierta: se abre cuando apruebas un anunciante directo.',
-      endContest: 'Terminar La Cara Wepawao ahora', confirmEnd: '¿Terminar La Cara Wepawao ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
+      contestOpen: (d, n) => `El Reto de la Cara Wepawao abierto hasta ${d} · ${n} ${n === 1 ? 'participación' : 'participaciones'}`, contestNone: 'El Reto de la Cara Wepawao no está abierto: se abre cuando apruebas un anunciante directo.',
+      endContest: 'Terminar el Reto de la Cara Wepawao ahora', confirmEnd: '¿Terminar el Reto de la Cara Wepawao ahora? Las participaciones con más votos ganan los anunciantes que esperan.',
       filters: { new: 'Nuevos', active: 'Activos', declined: 'Rechazados' },
       empty: 'Todavía no hay anunciantes aquí.',
       referred: (n) => `Referido por ${n}`, direct: 'Llegó directamente a Wepawao',
-      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'La Cara Wepawao' : 'enlace de anunciante'})`,
-      inContest: 'En La Cara Wepawao',
+      sponsor: (n, via) => `Patrocinador: ${n} (${via === 'contest' ? 'El Reto de la Cara Wepawao' : 'enlace de anunciante'})`,
+      inContest: 'En el Reto de la Cara Wepawao',
       approve: 'Aprobar', decline: 'Rechazar',
       paid: (c) => `Publicidad acreditada: $${(c / 100).toFixed(2)}`,
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
-    joinOrSignIn: 'Únete o inicia sesión', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
+    joinOrSignIn: 'Únete o inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     emailLink: 'Envíame un código', codePh: 'Código del correo', codeBtn: 'Entrar', checking: 'Verificando…', codeBad: 'Ese código no es correcto o ya expiró. Revísalo o toca "Enviarlo otra vez".', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un código de acceso a',
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
@@ -469,6 +525,10 @@ const I18N = {
     kinds: { update: 'momento', offer: 'oferta', request: 'solicitud' },
     cats: { general: 'general', produce: 'productos frescos', tools: 'herramientas', services: 'servicios', household: 'hogar', free: 'gratis' },
     wao: { btn: 'Wao!', done: 'Dijiste Wao!', received: (n) => (n === 1 ? '1 persona dijo Wao!' : `${n} personas dijeron Wao!`), onlyYou: 'Solo tú lo ves' },
+    wepa: { btn: 'Wepa!', done: 'Dijiste Wepa!' },
+    reactBubble: { wao: 'Wao! = ¡qué impresionante! 😮', wepa: 'Wepa! = ¡vamos, felicidades! 🎉' },
+    reactTip: 'Wao! = ¡qué impresionante! 😮 · Wepa! = ¡vamos, felicidades! 🎉 Toca uno o los dos.',
+    reactReceived: (wao, wepa) => [wao ? `${wao} Wao!` : '', wepa ? `${wepa} Wepa!` : ''].filter(Boolean).join(' · '),
     comments: 'Comentarios', hideComments: 'Ocultar comentarios', markFulfilled: 'Marcar como cumplido', closeListing: 'Cerrar publicación',
     reopen: 'Reabrir', renew: 'Renovar por 30 días',
     confirmFulfil: '¿Marcar como cumplido? Saldrá del feed público. Puedes reabrirlo después.',
@@ -531,7 +591,7 @@ const I18N = {
         'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
         'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
         'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
-        'Los anunciantes que llegan directamente a Wepawao se ganan en La Cara Wepawao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wepawao no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
+        'Los anunciantes que llegan directamente a Wepawao se ganan en el Reto de la Cara Wepawao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wepawao no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
       ]],
     ],
     pricingTitle: 'Precios',
@@ -573,6 +633,7 @@ const I18N = {
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
+      contact: '¿Preguntas o ideas? Escríbenos a',
       scenes: [
         { a: 'Muchos feeds deciden', b: ['', 'lo que ves.', ''] },
         { a: 'Demasiadas veces,', b: ['se ve a quien ', 'paga.', ''] },
@@ -727,17 +788,18 @@ function useMaxPhotos() {
   return max
 }
 // Links people share always use wepawao.com when shared from the live site's old Vercel address.
-const shareOrigin = () => (/^wepawao-demo-afd4\.vercel\.app$|^wepawao\.com$/i.test(window.location.hostname) ? 'https://www.wepawao.com' : window.location.origin)
+const shareOrigin = () => (/^(wepawao|wao)-demo-afd4\.vercel\.app$|^wepawao\.com$/i.test(window.location.hostname) ? 'https://www.wepawao.com' : window.location.origin)
 const postImages = (p) => (p.image_paths?.length ? p.image_paths : p.image_path ? [p.image_path] : [])
 const imageFields = (paths, multi) => (multi ? { image_path: paths[0] || null, image_paths: paths } : { image_path: paths[0] || null })
 
-function postLink(id, lang) {
+function postLink(id, lang, me) {
   // /p/… shows the post's own photo and words in WhatsApp/Messages previews, then opens the post here.
-  return `${shareOrigin()}/p/${id}?lang=${lang}`
+  // A member's shared link also carries their id (ref), so anyone who joins from it counts in their Affiliate Program.
+  return `${shareOrigin()}/p/${id}?lang=${lang}${me ? `&ref=${me}` : ''}`
 }
 // Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
-async function sharePost(p, t, lang) {
-  const url = postLink(p.id, lang)
+async function sharePost(p, t, lang, me) {
+  const url = postLink(p.id, lang, me)
   const text = (p.title || p.body || t.shareText).slice(0, 140)
   if (navigator.share) {
     try { await navigator.share({ title: 'Wepawao', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
@@ -832,7 +894,8 @@ function SignIn({ startWithPassword = false }) {
     if (sending) return
     setSending(true); setMsg('')
     let ref = new URLSearchParams(window.location.search).get('ref')
-    try { ref = ref || localStorage.getItem('wao_invite') } catch { /* ignore */ }
+    try { ref = ref || localStorage.getItem('wao_invite') || localStorage.getItem('wao_ref') } catch { /* ignore */ }
+    if (ref && !UUID_RE.test(ref)) ref = null
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -846,9 +909,10 @@ function SignIn({ startWithPassword = false }) {
   }
 
   // The code from the email signs the member in right here, in this same browser.
-  async function verify(e) {
+  const codeRef = useRef(null)
+  async function verify(e, given) {
     e?.preventDefault()
-    const token = code.replace(/\D/g, '')
+    const token = (given ?? code).replace(/\D/g, '')
     if (token.length < 6 || checking) return
     setChecking(true); setMsg('')
     const { error } = await supabase.auth.verifyOtp({ email: sentTo, token, type: 'email' })
@@ -871,11 +935,26 @@ function SignIn({ startWithPassword = false }) {
           ))}
         </ol>
         <form onSubmit={verify} className="flex gap-2">
-          <input className={`${field} min-w-0 flex-1 text-center text-2xl font-extrabold tracking-[0.3em] placeholder:text-base placeholder:font-normal placeholder:tracking-normal`} inputMode="numeric" autoComplete="one-time-code"
+          <input className={`${field} min-w-0 flex-1 text-center text-2xl font-extrabold tracking-[0.3em] placeholder:text-base placeholder:font-normal placeholder:tracking-normal`} ref={codeRef} inputMode="numeric" autoComplete="one-time-code"
             maxLength={10} placeholder={t.codePh} aria-label={t.codePh} value={code} autoFocus
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} />
+            onChange={(e) => {
+              const next = e.target.value.replace(/\D/g, '')
+              // A whole code arriving at once (pasted, or filled in from the keyboard suggestion): sign in right away.
+              const filledAtOnce = next.length >= 6 && next.length - code.length >= 4
+              setCode(next)
+              if (filledAtOnce) verify(null, next)
+            }} />
           <button className={primary} disabled={checking || code.length < 6}>{checking ? t.checking : t.codeBtn}</button>
         </form>
+        <button type="button" className={ghostSm} disabled={checking} onClick={async () => {
+          try {
+            const pasted = (await navigator.clipboard.readText()).replace(/\D/g, '').slice(0, 10)
+            if (pasted.length >= 6) { setCode(pasted); verify(null, pasted); return }
+          } catch { /* this browser does not allow reading the clipboard */ }
+          // Fallback: put the cursor in the code box so a long-press shows Paste.
+          codeRef.current?.focus()
+        }}>📋 {t.pasteCode}</button>
+        <p className="text-xs text-stone-500">{t.codeTip}</p>
         {msg && <p className="text-sm text-red-600">{msg}</p>}
         <div className="flex flex-wrap items-center gap-3 border-t border-[#dcdff5] pt-3">
           <button type="button" className={ghostSm} disabled={wait > 0 || sending} onClick={() => submit()}>
@@ -890,6 +969,7 @@ function SignIn({ startWithPassword = false }) {
   return (
     <form onSubmit={submit} className={`${card} space-y-3`}>
       <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
+      <p className="text-lg font-extrabold text-[#4a3af0]">{t.itsFree}</p>
       <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -1379,8 +1459,8 @@ function MomentComposer({ userId, onPosted }) {
 }
 
 // Before/after reveal, nonstop like the landing slideshow: the original photo, then the divider sweeps
-// across to the AI version, holds it, fades back to the original and starts again. It only moves while
-// the post is on screen. Dragging pauses it; it carries on a few seconds after the member lets go.
+// across to the AI version, holds it, fades back to the original and starts again, constantly.
+// It pauses only while the post is off screen (to save battery) and picks up again when it comes back.
 function BeforeAfter({ original, aiVersion }) {
   const { t } = useLang()
   const [pos, setPos] = useState(100)
@@ -1389,12 +1469,11 @@ function BeforeAfter({ original, aiVersion }) {
   const raf = useRef(0)
   const timer = useRef(0)
   const visible = useRef(false)
-  const held = useRef(false)
   const stop = () => { cancelAnimationFrame(raf.current); clearTimeout(timer.current) }
   const loop = useCallback(() => {
     stop()
     if (reducedMotion()) { setPos(0); return }
-    if (!visible.current || held.current) return
+    if (!visible.current) return
     setPos(100)
     let start
     const HOLD = 1500, DUR = 2800, AFTER = 3200
@@ -1412,15 +1491,13 @@ function BeforeAfter({ original, aiVersion }) {
     const el = box.current
     if (!el || !('IntersectionObserver' in window)) { visible.current = true; loop(); return stop }
     const io = new IntersectionObserver(([e]) => {
-      const on = e.isIntersecting && e.intersectionRatio > 0.5
+      const on = e.isIntersecting && e.intersectionRatio > 0.25
       if (on && !visible.current) { visible.current = true; loop() }
       else if (!on && visible.current) { visible.current = false; stop() }
-    }, { threshold: [0, 0.5, 1] })
+    }, { threshold: [0, 0.25, 0.5, 1] })
     io.observe(el)
     return () => { io.disconnect(); stop() }
   }, [loop])
-  const grab = () => { held.current = true; stop() }
-  const letGo = () => { clearTimeout(timer.current); timer.current = setTimeout(() => { held.current = false; loop() }, 5000) }
   return (
     <div className="mt-3 space-y-1">
       <div ref={box} className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
@@ -1432,12 +1509,7 @@ function BeforeAfter({ original, aiVersion }) {
         </div>
         {pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
         {pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
-        <input type="range" min="0" max="100" value={pos}
-          onPointerDown={grab} onTouchStart={grab} onPointerUp={letGo} onTouchEnd={letGo}
-          onChange={(e) => { grab(); setPos(Number(e.target.value)); letGo() }}
-          aria-label={t.ai.drag} className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>
-      <p className="text-center text-xs text-stone-400">{t.ai.drag}</p>
     </div>
   )
 }
@@ -1710,11 +1782,13 @@ function PostEditor({ p, me, onDone, onCancel }) {
 }
 
 // ---------- One post ----------
-// ---------- Wao! button ----------
-// Members tap Wao! on other people's posts. Each member sees only their own Wao!s, and on their
-// own posts how many people said Wao! (nobody else sees the numbers). The feed order never changes.
-// The Wao!s for every post on screen are loaded together in one request.
-const waoCache = new Map() // `${me}:${postId}` -> { mine, count }
+// ---------- Wao! and Wepa! buttons ----------
+// Members tap Wao! (that's amazing) and/or Wepa! (go you!) on other people's posts. Each member sees
+// only their own taps, and on their own posts how many of each they got (nobody else sees the numbers).
+// The feed order never changes. Reactions for every post on screen are loaded together in one request.
+const REACTIONS = ['wao', 'wepa']
+const emptyReact = () => ({ wao: { mine: false, count: 0 }, wepa: { mine: false, count: 0 } })
+const waoCache = new Map() // `${me}:${postId}` -> { wao: {mine,count}, wepa: {mine,count} }
 let waoPending = new Map() // me -> Map(postId -> [resolve])
 let waoTimer = null
 function queueWao(me, postId) {
@@ -1735,10 +1809,15 @@ async function flushWaos() {
     const ids = [...m.keys()]
     for (let i = 0; i < ids.length; i += 100) {
       const chunk = ids.slice(i, i + 100)
-      const { data, error } = await supabase.from('waos').select('post_id,user_id').in('post_id', chunk)
+      const { data, error } = await supabase.from('waos').select('post_id,user_id,kind').in('post_id', chunk)
       for (const id of chunk) {
-        const rows = (data || []).filter((r) => r.post_id === id)
-        const v = { mine: rows.some((r) => r.user_id === me), count: rows.length }
+        const v = emptyReact()
+        for (const r of (data || [])) {
+          if (r.post_id !== id) continue
+          const k = r.kind === 'wepa' ? 'wepa' : 'wao'
+          v[k].count += 1
+          if (r.user_id === me) v[k].mine = true
+        }
         if (!error) waoCache.set(`${me}:${id}`, v)
         for (const resolve of m.get(id)) resolve(v)
       }
@@ -1746,10 +1825,18 @@ async function flushWaos() {
   }
 }
 
+const REACT_STYLE = {
+  wao: { badge: '!', on: 'border-[#f6d155] bg-[#f6d155] text-[#14123a]', off: 'border-[#4a3af0] text-[#4a3af0]', dotOn: 'bg-[#14123a] text-[#f6d155]', dotOff: 'bg-[#f6d155] text-[#14123a]' },
+  wepa: { badge: '🎉', on: 'border-[#4a3af0] bg-[#4a3af0] text-white', off: 'border-[#4a3af0] text-[#4a3af0]', dotOn: 'bg-white', dotOff: 'bg-[#e8e9fb]' },
+}
+
 function WaoButton({ p, me, mine }) {
   const { t } = useLang()
   const [s, setS] = useState(() => (me ? waoCache.get(`${me}:${p.id}`) || null : null))
-  const [pop, setPop] = useState(false)
+  const [pop, setPop] = useState('')
+  const [bubble, setBubble] = useState('')
+  const bubbleTimer = useRef(null)
+  useEffect(() => () => clearTimeout(bubbleTimer.current), [])
   const busy = useRef(false)
   useEffect(() => {
     if (!me) { setS(null); return }
@@ -1758,42 +1845,61 @@ function WaoButton({ p, me, mine }) {
     return () => { live = false }
   }, [me, p.id])
 
-  // The poster sees how many people said Wao! (only when there is at least one).
+  // The poster sees how many Wao!s and Wepa!s they got (only when there is at least one).
   if (mine) {
-    if (!s?.count) return null
+    const wao = s?.wao.count || 0, wepa = s?.wepa.count || 0
+    if (!wao && !wepa) return null
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full bg-[#fff8dc] px-3 py-1.5 text-sm font-bold text-[#14123a]" title={t.wao.onlyYou}>
         <span className="grid h-5 w-5 place-items-center rounded-full bg-[#f6d155] text-xs font-black">!</span>
-        {t.wao.received(s.count)}
+        {t.reactReceived(wao, wepa)}
         <span className="text-xs font-normal text-stone-500">· {t.wao.onlyYou}</span>
       </span>
     )
   }
 
-  async function toggle() {
+  async function toggle(kind) {
     if (!me) { window.dispatchEvent(new Event('wp-signin')); return }
     if (busy.current) return
     busy.current = true
-    const was = !!s?.mine
-    const next = { mine: !was, count: Math.max(0, (s?.count || 0) + (was ? -1 : 1)) }
+    const before = s || emptyReact()
+    const was = before[kind].mine
+    const next = { ...before, [kind]: { mine: !was, count: Math.max(0, before[kind].count + (was ? -1 : 1)) } }
     setS(next); waoCache.set(`${me}:${p.id}`, next)
-    if (!was) { setPop(true); setTimeout(() => setPop(false), 600) }
+    if (!was) {
+      setPop(kind); setTimeout(() => setPop(''), 600)
+      // A small bubble says what this reaction means, then fades away.
+      clearTimeout(bubbleTimer.current); setBubble(kind)
+      bubbleTimer.current = setTimeout(() => setBubble(''), 2600)
+    } else setBubble('')
     const { error } = was
-      ? await supabase.from('waos').delete().eq('post_id', p.id).eq('user_id', me)
-      : await supabase.from('waos').insert({ post_id: p.id, user_id: me })
-    if (error && error.code !== '23505') {
-      const back = { mine: was, count: s?.count || 0 }
-      setS(back); waoCache.set(`${me}:${p.id}`, back)
-    }
+      ? await supabase.from('waos').delete().eq('post_id', p.id).eq('user_id', me).eq('kind', kind)
+      : await supabase.from('waos').insert({ post_id: p.id, user_id: me, kind })
+    if (error && error.code !== '23505') { setS(before); waoCache.set(`${me}:${p.id}`, before) }
     busy.current = false
   }
-  const on = !!s?.mine
   return (
-    <button type="button" onClick={toggle} aria-pressed={on} aria-label={on ? t.wao.done : t.wao.btn}
-      className={`inline-flex items-center gap-1.5 rounded-full border-2 px-4 py-1.5 text-sm font-extrabold transition-colors ${on ? 'border-[#f6d155] bg-[#f6d155] text-[#14123a]' : 'border-[#4a3af0] text-[#4a3af0]'}`}>
-      <span className={`grid h-5 w-5 place-items-center rounded-full text-xs font-black ${on ? 'bg-[#14123a] text-[#f6d155]' : 'bg-[#f6d155] text-[#14123a]'} ${pop ? 'wp-wao-pop' : ''}`}>!</span>
-      {t.wao.btn}
-    </button>
+    <span className="inline-flex flex-wrap items-center gap-2">
+      {REACTIONS.map((kind) => {
+        const on = !!s?.[kind].mine
+        const st = REACT_STYLE[kind]
+        return (
+          <span key={kind} className="relative inline-flex">
+            {bubble === kind && (
+              <span role="status" className="wp-bubble pointer-events-none absolute bottom-full left-0 z-20 mb-2 w-max max-w-[220px] rounded-2xl bg-[#14123a] px-3 py-2 text-xs font-bold leading-snug text-white shadow-lg">
+                {t.reactBubble[kind]}
+                <span className="absolute left-5 top-full h-0 w-0 border-x-[6px] border-t-[6px] border-x-transparent border-t-[#14123a]" />
+              </span>
+            )}
+            <button type="button" onClick={() => toggle(kind)} aria-pressed={on} aria-label={on ? t[kind].done : t[kind].btn}
+              className={`inline-flex items-center gap-1.5 rounded-full border-2 px-4 py-1.5 text-sm font-extrabold transition-colors ${on ? st.on : st.off}`}>
+              <span className={`grid h-5 w-5 place-items-center rounded-full text-xs font-black ${on ? st.dotOn : st.dotOff} ${pop === kind ? 'wp-wao-pop' : ''}`}>{st.badge}</span>
+              {t[kind].btn}
+            </button>
+          </span>
+        )
+      })}
+    </span>
   )
 }
 
@@ -1845,7 +1951,7 @@ function PostCard({ p, me, onChanged }) {
     setNote(msg); setTimeout(() => setNote(''), 3000)
   }
   async function share() {
-    const msg = await sharePost(p, t, lang)
+    const msg = await sharePost(p, t, lang, me)
     if (msg) { setNote(msg); setTimeout(() => setNote(''), 2500) }
   }
 
@@ -2323,28 +2429,40 @@ function HomeScreenTip() {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
   const [hidden, setHidden] = useState(() => {
-    try { return localStorage.getItem('wao_home_tip_hidden') === '1' } catch { return false }
+    try { return localStorage.getItem('wao_home_tip_hidden_v2') === '1' } catch { return false }
   })
   const standalone = window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent)
-  const mobile = ios || /android/i.test(navigator.userAgent)
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  const android = /android/i.test(navigator.userAgent)
   useEffect(() => {
     const onPrompt = (e) => { e.preventDefault(); setInstallEvt(e) }
     window.addEventListener('beforeinstallprompt', onPrompt)
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
-  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden', '1') } catch { /* ignore */ } setHidden(true) }
-  if (hidden || standalone || (!mobile && !installEvt)) return null
+  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
+  // Already opened from the home screen, dismissed, or a computer: nothing to show.
+  if (hidden || standalone || (!ios && !android && !installEvt)) return null
+  const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
   return (
-    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white px-4 py-3 text-sm">
-      <img src="/apple-touch-icon.png" alt="" className="h-10 w-10 shrink-0 rounded-xl" />
-      <div className="flex-1 space-y-2">
-        <p>{mobile ? t.homeTipIos : t.homeTipInstall}</p>
-        {installEvt && (
-          <button className={ghostSm} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
-        )}
+    <div className={`${card} space-y-3`}>
+      <div className="flex items-center gap-3">
+        <img src="/apple-touch-icon.png" alt="" className="h-12 w-12 shrink-0 rounded-2xl" />
+        <h2 className="flex-1 text-xl font-extrabold">{t.homeTipTitle}</h2>
       </div>
-      <button className="text-xs text-stone-500 underline" onClick={hide}>{t.gotIt}</button>
+      {installEvt ? (
+        <button className={primary} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
+      ) : (
+        <ol className="space-y-2 text-stone-700">
+          {steps.map((step, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-sm font-extrabold text-[#14123a]">{i + 1}</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <p className="text-sm text-stone-600">{t.homeTipAfter}</p>
+      <button className="text-sm font-bold text-[#4a3af0] underline" onClick={hide}>{t.gotIt}</button>
     </div>
   )
 }
@@ -2728,9 +2846,53 @@ function TierGrowthChart({ weeks }) {
   )
 }
 
+// How many people opened a member's links, and how many of them joined.
+function useLinkStats(me, refreshKey) {
+  const [stats, setStats] = useState(null)
+  useEffect(() => {
+    if (!me) { setStats(null); return }
+    let live = true
+    supabase.rpc('my_link_stats').then(({ data, error }) => { if (live && !error) setStats(data) })
+    return () => { live = false }
+  }, [me, refreshKey])
+  return stats
+}
+
+function LinkStatsCard({ stats }) {
+  const { t } = useLang()
+  if (!stats) return null
+  const visitors = stats.visitors || 0
+  const joined = stats.joined || 0
+  const rate = visitors ? Math.min(100, Math.round((joined / visitors) * 100)) : null
+  return (
+    <div className={`${card} space-y-3`}>
+      <h3 className="font-bold">{t.aff.linkTitle}</h3>
+      {visitors === 0 && !joined ? <p className="text-stone-600">{t.aff.linkNone}</p> : (
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-2xl bg-[#eef0fc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums">{visitors}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkOpened}</div>
+            <div className={`text-xs tabular-nums ${stats.opens_week ? 'font-bold text-emerald-700' : 'text-stone-500'}`}>{t.aff.linkWeek(stats.opens_week || 0)}</div>
+          </div>
+          <div className="rounded-2xl bg-[#eef0fc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums">{joined}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkJoined}</div>
+          </div>
+          <div className="rounded-2xl bg-[#fff8dc] p-3">
+            <div className="text-3xl font-extrabold tabular-nums text-[#4a3af0]">{rate == null ? '–' : `${rate}%`}</div>
+            <div className="text-xs text-stone-600">{t.aff.linkRate}</div>
+          </div>
+        </div>
+      )}
+      {stats.since && <p className="text-xs text-stone-500">{t.aff.linkSince(stats.since)}</p>}
+    </div>
+  )
+}
+
 function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
   const { t, lang } = useLang()
   const { data, error, loading } = useAffiliateTiers(me, refreshKey)
+  const linkStats = useLinkStats(me, refreshKey)
   const [note, setNote] = useState('')
   if (!me) return <div className={`${card} text-stone-600`}>{t.needLogin}</div>
   const counts = [data?.tier1 ?? 0, data?.tier2 ?? 0, data?.tier3 ?? 0]
@@ -2761,6 +2923,8 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
               </div>
             ))}
           </div>
+
+          <LinkStatsCard stats={linkStats} />
 
           <div className={`${card} space-y-2`}>
             <h3 className="font-bold">{t.aff.growth}</h3>
@@ -3197,10 +3361,10 @@ function RoadmapBanner() {
   })
   if (hidden) return null
   return (
-    <div className="flex items-start gap-3 rounded-3xl border-2 border-[#dcdff5] bg-white/70 px-4 py-3 text-sm">
-      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold">!</span>
+    <div className="flex items-start gap-3 rounded-3xl bg-[#4a3af0] px-4 py-3 text-sm font-semibold text-white">
+      <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold text-[#14123a]">!</span>
       <p className="flex-1">{t.banner}</p>
-      <button className="text-xs text-stone-500 underline" onClick={() => {
+      <button className="text-xs font-bold text-white/85 underline" onClick={() => {
         try { localStorage.setItem('wao_roadmap_hidden', '1') } catch { /* ignore */ }
         setHidden(true)
       }}>{t.gotIt}</button>
@@ -3513,6 +3677,13 @@ function Welcome({ name, number, onDone }) {
             {w.memberPre}<span className="text-[#f6d155]">{number}</span>{w.memberPost}
           </p>
         )}
+        {last && (
+          <p className="text-[clamp(0.9rem,3.8vw,1.05rem)] text-[#b9bde6]" style={rise(1.1)}>
+            {w.contact}{' '}
+            <a href="mailto:support@wepawao.com" className="font-bold text-[#eef0fc] underline underline-offset-4"
+              onClick={(e) => e.stopPropagation()}>support@wepawao.com</a>
+          </p>
+        )}
       </div>
 
       <div className="relative z-10 flex min-h-[84px] flex-col justify-end gap-2">
@@ -3652,6 +3823,21 @@ export default function App() {
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
   }, [me, afterSignIn])
+  // Visitors can't open "My posts": send them to Everyone and show "Join or sign in" instead.
+  // After they sign in, open My posts for them.
+  const [mineAfterSignIn, setMineAfterSignIn] = useState(false)
+  const openMineOrSignIn = useCallback(() => {
+    if (me) return false
+    setMineAfterSignIn(true); setAfterSignIn(false); setTab('everyone'); setShowSignIn(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return true
+  }, [me])
+  useEffect(() => {
+    if (authChecked && !me && tab === 'mine') openMineOrSignIn()
+  }, [authChecked, me, tab, openMineOrSignIn])
+  useEffect(() => {
+    if (me && mineAfterSignIn) { setMineAfterSignIn(false); setShowSignIn(false); setTab('mine'); window.scrollTo(0, 0) }
+  }, [me, mineAfterSignIn])
   useEffect(() => {
     if (me && shareAfterSignIn) { setShareAfterSignIn(false); setShowSignIn(false); setTab('everyone'); openShare() }
   }, [me, shareAfterSignIn, openShare])
@@ -3667,9 +3853,28 @@ export default function App() {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => { setSession(data.session); setAuthChecked(true) })
-    const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => { setSession(s); if (ev === 'PASSWORD_RECOVERY') setResetting(true) })
-    return () => sub.subscription.unsubscribe()
+    // Read the saved sign-in from storage. The home-screen app runs this on every launch,
+    // and again when iOS brings it back from the background, so a member never lands as a visitor.
+    // A momentarily empty read (iOS can be slow to hand back storage when the app wakes) must never
+    // sign the member out: only a real SIGNED_OUT event (below) clears the session.
+    const restore = () => supabase.auth.getSession()
+      .then(({ data, error }) => { if (!error && data.session) setSession(data.session); setAuthChecked(true) })
+      .catch(() => setAuthChecked(true))
+    restore()
+    const { data: sub } = supabase.auth.onAuthStateChange((ev, s) => {
+      if (s) setSession(s)
+      else if (ev === 'SIGNED_OUT') setSession(null)
+      if (ev === 'INITIAL_SESSION') setAuthChecked(true)
+      if (ev === 'PASSWORD_RECOVERY') setResetting(true)
+    })
+    const onShow = () => { if (document.visibilityState === 'visible') restore() }
+    window.addEventListener('pageshow', onShow)
+    document.addEventListener('visibilitychange', onShow)
+    return () => {
+      sub.subscription.unsubscribe()
+      window.removeEventListener('pageshow', onShow)
+      document.removeEventListener('visibilitychange', onShow)
+    }
   }, [])
 
   // Loads the member's name and number, then opens the welcome. Automatic only the first time.
@@ -3717,6 +3922,37 @@ export default function App() {
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
   // and connect the two of you as soon as you are signed in.
+  // Count the open for the member who shared the link (Affiliate dashboard), once per page load.
+  // Only visitors who are not signed in count; the database skips repeats from the same visitor that day.
+  const visitLogged = useRef(false)
+  useEffect(() => {
+    if (!authChecked || me || visitLogged.current) return
+    const q = new URLSearchParams(window.location.search)
+    const ref = q.get('invite') || q.get('ref')
+    if (!ref || !UUID_RE.test(ref)) return
+    visitLogged.current = true
+    // A browser that has signed in to Wepawao before belongs to a member (often the sharer testing
+    // their own link), not a new prospect, so it does not count.
+    try { if (localStorage.getItem('wao_signin_email') || localStorage.getItem('wao_member')) return } catch { /* ignore */ }
+    let visitor = null
+    try {
+      visitor = localStorage.getItem('wao_visitor')
+      if (!visitor) { visitor = (crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`); localStorage.setItem('wao_visitor', visitor) }
+    } catch { visitor = `${Date.now()}-${Math.random().toString(36).slice(2)}` }
+    const post = q.get('post')
+    supabase.rpc('record_link_visit', {
+      p_ref: ref, p_visitor: visitor, p_source: q.get('invite') ? 'invite' : (post ? 'post' : 'invite'),
+      p_post: post && UUID_RE.test(post) ? post : null,
+    }).then(() => {}, () => {})
+  }, [authChecked, me])
+  // Shared post links (?ref=<member id>): remember who shared it, so if this visitor joins later
+  // they count in that member's Affiliate Program. No banner; the post simply opens.
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get('ref')
+    if (ref && UUID_RE.test(ref)) { try { localStorage.setItem('wao_ref', ref) } catch { /* ignore */ } }
+  }, [])
+  // Once signed in, the remembered sharer has done its job (it only counts when a new member joins).
+  useEffect(() => { if (me) { try { localStorage.removeItem('wao_ref'); localStorage.setItem('wao_member', '1') } catch { /* ignore */ } } }, [me])
   useEffect(() => {
     const fromLink = new URLSearchParams(window.location.search).get('invite')
     if (fromLink && UUID_RE.test(fromLink)) {
@@ -3756,7 +3992,13 @@ export default function App() {
   return (
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
-        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3">
+        {/* Keeps the logo and buttons below the iPhone status bar clock in the home-screen app. */}
+        <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3"
+          style={{
+            paddingTop: 'max(12px, env(safe-area-inset-top, 20px))',
+            paddingLeft: 'max(16px, env(safe-area-inset-left))',
+            paddingRight: 'max(16px, env(safe-area-inset-right))',
+          }}>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
             Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
@@ -3806,6 +4048,7 @@ export default function App() {
               )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
+              <HomeScreenTip />
             </>
           )}
           {flash && (
@@ -3828,7 +4071,7 @@ export default function App() {
 
           <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6`}>
             {TABS.map((k) => (
-              <button key={k} onClick={() => { setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
+              <button key={k} onClick={() => { if (k === 'mine' && openMineOrSignIn()) return; setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>
                 {t.tabs[k]}
               </button>

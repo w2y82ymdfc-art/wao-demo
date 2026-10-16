@@ -17,3 +17,6 @@
 @keyframes wp-wao-pop { 0% { transform: scale(1); } 35% { transform: scale(1.6) rotate(-12deg); } 70% { transform: scale(.9) rotate(6deg); } 100% { transform: scale(1); } }
 .wp-wao-pop { animation: wp-wao-pop .6s ease; }
 @media (prefers-reduced-motion: reduce) { .wp-wao-pop { animation: none; } }
+@keyframes wp-bubble { 0% { opacity: 0; transform: translateY(4px) scale(.95); } 12% { opacity: 1; transform: none; } 85% { opacity: 1; } 100% { opacity: 0; } }
+.wp-bubble { animation: wp-bubble 2.6s ease forwards; }
+@media (prefers-reduced-motion: reduce) { .wp-bubble { animation: none; } }

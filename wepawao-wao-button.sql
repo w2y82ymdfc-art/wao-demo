@@ -18,3 +18,11 @@ create policy "Members add own waos" on public.waos for insert to authenticated
               and exists (select 1 from public.posts p where p.id = post_id and p.user_id <> (select auth.uid())));
 
 create index if not exists waos_post_id_idx on public.waos (post_id);
+
+-- Wao! and Wepa! (October 16, 2026). Already applied to the Wao project.
+-- Each reaction is a Wao! or a Wepa!. A member can give a post one of each.
+alter table public.waos add column if not exists kind text not null default 'wao';
+alter table public.waos drop constraint if exists waos_kind_check;
+alter table public.waos add constraint waos_kind_check check (kind in ('wao', 'wepa'));
+alter table public.waos drop constraint if exists waos_pkey;
+alter table public.waos add constraint waos_pkey primary key (post_id, user_id, kind);

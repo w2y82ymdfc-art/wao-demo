@@ -9,7 +9,9 @@ export default async function handler(req, res) {
   const id = String(req.query.id || '')
   const lang = req.query.lang === 'es' ? 'es' : 'en'
   const site = `https://${req.headers['x-forwarded-host'] || req.headers.host}`
-  const target = UUID_RE.test(id) ? `${site}/?post=${id}&lang=${lang}` : `${site}/?lang=${lang}`
+  // Keep the sharer's id (ref) so the visitor is credited to them if they join.
+  const ref = UUID_RE.test(String(req.query.ref || '')) ? `&ref=${req.query.ref}` : ''
+  const target = UUID_RE.test(id) ? `${site}/?post=${id}&lang=${lang}${ref}` : `${site}/?lang=${lang}${ref}`
   const es = lang === 'es'
   let title = 'Wepawao'
   let desc = es ? 'Nueva red social, ¡nuevos Momentos IA combinados para recordar!' : 'New Social Media, new AI Moments combined to remember!'

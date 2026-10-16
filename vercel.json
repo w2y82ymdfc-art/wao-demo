@@ -1,3 +1,32 @@
 {
-  "rewrites": [{ "source": "/p/:id", "destination": "/api/p?id=:id" }]
+  "rewrites": [
+    {
+      "source": "/p/:id",
+      "destination": "/api/p?id=:id"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wepawao-demo-afd4.vercel.app"
+        }
+      ],
+      "destination": "https://www.wepawao.com/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wao-demo-afd4.vercel.app"
+        }
+      ],
+      "destination": "https://www.wepawao.com/:path*",
+      "permanent": false
+    }
+  ]
 }
