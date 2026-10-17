@@ -2035,10 +2035,10 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
   const [busy, setBusy] = useState(false)
 
   useEffect(() => {
-    supabase.from('profiles').select('username,display_name,bio,location_text').eq('id', me).single()
+    supabase.from('profiles').select('display_name').eq('id', me).single()
       .then(({ data, error }) => {
         if (error) setMsg(error.message)
-        else setF({ username: data.username || '', display_name: data.display_name || '', bio: data.bio || '', location_text: data.location_text || '' })
+        else setF({ display_name: data.display_name || '' })
       })
   }, [me])
 
@@ -2046,12 +2046,8 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
     e.preventDefault()
     setBusy(true)
     setMsg('')
-    const { error } = await supabase.from('profiles').update({
-      username: f.username,
-      display_name: f.display_name.trim(),
-      bio: f.bio.trim() || null,
-      location_text: f.location_text.trim() || null,
-    }).eq('id', me)
+    // Only the name is asked for. Usernames, areas and "about" texts already saved stay as they are.
+    const { error } = await supabase.from('profiles').update({ display_name: f.display_name.trim() }).eq('id', me)
     setBusy(false)
     if (error) return setMsg(error.code === '23505' ? t.usernameTaken : error.message)
     setMsg(t.saved)
@@ -2074,25 +2070,13 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
       </div>
 
       <form onSubmit={save} className="space-y-3">
-        <label className="block text-sm text-stone-600">{t.usernameLabel}
-          <input className={`${field} mt-1`} value={f.username} minLength={3} maxLength={30} required
-            onChange={(e) => setF({ ...f, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') })} />
-        </label>
         <label className="block text-sm text-stone-600">{t.nameLabel}
           <input className={`${field} mt-1`} value={f.display_name} maxLength={40} required onChange={set('display_name')} />
-        </label>
-        <label className="block text-sm text-stone-600">{t.areaLabel}
-          <input className={`${field} mt-1`} placeholder={t.areaPh} value={f.location_text} onChange={set('location_text')} />
-        </label>
-        <label className="block text-sm text-stone-600">{t.aboutLabel}
-          <textarea className={`${field} mt-1 min-h-20`} maxLength={500} value={f.bio} onChange={set('bio')} />
         </label>
         <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.affiliateNote}</p>
         <button disabled={busy} className={primary}>{busy ? t.saving : t.save}</button>
         {msg && <p className="text-sm text-stone-600">{msg}</p>}
       </form>
-
-      <PasswordSetter />
 
       <div className="mt-8 border-t border-[#dcdff5] pt-6">
         <button type="button" className={ghostSm} onClick={onSignOut}>{t.signOut}</button>
