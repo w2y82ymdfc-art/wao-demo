@@ -248,6 +248,12 @@ const I18N = {
     within: (r) => `Within ${r} km`, clear: 'clear',
     discoverNote: 'Browse by type, category and distance. Always newest first.', noLocation: 'Could not get your location.',
     peopleTitle: 'People on Wepawao', newestFirst: 'Newest members first.',
+    visionTitle: 'The vision of Wepawao',
+    visionLines: [
+      'A new social network that feels like yours, because it shares its advertising income with its members through a free Affiliate Program.',
+      'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
+      'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
+    ],
     promiseTitle: 'Our promise',
     promiseItems: [
       ['No black boxes.', "Your feed is newest first. We don't rank, score, or reorder it."],
@@ -548,6 +554,12 @@ const I18N = {
     within: (r) => `A menos de ${r} km`, clear: 'borrar',
     discoverNote: 'Explora por tipo, categoría y distancia. Siempre lo más reciente primero.', noLocation: 'No se pudo obtener tu ubicación.',
     peopleTitle: 'Personas en Wepawao', newestFirst: 'Miembros más recientes primero.',
+    visionTitle: 'La visión de Wepawao',
+    visionLines: [
+      'Una nueva red social que se siente tuya, porque comparte sus ingresos de publicidad con sus miembros a través de un Programa de Afiliados gratuito.',
+      'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
+      'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
+    ],
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
       ['Sin cajas negras.', 'Tu feed va de lo más reciente a lo más antiguo. No clasificamos, puntuamos ni reordenamos nada.'],
@@ -3683,6 +3695,10 @@ function OurPromise({ onReplay }) {
   const { t } = useLang()
   return (
     <>
+      <div className={`${card} space-y-3 !bg-[#4a3af0] text-white`}>
+        <h2 className="text-2xl font-extrabold text-[#f6d155]">{t.visionTitle}</h2>
+        {t.visionLines.map((l) => <p key={l} className="leading-relaxed">{l}</p>)}
+      </div>
       <div className={`${card} !bg-[#14123a] text-white`}>
         <h2 className="mb-2 text-xl font-bold text-[#f6d155]">{t.differentTitle}</h2>
         <p>{t.differentText}</p>
