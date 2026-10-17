@@ -4011,7 +4011,9 @@ export default function App() {
                   {t.profile}
                 </button>
               )
-              : <button className={ghostSm} onClick={() => { setAfterSignIn(true); setShowSignIn((v) => !v); window.scrollTo(0, 0) }}>{t.signIn}</button>}
+              : <button className={`${ghostSm} inline-flex items-center gap-1.5`} onClick={() => { setAfterSignIn(true); setShowSignIn((v) => !v); window.scrollTo(0, 0) }}>
+                  {t.signIn}<span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-xs font-extrabold text-[#14123a]">{t.free}</span>
+                </button>}
           </div>
           </div>
         </header>
