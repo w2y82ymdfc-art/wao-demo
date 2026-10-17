@@ -2073,7 +2073,6 @@ function ProfileEditor({ me, avatarUrl, onAvatar, onSaved, onClose, onSignOut })
         <label className="block text-sm text-stone-600">{t.nameLabel}
           <input className={`${field} mt-1`} value={f.display_name} maxLength={40} required onChange={set('display_name')} />
         </label>
-        <p className="rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm text-stone-600">{t.affiliateNote}</p>
         <button disabled={busy} className={primary}>{busy ? t.saving : t.save}</button>
         {msg && <p className="text-sm text-stone-600">{msg}</p>}
       </form>
