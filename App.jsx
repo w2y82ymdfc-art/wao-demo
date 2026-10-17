@@ -257,7 +257,7 @@ const I18N = {
     promiseTitle: 'Our promise',
     promiseItems: [
       ['No black boxes.', "Your feed is newest first. We don't rank, score, or reorder it."],
-      ['Nothing for sale in the feed.', 'No boosts, no sponsored posts, no pay-to-play.'],
+      ['No paid boosts.', 'Ads never jump ahead of members\' posts or change the newest-first order.'],
       ['Filters you control.', 'Category and distance only narrow the list. They never reshuffle it.'],
       ['Easy for everyone.', 'Share a moment or list something in under a minute.'],
       ['Your email stays private.', 'It is never shown on your public profile.'],
@@ -563,7 +563,7 @@ const I18N = {
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
       ['Sin cajas negras.', 'Tu feed va de lo más reciente a lo más antiguo. No clasificamos, puntuamos ni reordenamos nada.'],
-      ['Nada pagado en el feed.', 'Sin impulsos, sin publicaciones patrocinadas, sin pagar por visibilidad.'],
+      ['Sin impulsos pagados.', 'Los anuncios nunca se adelantan a las publicaciones de los miembros ni cambian el orden de lo más reciente primero.'],
       ['Filtros que tú controlas.', 'La categoría y la distancia solo reducen la lista. Nunca la reordenan.'],
       ['Fácil para todos.', 'Comparte un momento o publica una oferta en menos de un minuto.'],
       ['Tu correo es privado.', 'Nunca se muestra en tu perfil público.'],
