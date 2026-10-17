@@ -83,7 +83,7 @@ const I18N = {
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
-    homeTipTitle: 'Open Wepawao like an app 📲',
+    homeTipTitle: 'Open Wepawao like an app 📲', homeTipWepa: 'Wepa! Your moment is posted. Want Wepawao on your home screen, so you can come back with one tap?',
     homeTipStepsIos: ['Open Wepawao in Safari.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
     homeTipStepsAndroid: ['Open Wepawao in Chrome.', 'Tap the menu (⋮) at the top right.', 'Tap "Add to Home screen" or "Install app", then "Add".'],
     homeTipAfter: 'Then open Wepawao from its icon and sign in once. It remembers you from then on.',
@@ -389,7 +389,7 @@ const I18N = {
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
-    homeTipTitle: 'Abre Wepawao como una app 📲',
+    homeTipTitle: 'Abre Wepawao como una app 📲', homeTipWepa: '¡Wepa! Tu momento ya está publicado. ¿Quieres Wepawao en tu pantalla de inicio para volver con un solo toque?',
     homeTipStepsIos: ['Abre Wepawao en Safari.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
     homeTipStepsAndroid: ['Abre Wepawao en Chrome.', 'Toca el menú (⋮) arriba a la derecha.', 'Toca "Agregar a la pantalla principal" o "Instalar app" y luego "Agregar".'],
     homeTipAfter: 'Luego abre Wepawao desde su ícono e inicia sesión una vez. Desde ahí te recuerda.',
@@ -2420,7 +2420,8 @@ function SharedPost({ id, me, onClose, onChanged }) {
 
 // ---------- Home-screen tip ----------
 // Phones (iPhone and Android): show how to add Wepawao from the browser's Share button. Where the browser offers it, also show an install button.
-function HomeScreenTip() {
+// Offered only right after a member posts a moment (a happy moment, not an interruption), until they tap "Got it".
+function HomeScreenTip({ show }) {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
   const [hidden, setHidden] = useState(() => {
@@ -2436,7 +2437,7 @@ function HomeScreenTip() {
   }, [])
   const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
   // Already opened from the home screen, dismissed, or a computer: nothing to show.
-  if (hidden || standalone || (!ios && !android && !installEvt)) return null
+  if (!show || hidden || standalone || (!ios && !android && !installEvt)) return null
   const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
   return (
     <div className={`${card} space-y-3`}>
@@ -2444,6 +2445,7 @@ function HomeScreenTip() {
         <img src="/apple-touch-icon.png" alt="" className="h-12 w-12 shrink-0 rounded-2xl" />
         <h2 className="flex-1 text-xl font-extrabold">{t.homeTipTitle}</h2>
       </div>
+      <p className="font-semibold text-[#14123a]">{t.homeTipWepa}</p>
       {installEvt ? (
         <button className={primary} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
       ) : (
@@ -3917,6 +3919,7 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
+  const [homeTip, setHomeTip] = useState(false)
   useNetworkWatcher(me, (ev) => { setNetEvent(ev); posted() })
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
@@ -4044,12 +4047,11 @@ export default function App() {
               {me && composerOpen && (
                 <div ref={composerRef} className="scroll-mt-20">
                   <MomentComposer userId={me}
-                    onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
+                    onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); setHomeTip(true); posted() }} />
                 </div>
               )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
-              <HomeScreenTip />
             </>
           )}
           {flash && (
@@ -4058,9 +4060,10 @@ export default function App() {
               <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
             </div>
           )}
+          {me && <HomeScreenTip show={homeTip} />}
           {me && tab === 'mine' && (
             <MomentComposer userId={me}
-              onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); posted() }} />
+              onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); setHomeTip(true); posted() }} />
           )}
           {!me && !showSignIn && tab === 'discover' && (
             <div className={`${card} space-y-3`}>
