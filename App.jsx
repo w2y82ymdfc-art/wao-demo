@@ -221,7 +221,7 @@ const I18N = {
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
     joinOrSignIn: 'Join or sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
-    googleBtn: 'Continue with Google', googleBusy: 'Opening Google…', googleBad: 'Google sign-in is not available right now. Use the email code below.', orEmail: 'or use your email',
+    googleBtn: 'Continue with Google', googleBusy: 'Opening Google…', googleBad: 'Google sign-in is not available right now. Use the email code below.', orEmail: 'or use your email', useEmail: 'No Google account? Use your email instead',
     emailLink: 'Email me a code', codePh: 'Code from the email', codeBtn: 'Sign in', checking: 'Checking…', codeBad: 'That code is not right or has expired. Check it, or tap "Send it again".', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in code to',
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
@@ -546,7 +546,7 @@ const I18N = {
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
     joinOrSignIn: 'Únete o inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
-    googleBtn: 'Continuar con Google', googleBusy: 'Abriendo Google…', googleBad: 'Entrar con Google no está disponible ahora. Usa el código por correo abajo.', orEmail: 'o usa tu correo',
+    googleBtn: 'Continuar con Google', googleBusy: 'Abriendo Google…', googleBad: 'Entrar con Google no está disponible ahora. Usa el código por correo abajo.', orEmail: 'o usa tu correo', useEmail: '¿No tienes Google? Usa tu correo',
     emailLink: 'Envíame un código', codePh: 'Código del correo', codeBtn: 'Entrar', checking: 'Verificando…', codeBad: 'Ese código no es correcto o ya expiró. Revísalo o toca "Enviarlo otra vez".', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un código de acceso a',
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
@@ -906,6 +906,18 @@ function LangToggle({ lang, setLang }) {
 }
 
 // ---------- Sign in ----------
+// Google refuses to sign people in inside app browsers (Facebook, Instagram, Messenger, TikTok...),
+// so there the email code shows instead.
+const IN_APP_BROWSER = typeof navigator !== 'undefined' && /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|Line\/|TikTok|musical_ly|Snapchat|Twitter/i.test(navigator.userAgent || '')
+// Coming back from a Google attempt that did not work: go straight to the email code.
+const GOOGLE_RETURN_ERROR = typeof window !== 'undefined' && /[?#&]error(_code)?=/.test(window.location.search + window.location.hash)
+let googleCheck = null
+function googleAvailable() {
+  if (IN_APP_BROWSER) return Promise.resolve(false)
+  googleCheck = googleCheck || fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY } })
+    .then((r) => (r.ok ? r.json() : null)).then((d) => !!d?.external?.google).catch(() => false)
+  return googleCheck
+}
 function SignIn({ startWithPassword = false, allowPassword = false }) {
   const { t, lang } = useLang()
   const [email, setEmailRaw] = useState(() => { try { return localStorage.getItem('wao_signin_email') || '' } catch { return '' } })
@@ -960,7 +972,16 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
   }
 
   // Google: one or two taps, no code. Brings the member back here signed in.
+  // Shown first only when Google is switched on and this browser can use it; otherwise the email code shows as before.
   const [googleBusy, setGoogleBusy] = useState(false)
+  const [googleOk, setGoogleOk] = useState(null) // null = still checking
+  const [emailOpen, setEmailOpen] = useState(() => GOOGLE_RETURN_ERROR || startWithPassword)
+  useEffect(() => {
+    if (GOOGLE_RETURN_ERROR) setMsg(t.googleBad)
+    let alive = true
+    googleAvailable().then((ok) => { if (alive) setGoogleOk(ok) })
+    return () => { alive = false }
+  }, [])
   async function google() {
     if (googleBusy) return
     setGoogleBusy(true); setMsg('')
@@ -1033,7 +1054,7 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
     <form onSubmit={submit} className={`${card} space-y-3`}>
       <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
       <p className="text-lg font-extrabold text-[#4a3af0]">{t.itsFree}</p>
-      <button type="button" onClick={google} disabled={googleBusy}
+      {googleOk && <button type="button" onClick={google} disabled={googleBusy}
         className="flex w-full items-center justify-center gap-3 rounded-full border-2 border-[#dcdff5] bg-white px-4 py-3 text-base font-bold text-[#14123a] shadow-sm active:scale-[0.99] disabled:opacity-60">
         <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
           <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
@@ -1042,10 +1063,15 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
           <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
         </svg>
         {googleBusy ? t.googleBusy : t.googleBtn}
-      </button>
-      <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-stone-400">
+      </button>}
+      {googleOk && !emailOpen && <>
+        {msg && <p className="text-sm text-stone-600">{msg}</p>}
+        <button type="button" className="block w-full text-center text-sm font-bold text-[#4a3af0] underline" onClick={() => setEmailOpen(true)}>{t.useEmail}</button>
+      </>}
+      {(googleOk === false || emailOpen) && <>
+      {googleOk && <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-stone-400">
         <span className="h-px flex-1 bg-[#dcdff5]" />{t.orEmail}<span className="h-px flex-1 bg-[#dcdff5]" />
-      </div>
+      </div>}
       <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -1063,6 +1089,7 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
           <button type="button" className="block text-sm font-bold text-[#4a3af0] underline" onClick={forgot}>{t.forgot}</button>
         </>)}
       </div>}
+      </>}
     </form>
   )
 }
