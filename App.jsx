@@ -54,7 +54,22 @@ const I18N = {
     visContacts: 'Contacts only', visPublic: 'Public',
     visContactsSub: 'Only your contacts see it', visPublicSub: 'Everyone, if it follows the rules',
     publicRulesTitle: 'Rules for public moments',
-    publicRules: ['No prices or dollar amounts.', 'No web links or phone numbers.', 'Up to 3 public moments a day.', 'Hidden from Everyone if 3 members report it.'],
+    publicRules: ['No prices or dollar amounts.', 'No web links or phone numbers.', 'No business ads: recommending a place you visited is welcome, a business promoting itself is a paid ad.', 'Up to 3 public moments a day.', 'Hidden from Everyone if 3 members report it.'],
+    adCheck: {
+      checking: 'Checking…',
+      title: 'This looks like an ad',
+      text: 'On Wepawao, ads are paid, and that is what funds the commissions members earn. Recommending a place you visited is always welcome.',
+      why: 'What we noticed:',
+      personal: 'It is a personal recommendation',
+      personalSub: 'Post it publicly',
+      contacts: 'Share with my contacts only',
+      advertise: 'I want to advertise',
+      advertiseSubject: 'I want to advertise on Wepawao',
+      edit: 'Let me edit it',
+    },
+    reportWhy: 'Why are you reporting it?',
+    reportAd: 'Unpaid ad',
+    reportRules: 'Breaks the rules',
     blocked: {
       price: 'it mentions a price or dollar amount',
       link: 'it includes a web link',
@@ -363,7 +378,22 @@ const I18N = {
     visContacts: 'Solo contactos', visPublic: 'Público',
     visContactsSub: 'Solo tus contactos lo ven', visPublicSub: 'Todos, si cumple las reglas',
     publicRulesTitle: 'Reglas para momentos públicos',
-    publicRules: ['Sin precios ni cantidades de dinero.', 'Sin enlaces web ni números de teléfono.', 'Hasta 3 momentos públicos al día.', 'Se oculta de Todos si 3 miembros lo reportan.'],
+    publicRules: ['Sin precios ni cantidades de dinero.', 'Sin enlaces web ni números de teléfono.', 'Sin anuncios de negocios: recomendar un lugar que visitaste es bienvenido, un negocio promocionándose es un anuncio pagado.', 'Hasta 3 momentos públicos al día.', 'Se oculta de Todos si 3 miembros lo reportan.'],
+    adCheck: {
+      checking: 'Revisando…',
+      title: 'Esto parece un anuncio',
+      text: 'En Wepawao los anuncios son pagados, y eso es lo que paga las comisiones que ganan los miembros. Recomendar un lugar que visitaste siempre es bienvenido.',
+      why: 'Lo que notamos:',
+      personal: 'Es una recomendación personal',
+      personalSub: 'Publicarlo para Todos',
+      contacts: 'Compartir solo con mis contactos',
+      advertise: 'Quiero anunciarme',
+      advertiseSubject: 'Quiero anunciarme en Wepawao',
+      edit: 'Déjame editarlo',
+    },
+    reportWhy: '¿Por qué lo reportas?',
+    reportAd: 'Anuncio sin pagar',
+    reportRules: 'No cumple las reglas',
     blocked: {
       price: 'menciona un precio o una cantidad de dinero',
       link: 'incluye un enlace web',
@@ -1169,9 +1199,90 @@ function VisibilityPicker({ value, onChange }) {
   )
 }
 
+// ---------- Ad check (public moments only) ----------
+// Two layers, run just before a public moment is posted:
+// 1. Free word rules (instant): business-voice words like "oferta", "ordena", "te esperamos", "order now".
+// 2. AI check (/api/ad-check) of the caption and photo, only when the words found nothing.
+// It never blocks: if a post looks like an ad, the member chooses what to do. Reports still apply.
+const AD_WORDS = [
+  // Spanish
+  'ofertas?', 'especial(es)? del d[ií]a', 'especiales', 'descuentos?', 'promoci[oó]n(es)?', 'promos?', '2\\s?x\\s?1',
+  'ord[eé]na(lo|la|los)?', 'haz tu (orden|pedido)', 'pide (ya|hoy)', 'll[aá]ma(nos)?', 'esc[ií]benos', 'ven hoy',
+  'te esperamos', 'los esperamos', 'vis[ií]tanos', 's[ií]guenos', 'abiertos?\\s+(de|desde|hoy|todos)', 'horarios?',
+  'servicio a domicilio', 'delivery', 'reservaciones', 'nuestros? (clientes|men[uú]|productos|servicios|local|tienda)',
+  'nuestras? (ofertas|especialidades|tienda)', 'precios? (bajos|especiales)', 'liquidaci[oó]n', 'whats\\s?app',
+  // English
+  'on sale', 'discounts?', 'order now', 'order today', 'call us', 'text us', 'dm us', 'follow us', 'visit us', 'book now',
+  'now open', 'free delivery', 'our (menu|customers|products|services|store|shop)', 'open (daily|from|today)', 'happy hour specials?',
+]
+const AD_RE = new RegExp(`(^|[^\\p{L}\\d])(${AD_WORDS.join('|')})(?=$|[^\\p{L}\\d])`, 'iu')
+
+function adWordsFound(text) {
+  const m = String(text || '').match(AD_RE)
+  return m ? m[2] : ''
+}
+
+// Small JPEG for the AI check, so the request stays light.
+async function adThumb(blob) {
+  if (!blob) return ''
+  try {
+    const bmp = await createImageBitmap(blob)
+    const s = Math.min(1, 512 / Math.max(bmp.width, bmp.height))
+    const c = document.createElement('canvas')
+    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s)
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height)
+    const url = c.toDataURL('image/jpeg', 0.7)
+    return url.slice(url.indexOf(',') + 1)
+  } catch { return '' }
+}
+
+// Returns '' when it looks fine, or a short reason to show the member when it looks like an ad.
+async function checkForAd(text, blob, lang) {
+  const word = adWordsFound(text)
+  if (word) return `"${word}"`
+  try {
+    const { data } = await supabase.auth.getSession()
+    const token = data?.session?.access_token
+    if (!token) return ''
+    const r = await fetch('/api/ad-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ text, image: await adThumb(blob) }),
+      signal: AbortSignal.timeout(10000),
+    })
+    if (!r.ok) return ''
+    const j = await r.json()
+    return j.ad ? (j.why?.[lang] || j.why?.es || '…') : ''
+  } catch { return '' } // never stop a member from posting because the check failed
+}
+
+function AdCheckPanel({ why, busy, onPersonal, onContacts, onEdit }) {
+  const { t } = useLang()
+  const a = t.adCheck
+  const mail = `mailto:support@wepawao.com?subject=${encodeURIComponent(a.advertiseSubject)}`
+  return (
+    <div className="space-y-2 rounded-2xl border-2 border-[#f0c94a] bg-[#fff8dc] p-3 text-sm">
+      <div className="text-base font-extrabold">{a.title}</div>
+      <p className="text-stone-700">{a.text}</p>
+      {why && <p className="text-stone-600"><b>{a.why}</b> {why}</p>}
+      <div className="grid gap-2 pt-1">
+        <button type="button" disabled={busy} onClick={onPersonal}
+          className="rounded-2xl border-2 border-[#4a3af0] bg-white px-3 py-2 text-left">
+          <div className="font-bold text-[#4a3af0]">{a.personal}</div>
+          <div className="text-stone-500">{a.personalSub}</div>
+        </button>
+        <button type="button" disabled={busy} onClick={onContacts}
+          className="rounded-2xl border-2 border-[#dcdff5] bg-white px-3 py-2 text-left font-bold">{a.contacts}</button>
+        <a href={mail} className="rounded-2xl border-2 border-[#dcdff5] bg-white px-3 py-2 text-left font-bold text-[#4a3af0]">{a.advertise}</a>
+        <button type="button" disabled={busy} onClick={onEdit} className="px-1 py-1 text-left font-bold text-stone-500 underline">{a.edit}</button>
+      </div>
+    </div>
+  )
+}
+
 // ---------- Composer ----------
 function Composer({ userId, mode, onPosted }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const kind = mode === 'offer' ? 'offer' : 'update'
   const detailed = kind === 'offer'
   const [ltype, setLtype] = useState('one_time')
@@ -1184,7 +1295,9 @@ function Composer({ userId, mode, onPosted }) {
   const maxPhotos = useMaxPhotos()
   const photos = usePhotoPicker([], maxPhotos, () => setError(t.couldNotRead))
 
-  const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
+  const [adWhy, setAdWhy] = useState(null) // null = no notice; string = looks like an ad
+  const [checking, setChecking] = useState(false)
+  const set = (k) => (e) => { setAdWhy(null); setF({ ...f, [k]: e.target.value }) }
   const coords = () =>
     new Promise((resolve) =>
       navigator.geolocation.getCurrentPosition(
@@ -1194,10 +1307,20 @@ function Composer({ userId, mode, onPosted }) {
       )
     )
 
-  async function submit(e) {
-    e.preventDefault()
-    setBusy(true)
+  async function submit(e, opts = {}) {
+    e?.preventDefault?.()
+    const vis = opts.vis || visibility
     setError('')
+    // Public moments: check for business ads first, unless the member already answered the notice.
+    if (kind === 'update' && vis === 'public' && !opts.skipAdCheck) {
+      setChecking(true)
+      const why = await checkForAd(f.body.trim(), photos.items[0]?.blob, lang)
+      setChecking(false)
+      if (why) { setAdWhy(why); return }
+    }
+    setAdWhy(null)
+    if (vis !== visibility) setVisibility(vis)
+    setBusy(true)
     const postId = crypto.randomUUID()
     let uploaded = []
     try {
@@ -1216,12 +1339,12 @@ function Composer({ userId, mode, onPosted }) {
         price_cents: kind === 'offer' && f.price !== '' ? Math.round(parseFloat(f.price) * 100) : null,
         location_text: detailed ? f.area || null : null,
         ...imageFields(up.paths, multi),
-        ...(multi && kind === 'update' ? { visibility } : {}),
+        ...(multi && kind === 'update' ? { visibility: vis } : {}),
         ...where,
       })
       if (postErr) throw postErr
       let notice = ''
-      if (multi && kind === 'update' && visibility === 'public') {
+      if (multi && kind === 'update' && vis === 'public') {
         const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
         if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
       }
@@ -1283,7 +1406,14 @@ function Composer({ userId, mode, onPosted }) {
 
       {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
 
-      {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={setVisibility} />}
+      {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={(v) => { setAdWhy(null); setVisibility(v) }} />}
+
+      {adWhy !== null && (
+        <AdCheckPanel why={adWhy} busy={busy}
+          onPersonal={() => submit(null, { skipAdCheck: true })}
+          onContacts={() => submit(null, { vis: 'contacts' })}
+          onEdit={() => setAdWhy(null)} />
+      )}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -1291,7 +1421,9 @@ function Composer({ userId, mode, onPosted }) {
         {photos.input}
         <button type="button" className={ghost} onClick={photos.open}>{t.addPhoto}</button>
         <span className="text-sm text-stone-500">{f.body.length} / 500</span>
-        <button disabled={busy || !f.body.trim()} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
+        {adWhy === null && (
+          <button disabled={busy || checking || !f.body.trim()} className={`${primary} ml-auto`}>{checking ? t.adCheck.checking : busy ? t.posting : t.post}</button>
+        )}
       </div>
     </form>
   )
@@ -1385,7 +1517,7 @@ function PhotoSlot({ label, picker }) {
 }
 
 function AiComposer({ userId, onPosted }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [body, setBody] = useState('')
   const [tool, setTool] = useState('')
   const [prompt, setPrompt] = useState('')
@@ -1393,14 +1525,26 @@ function AiComposer({ userId, onPosted }) {
   const [guide, setGuide] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [adWhy, setAdWhy] = useState(null)
+  const [checking, setChecking] = useState(false)
   const original = usePhotoPicker([], 1, () => setError(t.couldNotRead))
   const aiVersion = usePhotoPicker([], 1, () => setError(t.couldNotRead))
   const both = original.items.length === 1 && aiVersion.items.length === 1
 
-  async function submit(e) {
-    e.preventDefault()
+  async function submit(e, opts = {}) {
+    e?.preventDefault?.()
     if (!both) { setError(t.ai.needBoth); return }
-    setBusy(true); setError('')
+    const vis = opts.vis || visibility
+    setError('')
+    if (vis === 'public' && !opts.skipAdCheck) {
+      setChecking(true)
+      const why = await checkForAd(body.trim(), original.items[0]?.blob, lang)
+      setChecking(false)
+      if (why) { setAdWhy(why); return }
+    }
+    setAdWhy(null)
+    if (vis !== visibility) setVisibility(vis)
+    setBusy(true)
     const postId = crypto.randomUUID()
     let uploaded = []
     try {
@@ -1408,12 +1552,12 @@ function AiComposer({ userId, onPosted }) {
       uploaded = up.uploaded
       const { error: postErr } = await supabase.from('posts').insert({
         id: postId, user_id: userId, kind: 'update', listing_type: 'one_time', category: 'general',
-        body: body.trim(), ...imageFields(up.paths, true), visibility,
+        body: body.trim(), ...imageFields(up.paths, true), visibility: vis,
         ai_moment: true, ai_tool: tool.trim() || null, ai_prompt: prompt.trim() || null,
       })
       if (postErr) throw postErr
       let notice = ''
-      if (visibility === 'public') {
+      if (vis === 'public') {
         const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
         if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
       }
@@ -1440,18 +1584,26 @@ function AiComposer({ userId, onPosted }) {
         <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} />
       </div>
       <textarea className={`${field} min-h-20`} required maxLength={500} placeholder={t.ai.captionPh}
-        value={body} onChange={(e) => setBody(e.target.value)} />
+        value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
       <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] p-3">
         <div className="text-sm font-bold">{t.ai.howTitle}</div>
         <input className={field} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
         <textarea className={`${field} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
       </div>
-      <VisibilityPicker value={visibility} onChange={setVisibility} />
+      <VisibilityPicker value={visibility} onChange={(v) => { setAdWhy(null); setVisibility(v) }} />
       <p className="text-xs text-stone-500">{t.ai.rules}</p>
+      {adWhy !== null && (
+        <AdCheckPanel why={adWhy} busy={busy}
+          onPersonal={() => submit(null, { skipAdCheck: true })}
+          onContacts={() => submit(null, { vis: 'contacts' })}
+          onEdit={() => setAdWhy(null)} />
+      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="flex items-center gap-3">
         <span className="text-sm text-stone-500">{body.length} / 500</span>
-        <button disabled={busy || !body.trim() || !both} className={`${primary} ml-auto`}>{busy ? t.posting : t.post}</button>
+        {adWhy === null && (
+          <button disabled={busy || checking || !body.trim() || !both} className={`${primary} ml-auto`}>{checking ? t.adCheck.checking : busy ? t.posting : t.post}</button>
+        )}
       </div>
     </form>
   )
@@ -1983,9 +2135,10 @@ function PostCard({ p, me, onChanged }) {
     if (images.length) supabase.storage.from(BUCKET).remove(images)
     onChanged()
   }
-  async function report() {
-    if (!window.confirm(t.confirmReport)) return
-    const { error } = await supabase.from('reports').insert({ reporter_id: me, post_id: p.id, reported_user_id: p.user_id })
+  const [reporting, setReporting] = useState(false)
+  async function report(reason) {
+    setReporting(false)
+    const { error } = await supabase.from('reports').insert({ reporter_id: me, post_id: p.id, reported_user_id: p.user_id, reason })
     const msg = !error ? t.reportedThanks : error.code === '23505' ? t.alreadyReported : error.message
     setNote(msg); setTimeout(() => setNote(''), 3000)
   }
@@ -2050,13 +2203,23 @@ function PostCard({ p, me, onChanged }) {
         {!inactive && <WaoButton p={p} me={me} mine={mine} />}
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
         {canShare && <button className={ghostSm} onClick={share}>{t.share}</button>}
-        {canReport && <button className={ghostSm} onClick={report}>{t.report}</button>}
+        {canReport && <button className={ghostSm} onClick={() => setReporting((v) => !v)} aria-expanded={reporting}>{t.report}</button>}
         {mine && !editing && <button className={ghostSm} onClick={() => setEditing(true)}>{t.edit}</button>}
         {mine && <button className={ghostSm} disabled={deleting} onClick={remove}>{deleting ? t.deleting : t.deletePost}</button>}
         {canClose && <button className={ghostSm} onClick={close}>{ongoing ? t.closeListing : t.markFulfilled}</button>}
         {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? t.renew : t.reopen}</button>}
         {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
       </div>
+      {reporting && (
+        <div className="mt-3 rounded-2xl bg-[#eef0fc] p-3">
+          <div className="mb-2 text-sm font-bold">{t.reportWhy}</div>
+          <div className="flex flex-wrap gap-2">
+            <button className={ghostSm} onClick={() => report('unpaid_ad')}>{t.reportAd}</button>
+            <button className={ghostSm} onClick={() => report('rules')}>{t.reportRules}</button>
+            <button className="px-2 text-sm text-stone-500 underline" onClick={() => setReporting(false)}>{t.cancel}</button>
+          </div>
+        </div>
+      )}
       {ongoing && !inactive && p.expires_at && (
         <p className="mt-2 text-xs text-stone-500">{t.listedUntil(new Date(p.expires_at).toLocaleDateString(loc(lang), { dateStyle: 'medium' }))}</p>
       )}
