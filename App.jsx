@@ -1,4 +1,5 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import logoImg from './wepawao-logo.png'
 import { createClient } from '@supabase/supabase-js'
 import hero1a from './hero/1-before.jpg'
 import hero1b from './hero/1-ai.jpg'
@@ -80,6 +81,7 @@ const I18N = {
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
     photoLimit: (n) => `You've reached the maximum of ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wepawao`,
+    makeMine: { title: 'Wao! Want one of your own?', text: 'Turn your photo into a fun AI caricature and share your moment on Wepawao. It’s free!', btn: 'Make mine, free ✨', shareTail: 'Make yours free on Wepawao ✨' },
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
@@ -321,12 +323,14 @@ const I18N = {
       steps: ['Take a selfie or pick a clear photo of your face.', 'Open a free AI app that makes images (ChatGPT, Google Gemini, Meta AI or Microsoft Copilot), upload your photo and paste one of the ideas below.', 'Save the caricature it makes, come back here and post both pictures.'],
       ideasTitle: 'Caricature ideas you can copy',
       ideas: [
-        ['Field day', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are having a field day in a sunny park, running a sack race with friends.'],
-        ['My own business', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are the proud owner of their own small business, at the front door on opening day.'],
-        ['Chef', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are a chef in a busy kitchen, flipping food in a pan with flames.'],
-        ['Beach day', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are relaxing on a Puerto Rico beach with palm trees and a coconut drink.'],
-        ['Superhero', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are a superhero with an original costume and cape, flying over a city.'],
-        ['Rock star', 'Make a fun caricature of the person in this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep the face clearly recognizable. They are a rock star playing guitar on a big stage with colorful lights.'],
+        ['People (the basic prompt)', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format.'],
+        ['Places (the basic prompt)', 'Make a fun caricature of this photo: bright colorful cartoon style. Keep it clearly recognizable. Square format.'],
+        ['Field day', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are having a field day in a sunny park, running a sack race with friends.'],
+        ['My own business', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are the proud owner of their own small business, at the front door on opening day.'],
+        ['Chef', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are a chef in a busy kitchen, flipping food in a pan with flames.'],
+        ['Beach day', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are relaxing on a Puerto Rico beach with palm trees and a coconut drink.'],
+        ['Superhero', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are a superhero with an original costume and cape, flying over a city.'],
+        ['Rock star', 'Make a fun caricature of this photo: big head, small body, big happy smile, bright colorful cartoon style. Keep faces clearly recognizable. Square format. They are a rock star playing guitar on a big stage with colorful lights.'],
       ],
       copy: 'Copy', copied: 'Copied!',
       rules: 'Only your own face, or people who said yes. No photos of children. No real brands, logos or famous characters.',
@@ -386,6 +390,7 @@ const I18N = {
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
     photoLimit: (n) => `Llegaste al máximo de ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wepawao`,
+    makeMine: { title: '¡Wao! ¿Quieres la tuya?', text: 'Convierte tu foto en una caricatura divertida con IA y comparte tu momento en Wepawao. ¡Es gratis!', btn: 'Hacer la mía, gratis ✨', shareTail: 'Haz la tuya gratis en Wepawao ✨' },
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
@@ -627,12 +632,14 @@ const I18N = {
       steps: ['Tómate un selfie o elige una foto clara de tu cara.', 'Abre una app de IA gratis que haga imágenes (ChatGPT, Google Gemini, Meta AI o Microsoft Copilot), sube tu foto y pega una de las ideas de abajo.', 'Guarda la caricatura que crea, vuelve aquí y publica las dos imágenes.'],
       ideasTitle: 'Ideas de caricatura que puedes copiar',
       ideas: [
-        ['Día de juegos', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Está en un día de juegos en un parque soleado, corriendo una carrera de sacos con amigos.'],
-        ['Mi propio negocio', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Es la persona orgullosa dueña de su propio negocio, en la puerta el día de la apertura.'],
-        ['Chef', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Es chef en una cocina llena de movimiento, salteando comida en un sartén con llamas.'],
-        ['Día de playa', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Está descansando en una playa de Puerto Rico con palmas y una bebida de coco.'],
-        ['Superhéroe', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Es un superhéroe con un traje y capa originales, volando sobre una ciudad.'],
-        ['Estrella de rock', 'Haz una caricatura divertida de la persona de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido. Mantén su cara bien reconocible. Es una estrella de rock tocando guitarra en una tarima grande con luces de colores.'],
+        ['Personas (la instrucción básica)', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado.'],
+        ['Lugares (la instrucción básica)', 'Haz una caricatura divertida de esta foto: estilo de dibujo colorido y alegre. Mantenla bien reconocible. Formato cuadrado.'],
+        ['Día de juegos', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Está en un día de juegos en un parque soleado, corriendo una carrera de sacos con amigos.'],
+        ['Mi propio negocio', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Es la persona orgullosa dueña de su propio negocio, en la puerta el día de la apertura.'],
+        ['Chef', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Es chef en una cocina llena de movimiento, salteando comida en un sartén con llamas.'],
+        ['Día de playa', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Está descansando en una playa de Puerto Rico con palmas y una bebida de coco.'],
+        ['Superhéroe', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Es un superhéroe con un traje y capa originales, volando sobre una ciudad.'],
+        ['Estrella de rock', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado. Es una estrella de rock tocando guitarra en una tarima grande con luces de colores.'],
       ],
       copy: 'Copiar', copied: '¡Copiado!',
       rules: 'Solo tu propia cara, o personas que dijeron que sí. Sin fotos de niños. Sin marcas, logos ni personajes famosos reales.',
@@ -812,7 +819,7 @@ function postLink(id, lang, me) {
 // Opens the phone's share sheet (WhatsApp, Messages, email…). Falls back to copying the link.
 async function sharePost(p, t, lang, me) {
   const url = postLink(p.id, lang, me)
-  const text = (p.title || p.body || t.shareText).slice(0, 140)
+  const text = `${(p.title || p.body || t.shareText).slice(0, 140)}\n\n${t.makeMine.shareTail}`
   if (navigator.share) {
     try { await navigator.share({ title: 'Wepawao', text, url }); return null } catch (e) { if (e?.name === 'AbortError') return null }
   }
@@ -1527,9 +1534,23 @@ function BeforeAfter({ original, aiVersion }) {
 }
 
 function AiHow({ p }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [open, setOpen] = useState(false)
+  const [tr, setTr] = useState(null)
+  const [orig, setOrig] = useState(false)
+  const target = loc(lang)
+  const from = p.ai_prompt ? guessLang(p.ai_prompt) : null
+  const canTr = !!from && from !== target
+  // The prompt is shown in the language Wepawao is set to (translated automatically when it was written in the other one).
+  useEffect(() => {
+    setTr(null); setOrig(false)
+    if (!open || !canTr) return
+    let live = true
+    translateText(p.ai_prompt, from, target).then((x) => live && setTr(x)).catch(() => {})
+    return () => { live = false }
+  }, [open, canTr, p.ai_prompt, from, target])
   if (!p.ai_prompt && !p.ai_tool) return null
+  const shown = tr && !orig ? tr : p.ai_prompt
   return (
     <div className="mt-2 rounded-2xl bg-[#eef0fc] px-3 py-2 text-sm">
       <div className="flex items-center justify-between gap-2">
@@ -1538,8 +1559,14 @@ function AiHow({ p }) {
       </div>
       {open && p.ai_prompt && (
         <div className="mt-2 space-y-2">
-          <p className="whitespace-pre-wrap rounded-xl bg-white px-3 py-2 text-stone-700">{p.ai_prompt}</p>
-          <div className="flex items-center gap-2"><CopyButton text={p.ai_prompt} /><span className="text-xs text-stone-500">{t.ai.tryPrompt}</span></div>
+          <p className="whitespace-pre-wrap rounded-xl bg-white px-3 py-2 text-stone-700">{shown}</p>
+          {tr && (
+            <div className="flex flex-wrap items-center gap-x-3 text-xs">
+              {!orig && <span className="text-stone-400">🌐 {t.tr.note}</span>}
+              <button className="font-bold text-[#4a3af0]" onClick={() => setOrig((v) => !v)}>{orig ? `🌐 ${t.tr.btn}` : t.tr.back}</button>
+            </div>
+          )}
+          <div className="flex items-center gap-2"><CopyButton text={shown} /><span className="text-xs text-stone-500">{t.ai.tryPrompt}</span></div>
         </div>
       )}
     </div>
@@ -2414,6 +2441,16 @@ function SharedPost({ id, me, onClose, onChanged }) {
         <button className="text-sm text-stone-500 underline" onClick={onClose}>{t.backToFeed}</button>
       </div>
       {p ? <PostCard p={p} me={me} onChanged={onChanged} /> : <div className={`${card} text-stone-600`}>{t.postGone}</div>}
+      {p && p.user_id !== me && (
+        // A speech bubble under the shared moment, inviting the person who opened it to make their own.
+        <div className="relative ml-6 mt-1 rounded-3xl bg-[#4a3af0] px-5 py-4 text-white shadow-lg">
+          <span className="absolute -top-2 left-8 h-4 w-4 rotate-45 bg-[#4a3af0]" />
+          <p className="text-lg font-extrabold text-[#f6d155]">{t.makeMine.title}</p>
+          <p className="mt-1">{t.makeMine.text}</p>
+          <button className="mt-3 rounded-full bg-[#f6d155] px-5 py-2.5 font-black text-[#14123a]"
+            onClick={() => window.dispatchEvent(new Event('wp-make-mine'))}>{t.makeMine.btn}</button>
+        </div>
+      )}
     </section>
   )
 }
@@ -3842,6 +3879,15 @@ export default function App() {
   useEffect(() => {
     if (me && shareAfterSignIn) { setShareAfterSignIn(false); setShowSignIn(false); setTab('everyone'); openShare() }
   }, [me, shareAfterSignIn, openShare])
+  // "Make mine" under a shared moment: members go straight to the posting box; visitors join first, then land there.
+  useEffect(() => {
+    const onMakeMine = () => {
+      if (me) { setTab('everyone'); openShare() }
+      else { setShareAfterSignIn(true); setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+    }
+    window.addEventListener('wp-make-mine', onMakeMine)
+    return () => window.removeEventListener('wp-make-mine', onMakeMine)
+  }, [me, openShare])
   useEffect(() => {
     if (!me) { setIsAdmin(false); return }
     supabase.rpc('is_admin').then(({ data, error }) => setIsAdmin(!error && data === true))
@@ -4002,9 +4048,7 @@ export default function App() {
             paddingRight: 'max(16px, env(safe-area-inset-right))',
           }}>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 text-2xl font-extrabold tracking-tight text-[#4a3af0] sm:gap-2 sm:text-3xl">
-            Wepawao<span className="grid h-7 w-7 place-items-center rounded-full bg-[#f6d155] text-lg text-[#14123a] sm:h-8 sm:w-8 sm:text-xl">!</span>
-          </div>
+          <img src={logoImg} alt="Wepawao" className="h-11 w-auto rounded-xl sm:h-12" />
           <div className="flex items-center gap-2">
             <LangToggle lang={lang} setLang={setLang} />
             {me
