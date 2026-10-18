@@ -355,7 +355,7 @@ const I18N = {
       filterAll: 'All moments', filterAi: 'Caricatures ✨',
       noAi: 'No caricatures yet. Be the first!',
     },
-    hero: { l1: 'New Social Media,', l2: 'new AI Moments combined to remember!', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your caricature ✨', hide: 'Close' },
+    hero: { l1: 'New social media.', l2: 'AI moments worth remembering.', scenes: ['From her kitchen… to her own bakery.', 'From the office… to the main stage.', 'From his porch… to the Moon.'], fictional: 'Fictional people, made with AI.', scene: (n) => `Example ${n}`, share: 'Share your caricature ✨', hide: 'Close' },
     welcome: {
       wepa: 'Wepa!', skip: 'Skip', tap: 'Tap to continue', enter: 'Enter Wepawao', replay: 'Welcome message',
       hello: (n) => (n ? `Welcome, ${n}.` : 'Welcome.'), memberPre: 'You are member ', memberPost: '.',
@@ -680,7 +680,7 @@ const I18N = {
       filterAll: 'Todos los momentos', filterAi: 'Caricaturas ✨',
       noAi: 'Aún no hay caricaturas. ¡Sé el primero!',
     },
-    hero: { l1: 'Nueva red social,', l2: '¡nuevos Momentos IA combinados para recordar!', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu caricatura ✨', hide: 'Cerrar' },
+    hero: { l1: 'Nueva red social.', l2: 'Momentos IA para recordar.', scenes: ['De su cocina… a su propia panadería.', 'De la oficina… a la tarima principal.', 'De su balcón… a la Luna.'], fictional: 'Personas ficticias, creadas con IA.', scene: (n) => `Ejemplo ${n}`, share: 'Comparte tu caricatura ✨', hide: 'Cerrar' },
     welcome: {
       wepa: '¡Wepa!', skip: 'Saltar', tap: 'Toca para continuar', enter: 'Entrar a Wepawao', replay: 'Mensaje de bienvenida',
       hello: (n) => (n ? `Te damos la bienvenida, ${n}.` : 'Te damos la bienvenida.'), memberPre: 'Eres miembro n.º ', memberPost: '.',
@@ -2767,6 +2767,8 @@ function scrollToSignIn() {
 }
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
+const COMMUNITY_MIN_SHOWN = 100
+
 function useCommunityStats(refreshKey) {
   const [data, setData] = useState(null)
   useEffect(() => {
@@ -2978,6 +2980,9 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
   const { t } = useLang()
   const { data } = useAffiliateTiers(me, refreshKey)
   const community = useCommunityStats(refreshKey)
+  // Small numbers read as "empty", so the community counter stays hidden until it passes 100 members.
+  const communitySlide = (community?.members ?? 0) >= COMMUNITY_MIN_SHOWN
+    ? [(active) => <CommunitySlide stats={community} active={active} />] : []
   const [contest] = useContest(refreshKey)
   const contestSlide = contest?.open ? [() => (
     <div onClick={(e) => { e.stopPropagation(); onContest() }}>
@@ -3023,7 +3028,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
           </ol>
         </>
       ),
-      (active) => <CommunitySlide stats={community} active={active} />,
+      ...communitySlide,
     ]
     return <Slideshow slides={slides} />
   }
@@ -3063,7 +3068,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
         </div>
       </>
     ),
-    (active) => <CommunitySlide stats={community} active={active} />,
+    ...communitySlide,
   ]
   return <Slideshow slides={slides} onOpen={onOpen} />
 }

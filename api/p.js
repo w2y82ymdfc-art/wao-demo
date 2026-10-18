@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const target = UUID_RE.test(id) ? `${site}/?post=${id}&lang=${lang}${ref}` : `${site}/?lang=${lang}${ref}`
   const es = lang === 'es'
   let title = 'Wepawao'
-  let desc = es ? 'Nueva red social, ¡nuevos Momentos IA combinados para recordar!' : 'New Social Media, new AI Moments combined to remember!'
+  let desc = es ? 'Nueva red social. Momentos IA para recordar.' : 'New social media. AI moments worth remembering.'
   let image = `${site}/wepawao-share.jpg`
   let big = true
 

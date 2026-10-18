@@ -41,11 +41,11 @@ function wepawaoSiteFiles() {
 
 const meta = (k, v, content) => ['meta', { [k]: v, content }]
 const HEAD_TAGS = [
-  meta('name', 'description', 'New Social Media, new AI Moments combined to remember! No algorithm. Newest first. Always.'),
+  meta('name', 'description', 'New social media. AI moments worth remembering. No algorithm. Newest first. Always.'),
   // Link preview (WhatsApp, iMessage, Facebook, X)
   meta('property', 'og:type', 'website'),
   meta('property', 'og:site_name', 'Wepawao'),
-  meta('property', 'og:title', 'Wepawao · New Social Media, new AI Moments combined to remember!'),
+  meta('property', 'og:title', 'Wepawao · New social media. AI moments worth remembering.'),
   meta('property', 'og:description', 'Your photo + AI = your AI Moment. Nueva red social, ¡nuevos Momentos IA combinados para recordar!'),
   meta('property', 'og:url', `${SITE}/`),
   meta('property', 'og:image', `${SITE}/wepawao-share.jpg`),
