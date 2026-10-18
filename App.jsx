@@ -221,6 +221,7 @@ const I18N = {
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
     joinOrSignIn: 'Join or sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
+    googleBtn: 'Continue with Google', googleBusy: 'Opening Google…', googleBad: 'Google sign-in is not available right now. Use the email code below.', orEmail: 'or use your email',
     emailLink: 'Email me a code', codePh: 'Code from the email', codeBtn: 'Sign in', checking: 'Checking…', codeBad: 'That code is not right or has expired. Check it, or tap "Send it again".', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in code to',
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
@@ -545,6 +546,7 @@ const I18N = {
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
     joinOrSignIn: 'Únete o inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
+    googleBtn: 'Continuar con Google', googleBusy: 'Abriendo Google…', googleBad: 'Entrar con Google no está disponible ahora. Usa el código por correo abajo.', orEmail: 'o usa tu correo',
     emailLink: 'Envíame un código', codePh: 'Código del correo', codeBtn: 'Entrar', checking: 'Verificando…', codeBad: 'Ese código no es correcto o ya expiró. Revísalo o toca "Enviarlo otra vez".', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un código de acceso a',
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
@@ -957,6 +959,18 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
     setSentTo(email.trim().toLowerCase()); setCode(''); setWait(60)
   }
 
+  // Google: one or two taps, no code. Brings the member back here signed in.
+  const [googleBusy, setGoogleBusy] = useState(false)
+  async function google() {
+    if (googleBusy) return
+    setGoogleBusy(true); setMsg('')
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/?lang=${lang}`, queryParams: { prompt: 'select_account' } },
+    })
+    if (error) { setGoogleBusy(false); setMsg(t.googleBad) }
+  }
+
   // The code from the email signs the member in right here, in this same browser.
   const codeRef = useRef(null)
   async function verify(e, given) {
@@ -1019,6 +1033,19 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
     <form onSubmit={submit} className={`${card} space-y-3`}>
       <h2 className="text-xl font-bold">{t.joinOrSignIn}</h2>
       <p className="text-lg font-extrabold text-[#4a3af0]">{t.itsFree}</p>
+      <button type="button" onClick={google} disabled={googleBusy}
+        className="flex w-full items-center justify-center gap-3 rounded-full border-2 border-[#dcdff5] bg-white px-4 py-3 text-base font-bold text-[#14123a] shadow-sm active:scale-[0.99] disabled:opacity-60">
+        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
+          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+          <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+        </svg>
+        {googleBusy ? t.googleBusy : t.googleBtn}
+      </button>
+      <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-stone-400">
+        <span className="h-px flex-1 bg-[#dcdff5]" />{t.orEmail}<span className="h-px flex-1 bg-[#dcdff5]" />
+      </div>
       <p className="text-sm text-stone-600">{t.newHere}</p>
       <input className={field} placeholder={t.yourNameNew} value={name} onChange={(e) => setName(e.target.value)} />
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -4174,7 +4201,15 @@ export default function App() {
     if (ref && UUID_RE.test(ref)) { try { localStorage.setItem('wao_ref', ref) } catch { /* ignore */ } }
   }, [])
   // Once signed in, the remembered sharer has done its job (it only counts when a new member joins).
-  useEffect(() => { if (me) { try { localStorage.removeItem('wao_ref'); localStorage.setItem('wao_member', '1') } catch { /* ignore */ } } }, [me])
+  // Google sign-in cannot carry the sharer along like the email code does, so a brand-new member
+  // claims it here once (the database ignores it for anyone who joined earlier or already has one).
+  useEffect(() => {
+    if (!me) return
+    let claim = null
+    try { claim = localStorage.getItem('wao_invite') || localStorage.getItem('wao_ref') } catch { /* ignore */ }
+    if (claim && UUID_RE.test(claim) && claim !== me) supabase.rpc('claim_referral', { p_ref: claim }).then(() => {}, () => {})
+    try { localStorage.removeItem('wao_ref'); localStorage.setItem('wao_member', '1') } catch { /* ignore */ }
+  }, [me])
   useEffect(() => {
     const fromLink = new URLSearchParams(window.location.search).get('invite')
     if (fromLink && UUID_RE.test(fromLink)) {
