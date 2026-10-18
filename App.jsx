@@ -86,7 +86,7 @@ const I18N = {
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: ['Start my network', 'or open my page'],
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
-    invitedBy: (n) => `${n} invited you to Wepawao! Join below and you will be connected.`,
+    invitedBy: (n) => `${n} invited you to Wepawao!`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
     requestsTitle: 'Contact requests', accept: 'Accept', decline: 'Decline',
     myContacts: 'My contacts', noContacts: 'No contacts yet. Share your invite link to start!',
@@ -410,7 +410,7 @@ const I18N = {
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: ['Empezar mi red', 'o abrir mi página'],
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
-    invitedBy: (n) => `${n} te invitó a Wepawao. Únete abajo y quedarán conectados.`,
+    invitedBy: (n) => `${n} te invitó a Wepawao.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
     requestsTitle: 'Solicitudes de contacto', accept: 'Aceptar', decline: 'Rechazar',
     myContacts: 'Mis contactos', noContacts: 'Aún no tienes contactos. ¡Comparte tu enlace de invitación para empezar!',
@@ -904,7 +904,7 @@ function LangToggle({ lang, setLang }) {
 }
 
 // ---------- Sign in ----------
-function SignIn({ startWithPassword = false }) {
+function SignIn({ startWithPassword = false, allowPassword = false }) {
   const { t, lang } = useLang()
   const [email, setEmailRaw] = useState(() => { try { return localStorage.getItem('wao_signin_email') || '' } catch { return '' } })
   const setEmail = (v) => { setEmailRaw(v); try { localStorage.setItem('wao_signin_email', v) } catch { /* ignore */ } }
@@ -1024,7 +1024,8 @@ function SignIn({ startWithPassword = false }) {
       <input className={field} type="email" required placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} />
       <button className={primary} disabled={sending}>{sending ? t.sending : t.emailLink}</button>
       {msg && <p className="text-sm text-stone-600">{msg}</p>}
-      <div className="space-y-2 border-t border-[#dcdff5] pt-3">
+      {/* Password sign-in only for returning members (home-screen app, or this browser used before). New visitors only see the email code. */}
+      {(allowPassword || pwOpen) && <div className="space-y-2 border-t border-[#dcdff5] pt-3">
         {!pwOpen ? (
           <button type="button" className="text-sm font-bold text-[#4a3af0] underline" onClick={() => setPwOpen(true)}>{t.pwOpen}</button>
         ) : (<>
@@ -1034,7 +1035,7 @@ function SignIn({ startWithPassword = false }) {
           <button type="button" className={primary} onClick={signInPw}>{t.pwSignIn}</button>
           <button type="button" className="block text-sm font-bold text-[#4a3af0] underline" onClick={forgot}>{t.forgot}</button>
         </>)}
-      </div>
+      </div>}
     </form>
   )
 }
@@ -4234,7 +4235,7 @@ export default function App() {
           {showSignIn && !me && inviter && (
             <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
           )}
-          {showSignIn && !me && <SignIn startWithPassword={pwFirst} />}
+          {showSignIn && !me && <SignIn startWithPassword={pwFirst} allowPassword={returning} />}
           {resetting && me && <PasswordReset onDone={() => {
             setResetting(false)
             const url = new URL(window.location.href); url.searchParams.delete('reset')
