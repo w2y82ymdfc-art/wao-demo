@@ -912,8 +912,11 @@ const IN_APP_BROWSER = typeof navigator !== 'undefined' && /FBAN|FBAV|FB_IAB|FBI
 // Coming back from a Google attempt that did not work: go straight to the email code.
 const GOOGLE_RETURN_ERROR = typeof window !== 'undefined' && /[?#&]error(_code)?=/.test(window.location.search + window.location.hash)
 let googleCheck = null
+// Turn back to true once the Google Client ID and Secret are saved in Supabase (Auth → Providers → Google).
+// Supabase reports Google as "on" even when the secret is missing, so this switch keeps the button hidden until then.
+const GOOGLE_SIGNIN_READY = false
 function googleAvailable() {
-  if (IN_APP_BROWSER) return Promise.resolve(false)
+  if (!GOOGLE_SIGNIN_READY || IN_APP_BROWSER) return Promise.resolve(false)
   googleCheck = googleCheck || fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY } })
     .then((r) => (r.ok ? r.json() : null)).then((d) => !!d?.external?.google).catch(() => false)
   return googleCheck
