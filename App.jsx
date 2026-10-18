@@ -2701,6 +2701,16 @@ function TierDot({ i }) {
 // Members: their network, then each tier with its number counting up, then the whole community.
 // Visitors: the three tiers, how a network grows, then the whole community.
 const SLIDE_MS = 4500
+// How long a visitor sees a shared moment before the page moves down to the sign-in box (about both slides).
+const SHARED_POST_VIEW_MS = 8000
+// Scrolls to the sign-in box wherever it is on the page (top, or under a shared moment).
+function scrollToSignIn() {
+  requestAnimationFrame(() => {
+    const el = document.getElementById('wp-signin')
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
+  })
+}
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 function useCommunityStats(refreshKey) {
@@ -4011,7 +4021,7 @@ export default function App() {
   const fromHistory = useRef(false)
   useEffect(() => {
     const onPop = (e) => { fromHistory.current = true; setTab(e.state?.wpTab || 'everyone') }
-    const onJoinAsk = () => { setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+    const onJoinAsk = () => { setShowSignIn(true); scrollToSignIn() }
     window.addEventListener('wp-signin', onJoinAsk)
     window.addEventListener('popstate', onPop)
     if (!window.history.state?.wpTab) window.history.replaceState({ ...(window.history.state || {}), wpTab: 'everyone' }, '')
@@ -4047,7 +4057,7 @@ export default function App() {
   useEffect(() => {
     const onMakeMine = () => {
       if (me) { setTab('everyone'); openShare() }
-      else { setShareAfterSignIn(true); setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+      else { setShareAfterSignIn(true); setShowSignIn(true); scrollToSignIn() }
     }
     window.addEventListener('wp-make-mine', onMakeMine)
     return () => window.removeEventListener('wp-make-mine', onMakeMine)
@@ -4192,6 +4202,21 @@ export default function App() {
       setInviter(null)
     })
   }, [me, ready, inviter])
+  // A visitor opening a shared moment sees the moment first; the sign-in box sits right under it,
+  // and the page glides down to it after a few seconds (unless they already scrolled on their own).
+  const signInBelowPost = !me && !!sharedId && tab === 'everyone'
+  const signInBox = showSignIn && !me && (
+    <div id="wp-signin" className="scroll-mt-20 space-y-4">
+      {inviter && <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>}
+      <SignIn startWithPassword={pwFirst} allowPassword={returning} />
+    </div>
+  )
+  useEffect(() => {
+    if (!authChecked || me || !sharedId) return
+    setShowSignIn(true)
+    const timer = setTimeout(() => { if (window.scrollY < 40) scrollToSignIn() }, SHARED_POST_VIEW_MS)
+    return () => clearTimeout(timer)
+  }, [authChecked, me, sharedId])
   function closeShared() {
     setSharedId(null)
     const url = new URL(window.location.href)
@@ -4222,20 +4247,17 @@ export default function App() {
                   {t.profile}
                 </button>
               )
-              : <button className={`${ghostSm} inline-flex items-center gap-1.5`} onClick={() => { setAfterSignIn(true); setShowSignIn((v) => !v); window.scrollTo(0, 0) }}>
+              : <button className={`${ghostSm} inline-flex items-center gap-1.5`} onClick={() => { setAfterSignIn(true); setShowSignIn((v) => !v); scrollToSignIn() }}>
                   {t.signIn}<span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-xs font-extrabold text-[#14123a]">{t.free}</span>
                 </button>}
           </div>
           </div>
         </header>
-        <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setAfterSignIn(true); setShowSignIn(true); window.scrollTo(0, 0) }} />
+        <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setAfterSignIn(true); setShowSignIn(true); scrollToSignIn() }} />
 
         <div className="mx-auto max-w-2xl px-4 py-4 pb-20 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
         <main className="min-w-0 space-y-4">
-          {showSignIn && !me && inviter && (
-            <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>
-          )}
-          {showSignIn && !me && <SignIn startWithPassword={pwFirst} allowPassword={returning} />}
+          {!signInBelowPost && signInBox}
           {resetting && me && <PasswordReset onDone={() => {
             setResetting(false)
             const url = new URL(window.location.href); url.searchParams.delete('reset')
@@ -4246,6 +4268,7 @@ export default function App() {
           {sharedId && tab === 'everyone' && (
             <SharedPost key={`${sharedId}-${refreshKey}`} id={sharedId} me={me} onClose={closeShared} onChanged={posted} />
           )}
+          {signInBelowPost && signInBox}
           {tab === 'everyone' && (
             <>
               {!wide && <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
