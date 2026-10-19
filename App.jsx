@@ -4301,6 +4301,9 @@ export default function App() {
   return (
     <LangCtx.Provider value={{ lang, t, setLang }}>
       <div className="min-h-screen bg-[#eef0fc] text-[#14123a]">
+        {/* A solid strip behind the iPhone clock and battery, so the page never scrolls under them. */}
+        <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[60] bg-white"
+          style={{ height: 'env(safe-area-inset-top, 0px)' }} />
         {/* Keeps the logo and buttons below the iPhone status bar clock in the home-screen app. */}
         <header className="border-b-2 border-[#dcdff5] bg-white px-4 py-3"
           style={{
