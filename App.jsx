@@ -1259,11 +1259,15 @@ function VisibilityPicker({ value, onChange }) {
           </button>
         ))}
       </div>
+      {/* Folded to one line so the Post button stays within reach; tap to read the rules. */}
       {value === 'public' && (
-        <div className="rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm">
-          <b>{t.publicRulesTitle}</b>
+        <details className="group rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 font-bold [&::-webkit-details-marker]:hidden">
+            <span>{t.publicRulesTitle}</span>
+            <span aria-hidden="true" className="text-[#4a3af0] transition-transform group-open:rotate-90">›</span>
+          </summary>
           <ul className="mt-1 list-disc pl-5 text-stone-700">{t.publicRules.map((r) => <li key={r}>{r}</li>)}</ul>
-        </div>
+        </details>
       )}
     </div>
   )
