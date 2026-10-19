@@ -3849,7 +3849,19 @@ function HeroShow() {
   const [i, setI] = useState(0)
   const [pos, setPos] = useState(100)
   const go = useCallback((n) => { setPos(100); setI(n) }, [])
+  // The wipe redraws the pictures on every frame. Run it only while the slideshow is on screen,
+  // so the phone isn't busy repainting it while the member is reading further down the page.
+  const boxRef = useRef(null)
+  const [onScreen, setOnScreen] = useState(true)
   useEffect(() => {
+    const el = boxRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0.15 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  useEffect(() => {
+    if (!onScreen) return
     const next = () => go((i + 1) % HERO_SCENES.length)
     if (reducedMotion()) { setPos(0); const id = setTimeout(next, 6000); return () => clearTimeout(id) }
     let raf, timer, start
@@ -3864,13 +3876,13 @@ function HeroShow() {
     }
     raf = requestAnimationFrame(step)
     return () => { cancelAnimationFrame(raf); clearTimeout(timer) }
-  }, [i, go])
+  }, [i, go, onScreen])
   return (
     <div>
       <div className="px-5 pb-3">
         <p key={i} className="wp-fade-in min-h-[1.5rem] font-bold text-white/90">{t.hero.scenes[i]}</p>
       </div>
-      <div className="relative aspect-square w-full select-none overflow-hidden bg-[#14123a]">
+      <div ref={boxRef} className="relative aspect-square w-full select-none overflow-hidden bg-[#14123a]">
         {HERO_SCENES.map(([before, after], k) => {
           const p = k === i ? pos : 0
           return (
@@ -4633,7 +4645,7 @@ export default function App() {
             </div>
           )}
 
-          <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6 !border-[#14123a] !bg-[#14123a] wp-tabs-pulse`}>
+          <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6 !border-[#14123a] !bg-[#14123a]`}>
             {TABS.map((k) => (
               <button key={k} onClick={() => { if (k === 'mine' && openMineOrSignIn()) return; setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
                 className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#f6d155] text-[#14123a]' : 'text-white'}`}>
