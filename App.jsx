@@ -4562,10 +4562,10 @@ export default function App() {
             </div>
           )}
 
-          <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6 !border-black !bg-black`}>
+          <nav ref={tabsRef} className={`${card} scroll-mt-3 grid grid-cols-3 gap-1 !p-3 lg:grid-cols-6 !border-[#14123a] !bg-[#14123a]`}>
             {TABS.map((k) => (
               <button key={k} onClick={() => { if (k === 'mine' && openMineOrSignIn()) return; setTab(k); setTimeout(() => tabsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60) }}
-                className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#ffd400] text-black' : 'text-white'}`}>
+                className={`rounded-2xl px-1 py-3 text-base font-bold ${tab === k ? 'bg-[#f6d155] text-[#14123a]' : 'text-white'}`}>
                 {t.tabs[k]}
               </button>
             ))}
