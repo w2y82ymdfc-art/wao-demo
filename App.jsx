@@ -732,6 +732,13 @@ const chip = 'rounded-full bg-[#e8e9fb] px-2.5 py-0.5 text-xs text-[#14123a]'
 // ---------- Helpers ----------
 const photoUrl = (path) => supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl
 const when = (iso, lang) => new Date(iso).toLocaleString(loc(lang), { dateStyle: 'medium', timeStyle: 'short' })
+// Short date for post headers: leaves out the year when it is this year ("19 oct, 4:57 a. m.").
+const whenShort = (iso, lang) => {
+  const d = new Date(iso)
+  const opts = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }
+  if (d.getFullYear() !== new Date().getFullYear()) opts.year = 'numeric'
+  return d.toLocaleString(loc(lang), opts)
+}
 const money = (c, free) => (c == null ? null : c === 0 ? free : `$${(c / 100).toFixed(2)}`)
 
 async function resizeImage(file, maxW = 1600, quality = 0.85) {
@@ -2225,14 +2232,17 @@ function PostCard({ p, me, onChanged }) {
     <article className={`${card} ${inactive ? 'opacity-70' : ''}`}>
       <div className="flex items-center gap-3">
         <Avatar url={p.author_avatar_url} name={p.author_display_name} />
+        {/* Name, then date and labels on one compact line that wraps only if needed. */}
         <div className="min-w-0 flex-1">
           <div className="truncate"><b>{p.author_display_name}</b> <span className="text-sm text-stone-500">@{p.author_username}</span></div>
-          <time className="text-xs text-stone-500">{when(p.created_at, lang)}{p.edited_at && ` · ${t.edited}`}</time>
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <time className="whitespace-nowrap text-xs text-stone-500">{whenShort(p.created_at, lang)}{p.edited_at && ` · ${t.edited}`}</time>
+            {p.ai_moment && <span className={`${chip} shrink-0 !bg-[#14123a] !text-[#f6d155]`}>{t.ai.badge}</span>}
+            {moment && mine && (
+              <span className={`${chip} shrink-0 ${isPublic ? '!bg-emerald-100' : ''}`}>{isPublic ? t.visPublic : t.visContacts}</span>
+            )}
+          </div>
         </div>
-        {p.ai_moment && <span className={`${chip} shrink-0 !bg-[#14123a] !text-[#f6d155]`}>{t.ai.badge}</span>}
-        {moment && mine && (
-          <span className={`${chip} shrink-0 ${isPublic ? '!bg-emerald-100' : ''}`}>{isPublic ? t.visPublic : t.visContacts}</span>
-        )}
       </div>
       {moment && mine && p.visibility === 'public' && p.public_block_reason && !editing && (
         <p className="mt-3 rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm"><b>{t.notPublic}</b> {t.blocked[p.public_block_reason]}.</p>
