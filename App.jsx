@@ -990,7 +990,7 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
     setGoogleBusy(true); setMsg('')
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/?lang=${lang}`, queryParams: { prompt: 'select_account' } },
+      options: { redirectTo: `${window.location.origin}/?lang=${lang}` },
     })
     if (error) { setGoogleBusy(false); setMsg(t.googleBad) }
   }
