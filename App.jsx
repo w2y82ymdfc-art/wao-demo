@@ -2744,7 +2744,18 @@ function useHomeScreenHandoff(me, lang) {
     async function prepare() {
       try {
         const saved = JSON.parse(localStorage.getItem(cacheKey) || 'null')
-        if (saved?.code && Date.now() - saved.at < HANDOFF_MAX_AGE_MS) { apply(saved); return }
+        if (saved?.code && Date.now() - saved.at < HANDOFF_MAX_AGE_MS) {
+          // A code works once. If the member signed in anywhere after this code was made
+          // (usually the icon using it), it is spent: get a fresh one so a re-added icon still works.
+          let spent = false
+          try {
+            const { data: u } = await supabase.auth.getUser()
+            const last = Date.parse(u?.user?.last_sign_in_at || '')
+            spent = Number.isFinite(last) && last > saved.at
+          } catch { /* keep the saved code */ }
+          if (!spent) { apply(saved); return }
+          try { localStorage.removeItem(cacheKey) } catch { /* ignore */ }
+        }
       } catch { /* ignore */ }
       try {
         const { data } = await supabase.auth.getSession()
