@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   const target = UUID_RE.test(id) ? `${site}/?vip=${id}&lang=${lang}` : `${site}/?lang=${lang}`
   let title = es ? 'Clientes VIP · Wepawao' : 'VIP Customers · Wepawao'
   const desc = es
-    ? 'Para nosotros, cada cliente es VIP. Únete gratis y te avisamos cuando haya una ocasión especial.'
-    : "For us, every customer is VIP. Join free and we'll let you know when a special occasion comes."
+    ? 'Para nosotros, cada cliente es VIP. Únete gratis y te enviaremos un mensaje cuando haya una ocasión especial.'
+    : "For us, every customer is VIP. Join free and we will send you a message when a special occasion comes."
   let image = `${site}/wepawao-share.jpg`
   let big = true
 
