@@ -1556,7 +1556,7 @@ function AiGuide() {
   return (
     <div className="space-y-3 rounded-3xl bg-[#14123a] p-4 text-white">
       <div className="flex items-center gap-3">
-        <WaoFaces size={30} />
+        <WepawaoFaces size={30} />
       </div>
       <h3 className="text-lg font-extrabold text-[#f6d155]">{t.ai.guideTitle}</h3>
       <ol className="space-y-2 text-sm">
@@ -1619,7 +1619,7 @@ function AiStartBubble({ onClose }) {
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
       <div className="max-h-[90vh] w-full max-w-md space-y-3 overflow-y-auto rounded-3xl bg-[#14123a] p-5 text-white shadow-2xl"
         onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-        <WaoFaces size={30} />
+        <WepawaoFaces size={30} />
         <h3 className="text-xl font-extrabold text-[#f6d155]">{t.ai.bubbleTitle}</h3>
         <ol className="space-y-2">
           {t.ai.bubbleSteps.map((s, i) => (
