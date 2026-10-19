@@ -45,7 +45,7 @@ if (typeof document !== 'undefined') {
 // ---------- Languages (EN / ES) ----------
 const I18N = {
   en: {
-    signIn: 'Join or sign in', profile: 'My page', signOut: 'Sign out', myPage: { title: 'My page', network: 'My network dashboard', posts: 'My posts', edit: 'Edit my profile' },
+    signIn: 'Join', profile: 'My page', signOut: 'Sign out', myPage: { title: 'My page', network: 'My network dashboard', posts: 'My posts', edit: 'Edit my profile' },
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
     tr: { btn: 'Translate', back: 'See original', busy: 'Translating…', note: 'Translated automatically', fail: 'Could not translate right now.', google: 'Open in Google Translate' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wepawao',
@@ -227,7 +227,7 @@ const I18N = {
       recordPay: 'Record cleared payment', amount: 'Amount in dollars', save: 'Save', cancel: 'Cancel',
       payNote: 'Only record money that has already cleared into the Wepawao account.',
     },
-    joinOrSignIn: 'Join or sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
+    joinOrSignIn: 'Sign in', itsFree: 'It’s free', yourNameNew: 'Your name (new members)', email: 'Email',
     googleBtn: 'Continue with Google', googleBusy: 'Opening Google…', googleBad: 'Google sign-in is not available right now. Use the email code below.', orEmail: 'or use your email', useEmail: 'No Google account? Use your email instead',
     emailLink: 'Email me a code', codePh: 'Code from the email', codeBtn: 'Sign in', checking: 'Checking…', codeBad: 'That code is not right or has expired. Check it, or tap "Send it again".', checkEmail: 'Check your email for a sign-in link.', sending: 'Sending…',
     sentTitle: 'Check your email ✉️', sentTo: 'We sent a sign-in code to',
@@ -382,7 +382,7 @@ const I18N = {
     },
   },
   es: {
-    signIn: 'Únete o entra', profile: 'Mi página', signOut: 'Cerrar sesión', myPage: { title: 'Mi página', network: 'Panel de mi red', posts: 'Mis publicaciones', edit: 'Editar mi perfil' },
+    signIn: 'Únete', profile: 'Mi página', signOut: 'Cerrar sesión', myPage: { title: 'Mi página', network: 'Panel de mi red', posts: 'Mis publicaciones', edit: 'Editar mi perfil' },
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
     tr: { btn: 'Traducir', back: 'Ver original', busy: 'Traduciendo…', note: 'Traducido automáticamente', fail: 'No se pudo traducir ahora.', google: 'Abrir en Google Traductor' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wepawao',
@@ -564,7 +564,7 @@ const I18N = {
       recordPay: 'Registrar pago acreditado', amount: 'Cantidad en dólares', save: 'Guardar', cancel: 'Cancelar',
       payNote: 'Registra solo dinero que ya se acreditó en la cuenta de Wepawao.',
     },
-    joinOrSignIn: 'Únete o inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
+    joinOrSignIn: 'Inicia sesión', itsFree: 'Es gratis', yourNameNew: 'Tu nombre (miembros nuevos)', email: 'Correo electrónico',
     googleBtn: 'Continuar con Google', googleBusy: 'Abriendo Google…', googleBad: 'Entrar con Google no está disponible ahora. Usa el código por correo abajo.', orEmail: 'o usa tu correo', useEmail: '¿No tienes Google? Usa tu correo',
     emailLink: 'Envíame un código', codePh: 'Código del correo', codeBtn: 'Entrar', checking: 'Verificando…', codeBad: 'Ese código no es correcto o ya expiró. Revísalo o toca "Enviarlo otra vez".', checkEmail: 'Revisa tu correo para ver el enlace de acceso.', sending: 'Enviando…',
     sentTitle: 'Revisa tu correo ✉️', sentTo: 'Enviamos un código de acceso a',
