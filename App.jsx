@@ -914,7 +914,7 @@ const GOOGLE_RETURN_ERROR = typeof window !== 'undefined' && /[?#&]error(_code)?
 let googleCheck = null
 // Turn back to true once the Google Client ID and Secret are saved in Supabase (Auth → Providers → Google).
 // Supabase reports Google as "on" even when the secret is missing, so this switch keeps the button hidden until then.
-const GOOGLE_SIGNIN_READY = false
+const GOOGLE_SIGNIN_READY = true
 function googleAvailable() {
   if (!GOOGLE_SIGNIN_READY || IN_APP_BROWSER) return Promise.resolve(false)
   googleCheck = googleCheck || fetch(`${import.meta.env.VITE_SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: import.meta.env.VITE_SUPABASE_ANON_KEY } })
