@@ -1881,7 +1881,16 @@ function guessLang(text) {
   if (es === en) return null
   return es > en ? 'es' : 'en'
 }
-const trCache = new Map()
+// Translations are kept on this phone (up to ~300), so reopening Wepawao doesn't spend the daily allowance again.
+const TR_STORE = 'wao_tr_cache_v1'
+const trCache = new Map((() => { try { return JSON.parse(localStorage.getItem(TR_STORE) || '[]') } catch { return [] } })())
+function saveTr(key, val) {
+  trCache.set(key, val)
+  try {
+    const entries = [...trCache.entries()].slice(-300)
+    localStorage.setItem(TR_STORE, JSON.stringify(entries))
+  } catch { /* storage full or blocked: keep it for this visit only */ }
+}
 function chunks(text, maxBytes = 450) {
   const enc = new TextEncoder()
   const parts = text.split(/(?<=[.!?\n])\s+/)
@@ -1901,14 +1910,15 @@ async function translateText(text, from, to) {
   if (trCache.has(key)) return trCache.get(key)
   const results = []
   for (const c of chunks(text)) {
-    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(c)}&langpair=${from}|${to}`)
+    // A contact email ('de') raises MyMemory's free daily allowance about tenfold.
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(c)}&langpair=${from}|${to}&de=support%40wepawao.com`)
     const j = await r.json()
     const out = j?.responseData?.translatedText
     if (!r.ok || j?.responseStatus !== 200 || !out) throw new Error('translate')
     results.push(out)
   }
   const done = results.join(' ')
-  trCache.set(key, done)
+  saveTr(key, done)
   return done
 }
 
