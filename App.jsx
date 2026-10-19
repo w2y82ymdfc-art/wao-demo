@@ -101,7 +101,11 @@ const I18N = {
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
     homeTipTitle: 'Open Wepawao like an app 📲', homeTipWepa: 'Wepa! Your moment is posted. Want Wepawao on your home screen, so you can come back with one tap?',
-    homeTipStepsIos: ['Open Wepawao in Safari.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
+    homeTipStepsIos: ['Make sure you are in Safari. Opened this from WhatsApp? Tap the compass 🧭 at the bottom right first.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
+    homeTipInApp: 'You opened Wepawao inside another app, where it can\'t be added to your home screen. First open it in your browser:',
+    homeTipStepsInAppIos: ['Tap the menu (⋯) at the top or bottom of the screen.', 'Choose "Open in Safari" (or "Open in external browser").', 'In Safari, tap Share ↑, then "Add to Home Screen".'],
+    homeTipStepsInAppAndroid: ['Tap the menu (⋮ or ⋯) at the top of the screen.', 'Choose "Open in Chrome" (or "Open in browser").', 'In Chrome, tap ⋮, then "Add to Home screen".'],
+    notNow: 'Not now',
     homeTipStepsAndroid: ['Open Wepawao in Chrome.', 'Tap the menu (⋮) at the top right.', 'Tap "Add to Home screen" or "Install app", then "Add".'],
     homeTipAfter: 'Then open Wepawao from its icon and tap "Continue". You\'ll be right in.',
     wbTitle: (n) => (n ? `Welcome back, ${n} 👋` : 'Welcome back 👋'), wbText: 'Tap to continue to Wepawao.', wbBtn: 'Continue', wbBusy: 'One moment…',
@@ -428,7 +432,11 @@ const I18N = {
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
     homeTipTitle: 'Abre Wepawao como una app 📲', homeTipWepa: '¡Wepa! Tu momento ya está publicado. ¿Quieres Wepawao en tu pantalla de inicio para volver con un solo toque?',
-    homeTipStepsIos: ['Abre Wepawao en Safari.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
+    homeTipStepsIos: ['Asegúrate de estar en Safari. ¿Lo abriste desde WhatsApp? Primero toca la brújula 🧭 abajo a la derecha.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
+    homeTipInApp: 'Abriste Wepawao dentro de otra app, y desde ahí no se puede agregar a tu pantalla de inicio. Primero ábrelo en tu navegador:',
+    homeTipStepsInAppIos: ['Toca el menú (⋯) arriba o abajo en la pantalla.', 'Escoge "Abrir en Safari" (o "Abrir en navegador externo").', 'En Safari, toca Compartir ↑ y luego "Agregar a pantalla de inicio".'],
+    homeTipStepsInAppAndroid: ['Toca el menú (⋮ o ⋯) arriba en la pantalla.', 'Escoge "Abrir en Chrome" (o "Abrir en el navegador").', 'En Chrome, toca ⋮ y luego "Agregar a la pantalla principal".'],
+    notNow: 'Ahora no',
     homeTipStepsAndroid: ['Abre Wepawao en Chrome.', 'Toca el menú (⋮) arriba a la derecha.', 'Toca "Agregar a la pantalla principal" o "Instalar app" y luego "Agregar".'],
     homeTipAfter: 'Luego abre Wepawao desde su ícono y toca "Continuar". Entrarás directo.',
     wbTitle: (n) => (n ? `¡Hola de nuevo, ${n}! 👋` : '¡Hola de nuevo! 👋'), wbText: 'Toca para continuar a Wepawao.', wbBtn: 'Continuar', wbBusy: 'Un momento…',
@@ -2685,6 +2693,16 @@ function SharedPost({ id, me, onClose, onChanged }) {
 // Offered only right after a member posts a moment (a happy moment, not an interruption), until they tap "Got it".
 const isStandalone = () => window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
 const isIphone = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+// Facebook, Instagram, Messenger, TikTok, LINE and similar open links in their own built-in browser,
+// which has no "Add to Home Screen". (WhatsApp on iPhone opens a Safari view, handled in the iPhone steps.)
+const isInAppBrowser = () => /FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|musical_ly|TikTok|BytedanceWebview|Line\/|Snapchat|Pinterest|; wv\)/i.test(navigator.userAgent)
+
+// Home-screen tip: shown after the member's first moment. "Not now" brings it back once, after their
+// second moment; a second "Not now" (or adding the icon) ends it for good.
+// Stored value: '' = never asked, 'later' = said Not now once, 'done' = finished.
+const HOME_TIP_KEY = 'wao_home_tip_v3'
+const homeTipState = () => { try { return localStorage.getItem(HOME_TIP_KEY) || '' } catch { return '' } }
+const setHomeTipState = (v) => { try { localStorage.setItem(HOME_TIP_KEY, v) } catch { /* ignore */ } }
 
 // iPhone handoff: the home-screen icon keeps its own sign-in, apart from Safari.
 // While a member is signed in on iPhone Safari, keep a one-time sign-in code for them in the page address
@@ -2695,7 +2713,7 @@ const isIphone = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigat
 const HANDOFF_MAX_AGE_MS = 55 * 60 * 1000
 function useHomeScreenHandoff(me, lang) {
   useEffect(() => {
-    if (!me || !isIphone() || isStandalone()) return
+    if (!me || !isIphone() || isStandalone() || isInAppBrowser()) return
     let live = true
     const cacheKey = `wao_handoff_${me}`
     function apply({ code, first }) {
@@ -2749,9 +2767,7 @@ function useHomeScreenHandoff(me, lang) {
 function HomeScreenTip({ show }) {
   const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
-  const [hidden, setHidden] = useState(() => {
-    try { return localStorage.getItem('wao_home_tip_hidden_v2') === '1' } catch { return false }
-  })
+  const [hidden, setHidden] = useState(false)
   const standalone = window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
   const android = /android/i.test(navigator.userAgent)
@@ -2760,10 +2776,13 @@ function HomeScreenTip({ show }) {
     window.addEventListener('beforeinstallprompt', onPrompt)
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
-  const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
+  const done = () => { setHomeTipState('done'); setHidden(true) }
+  // First "Not now": ask once more after the second moment. Second "Not now": stop asking.
+  const notNow = () => { setHomeTipState(homeTipState() === 'later' ? 'done' : 'later'); setHidden(true) }
+  const inApp = isInAppBrowser()
   // Already opened from the home screen, dismissed, or a computer: nothing to show.
   if (!show || hidden || standalone || (!ios && !android && !installEvt)) return null
-  const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
+  const steps = inApp ? (ios ? t.homeTipStepsInAppIos : t.homeTipStepsInAppAndroid) : (ios ? t.homeTipStepsIos : t.homeTipStepsAndroid)
   return (
     <div className={`${card} space-y-3`}>
       <div className="flex items-center gap-3">
@@ -2771,8 +2790,9 @@ function HomeScreenTip({ show }) {
         <h2 className="flex-1 text-xl font-extrabold">{t.homeTipTitle}</h2>
       </div>
       <p className="font-semibold text-[#14123a]">{t.homeTipWepa}</p>
-      {installEvt ? (
-        <button className={primary} onClick={async () => { installEvt.prompt(); await installEvt.userChoice; hide() }}>{t.install}</button>
+      {inApp && <p className="text-stone-700">{t.homeTipInApp}</p>}
+      {installEvt && !inApp ? (
+        <button className={primary} onClick={async () => { installEvt.prompt(); const c = await installEvt.userChoice; if (c?.outcome === 'accepted') done(); else notNow() }}>{t.install}</button>
       ) : (
         <ol className="space-y-2 text-stone-700">
           {steps.map((step, i) => (
@@ -2784,7 +2804,7 @@ function HomeScreenTip({ show }) {
         </ol>
       )}
       <p className="text-sm text-stone-600">{t.homeTipAfter}</p>
-      <button className="text-sm font-bold text-[#4a3af0] underline" onClick={hide}>{t.gotIt}</button>
+      <button className="text-sm font-bold text-[#4a3af0] underline" onClick={notNow}>{t.notNow}</button>
     </div>
   )
 }
@@ -4297,12 +4317,17 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
-  const [homeTip, setHomeTip] = useState(false)
-  // The home-screen tip appears once the member has posted their second moment.
+  // Counts each time the tip is offered, so a tip closed with "Not now" can show again after the next moment.
+  const [homeTip, setHomeTip] = useState(0)
+  // The home-screen tip appears after the member's first moment, and once more after the second
+  // if they tapped "Not now" (see HOME_TIP_KEY).
   const offerHomeTip = useCallback(async () => {
     if (!me) return
+    const state = homeTipState()
+    if (state === 'done') return
     const { count, error } = await supabase.from('posts').select('id', { count: 'exact', head: true }).eq('user_id', me)
-    if (!error && (count || 0) >= 2) setHomeTip(true)
+    if (error) return
+    if ((count || 0) >= (state === 'later' ? 2 : 1)) setHomeTip((n) => n + 1)
   }, [me])
   useNetworkWatcher(me, (ev) => { setNetEvent(ev); posted() })
 
@@ -4389,7 +4414,7 @@ export default function App() {
     try {
       // The member already saw the welcome in Safari; don't replay it inside the icon.
       localStorage.setItem('wao_welcome_seen', '1')
-      localStorage.setItem('wao_home_tip_hidden_v2', '1')
+      localStorage.setItem(HOME_TIP_KEY, 'done')
       localStorage.setItem('wao_handoff_used', handoff.code)
     } catch { /* ignore */ }
     let { error } = await supabase.auth.verifyOtp({ token_hash: handoff.code, type: 'email' })
@@ -4499,7 +4524,7 @@ export default function App() {
               <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
             </div>
           )}
-          {me && <HomeScreenTip show={homeTip} />}
+          {me && homeTip > 0 && <HomeScreenTip key={homeTip} show />}
           {me && tab === 'mine' && (
             <MomentComposer userId={me}
               onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); offerHomeTip(); posted() }} />
