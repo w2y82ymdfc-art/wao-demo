@@ -279,6 +279,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
+    aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
     promiseItems: [
       ['No black boxes.', "Your feed is newest first. We don't rank, score, or reorder it."],
@@ -614,6 +615,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
+    aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
       ['Sin cajas negras.', 'Tu feed va de lo más reciente a lo más antiguo. No clasificamos, puntuamos ni reordenamos nada.'],
@@ -1648,6 +1650,7 @@ function AiStartBubble({ onClose }) {
             <p className="mt-1 text-sm text-white/80">{prompt}</p>
           </div>
         ))}
+        <button type="button" onClick={() => { onClose(); openAiFaq() }} className="block w-full text-center text-sm font-bold text-white/80 underline">{t.aiFaq.link}</button>
         <button type="button" onClick={onClose} className="w-full rounded-full bg-[#f6d155] px-4 py-3 text-base font-extrabold text-[#14123a]">{t.ai.bubbleOk}</button>
       </div>
     </div>
@@ -3948,6 +3951,28 @@ function HeroShow() {
   )
 }
 
+// ---------- Questions about AI (in Our promise; linked from the caricature pop-up and the hero) ----------
+const openAiFaq = () => window.dispatchEvent(new Event('wp-ai-faq'))
+function AiFaq() {
+  const { t } = useLang()
+  const f = t.aiFaq
+  return (
+    <div id="wp-ai-faq" className={`${card} scroll-mt-4 !bg-[#14123a] text-white`}>
+      <h2 className="text-xl font-extrabold text-[#f6d155]">{f.title}</h2>
+      <p className="mb-2 text-sm text-white/70">{f.note}</p>
+      {f.items.map(([q, a]) => (
+        <details key={q} className="group border-t border-white/15 py-3">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold [&::-webkit-details-marker]:hidden">
+            <span>{q}</span>
+            <span aria-hidden="true" className="text-[#f6d155] transition-transform group-open:rotate-90">›</span>
+          </summary>
+          <p className="mt-2 text-white/85">{a}</p>
+        </details>
+      ))}
+    </div>
+  )
+}
+
 // ---------- Hero (top of the Everyone tab) ----------
 function Hero({ signedIn, open, onShare, onSignIn }) {
   const { t } = useLang()
@@ -3963,6 +3988,7 @@ function Hero({ signedIn, open, onShare, onSignIn }) {
         <button className="w-full rounded-full bg-[#f6d155] px-6 py-3.5 text-lg font-black text-[#14123a]" onClick={signedIn ? onShare : onSignIn}>
           {signedIn ? (open ? t.hero.hide : t.hero.share) : t.signInToShare}
         </button>
+        <button type="button" onClick={openAiFaq} className="mt-2 block w-full text-center text-sm font-bold text-white/80 underline">{t.aiFaq.link}</button>
       </div>
     </section>
   )
@@ -4230,6 +4256,7 @@ function OurPromise({ onReplay }) {
           <p key={title} className="mb-3 flex gap-3"><b className="text-[#4a3af0]">{i + 1}.</b><span><b>{title}</b> {desc}</span></p>
         ))}
       </div>
+      <AiFaq />
       {SHOW_PRICING ? (
         <div className={card}>
           <h2 className="mb-3 text-xl font-bold">{t.pricingTitle}</h2>
@@ -4383,6 +4410,15 @@ export default function App() {
     window.addEventListener('wp-make-mine', onMakeMine)
     return () => window.removeEventListener('wp-make-mine', onMakeMine)
   }, [me, openShare])
+  // "Questions about AI?" links: open Our promise and bring the answers into view.
+  useEffect(() => {
+    const onFaq = () => {
+      setTab('promise')
+      setTimeout(() => document.getElementById('wp-ai-faq')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120)
+    }
+    window.addEventListener('wp-ai-faq', onFaq)
+    return () => window.removeEventListener('wp-ai-faq', onFaq)
+  }, [])
   useEffect(() => {
     if (!me) { setIsAdmin(false); return }
     supabase.rpc('is_admin').then(({ data, error }) => setIsAdmin(!error && data === true))
