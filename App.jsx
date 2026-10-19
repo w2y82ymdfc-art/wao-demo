@@ -3961,7 +3961,8 @@ const fill = (str, n) => str.replace('{n}', n)
 // The business's logo, or a gold tile with a fork-and-knife when it has none.
 function VipLogo({ path, size = 56 }) {
   const box = { width: size, height: size }
-  if (path) return <img src={photoUrl(path)} alt="" style={box} className="shrink-0 rounded-2xl bg-white object-cover" />
+  // Logos prepared by the Wepawao Team ship with the site ("/vip-….jpg"); owners' uploads live in storage.
+  if (path) return <img src={path.startsWith('/') ? path : photoUrl(path)} alt="" style={box} className="shrink-0 rounded-2xl bg-white object-contain" />
   return (
     <span style={box} className="grid shrink-0 place-items-center rounded-2xl bg-[#f6d155] text-[#14123a]">
       <svg width={size / 2} height={size / 2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2" /><path d="M6 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z" /><path d="M18 15v7" /></svg>
