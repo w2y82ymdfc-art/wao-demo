@@ -52,6 +52,7 @@ const I18N = {
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
     visContacts: 'Contacts only', visPublic: 'Public',
+    visTitle: 'Who can see your posts?',
     visContactsSub: 'Only your contacts see it', visPublicSub: 'Everyone, if it follows the rules',
     publicRulesTitle: 'Rules for public moments',
     publicRules: ['No prices or dollar amounts.', 'No web links or phone numbers.', 'No business ads: recommending a place you visited is welcome, a business promoting itself is a paid ad.', 'Up to 3 public moments a day.', 'Hidden from Everyone if 3 members report it.'],
@@ -386,6 +387,7 @@ const I18N = {
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
     visContacts: 'Solo contactos', visPublic: 'Público',
+    visTitle: '¿Quién puede ver tus publicaciones?',
     visContactsSub: 'Solo tus contactos lo ven', visPublicSub: 'Todos, si cumple las reglas',
     publicRulesTitle: 'Reglas para momentos públicos',
     publicRules: ['Sin precios ni cantidades de dinero.', 'Sin enlaces web ni números de teléfono.', 'Sin anuncios de negocios: recomendar un lugar que visitaste es bienvenido, un negocio promocionándose es un anuncio pagado.', 'Hasta 3 momentos públicos al día.', 'Se oculta de Todos si 3 miembros lo reportan.'],
@@ -1272,6 +1274,7 @@ function VisibilityPicker({ value, onChange }) {
   const { t } = useLang()
   return (
     <div className="space-y-2">
+      <p className="text-center text-base font-extrabold text-[#14123a]">{t.visTitle}</p>
       <div className="grid grid-cols-2 gap-2">
         {[['contacts', t.visContacts, t.visContactsSub], ['public', t.visPublic, t.visPublicSub]].map(([k, l, sub]) => (
           <button type="button" key={k} onClick={() => onChange(k)} aria-pressed={value === k}
