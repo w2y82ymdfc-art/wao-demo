@@ -14,7 +14,8 @@ const MANIFEST = {
   name: 'Wepawao',
   short_name: 'Wepawao',
   description: 'New social media, new moments to remember!',
-  start_url: '/',
+  // No start_url: an iPhone then saves the page address at "Add to Home Screen",
+  // which carries the member's one-time sign-in code (see useHomeScreenHandoff in App.jsx).
   display: 'standalone',
   background_color: '#eef0fc',
   theme_color: '#4a3af0',

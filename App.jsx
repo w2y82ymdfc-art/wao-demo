@@ -2687,18 +2687,33 @@ const isStandalone = () => window.matchMedia?.('(display-mode: standalone)').mat
 const isIphone = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 
 // iPhone handoff: the home-screen icon keeps its own sign-in, apart from Safari.
-// While the tip is on screen, ask the server for a one-time sign-in code for this member and point the
-// page's app settings at it, so the icon iPhone saves opens on "Welcome back, <name>. Tap to continue."
-// A code lasts 1 hour; a new one is fetched only after that, so an icon already added keeps working.
-// If anything fails, nothing changes: the icon just opens on the normal sign-in.
+// While a member is signed in on iPhone Safari, keep a one-time sign-in code for them in the page address
+// (and in the page's app settings). Whenever they tap "Add to Home Screen", iPhone saves that address,
+// so the icon opens on "Welcome back, <name>. Tap to continue." instead of asking them to join again.
+// A code lasts 1 hour; it is reused across visits within that hour and replaced only after it expires,
+// so an icon already added keeps working. If anything fails, nothing changes: the icon opens on the normal sign-in.
 const HANDOFF_MAX_AGE_MS = 55 * 60 * 1000
-function useHomeScreenHandoff(active, me, lang) {
+function useHomeScreenHandoff(me, lang) {
   useEffect(() => {
-    if (!active || !me || !isIphone() || isStandalone()) return
-    let fetchedAt = 0
+    if (!me || !isIphone() || isStandalone()) return
     let live = true
+    const cacheKey = `wao_handoff_${me}`
+    function apply({ code, first }) {
+      const url = new URL(window.location.href)
+      url.searchParams.set('handoff', code)
+      if (first) url.searchParams.set('n', first); else url.searchParams.delete('n')
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash)
+      const q = new URLSearchParams({ h: code, lang })
+      if (first) q.set('n', first)
+      let link = document.querySelector('link[rel="manifest"]')
+      if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link) }
+      link.href = `/api/manifest?${q.toString()}`
+    }
     async function prepare() {
-      if (Date.now() - fetchedAt < HANDOFF_MAX_AGE_MS) return
+      try {
+        const saved = JSON.parse(localStorage.getItem(cacheKey) || 'null')
+        if (saved?.code && Date.now() - saved.at < HANDOFF_MAX_AGE_MS) { apply(saved); return }
+      } catch { /* ignore */ }
       try {
         const { data } = await supabase.auth.getSession()
         const token = data?.session?.access_token
@@ -2710,23 +2725,29 @@ function useHomeScreenHandoff(active, me, lang) {
         const { data: prof } = await supabase.from('profiles').select('display_name').eq('id', me).maybeSingle()
         const first = String(prof?.display_name || '').trim().split(/\s+/)[0] || ''
         if (!live) return
-        fetchedAt = Date.now()
-        const q = new URLSearchParams({ h: code, lang })
-        if (first) q.set('n', first)
-        let link = document.querySelector('link[rel="manifest"]')
-        if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link) }
-        link.href = `/api/manifest?${q.toString()}`
+        const entry = { code, first, at: Date.now() }
+        try { localStorage.setItem(cacheKey, JSON.stringify(entry)) } catch { /* ignore */ }
+        apply(entry)
       } catch { /* keep the regular icon; the member can sign in normally */ }
     }
     prepare()
     const onShow = () => { if (document.visibilityState === 'visible') prepare() }
     document.addEventListener('visibilitychange', onShow)
-    return () => { live = false; document.removeEventListener('visibilitychange', onShow) }
-  }, [active, me, lang])
+    return () => {
+      live = false
+      document.removeEventListener('visibilitychange', onShow)
+      // Signed out: take the code back out of the address.
+      const url = new URL(window.location.href)
+      if (url.searchParams.has('handoff')) {
+        url.searchParams.delete('handoff'); url.searchParams.delete('n')
+        window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash)
+      }
+    }
+  }, [me, lang])
 }
 
-function HomeScreenTip({ show, me }) {
-  const { t, lang } = useLang()
+function HomeScreenTip({ show }) {
+  const { t } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
   const [hidden, setHidden] = useState(() => {
     try { return localStorage.getItem('wao_home_tip_hidden_v2') === '1' } catch { return false }
@@ -2740,7 +2761,6 @@ function HomeScreenTip({ show, me }) {
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
   const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
-  useHomeScreenHandoff(show && !hidden, me, lang)
   // Already opened from the home screen, dismissed, or a computer: nothing to show.
   if (!show || hidden || standalone || (!ios && !android && !installEvt)) return null
   const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
@@ -4094,7 +4114,8 @@ export default function App() {
   const [handoff, setHandoff] = useState(() => {
     const q = new URLSearchParams(window.location.search)
     const code = q.get('handoff')
-    if (!code) return null
+    // Only the home-screen icon uses it; in Safari the code just waits in the address for "Add to Home Screen".
+    if (!code || !isStandalone()) return null
     try { if (localStorage.getItem('wao_handoff_used') === code) return null } catch { /* ignore */ }
     return { code, name: (q.get('n') || '').slice(0, 30) }
   })
@@ -4142,6 +4163,7 @@ export default function App() {
   })
   const t = I18N[lang]
   const me = session?.user.id
+  useHomeScreenHandoff(me, lang)
   const ready = useSchemaReady()
   const { map: conn, reload: reloadConn } = useConnections(me, ready, refreshKey)
 
@@ -4477,7 +4499,7 @@ export default function App() {
               <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
             </div>
           )}
-          {me && <HomeScreenTip show={homeTip} me={me} />}
+          {me && <HomeScreenTip show={homeTip} />}
           {me && tab === 'mine' && (
             <MomentComposer userId={me}
               onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); offerHomeTip(); posted() }} />
