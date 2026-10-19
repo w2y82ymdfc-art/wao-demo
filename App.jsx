@@ -279,7 +279,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
-    vip: {"beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Up to 2 messages a week", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "error": "Something went wrong. Try again."},
+    vip: {"beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Up to 2 messages a week", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again."},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
     promiseItems: [
@@ -616,7 +616,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
-    vip: {"beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviamos un mensaje directo cuando llega una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Máximo 2 mensajes por semana", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "error": "Algo falló. Inténtalo otra vez."},
+    vip: {"beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviamos un mensaje directo cuando llega una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Máximo 2 mensajes por semana", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez."},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
@@ -3958,6 +3958,29 @@ function HeroShow() {
 // Beta: messages show inside Wepawao (no phone alerts yet).
 const vipLink = (id) => `${window.location.origin}/?vip=${id}`
 const fill = (str, n) => str.replace('{n}', n)
+// The business's logo, or a gold tile with a fork-and-knife when it has none.
+function VipLogo({ path, size = 56 }) {
+  const box = { width: size, height: size }
+  if (path) return <img src={photoUrl(path)} alt="" style={box} className="shrink-0 rounded-2xl bg-white object-cover" />
+  return (
+    <span style={box} className="grid shrink-0 place-items-center rounded-2xl bg-[#f6d155] text-[#14123a]">
+      <svg width={size / 2} height={size / 2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2" /><path d="M6 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z" /><path d="M18 15v7" /></svg>
+    </span>
+  )
+}
+// Small square logo picker (one image).
+function LogoPicker({ picker, current, label }) {
+  const item = picker.items[0]
+  return (
+    <div className="flex items-center gap-3">
+      {picker.input}
+      {item ? <img src={item.url} alt="" className="h-16 w-16 shrink-0 rounded-2xl object-cover" /> : <VipLogo path={current} size={64} />}
+      <button type="button" onClick={item ? () => picker.removeAt(0) : picker.open}
+        className="min-h-11 rounded-full border-2 border-[#7b6ff5] bg-[#e6e2ff] px-4 font-bold text-[#4a3af0]">{label}</button>
+    </div>
+  )
+}
+
 function VipMessage({ m, listName }) {
   const { lang } = useLang()
   return (
@@ -3984,7 +4007,7 @@ function VipListPage({ id, me, onSignIn, onBack }) {
   const [busy, setBusy] = useState(false)
   useEffect(() => {
     let live = true
-    supabase.from('vip_lists').select('id,name,town,about,owner_id').eq('id', id).maybeSingle()
+    supabase.from('vip_lists').select('id,name,town,about,owner_id,logo_path').eq('id', id).maybeSingle()
       .then(({ data }) => { if (live) setList(data || null) })
     supabase.from('vip_messages').select('*').eq('list_id', id).order('created_at', { ascending: false }).limit(5)
       .then(({ data }) => { if (live) setMsgs(data || []) })
@@ -4009,9 +4032,12 @@ function VipListPage({ id, me, onSignIn, onBack }) {
     <div className="space-y-4">
       <div className="space-y-4 rounded-3xl bg-[#14123a] p-5 text-white">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-2xl font-extrabold">{list.name}</h2>
-            {list.town && <div className="text-sm text-white/75">{list.town}</div>}
+          <div className="flex items-center gap-3">
+            <VipLogo path={list.logo_path} size={64} />
+            <div>
+              <h2 className="text-2xl font-extrabold">{list.name}</h2>
+              {list.town && <div className="text-sm text-white/75">{list.town}</div>}
+            </div>
           </div>
           <span className="shrink-0 rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">VIP · {v.beta}</span>
         </div>
@@ -4040,6 +4066,21 @@ function VipOwner({ me, onOpenList }) {
   const [busy, setBusy] = useState(false)
   const [note, setNote] = useState('')
   const photo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
+  const logo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
+  async function uploadLogo() {
+    if (!logo.items[0]) return null
+    const up = await uploadPhotos([logo.items[0]], me, `vip-logo-${crypto.randomUUID().slice(0, 8)}`)
+    return up.paths[0]
+  }
+  async function saveLogo() {
+    setBusy(true); setNote('')
+    try {
+      const path = await uploadLogo()
+      const { error } = await supabase.from('vip_lists').update({ logo_path: path }).eq('id', list.id)
+      if (error) throw error
+      logo.reset(); load()
+    } catch { setNote(v.error) } finally { setBusy(false) }
+  }
   const load = useCallback(async () => {
     const { data } = await supabase.from('vip_lists').select('*').eq('owner_id', me).maybeSingle()
     setList(data || null)
@@ -4058,9 +4099,11 @@ function VipOwner({ me, onOpenList }) {
     e.preventDefault()
     if (form.name.trim().length < 2) return
     setBusy(true); setNote('')
-    const { error } = await supabase.from('vip_lists').insert({ owner_id: me, name: form.name.trim(), town: form.town.trim() || null, about: form.about.trim() || null })
+    let logo_path = null
+    try { logo_path = await uploadLogo() } catch { /* the list is created without a logo; it can be added later */ }
+    const { error } = await supabase.from('vip_lists').insert({ owner_id: me, name: form.name.trim(), town: form.town.trim() || null, about: form.about.trim() || null, logo_path })
     setBusy(false)
-    if (error) setNote(v.error); else load()
+    if (error) setNote(v.error); else { logo.reset(); load() }
   }
   async function send(e) {
     e.preventDefault()
@@ -4098,6 +4141,7 @@ function VipOwner({ me, onOpenList }) {
           <span className="rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{v.free}</span>
         </div>
         <p className="text-stone-600">{v.createIntro}</p>
+        <LogoPicker picker={logo} current={null} label={logo.items[0] ? t.ai.change : v.logoAdd} />
         <input className={field} maxLength={60} required placeholder={v.name} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input className={field} maxLength={40} placeholder={v.town} value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} />
         <input className={field} maxLength={300} placeholder={v.about} value={form.about} onChange={(e) => setForm({ ...form, about: e.target.value })} />
@@ -4110,9 +4154,12 @@ function VipOwner({ me, onOpenList }) {
     <div className="space-y-4">
       <div className="space-y-3 rounded-3xl bg-[#14123a] p-5 text-white">
         <div className="flex items-start justify-between gap-2">
-          <div>
-            <div className="text-sm text-white/70">{v.ownerTitle}</div>
-            <h3 className="text-xl font-extrabold">{list.name}</h3>
+          <div className="flex items-center gap-3">
+            <VipLogo path={list.logo_path} size={56} />
+            <div>
+              <div className="text-sm text-white/70">{v.ownerTitle}</div>
+              <h3 className="text-xl font-extrabold">{list.name}</h3>
+            </div>
           </div>
           <span className="shrink-0 rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{v.free}</span>
         </div>
@@ -4123,6 +4170,10 @@ function VipOwner({ me, onOpenList }) {
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={share} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.share}</button>
           <button type="button" onClick={() => onOpenList(list.id)} className="rounded-full border-2 border-white/70 px-5 py-2 font-bold text-white">{v.open}</button>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white/10 p-3">
+          <LogoPicker picker={logo} current={list.logo_path} label={logo.items[0] ? t.ai.change : (list.logo_path ? v.logoChange : v.logoAdd)} />
+          {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
         </div>
       </div>
       <form onSubmit={send} className={`${card} space-y-3`}>
@@ -4150,7 +4201,7 @@ function VipHub({ me, onOpenList, onBack }) {
     const ids = (mem || []).map((r) => r.list_id)
     if (!ids.length) { setLists([]); setMsgs([]); return }
     const [{ data: ls }, { data: ms }] = await Promise.all([
-      supabase.from('vip_lists').select('id,name,town').in('id', ids),
+      supabase.from('vip_lists').select('id,name,town,logo_path').in('id', ids),
       supabase.from('vip_messages').select('*').in('list_id', ids).order('created_at', { ascending: false }).limit(20),
     ])
     setLists(ls || []); setMsgs(ms || [])
@@ -4177,7 +4228,7 @@ function VipHub({ me, onOpenList, onBack }) {
           <h3 className="mb-1 font-extrabold">{v.myLists}</h3>
           {lists.map((l) => (
             <div key={l.id} className="flex items-center justify-between gap-3 border-t-2 border-[#eef0fc] py-2">
-              <button type="button" className="text-left font-bold" onClick={() => onOpenList(l.id)}>{l.name}</button>
+              <button type="button" className="flex items-center gap-3 text-left font-bold" onClick={() => onOpenList(l.id)}><VipLogo path={l.logo_path} size={36} />{l.name}</button>
               <button type="button" className="min-h-11 px-2 font-bold text-[#4a3af0]" onClick={() => leave(l.id)}>{v.leave}</button>
             </div>
           ))}
