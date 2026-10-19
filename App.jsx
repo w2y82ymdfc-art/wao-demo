@@ -4169,6 +4169,8 @@ export default function App() {
     if (!data) return
     const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).lte('created_at', data.created_at)
     setWelcome({ name: data.display_name || '', number: count || 1 })
+    // Counts as seen once it has opened, even if the member leaves without tapping Enter or Skip.
+    try { localStorage.setItem('wao_welcome_seen', '1') } catch { /* ignore */ }
   }
   function closeWelcome() {
     try { localStorage.setItem('wao_welcome_seen', '1') } catch { /* ignore */ }
