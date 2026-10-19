@@ -4654,8 +4654,6 @@ export default function App() {
             ))}
           </nav>
 
-          {tab === 'everyone' && <RoadmapBanner />}
-
           {tab === 'everyone' && (
             <>
               <Feed mode="everyone" {...feedProps} />
