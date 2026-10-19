@@ -3956,7 +3956,8 @@ function HeroShow() {
 // ---------- Clientes VIP (beta) ----------
 // A business keeps a VIP list; customers join with one tap; the owner sends up to 2 messages a week.
 // Beta: messages show inside Wepawao (no phone alerts yet).
-const vipLink = (id) => `${window.location.origin}/?vip=${id}`
+// Shared as /v/<id> so WhatsApp and Facebook show the business's name and logo (api/v.js).
+const vipLink = (id, lang) => `${window.location.origin}/v/${id}?lang=${lang}`
 const fill = (str, n) => str.replace('{n}', n)
 // The business's logo, or a gold tile with a fork-and-knife when it has none.
 function VipLogo({ path, size = 56 }) {
@@ -4057,7 +4058,7 @@ function VipListPage({ id, me, onSignIn, onBack }) {
 }
 
 function VipOwner({ me, onOpenList }) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const v = t.vip
   const [list, setList] = useState(undefined)
   const [count, setCount] = useState(0)
@@ -4129,7 +4130,7 @@ function VipOwner({ me, onOpenList }) {
     } finally { setBusy(false) }
   }
   async function share() {
-    const url = vipLink(list.id)
+    const url = vipLink(list.id, lang)
     if (navigator.share) { try { await navigator.share({ title: list.name, text: v.pitch, url }); return } catch (e2) { if (e2?.name === 'AbortError') return } }
     try { await navigator.clipboard.writeText(url); setNote(v.copied) } catch { window.prompt('', url) }
   }
