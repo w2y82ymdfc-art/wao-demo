@@ -279,6 +279,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
+    vip: {"beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Up to 2 messages a week", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "error": "Something went wrong. Try again."},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
     promiseItems: [
@@ -615,6 +616,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
+    vip: {"beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviamos un mensaje directo cuando llega una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Máximo 2 mensajes por semana", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "error": "Algo falló. Inténtalo otra vez."},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
@@ -3951,6 +3953,242 @@ function HeroShow() {
   )
 }
 
+// ---------- Clientes VIP (beta) ----------
+// A business keeps a VIP list; customers join with one tap; the owner sends up to 2 messages a week.
+// Beta: messages show inside Wepawao (no phone alerts yet).
+const vipLink = (id) => `${window.location.origin}/?vip=${id}`
+const fill = (str, n) => str.replace('{n}', n)
+function VipMessage({ m, listName }) {
+  const { lang } = useLang()
+  return (
+    <div className="overflow-hidden rounded-3xl border-2 border-[#dcdff5] bg-white">
+      {m.image_path && <img loading="lazy" alt="" src={photoUrl(m.image_path)} className="max-h-72 w-full object-cover" />}
+      <div className="space-y-1 p-4">
+        {listName && <div className="text-sm font-bold text-[#4a3af0]">{listName}</div>}
+        {m.when_text && <span className="inline-block rounded-full bg-[#4a3af0] px-3 py-1 text-xs font-extrabold text-white">{m.when_text}</span>}
+        <div className="text-lg font-extrabold">{m.title}</div>
+        {m.body && <p className="whitespace-pre-wrap text-stone-700">{m.body}</p>}
+        <div className="text-xs text-stone-500">{whenShort(m.created_at, lang)}</div>
+      </div>
+    </div>
+  )
+}
+
+function VipListPage({ id, me, onSignIn, onBack }) {
+  const { t } = useLang()
+  const v = t.vip
+  const [list, setList] = useState(undefined)
+  const [msgs, setMsgs] = useState([])
+  const [joined, setJoined] = useState(false)
+  const [count, setCount] = useState(null)
+  const [busy, setBusy] = useState(false)
+  useEffect(() => {
+    let live = true
+    supabase.from('vip_lists').select('id,name,town,about,owner_id').eq('id', id).maybeSingle()
+      .then(({ data }) => { if (live) setList(data || null) })
+    supabase.from('vip_messages').select('*').eq('list_id', id).order('created_at', { ascending: false }).limit(5)
+      .then(({ data }) => { if (live) setMsgs(data || []) })
+    supabase.rpc('vip_member_count', { p_list: id }).then(({ data }) => { if (live) setCount(data ?? null) })
+    if (me) supabase.from('vip_members').select('list_id').eq('list_id', id).eq('user_id', me).maybeSingle()
+      .then(({ data }) => { if (live) setJoined(!!data) })
+    return () => { live = false }
+  }, [id, me])
+  async function toggle() {
+    if (!me) { try { localStorage.setItem('wao_vip_pending', id) } catch { /* ignore */ } onSignIn(); return }
+    setBusy(true)
+    const q = joined
+      ? supabase.from('vip_members').delete().eq('list_id', id).eq('user_id', me)
+      : supabase.from('vip_members').insert({ list_id: id, user_id: me })
+    const { error } = await q
+    setBusy(false)
+    if (!error) { setJoined(!joined); setCount((c) => (c == null ? c : c + (joined ? -1 : 1))) }
+  }
+  if (list === undefined) return null
+  if (list === null) return <div className={card}><p>{v.notFound}</p><button className="mt-3 font-bold text-[#4a3af0] underline" onClick={onBack}>OK</button></div>
+  return (
+    <div className="space-y-4">
+      <div className="space-y-4 rounded-3xl bg-[#14123a] p-5 text-white">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-2xl font-extrabold">{list.name}</h2>
+            {list.town && <div className="text-sm text-white/75">{list.town}</div>}
+          </div>
+          <span className="shrink-0 rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">VIP · {v.beta}</span>
+        </div>
+        {list.about && <p className="font-semibold">{list.about}</p>}
+        <p className="text-white/85">{v.pitch}</p>
+        <button type="button" disabled={busy} onClick={toggle}
+          className={`w-full rounded-full px-6 py-3.5 text-lg font-black ${joined ? 'border-2 border-[#f6d155] text-[#f6d155]' : 'bg-[#f6d155] text-[#14123a]'}`}>
+          {!me ? v.joinSignIn : joined ? v.joined : v.join}
+        </button>
+        <p className="text-center text-xs text-white/70">{v.fine}{count != null ? ` · ${count} ${v.count}` : ''}</p>
+      </div>
+      <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.last}</h3>
+      {msgs.length ? msgs.map((m) => <VipMessage key={m.id} m={m} />) : <p className="px-1 text-stone-600">{v.none}</p>}
+    </div>
+  )
+}
+
+function VipOwner({ me, onOpenList }) {
+  const { t } = useLang()
+  const v = t.vip
+  const [list, setList] = useState(undefined)
+  const [count, setCount] = useState(0)
+  const [sent, setSent] = useState([])
+  const [form, setForm] = useState({ name: '', town: '', about: '' })
+  const [msg, setMsg] = useState({ title: '', when: '', body: '' })
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState('')
+  const photo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
+  const load = useCallback(async () => {
+    const { data } = await supabase.from('vip_lists').select('*').eq('owner_id', me).maybeSingle()
+    setList(data || null)
+    if (data) {
+      const [{ data: n }, { data: m }] = await Promise.all([
+        supabase.rpc('vip_member_count', { p_list: data.id }),
+        supabase.from('vip_messages').select('*').eq('list_id', data.id).order('created_at', { ascending: false }).limit(10),
+      ])
+      setCount(n || 0); setSent(m || [])
+    }
+  }, [me])
+  useEffect(() => { load() }, [load])
+  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000
+  const thisWeek = sent.filter((m) => new Date(m.created_at).getTime() > weekAgo).length
+  async function create(e) {
+    e.preventDefault()
+    if (form.name.trim().length < 2) return
+    setBusy(true); setNote('')
+    const { error } = await supabase.from('vip_lists').insert({ owner_id: me, name: form.name.trim(), town: form.town.trim() || null, about: form.about.trim() || null })
+    setBusy(false)
+    if (error) setNote(v.error); else load()
+  }
+  async function send(e) {
+    e.preventDefault()
+    if (msg.title.trim().length < 2 || busy) return
+    if (thisWeek >= 2) { setNote(v.limit); return }
+    setBusy(true); setNote('')
+    let uploaded = []
+    try {
+      let image_path = null
+      if (photo.items[0]) {
+        const up = await uploadPhotos([photo.items[0]], me, `vip-${crypto.randomUUID().slice(0, 8)}`)
+        uploaded = up.uploaded; image_path = up.paths[0]
+      }
+      const { error } = await supabase.from('vip_messages').insert({
+        list_id: list.id, title: msg.title.trim(), when_text: msg.when.trim() || null, body: msg.body.trim() || null, image_path,
+      })
+      if (error) throw error
+      setMsg({ title: '', when: '', body: '' }); photo.reset(); setNote(v.sent); load()
+    } catch (err) {
+      if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
+      setNote(String(err?.message || '').includes('vip_weekly_limit') ? v.limit : v.error)
+    } finally { setBusy(false) }
+  }
+  async function share() {
+    const url = vipLink(list.id)
+    if (navigator.share) { try { await navigator.share({ title: list.name, text: v.pitch, url }); return } catch (e2) { if (e2?.name === 'AbortError') return } }
+    try { await navigator.clipboard.writeText(url); setNote(v.copied) } catch { window.prompt('', url) }
+  }
+  if (list === undefined) return null
+  if (list === null) {
+    return (
+      <form onSubmit={create} className={`${card} space-y-3`}>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-xl font-extrabold">{v.ownerTitle}</h3>
+          <span className="rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{v.free}</span>
+        </div>
+        <p className="text-stone-600">{v.createIntro}</p>
+        <input className={field} maxLength={60} required placeholder={v.name} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        <input className={field} maxLength={40} placeholder={v.town} value={form.town} onChange={(e) => setForm({ ...form, town: e.target.value })} />
+        <input className={field} maxLength={300} placeholder={v.about} value={form.about} onChange={(e) => setForm({ ...form, about: e.target.value })} />
+        <button className={`${primary} w-full`} disabled={busy}>{v.create}</button>
+        {note && <p className="text-sm text-stone-600">{note}</p>}
+      </form>
+    )
+  }
+  return (
+    <div className="space-y-4">
+      <div className="space-y-3 rounded-3xl bg-[#14123a] p-5 text-white">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <div className="text-sm text-white/70">{v.ownerTitle}</div>
+            <h3 className="text-xl font-extrabold">{list.name}</h3>
+          </div>
+          <span className="shrink-0 rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{v.free}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl bg-white/10 p-3"><div className="text-xs text-white/70">{v.count}</div><div className="text-3xl font-black text-[#f6d155]">{count}</div></div>
+          <div className="rounded-2xl bg-white/10 p-3"><div className="text-xs text-white/70">{v.week}</div><div className="text-lg font-extrabold">{fill(v.weekOf, thisWeek)}</div></div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={share} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.share}</button>
+          <button type="button" onClick={() => onOpenList(list.id)} className="rounded-full border-2 border-white/70 px-5 py-2 font-bold text-white">{v.open}</button>
+        </div>
+      </div>
+      <form onSubmit={send} className={`${card} space-y-3`}>
+        <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
+        <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
+        <input className={field} maxLength={80} required placeholder={v.msgTitle} value={msg.title} onChange={(e) => setMsg({ ...msg, title: e.target.value })} />
+        <input className={field} maxLength={60} placeholder={v.when} value={msg.when} onChange={(e) => setMsg({ ...msg, when: e.target.value })} />
+        <textarea className={`${field} min-h-20`} maxLength={500} placeholder={v.body} value={msg.body} onChange={(e) => setMsg({ ...msg, body: e.target.value })} />
+        <button className={`${primary} w-full`} disabled={busy || thisWeek >= 2}>{fill(v.send, count)}</button>
+        {note && <p className="text-sm font-semibold text-stone-700">{note}</p>}
+      </form>
+      {sent.length > 0 && <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.sentList}</h3>}
+      {sent.map((m) => <VipMessage key={m.id} m={m} />)}
+    </div>
+  )
+}
+
+function VipHub({ me, onOpenList, onBack }) {
+  const { t } = useLang()
+  const v = t.vip
+  const [lists, setLists] = useState([])
+  const [msgs, setMsgs] = useState([])
+  const load = useCallback(async () => {
+    const { data: mem } = await supabase.from('vip_members').select('list_id').eq('user_id', me)
+    const ids = (mem || []).map((r) => r.list_id)
+    if (!ids.length) { setLists([]); setMsgs([]); return }
+    const [{ data: ls }, { data: ms }] = await Promise.all([
+      supabase.from('vip_lists').select('id,name,town').in('id', ids),
+      supabase.from('vip_messages').select('*').in('list_id', ids).order('created_at', { ascending: false }).limit(20),
+    ])
+    setLists(ls || []); setMsgs(ms || [])
+  }, [me])
+  useEffect(() => { load() }, [load])
+  const nameOf = (id) => lists.find((l) => l.id === id)?.name
+  async function leave(id) {
+    await supabase.from('vip_members').delete().eq('list_id', id).eq('user_id', me)
+    load()
+  }
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2 rounded-3xl bg-[#14123a] p-5 text-white">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-2xl font-extrabold text-[#f6d155]">{v.hubTitle}</h2>
+          <span className="rounded-full bg-white/15 px-2.5 py-1 text-xs font-extrabold">{v.beta}</span>
+        </div>
+        <p className="text-white/85">{v.hubIntro}</p>
+      </div>
+      <h3 className="px-1 text-xl font-extrabold">{v.inboxTitle}</h3>
+      {msgs.length ? msgs.map((m) => <VipMessage key={m.id} m={m} listName={nameOf(m.list_id)} />) : <p className="px-1 text-stone-600">{v.inboxEmpty}</p>}
+      {lists.length > 0 && (
+        <div className={card}>
+          <h3 className="mb-1 font-extrabold">{v.myLists}</h3>
+          {lists.map((l) => (
+            <div key={l.id} className="flex items-center justify-between gap-3 border-t-2 border-[#eef0fc] py-2">
+              <button type="button" className="text-left font-bold" onClick={() => onOpenList(l.id)}>{l.name}</button>
+              <button type="button" className="min-h-11 px-2 font-bold text-[#4a3af0]" onClick={() => leave(l.id)}>{v.leave}</button>
+            </div>
+          ))}
+        </div>
+      )}
+      <VipOwner me={me} onOpenList={onOpenList} />
+      <button type="button" className="px-1 font-bold text-[#4a3af0] underline" onClick={onBack}>{t.myPage.title}</button>
+    </div>
+  )
+}
+
 // ---------- Questions about AI (in Our promise; linked from the caricature pop-up and the hero) ----------
 const openAiFaq = () => window.dispatchEvent(new Event('wp-ai-faq'))
 function AiFaq() {
@@ -4320,6 +4558,14 @@ export default function App() {
   const [netEvent, setNetEvent] = useState(null)
   const [composerOpen, setComposerOpen] = useState(false)
   const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
+  // A VIP list opened from its link (?vip=…), or one a visitor was joining before signing in.
+  const [vipId, setVipId] = useState(() => {
+    const q = new URLSearchParams(window.location.search).get('vip')
+    if (q && UUID_RE.test(q)) return q
+    try { const p = localStorage.getItem('wao_vip_pending'); if (p && UUID_RE.test(p)) return p } catch { /* ignore */ }
+    return null
+  })
+  useEffect(() => { if (vipId) setTab('vip') }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [flash, setFlash] = useState('')
   // Advertiser link (?advertise=1&pref=<affiliate id>): show the advertiser form and remember who sent it.
   const [advertise, setAdvertise] = useState(() => new URLSearchParams(window.location.search).has('advertise'))
@@ -4498,6 +4744,15 @@ export default function App() {
   }, [me])
 
   const posted = () => setRefreshKey((k) => k + 1)
+  // A visitor tapped "Quiero ser cliente VIP" and then signed in: finish the join for them.
+  useEffect(() => {
+    if (!me) return
+    let p = null
+    try { p = localStorage.getItem('wao_vip_pending'); localStorage.removeItem('wao_vip_pending') } catch { /* ignore */ }
+    if (!p || !UUID_RE.test(p)) return
+    supabase.from('vip_members').upsert({ list_id: p, user_id: me }, { onConflict: 'list_id,user_id', ignoreDuplicates: true })
+      .then(() => { setVipId(p); setTab('vip'); setShowSignIn(false); posted(); window.scrollTo(0, 0) })
+  }, [me]) // eslint-disable-line react-hooks/exhaustive-deps
   // Counts each time the tip is offered, so a tip closed with "Not now" can show again after the next moment.
   const [homeTip, setHomeTip] = useState(0)
   // The home-screen tip appears after the member's first moment, and once more after the second
@@ -4750,6 +5005,15 @@ export default function App() {
             <ContestPage me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
               onSignIn={() => { setShowSignIn(true); window.scrollTo(0, 0) }} />
           )}
+          {tab === 'vip' && vipId && (
+            <VipListPage key={`${vipId}-${me || ''}-${refreshKey}`} id={vipId} me={me}
+              onSignIn={() => { setShowSignIn(true); scrollToSignIn() }}
+              onBack={() => { setVipId(null); setTab('everyone') }} />
+          )}
+          {tab === 'viphub' && me && (
+            <VipHub me={me} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
+              onBack={() => { setTab('mypage'); window.scrollTo(0, 0) }} />
+          )}
           {tab === 'mypage' && me && (
             <>
               <div className="space-y-4 rounded-3xl bg-gradient-to-br from-[#14123a] to-[#2a2370] p-5 text-white">
@@ -4760,6 +5024,7 @@ export default function App() {
                 <div className="flex flex-wrap gap-2">
                   <button className="rounded-full bg-[#f6d155] px-6 py-3 font-bold text-[#14123a]" onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
                   <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('mine'); window.scrollTo(0, 0) }}>{t.myPage.posts}</button>
+                  <button className="rounded-full border-2 border-[#f6d155] px-5 py-2.5 font-bold text-[#f6d155]" onClick={() => { setTab('viphub'); window.scrollTo(0, 0) }}>{t.vip.hubBtn}</button>
                 </div>
               </div>
               <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
