@@ -4620,7 +4620,7 @@ export default function App() {
                 </div>
               </div>
               <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
-                onSaved={posted} onClose={() => setTab('everyone')} onSignOut={() => { supabase.auth.signOut(); setTab('everyone') }} />
+                onSaved={posted} onClose={() => setTab('everyone')} onSignOut={() => { supabase.auth.signOut({ scope: 'local' }); setTab('everyone') }} />
             </>
           )}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
