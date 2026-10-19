@@ -1001,8 +1001,15 @@ function SignIn({ startWithPassword = false, allowPassword = false }) {
   useEffect(() => {
     if (GOOGLE_RETURN_ERROR) setMsg(t.googleBad)
     let alive = true
-    googleAvailable().then((ok) => { if (alive) setGoogleOk(ok) })
-    return () => { alive = false }
+    // iPhone Home Screen app: Google opens in a separate sheet and the sign-in lands there,
+    // not back in the app, so the member gets stuck. Use the email code there instead.
+    if (isIphone() && isStandalone()) setGoogleOk(false)
+    else googleAvailable().then((ok) => { if (alive) setGoogleOk(ok) })
+    // Came back without finishing Google (closed the sheet): let them try again.
+    const back = () => { if (document.visibilityState === 'visible') setGoogleBusy(false) }
+    document.addEventListener('visibilitychange', back)
+    window.addEventListener('pageshow', back)
+    return () => { alive = false; document.removeEventListener('visibilitychange', back); window.removeEventListener('pageshow', back) }
   }, [])
   async function google() {
     if (googleBusy) return
