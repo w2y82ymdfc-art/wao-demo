@@ -427,7 +427,7 @@ const I18N = {
     confirmDelete: '¿Borrar esta publicación para siempre? También se borrarán sus fotos y comentarios.',
     photoLimit: (n) => `Llegaste al máximo de ${n} fotos por publicación.`,
     members: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'miembro' : 'miembros'} en Wepawao`,
-    makeMine: { title: '¡Wao! ¿Quieres la tuya?', text: 'Convierte tu foto en una caricatura divertida con IA y comparte tu momento en Wepawao. ¡Es gratis!', btn: 'Hacer la mía, gratis ✨', shareTail: 'Haz la tuya gratis en Wepawao ✨' },
+    makeMine: { title: '¡Wao! ¿Quieres la tuya?', text: 'Convierte tu foto en una caricatura divertida con IA y comparte tu momento en Wepawao. ¡Es gratis!', btn: 'Quiero hacer la mía gratis ✨', shareTail: 'Haz la tuya gratis en Wepawao ✨' },
     sharedPost: 'Compartido contigo', backToFeed: 'Ver todo', postGone: 'Esta publicación ya no está disponible.',
     homeTipIos: 'Pon Wepawao en tu pantalla de inicio: toca el botón Compartir de tu navegador y luego "Agregar a inicio".',
     homeTipInstall: 'Pon Wepawao en tu pantalla de inicio para abrirlo como una app.', install: 'Agregar a inicio',
