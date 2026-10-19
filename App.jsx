@@ -96,7 +96,7 @@ const I18N = {
     confirmDelete: 'Delete this post for good? Its photos and comments will be removed too.',
     photoLimit: (n) => `You've reached the maximum of ${n} photos per post.`,
     members: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'member' : 'members'} on Wepawao`,
-    makeMine: { title: 'Wao! Want one of your own?', text: 'Turn your photo into a fun AI caricature and share your moment on Wepawao. It’s free!', btn: 'Make mine, free ✨', shareTail: 'Make yours free on Wepawao ✨' },
+    makeMine: { title: 'Wao! Want one of your own?', text: 'Turn your photo into a fun AI caricature and share your moment on Wepawao. It’s free!', btn: 'I want to make mine free ✨', shareTail: 'Make yours free on Wepawao ✨' },
     sharedPost: 'Shared with you', backToFeed: 'See everything', postGone: 'This post is no longer available.',
     homeTipIos: 'Put Wepawao on your home screen: tap your browser\'s Share button, then "Add to Home Screen".',
     homeTipInstall: 'Put Wepawao on your home screen so it opens like an app.', install: 'Add to home screen',
