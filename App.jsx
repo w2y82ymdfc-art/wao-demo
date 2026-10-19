@@ -730,6 +730,8 @@ const loc = (lang) => (lang === 'es' ? 'es' : 'en')
 // ---------- Shared styles ----------
 const card = 'rounded-3xl border-2 border-[#dcdff5] bg-white p-5'
 const field = 'w-full rounded-2xl border-2 border-[#dcdff5] bg-[#eef0fc] px-4 py-3 text-[#14123a] placeholder:text-stone-400'
+// Inputs on the navy panels.
+const darkField = 'w-full rounded-2xl border-2 border-white/15 bg-white/10 px-4 py-3 text-white placeholder:text-white/55'
 const primary = 'rounded-full bg-[#4a3af0] px-6 py-3 font-bold text-white disabled:bg-[#b4adf8]'
 const ghost = 'rounded-full border-2 border-[#4a3af0] px-5 py-2 font-bold text-[#4a3af0] disabled:opacity-40'
 const ghostSm = 'rounded-full border-2 border-[#4a3af0] px-4 py-1.5 text-sm font-bold text-[#4a3af0] disabled:opacity-40'
@@ -1585,7 +1587,12 @@ function AiGuide() {
 }
 
 // One photo slot (original or AI version).
-function PhotoSlot({ label, picker }) {
+// Empty slots get their own color: indigo for the real photo, gold for the AI caricature.
+const SLOT_TONES = {
+  photo: 'border-[#7b6ff5] bg-[#e6e2ff] text-[#4a3af0]',
+  ai: 'border-[#e0b200] bg-[#fff3c4] text-[#14123a]',
+}
+function PhotoSlot({ label, picker, tone = 'photo', icon = '📷' }) {
   const { t } = useLang()
   const item = picker.items[0]
   return (
@@ -1602,8 +1609,8 @@ function PhotoSlot({ label, picker }) {
         )
         : (
           <button type="button" onClick={picker.open}
-            className="grid aspect-square w-full place-items-center rounded-2xl border-2 border-dashed border-[#b4adf8] bg-[#eef0fc] text-sm font-bold text-[#4a3af0]">
-            + {t.ai.choose}
+            className={`grid aspect-square w-full place-items-center rounded-2xl border-2 border-dashed text-sm font-bold ${SLOT_TONES[tone]}`}>
+            <span className="flex flex-col items-center gap-1"><span className="text-3xl" aria-hidden="true">{icon}</span>+ {t.ai.choose}</span>
           </button>
         )}
     </div>
@@ -1712,14 +1719,14 @@ function AiComposer({ userId, onPosted }) {
       {guide && <AiGuide />}
       <div className="grid grid-cols-2 gap-3">
         <PhotoSlot label={t.ai.original} picker={original} />
-        <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} />
+        <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} tone="ai" icon="✨" />
       </div>
-      <textarea className={`${field} min-h-20`} required maxLength={500} placeholder={t.ai.captionPh}
+      <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} required maxLength={500} placeholder={t.ai.captionPh}
         value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
-      <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] p-3">
-        <div className="text-sm font-bold">{t.ai.howTitle}</div>
-        <input className={field} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
-        <textarea className={`${field} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+      <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
+        <div className="text-sm font-bold text-[#f6d155]">{t.ai.howTitle}</div>
+        <input className={darkField} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
+        <textarea className={`${darkField} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
       </div>
       <VisibilityPicker value={visibility} onChange={(v) => { setAdWhy(null); setVisibility(v) }} />
       <p className="text-xs text-stone-500">{t.ai.rules}</p>
@@ -2071,12 +2078,12 @@ function PostEditor({ p, me, onDone, onCancel }) {
         <>
           <div className="grid grid-cols-2 gap-3">
             <PhotoSlot label={t.ai.original} picker={aiOrig} />
-            <PhotoSlot label={t.ai.aiVersion} picker={aiPic} />
+            <PhotoSlot label={t.ai.aiVersion} picker={aiPic} tone="ai" icon="✨" />
           </div>
-          <div className="space-y-2 rounded-2xl border-2 border-[#dcdff5] bg-white p-3">
-            <div className="text-sm font-bold">{t.ai.howTitle}</div>
-            <input className={field} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
-            <textarea className={`${field} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+          <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
+            <div className="text-sm font-bold text-[#f6d155]">{t.ai.howTitle}</div>
+            <input className={darkField} maxLength={60} placeholder={t.ai.toolPh} value={tool} onChange={(e) => setTool(e.target.value)} />
+            <textarea className={`${darkField} min-h-16`} maxLength={600} placeholder={t.ai.promptPh} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
           </div>
         </>
       )}
