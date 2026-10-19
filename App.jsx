@@ -2780,11 +2780,22 @@ function HomeScreenTip({ show }) {
   // First "Not now": ask once more after the second moment. Second "Not now": stop asking.
   const notNow = () => { setHomeTipState(homeTipState() === 'later' ? 'done' : 'later'); setHidden(true) }
   const inApp = isInAppBrowser()
+  const visible = !(!show || hidden || standalone || (!ios && !android && !installEvt))
+  // Bring the tip into view right after posting, so the member sees it without scrolling.
+  // A short wait lets the posting box close and the new moment appear first.
+  const boxRef = useRef(null)
+  useEffect(() => {
+    if (!visible) return
+    const timer = setTimeout(() => {
+      boxRef.current?.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' })
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [visible])
   // Already opened from the home screen, dismissed, or a computer: nothing to show.
-  if (!show || hidden || standalone || (!ios && !android && !installEvt)) return null
+  if (!visible) return null
   const steps = inApp ? (ios ? t.homeTipStepsInAppIos : t.homeTipStepsInAppAndroid) : (ios ? t.homeTipStepsIos : t.homeTipStepsAndroid)
   return (
-    <div className={`${card} space-y-3`}>
+    <div ref={boxRef} className={`${card} space-y-3`} style={{ scrollMarginTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
       <div className="flex items-center gap-3">
         <img src="/apple-touch-icon.png" alt="" className="h-12 w-12 shrink-0 rounded-2xl" />
         <h2 className="flex-1 text-xl font-extrabold">{t.homeTipTitle}</h2>
