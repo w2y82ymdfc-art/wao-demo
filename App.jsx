@@ -342,6 +342,9 @@ const I18N = {
       needBoth: 'Add both pictures: your photo and your caricature.',
       helpBtn: 'Never used AI? Help me make my caricature', helpHide: 'Hide the guide',
       guideTitle: 'Your caricature in 3 steps',
+      bubbleTitle: 'Make your caricature with AI. It’s easy!',
+      bubbleSteps: ['Take a selfie or pick a photo from your gallery.', 'Open a free AI app (ChatGPT, Gemini, Meta AI or Copilot), upload your photo and paste one of these prompts.', 'Save your caricature and come back here to post it.'],
+      bubbleOk: 'Got it, let’s go!',
       steps: ['Take a selfie or pick a clear photo of your face.', 'Open a free AI app that makes images (ChatGPT, Google Gemini, Meta AI or Microsoft Copilot), upload your photo and paste one of the ideas below.', 'Save the caricature it makes, come back here and post both pictures.'],
       ideasTitle: 'Caricature ideas you can copy',
       ideas: [
@@ -675,6 +678,9 @@ const I18N = {
       guideTitle: 'Tu caricatura en 3 pasos',
       steps: ['Tómate un selfie o elige una foto clara de tu cara.', 'Abre una app de IA gratis que haga imágenes (ChatGPT, Google Gemini, Meta AI o Microsoft Copilot), sube tu foto y pega una de las ideas de abajo.', 'Guarda la caricatura que crea, vuelve aquí y publica las dos imágenes.'],
       ideasTitle: 'Ideas de caricatura que puedes copiar',
+      bubbleTitle: 'Haz tu caricatura con IA. ¡Es fácil!',
+      bubbleSteps: ['Tómate un selfie o elige una foto de tu galería.', 'Abre una app de IA gratis (ChatGPT, Gemini, Meta AI o Copilot), sube tu foto y pega una de estas instrucciones.', 'Guarda tu caricatura y regresa aquí para publicarla.'],
+      bubbleOk: '¡Entendido, vamos!',
       ideas: [
         ['Personas (la instrucción básica)', 'Haz una caricatura divertida de esta foto: cabeza grande, cuerpo pequeño, sonrisa grande y feliz, estilo de dibujo colorido y alegre. Mantén las caras bien reconocibles. Formato cuadrado.'],
         ['Lugares (la instrucción básica)', 'Haz una caricatura divertida de esta foto: estilo de dibujo colorido y alegre. Mantenla bien reconocible. Formato cuadrado.'],
@@ -1604,6 +1610,40 @@ function PhotoSlot({ label, picker }) {
   )
 }
 
+// Pop-up shown when the caricature posting box opens, until the member posts their first caricature:
+// the 3 simple steps and the two basic prompts (people and places), each with a copy button.
+const AI_POSTED_KEY = 'wao_ai_posted'
+function AiStartBubble({ onClose }) {
+  const { t } = useLang()
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
+      <div className="max-h-[90vh] w-full max-w-md space-y-3 overflow-y-auto rounded-3xl bg-[#14123a] p-5 text-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <WaoFaces size={30} />
+        <h3 className="text-xl font-extrabold text-[#f6d155]">{t.ai.bubbleTitle}</h3>
+        <ol className="space-y-2">
+          {t.ai.bubbleSteps.map((s, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#f6d155] text-xs font-extrabold text-[#14123a]">{i + 1}</span>
+              <span className="text-white/90">{s}</span>
+            </li>
+          ))}
+        </ol>
+        {t.ai.ideas.slice(0, 2).map(([name, prompt]) => (
+          <div key={name} className="rounded-2xl bg-white/10 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <b className="text-[#f6d155]">{name}</b>
+              <CopyButton text={prompt} className="rounded-full bg-[#f6d155] px-3 py-1 text-xs font-bold text-[#14123a]" />
+            </div>
+            <p className="mt-1 text-sm text-white/80">{prompt}</p>
+          </div>
+        ))}
+        <button type="button" onClick={onClose} className="w-full rounded-full bg-[#f6d155] px-4 py-3 text-base font-extrabold text-[#14123a]">{t.ai.bubbleOk}</button>
+      </div>
+    </div>
+  )
+}
+
 function AiComposer({ userId, onPosted }) {
   const { t, lang } = useLang()
   const [body, setBody] = useState('')
@@ -1611,6 +1651,7 @@ function AiComposer({ userId, onPosted }) {
   const [prompt, setPrompt] = useState('')
   const [visibility, setVisibility] = useState('public')
   const [guide, setGuide] = useState(false)
+  const [bubble, setBubble] = useState(() => { try { return !localStorage.getItem(AI_POSTED_KEY) } catch { return true } })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [adWhy, setAdWhy] = useState(null)
@@ -1650,6 +1691,7 @@ function AiComposer({ userId, onPosted }) {
         if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
       }
       setBody(''); setTool(''); setPrompt(''); original.reset(); aiVersion.reset()
+      try { localStorage.setItem(AI_POSTED_KEY, '1') } catch { /* ignore */ }
       onPosted(notice)
     } catch (err) {
       if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
@@ -1666,6 +1708,7 @@ function AiComposer({ userId, onPosted }) {
       <button type="button" className="text-sm font-bold text-[#4a3af0] underline" onClick={() => setGuide((v) => !v)}>
         {guide ? t.ai.helpHide : t.ai.helpBtn}
       </button>
+      {bubble && <AiStartBubble onClose={() => setBubble(false)} />}
       {guide && <AiGuide />}
       <div className="grid grid-cols-2 gap-3">
         <PhotoSlot label={t.ai.original} picker={original} />
