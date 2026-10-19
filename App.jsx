@@ -1,5 +1,5 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import logoImg from './wepawao-logo.png'
+import logoImg from './wepawao-wordmark.png'
 import { createClient } from '@supabase/supabase-js'
 import hero1a from './hero/1-before.jpg'
 import hero1b from './hero/1-ai.jpg'
@@ -4494,7 +4494,7 @@ export default function App() {
             paddingRight: 'max(16px, env(safe-area-inset-right))',
           }}>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
-          <img src={logoImg} alt="Wepawao" className="h-11 w-auto rounded-xl sm:h-12" />
+          <img src={logoImg} alt="Wepawao" className="h-9 w-auto shrink-0 sm:h-12" />
           <div className="flex items-center gap-2">
             <LangToggle lang={lang} setLang={setLang} />
             {me
