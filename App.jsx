@@ -103,7 +103,9 @@ const I18N = {
     homeTipTitle: 'Open Wepawao like an app 📲', homeTipWepa: 'Wepa! Your moment is posted. Want Wepawao on your home screen, so you can come back with one tap?',
     homeTipStepsIos: ['Open Wepawao in Safari.', 'Tap the Share button (the square with an arrow ↑).', 'Scroll down and tap "Add to Home Screen", then "Add".'],
     homeTipStepsAndroid: ['Open Wepawao in Chrome.', 'Tap the menu (⋮) at the top right.', 'Tap "Add to Home screen" or "Install app", then "Add".'],
-    homeTipAfter: 'Then open Wepawao from its icon and sign in once. It remembers you from then on.',
+    homeTipAfter: 'Then open Wepawao from its icon and tap "Continue". You\'ll be right in.',
+    wbTitle: (n) => (n ? `Welcome back, ${n} 👋` : 'Welcome back 👋'), wbText: 'Tap to continue to Wepawao.', wbBtn: 'Continue', wbBusy: 'One moment…',
+    wbExpired: 'That welcome link has expired. Sign in once here and Wepawao will remember you from then on.',
     pasteCode: 'Paste code',
     codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
@@ -428,7 +430,9 @@ const I18N = {
     homeTipTitle: 'Abre Wepawao como una app 📲', homeTipWepa: '¡Wepa! Tu momento ya está publicado. ¿Quieres Wepawao en tu pantalla de inicio para volver con un solo toque?',
     homeTipStepsIos: ['Abre Wepawao en Safari.', 'Toca el botón Compartir (el cuadrado con la flecha ↑).', 'Baja y toca "Agregar a pantalla de inicio" y luego "Agregar".'],
     homeTipStepsAndroid: ['Abre Wepawao en Chrome.', 'Toca el menú (⋮) arriba a la derecha.', 'Toca "Agregar a la pantalla principal" o "Instalar app" y luego "Agregar".'],
-    homeTipAfter: 'Luego abre Wepawao desde su ícono e inicia sesión una vez. Desde ahí te recuerda.',
+    homeTipAfter: 'Luego abre Wepawao desde su ícono y toca "Continuar". Entrarás directo.',
+    wbTitle: (n) => (n ? `¡Hola de nuevo, ${n}! 👋` : '¡Hola de nuevo! 👋'), wbText: 'Toca para continuar a Wepawao.', wbBtn: 'Continuar', wbBusy: 'Un momento…',
+    wbExpired: 'Ese enlace de bienvenida ya venció. Entra una vez aquí y Wepawao te recordará desde entonces.',
     pasteCode: 'Pegar código',
     codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
@@ -2679,8 +2683,50 @@ function SharedPost({ id, me, onClose, onChanged }) {
 // ---------- Home-screen tip ----------
 // Phones (iPhone and Android): show how to add Wepawao from the browser's Share button. Where the browser offers it, also show an install button.
 // Offered only right after a member posts a moment (a happy moment, not an interruption), until they tap "Got it".
-function HomeScreenTip({ show }) {
-  const { t } = useLang()
+const isStandalone = () => window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+const isIphone = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+
+// iPhone handoff: the home-screen icon keeps its own sign-in, apart from Safari.
+// While the tip is on screen, ask the server for a one-time sign-in code for this member and point the
+// page's app settings at it, so the icon iPhone saves opens on "Welcome back, <name>. Tap to continue."
+// A code lasts 1 hour; a new one is fetched only after that, so an icon already added keeps working.
+// If anything fails, nothing changes: the icon just opens on the normal sign-in.
+const HANDOFF_MAX_AGE_MS = 55 * 60 * 1000
+function useHomeScreenHandoff(active, me, lang) {
+  useEffect(() => {
+    if (!active || !me || !isIphone() || isStandalone()) return
+    let fetchedAt = 0
+    let live = true
+    async function prepare() {
+      if (Date.now() - fetchedAt < HANDOFF_MAX_AGE_MS) return
+      try {
+        const { data } = await supabase.auth.getSession()
+        const token = data?.session?.access_token
+        if (!token) return
+        const r = await fetch('/api/handoff', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(8000) })
+        if (!r.ok || !live) return
+        const { code } = await r.json()
+        if (!code) return
+        const { data: prof } = await supabase.from('profiles').select('display_name').eq('id', me).maybeSingle()
+        const first = String(prof?.display_name || '').trim().split(/\s+/)[0] || ''
+        if (!live) return
+        fetchedAt = Date.now()
+        const q = new URLSearchParams({ h: code, lang })
+        if (first) q.set('n', first)
+        let link = document.querySelector('link[rel="manifest"]')
+        if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link) }
+        link.href = `/api/manifest?${q.toString()}`
+      } catch { /* keep the regular icon; the member can sign in normally */ }
+    }
+    prepare()
+    const onShow = () => { if (document.visibilityState === 'visible') prepare() }
+    document.addEventListener('visibilitychange', onShow)
+    return () => { live = false; document.removeEventListener('visibilitychange', onShow) }
+  }, [active, me, lang])
+}
+
+function HomeScreenTip({ show, me }) {
+  const { t, lang } = useLang()
   const [installEvt, setInstallEvt] = useState(null)
   const [hidden, setHidden] = useState(() => {
     try { return localStorage.getItem('wao_home_tip_hidden_v2') === '1' } catch { return false }
@@ -2694,6 +2740,7 @@ function HomeScreenTip({ show }) {
     return () => window.removeEventListener('beforeinstallprompt', onPrompt)
   }, [])
   const hide = () => { try { localStorage.setItem('wao_home_tip_hidden_v2', '1') } catch { /* ignore */ } setHidden(true) }
+  useHomeScreenHandoff(show && !hidden, me, lang)
   // Already opened from the home screen, dismissed, or a computer: nothing to show.
   if (!show || hidden || standalone || (!ios && !android && !installEvt)) return null
   const steps = ios ? t.homeTipStepsIos : t.homeTipStepsAndroid
@@ -2718,6 +2765,21 @@ function HomeScreenTip({ show }) {
       )}
       <p className="text-sm text-stone-600">{t.homeTipAfter}</p>
       <button className="text-sm font-bold text-[#4a3af0] underline" onClick={hide}>{t.gotIt}</button>
+    </div>
+  )
+}
+
+// ---------- Welcome back (iPhone home-screen icon, first open) ----------
+// The icon was added with a one-time sign-in code for this member (see useHomeScreenHandoff).
+// One tap trades the code for the icon's own session, so the member never has to join or sign in again.
+function WelcomeBack({ name, busy, onContinue }) {
+  const { t } = useLang()
+  return (
+    <div className={`${card} space-y-4 text-center`}>
+      <img src="/apple-touch-icon.png" alt="" className="mx-auto h-16 w-16 rounded-2xl" />
+      <h2 className="text-2xl font-extrabold">{t.wbTitle(name)}</h2>
+      <p className="text-stone-600">{t.wbText}</p>
+      <button className={`${primary} w-full text-lg`} disabled={busy} onClick={onContinue}>{busy ? t.wbBusy : t.wbBtn}</button>
     </div>
   )
 }
@@ -4028,6 +4090,16 @@ export default function App() {
     const standalone = window.navigator.standalone === true || window.matchMedia?.('(display-mode: standalone)').matches
     return used || standalone
   })
+  // iPhone home-screen icon opened for the first time with its one-time sign-in code (?handoff=…).
+  const [handoff, setHandoff] = useState(() => {
+    const q = new URLSearchParams(window.location.search)
+    const code = q.get('handoff')
+    if (!code) return null
+    try { if (localStorage.getItem('wao_handoff_used') === code) return null } catch { /* ignore */ }
+    return { code, name: (q.get('n') || '').slice(0, 30) }
+  })
+  const [handoffBusy, setHandoffBusy] = useState(false)
+  const [handoffExpired, setHandoffExpired] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const [showProfile, setShowProfile] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
@@ -4204,6 +4276,12 @@ export default function App() {
 
   const posted = () => setRefreshKey((k) => k + 1)
   const [homeTip, setHomeTip] = useState(false)
+  // The home-screen tip appears once the member has posted their second moment.
+  const offerHomeTip = useCallback(async () => {
+    if (!me) return
+    const { count, error } = await supabase.from('posts').select('id', { count: 'exact', head: true }).eq('user_id', me)
+    if (!error && (count || 0) >= 2) setHomeTip(true)
+  }, [me])
   useNetworkWatcher(me, (ev) => { setNetEvent(ev); posted() })
 
   // Invite links (?invite=<member id>): remember the inviter, show who invited you,
@@ -4274,11 +4352,43 @@ export default function App() {
       setInviter(null)
     })
   }, [me, ready, inviter])
+  function clearHandoffFromUrl() {
+    const url = new URL(window.location.href)
+    url.searchParams.delete('handoff'); url.searchParams.delete('n')
+    window.history.replaceState(window.history.state, '', url.pathname + url.search)
+  }
+  // Already signed in here: the code is not needed (and stays unused).
+  useEffect(() => {
+    if (authChecked && me && handoff) { clearHandoffFromUrl(); setHandoff(null) }
+  }, [authChecked, me, handoff])
+  async function continueHandoff() {
+    if (!handoff || handoffBusy) return
+    setHandoffBusy(true)
+    try {
+      // The member already saw the welcome in Safari; don't replay it inside the icon.
+      localStorage.setItem('wao_welcome_seen', '1')
+      localStorage.setItem('wao_home_tip_hidden_v2', '1')
+      localStorage.setItem('wao_handoff_used', handoff.code)
+    } catch { /* ignore */ }
+    let { error } = await supabase.auth.verifyOtp({ token_hash: handoff.code, type: 'email' })
+    if (error) ({ error } = await supabase.auth.verifyOtp({ token_hash: handoff.code, type: 'magiclink' }))
+    clearHandoffFromUrl()
+    setHandoffBusy(false)
+    setHandoff(null)
+    if (error) {
+      // Expired or already used: fall back to the regular sign-in, once.
+      setHandoffExpired(true)
+      setShowSignIn(true)
+    }
+  }
+  const showWelcomeBack = authChecked && !me && !!handoff
+
   // A visitor opening a shared moment sees the moment first; the sign-in box sits right under it,
   // and the page glides down to it after a few seconds (unless they already scrolled on their own).
   const signInBelowPost = !me && !!sharedId && tab === 'everyone'
-  const signInBox = showSignIn && !me && (
+  const signInBox = showSignIn && !me && !showWelcomeBack && (
     <div id="wp-signin" className="scroll-mt-20 space-y-4">
+      {handoffExpired && <p className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm font-semibold">{t.wbExpired}</p>}
       {inviter && <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>}
       <SignIn startWithPassword={pwFirst} allowPassword={returning} />
     </div>
@@ -4332,6 +4442,7 @@ export default function App() {
 
         <div className="mx-auto max-w-2xl px-4 py-4 pb-20 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
         <main className="min-w-0 space-y-4">
+          {showWelcomeBack && <WelcomeBack name={handoff.name} busy={handoffBusy} onContinue={continueHandoff} />}
           {!signInBelowPost && signInBox}
           {resetting && me && <PasswordReset onDone={() => {
             setResetting(false)
@@ -4353,7 +4464,7 @@ export default function App() {
               {me && composerOpen && (
                 <div ref={composerRef} className="scroll-mt-20">
                   <MomentComposer userId={me}
-                    onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); setHomeTip(true); posted() }} />
+                    onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); offerHomeTip(); posted() }} />
                 </div>
               )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
@@ -4366,10 +4477,10 @@ export default function App() {
               <button className="text-xs text-stone-500 underline" onClick={() => setFlash('')}>{t.gotIt}</button>
             </div>
           )}
-          {me && <HomeScreenTip show={homeTip} />}
+          {me && <HomeScreenTip show={homeTip} me={me} />}
           {me && tab === 'mine' && (
             <MomentComposer userId={me}
-              onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); setHomeTip(true); posted() }} />
+              onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); offerHomeTip(); posted() }} />
           )}
           {!me && !showSignIn && tab === 'discover' && (
             <div className={`${card} space-y-3`}>
