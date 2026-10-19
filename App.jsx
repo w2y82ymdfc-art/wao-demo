@@ -2766,6 +2766,32 @@ function SharedPost({ id, me, onClose, onChanged }) {
 // Phones (iPhone and Android): show how to add Wepawao from the browser's Share button. Where the browser offers it, also show an install button.
 // Offered only right after a member posts a moment (a happy moment, not an interruption), until they tap "Got it".
 const isStandalone = () => window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+// iPhone Home Screen app: on opening (or coming back to it) iOS sometimes leaves the top of the page
+// undrawn until the member scrolls. Nudge the scroll by one pixel and back so it redraws everything.
+function nudgeRepaint() {
+  if (!isStandalone()) return
+  requestAnimationFrame(() => {
+    const y = window.scrollY
+    window.scrollTo(window.scrollX, y + 1)
+    requestAnimationFrame(() => window.scrollTo(window.scrollX, y))
+  })
+}
+function useHomeScreenRepaint() {
+  useEffect(() => {
+    if (!isStandalone()) return
+    const timers = []
+    const kick = () => { [150, 600, 1500].forEach((ms) => timers.push(setTimeout(nudgeRepaint, ms))) }
+    const onShow = () => { if (document.visibilityState === 'visible') kick() }
+    kick()
+    window.addEventListener('pageshow', onShow)
+    document.addEventListener('visibilitychange', onShow)
+    return () => {
+      timers.forEach(clearTimeout)
+      window.removeEventListener('pageshow', onShow)
+      document.removeEventListener('visibilitychange', onShow)
+    }
+  }, [])
+}
 const isIphone = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 // Facebook, Instagram, Messenger, TikTok, LINE and similar open links in their own built-in browser,
 // which has no "Add to Home Screen". (WhatsApp on iPhone opens a Safari view, handled in the iPhone steps.)
@@ -4292,6 +4318,7 @@ export default function App() {
   const t = I18N[lang]
   const me = session?.user.id
   useHomeScreenHandoff(me, lang)
+  useHomeScreenRepaint()
   const ready = useSchemaReady()
   const { map: conn, reload: reloadConn } = useConnections(me, ready, refreshKey)
 
