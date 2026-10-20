@@ -5070,15 +5070,17 @@ export default function App() {
           )}
           {tab === 'affiliate' && (
             <>
-              {!wide && !me && (
-                <>
-                  <button className="text-sm font-bold text-[#4a3af0]" onClick={() => setTab('everyone')}>{t.aff.back}</button>
-                  <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => {}}
-                    onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
-                </>
+              {!wide && !me && <button className="text-sm font-bold text-[#4a3af0]" onClick={() => setTab('everyone')}>{t.aff.back}</button>}
+              {/* Phone: the sliding banner sits at the top of the affiliate page, for visitors and members. */}
+              {!wide && <AffiliateBanner me={me} refreshKey={refreshKey}
+                onOpen={() => document.getElementById('wp-aff-dashboard')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
+              {(me || wide) && (
+                <div id="wp-aff-dashboard" className="scroll-mt-3">
+                  <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
+                    isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />
+                </div>
               )}
-              {(me || wide) && <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
-                isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => { setShowSignIn(true); scrollToSignIn() }}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
