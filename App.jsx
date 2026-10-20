@@ -1,6 +1,7 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import logoImg from './wepawao-wordmark.png'
 import { createClient } from '@supabase/supabase-js'
+import QRCode from 'qrcode'
 import hero1a from './hero/1-before.jpg'
 import hero1b from './hero/1-ai.jpg'
 import hero2a from './hero/2-before.jpg'
@@ -86,6 +87,7 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: ['Start my network', 'or open my page'],
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
+    qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Save image', close: 'Close', saved: 'Image saved' },
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
     invitedBy: (n) => `${n} invited you to Wepawao!`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
@@ -445,6 +447,7 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: ['Empezar mi red', 'o abrir mi página'],
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
+    qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Guardar imagen', close: 'Cerrar', saved: 'Imagen guardada' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
     invitedBy: (n) => `${n} te invitó a Wepawao.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
@@ -2752,6 +2755,7 @@ function Contacts({ me, conn, onChanged, ready }) {
         <p className="text-stone-600">{t.inviteText}</p>
         <div className="flex flex-wrap items-center gap-3">
           <button className={primary} onClick={shareInvite}>{t.inviteBtn}</button>
+          <QrCodeButton me={me} />
           {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
         </div>
       </div>
@@ -3031,6 +3035,92 @@ async function shareInviteLink(me, lang, t, onCopied) {
     try { await navigator.share({ title: 'Wepawao', text: t.inviteShareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
   }
   try { await navigator.clipboard.writeText(url); onCopied?.() } catch { window.prompt('', url) }
+}
+
+// ---------- My QR code: the affiliate's invite link as a QR image to print or share ----------
+function loadImg(src) {
+  return new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src })
+}
+async function drawInviteQr(canvas, url, caption) {
+  const W = 1080, H = 1350
+  canvas.width = W; canvas.height = H
+  const c = canvas.getContext('2d')
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H)
+  const [word, icon] = await Promise.all([loadImg(logoImg), loadImg('/apple-touch-icon.png')])
+  if (word) { const h = 150, w = (word.width / word.height) * h; c.drawImage(word, (W - w) / 2, 70, w, h) }
+  // High error correction so the logo in the middle doesn't stop the code from scanning.
+  const qr = QRCode.create(url, { errorCorrectionLevel: 'H' })
+  const n = qr.modules.size, quiet = 2, side = 820, cell = side / (n + quiet * 2)
+  const x0 = (W - side) / 2, y0 = 270
+  c.fillStyle = '#14123a'
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) {
+    if (qr.modules.get(r, k)) c.fillRect(x0 + (k + quiet) * cell, y0 + (r + quiet) * cell, Math.ceil(cell), Math.ceil(cell))
+  }
+  if (icon) {
+    const s = side * 0.2, ix = (W - s) / 2, iy = y0 + (side - s) / 2, pad = 14
+    c.fillStyle = '#ffffff'
+    c.beginPath(); c.roundRect(ix - pad, iy - pad, s + pad * 2, s + pad * 2, 36); c.fill()
+    c.save(); c.beginPath(); c.roundRect(ix, iy, s, s, 30); c.clip(); c.drawImage(icon, ix, iy, s, s); c.restore()
+  }
+  c.fillStyle = '#4a3af0'; c.font = '800 54px system-ui, -apple-system, sans-serif'; c.textAlign = 'center'
+  c.fillText(caption, W / 2, y0 + side + 110)
+}
+
+function QrCodeButton({ me, className = ghost }) {
+  const { t } = useLang()
+  const [open, setOpen] = useState(false)
+  if (!me) return null
+  return (
+    <>
+      <button type="button" className={className} onClick={() => setOpen(true)}>{t.qr.btn}</button>
+      {open && <QrCodeModal me={me} onClose={() => setOpen(false)} />}
+    </>
+  )
+}
+
+function QrCodeModal({ me, onClose }) {
+  const { t, lang } = useLang()
+  const canvasRef = useRef(null)
+  const [src, setSrc] = useState('')
+  const [note, setNote] = useState('')
+  useEffect(() => {
+    const cv = canvasRef.current
+    if (!cv) return
+    drawInviteQr(cv, inviteLink(me, lang), t.qr.caption).then(() => setSrc(cv.toDataURL('image/png'))).catch(() => {})
+  }, [me, lang, t.qr.caption])
+
+  async function save() {
+    const cv = canvasRef.current
+    if (!cv) return
+    const blob = await new Promise((r) => cv.toBlob(r, 'image/png'))
+    if (!blob) return
+    const file = new File([blob], 'wepawao-qr.png', { type: 'image/png' })
+    if (navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Wepawao' }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob); a.download = 'wepawao-qr.png'
+    document.body.appendChild(a); a.click(); a.remove()
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000)
+    setNote(t.qr.saved); setTimeout(() => setNote(''), 2500)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
+      <div className="max-h-[92vh] w-full max-w-sm space-y-3 overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"
+        onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+        <h3 className="text-xl font-extrabold">{t.qr.title}</h3>
+        <canvas ref={canvasRef} hidden />
+        {src
+          ? <img src={src} alt={t.qr.title} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
+          : <div className="aspect-[4/5] w-full rounded-2xl bg-[#eef0fc]" />}
+        <p className="text-sm text-stone-600">{t.qr.text}</p>
+        <button type="button" className={`${primary} w-full`} disabled={!src} onClick={save}>{t.qr.save}</button>
+        {note && <p className="text-center text-sm font-semibold text-emerald-700">{note}</p>}
+        <button type="button" className="w-full text-center text-sm font-bold text-[#4a3af0]" onClick={onClose}>{t.qr.close}</button>
+      </div>
+    </div>
+  )
 }
 
 function TierDot({ i }) {
@@ -3519,6 +3609,7 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
               )}
             <div className="flex flex-wrap items-center gap-3">
               <button className={primary} onClick={() => shareInviteLink(me, lang, t, () => { setNote(t.linkCopied); setTimeout(() => setNote(''), 2500) })}>{t.inviteBtn}</button>
+              <QrCodeButton me={me} />
               {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
             </div>
           </div>
