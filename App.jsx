@@ -88,6 +88,7 @@ const I18N = {
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
+    prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
     inviteBtn: 'Share my invite link', inviteShareText: "Wepa! I joined Wepawao. Join free with my link and see what's coming.",
     invitedBy: (n) => `${n} invited you to Wepawao!`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
@@ -448,6 +449,7 @@ const I18N = {
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
+    prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao. Únete gratis con mi enlace y mira lo que viene.',
     invitedBy: (n) => `${n} te invitó a Wepawao.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
@@ -4417,6 +4419,23 @@ function AiFaq() {
 }
 
 // ---------- Hero (top of the Everyone tab) ----------
+// Visitors only: "Puerto Rico now has its own social network" welcome card, above the hero.
+function PuertoRicoCard() {
+  const { t } = useLang()
+  return (
+    <section className="overflow-hidden rounded-3xl bg-[#14123a] text-white">
+      <img src="/wepawao-pr.jpg" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
+      <div className="space-y-2 px-5 pb-5 pt-4">
+        <span className="inline-block rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{t.prCard.pill}</span>
+        <h2 className="text-[clamp(1.4rem,6vw,2rem)] font-black leading-tight tracking-tight">
+          {t.prCard.l1}<span className="text-[#f6d155]">{t.prCard.l2}</span>
+        </h2>
+        <p className="text-sm font-semibold text-white/80">{t.prCard.sub}</p>
+      </div>
+    </section>
+  )
+}
+
 function Hero({ signedIn, open, onShare, onSignIn }) {
   const { t } = useLang()
   return (
@@ -5257,6 +5276,7 @@ export default function App() {
           {signInBelowPost && signInBox}
           {tab === 'everyone' && (
             <>
+              {!me && !sharedId && <PuertoRicoCard />}
               <Hero signedIn={!!me} open={composerOpen} onShare={() => (composerOpen ? setComposerOpen(false) : openShare())}
                 onSignIn={() => { setShareAfterSignIn(true); setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />
               {me && composerOpen && (

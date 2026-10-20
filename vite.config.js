@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // The repo is flat (no folders), so these files are published at the site root by this plugin.
-const STATIC_FILES = ['wepawao-share.jpg', 'wepawao-icon-192.png', 'wepawao-icon-512.png', 'apple-touch-icon.png', 'vip-la-parrilla.jpg', 'vip-brasa-panoramica.jpg']
+const STATIC_FILES = ['wepawao-share.jpg', 'wepawao-pr.jpg', 'wepawao-icon-192.png', 'wepawao-icon-512.png', 'apple-touch-icon.png', 'vip-la-parrilla.jpg', 'vip-brasa-panoramica.jpg']
 
 // Full site address for link previews (WhatsApp needs a full https:// address). Vercel provides it at build time.
 const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || ''
@@ -52,7 +52,7 @@ const HEAD_TAGS = [
   meta('property', 'og:image', `${SITE}/wepawao-share.jpg`),
   meta('property', 'og:image:width', '1200'),
   meta('property', 'og:image:height', '630'),
-  meta('property', 'og:image:alt', 'A woman in her home kitchen and her AI caricature as the owner of her own bakery'),
+  meta('property', 'og:image:alt', 'Puerto Rico ya tiene su propia red social: Wepawao. An El Morro sentry box and the Puerto Rico flag by the sea'),
   meta('name', 'twitter:card', 'summary_large_image'),
   meta('name', 'twitter:image', `${SITE}/wepawao-share.jpg`),
   // Home-screen app
