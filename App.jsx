@@ -3302,7 +3302,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
     ...contestSlide,
     (active) => (
       <>
-        <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
+        <SlideHead title={t.aff.bannerTitle} right={onOpen ? `${t.aff.open} →` : null} />
         <TierTiles values={counts} active={active} sub={fresh.map((f) => ({ text: t.aff.newWeek(f), hot: f > 0 }))} />
       </>
     ),
@@ -3322,7 +3322,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
     )),
     (active) => (
       <>
-        <SlideHead title={t.aff.bannerTitle} right={`${t.aff.open} →`} />
+        <SlideHead title={t.aff.bannerTitle} right={onOpen ? `${t.aff.open} →` : null} />
         <div className="mt-2 text-5xl font-extrabold leading-none"><CountUp value={total} active={active} /></div>
         <div className="mt-1 text-sm text-white/75">{total == null ? '' : t.aff.total(total).replace(/^[\d.,\s]+/, '')}</div>
         <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-white/10">
@@ -5073,7 +5073,7 @@ export default function App() {
               {!wide && !me && <button className="text-sm font-bold text-[#4a3af0]" onClick={() => setTab('everyone')}>{t.aff.back}</button>}
               {/* Phone: the sliding banner sits at the top of the affiliate page, for visitors and members. */}
               {!wide && <AffiliateBanner me={me} refreshKey={refreshKey}
-                onOpen={() => document.getElementById('wp-aff-dashboard')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onOpen={null}
                 onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
               {(me || wide) && (
                 <div id="wp-aff-dashboard" className="scroll-mt-3">
@@ -5120,7 +5120,7 @@ export default function App() {
         </main>
         {wide && (
           <aside className="sticky top-4 space-y-4">
-            <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
+            <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={tab === 'affiliate' ? null : () => { setTab('affiliate'); window.scrollTo(0, 0) }}
               onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
             <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
               onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
