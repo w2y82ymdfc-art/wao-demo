@@ -85,7 +85,7 @@ const I18N = {
     confirmReport: 'Report this moment for breaking the community rules?',
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
-    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: ['Start my network', 'or open my page'],
+    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free', calloutJoinWith: (n) => `Join ${n} on Wepawao`,
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
@@ -445,7 +445,7 @@ const I18N = {
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
-    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: ['Empezar mi red', 'o abrir mi página'],
+    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis', calloutJoinWith: (n) => `Únete a ${n} en Wepawao`,
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
@@ -849,7 +849,7 @@ const NEW_COLS = 'image_paths,edited_at,visibility,public_block_reason,'
 
 // "Use me, share me" strip under the top bar, on every screen. Members share their own invite link
 // (so new people join their network). Visitors are invited to join first, so they have a link of their own.
-function ShareCallout({ me, onJoin }) {
+function ShareCallout({ me, inviter, onJoin }) {
   const { t, lang } = useLang()
   const [note, setNote] = useState('')
   async function share() {
@@ -872,7 +872,7 @@ function ShareCallout({ me, onJoin }) {
         )
         : (
           <button onClick={onJoin} className="shrink-0 rounded-2xl bg-[#f6d155] px-3 py-1 text-center text-xs font-bold leading-tight text-[#14123a]">
-            {t.calloutJoin[0]}<br /><span className="font-semibold opacity-75">{t.calloutJoin[1]}</span>
+            {inviter?.display_name ? t.calloutJoinWith(inviter.display_name) : t.calloutJoin}
           </button>
         )}
     </div>
@@ -5238,7 +5238,7 @@ export default function App() {
           </div>
           </div>
         </header>
-        <ShareCallout me={me} onJoin={() => { setPwFirst(returning); setAfterSignIn(true); setShowSignIn(true); scrollToSignIn() }} />
+        <ShareCallout me={me} inviter={inviter} onJoin={() => { setPwFirst(returning); setAfterSignIn(true); setShowSignIn(true); scrollToSignIn() }} />
 
         <div className="mx-auto max-w-2xl px-4 py-4 pb-20 lg:grid lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
         <main className="min-w-0 space-y-4">
