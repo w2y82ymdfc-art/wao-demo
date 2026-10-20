@@ -115,6 +115,25 @@ const I18N = {
     codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
+    shop: {
+      soon: 'Coming soon',
+      cardTitle: 'Coming soon: Wepawao Shop',
+      cardText: 'Online and local businesses, with commissions for affiliate partners on real sales.',
+      cardBtn: 'See the preview',
+      title: 'Wepawao Shop',
+      intro: 'Online and local businesses, with commissions for affiliate partners on real sales. This is a preview: the Shop is not open yet.',
+      s1: 'Shop online and local', s2: 'Buy, or share with your link', s3: 'See your commissions',
+      online: 'Online', local: 'Local near you',
+      seasonal: 'Seasonal pick', premium: 'High-ticket pick', store: 'Online store',
+      localBiz: 'Local business', prepaid: 'Pay here, redeem in store', orderAhead: 'Order ahead, pick up',
+      buy: 'Buy now', shareTitle: 'You as affiliate partner',
+      shareText: 'Share a product with your link. When someone buys through it, the commission goes to you and your network.',
+      shareBtn: 'Share with my link',
+      saleTitle: 'New sale through your link',
+      saleNote: 'Split from the sale\'s commission pool. Pending until the return window closes, then paid with the monthly payout.',
+      you: 'You · Tier 1',
+      back: '← Back',
+    },
     home: 'Home', homeLogo: 'Wepawao, go to the home page',
     aff: {
       bannerTitle: 'Your Affiliate network',
@@ -455,6 +474,25 @@ const I18N = {
     codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
+    shop: {
+      soon: 'Próximamente',
+      cardTitle: 'Próximamente: Tienda Wepawao',
+      cardText: 'Negocios en línea y locales, con comisiones para socios afiliados por ventas reales.',
+      cardBtn: 'Ver la vista previa',
+      title: 'Tienda Wepawao',
+      intro: 'Negocios en línea y locales, con comisiones para socios afiliados por ventas reales. Esta es una vista previa: la Tienda aún no está abierta.',
+      s1: 'Compra en línea y local', s2: 'Compra, o comparte con tu enlace', s3: 'Mira tus comisiones',
+      online: 'En línea', local: 'Locales cerca de ti',
+      seasonal: 'Selección de temporada', premium: 'Selección de alto valor', store: 'Tienda en línea',
+      localBiz: 'Negocio local', prepaid: 'Paga aquí, redime en la tienda', orderAhead: 'Ordena y recoge',
+      buy: 'Comprar', shareTitle: 'Tú como socio afiliado',
+      shareText: 'Comparte un producto con tu enlace. Cuando alguien compra a través de él, la comisión es para ti y tu red.',
+      shareBtn: 'Compartir con mi enlace',
+      saleTitle: 'Nueva venta a través de tu enlace',
+      saleNote: 'Se reparte del fondo de comisiones de la venta. Pendiente hasta que cierre el periodo de devoluciones; luego se paga con el pago mensual.',
+      you: 'Tú · Nivel 1',
+      back: '← Volver',
+    },
     home: 'Inicio', homeLogo: 'Wepawao, ir a la página de inicio',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
@@ -4551,6 +4589,114 @@ function Welcome({ name, number, onDone }) {
 }
 
 // ---------- Our promise ----------
+// ---------- Wepawao Shop: "coming soon" card and preview (nothing here buys or pays yet) ----------
+function ShopSoonCard({ onOpen }) {
+  const { t } = useLang()
+  const s = t.shop
+  return (
+    <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-4">
+      <span className="inline-block rounded-full bg-[#f6d155] px-2.5 py-0.5 text-xs font-extrabold text-[#14123a]">{s.soon}</span>
+      <h3 className="text-lg font-extrabold">{s.cardTitle}</h3>
+      <p className="text-sm text-stone-700">{s.cardText}</p>
+      <button className={primary} onClick={onOpen}>{s.cardBtn}</button>
+    </div>
+  )
+}
+
+function MockPhoto({ h = 'h-28' }) {
+  return <div className={`${h} rounded-2xl bg-[#e8e9fb]`} />
+}
+function MockBar({ w = 'w-16' }) {
+  return <div className={`h-3 ${w} rounded-full bg-[#dcdff5]`} />
+}
+// Looks like a button, does nothing: the Shop is a preview.
+function MockBtn({ children, gold }) {
+  return (
+    <div className={`rounded-full py-3 text-center font-extrabold ${gold ? 'bg-[#f6d155] text-[#14123a]' : 'bg-[#4a3af0] text-white'}`}>{children}</div>
+  )
+}
+
+function ShopPreview({ onBack }) {
+  const { t } = useLang()
+  const s = t.shop
+  const step = (n, label) => (
+    <h3 className="flex items-center gap-2 text-lg font-extrabold">
+      <span className="grid h-7 w-7 place-items-center rounded-full bg-[#14123a] text-sm text-[#f6d155]">{n}</span>{label}
+    </h3>
+  )
+  return (
+    <div className="space-y-4">
+      <div className="relative overflow-hidden rounded-3xl bg-[#14123a] p-5 text-white">
+        <button className="text-sm font-bold text-[#f6d155]" onClick={onBack}>{s.back}</button>
+        <span className="absolute right-4 top-4 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{s.soon}</span>
+        <h2 className="mt-2 text-2xl font-extrabold">{s.title}</h2>
+        <p className="mt-1 text-sm text-white/85">{s.intro}</p>
+      </div>
+
+      {step(1, s.s1)}
+      <div className={`${card} space-y-3`} aria-hidden="true">
+        <div className="grid grid-cols-2 gap-1 rounded-full bg-[#eef0fc] p-1 text-center text-sm font-extrabold">
+          <div className="rounded-full bg-[#f6d155] py-2">{s.online}</div>
+          <div className="py-2 text-stone-600">{s.local}</div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[0, 1].map((i) => (
+            <div key={i} className="space-y-1.5">
+              <MockPhoto />
+              <div className="text-[11px] font-extrabold uppercase text-[#4a3af0]">{s.store}</div>
+              <div className="text-sm font-bold">{s.seasonal}</div>
+              <MockBar />
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-3 rounded-2xl border-2 border-[#f6d155] p-2">
+          <div className="h-20 w-20 shrink-0 rounded-xl bg-[#e8e9fb]" />
+          <div className="space-y-1.5 py-1">
+            <span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-[11px] font-extrabold">{s.premium}</span>
+            <div className="text-sm font-bold">{s.store}</div>
+            <MockBar w="w-20" />
+          </div>
+        </div>
+        <div className="flex items-center gap-3 rounded-2xl bg-[#eef0fc] p-3">
+          <div className="h-11 w-11 shrink-0 rounded-xl bg-[#dcdff5]" />
+          <div>
+            <div className="text-sm font-bold">{s.localBiz}</div>
+            <div className="text-xs text-stone-600">{s.prepaid} · {s.orderAhead}</div>
+          </div>
+        </div>
+      </div>
+
+      {step(2, s.s2)}
+      <div className={`${card} space-y-3`} aria-hidden="true">
+        <MockPhoto h="h-40" />
+        <div className="text-[11px] font-extrabold uppercase text-[#4a3af0]">{s.store}</div>
+        <div className="font-bold">{s.seasonal}</div>
+        <MockBar w="w-24" />
+        <MockBtn>{s.buy}</MockBtn>
+        <div className="space-y-2 rounded-2xl bg-[#14123a] p-4 text-white">
+          <div className="font-extrabold">{s.shareTitle}</div>
+          <p className="text-sm text-white/85">{s.shareText}</p>
+          <MockBtn gold>{s.shareBtn}</MockBtn>
+        </div>
+      </div>
+
+      {step(3, s.s3)}
+      <div className="space-y-3 rounded-3xl bg-[#14123a] p-4 text-white ring-2 ring-[#f6d155]" aria-hidden="true">
+        <div className="font-extrabold">{s.saleTitle}</div>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          {[s.you, t.aff.tier(2), t.aff.tier(3)].map((label, i) => (
+            <div key={i} className="rounded-2xl bg-white/10 px-1 py-2.5">
+              <div className="text-[11px] text-white/85">{label}</div>
+              <div className="mx-auto mt-2 h-3 w-10 rounded-full bg-[#f6d155]/70" />
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-white/85">{s.saleNote}</p>
+      </div>
+    </div>
+  )
+}
+
 function OurPromise({ onReplay }) {
   const { t } = useLang()
   return (
@@ -5081,6 +5227,7 @@ export default function App() {
               {!wide && <AffiliateBanner me={me} refreshKey={refreshKey}
                 onOpen={null}
                 onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
+              <ShopSoonCard onOpen={() => { setTab('shop'); window.scrollTo(0, 0) }} />
               {(me || wide) && (
                 <div id="wp-aff-dashboard" className="scroll-mt-3">
                   <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
@@ -5091,6 +5238,7 @@ export default function App() {
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
           )}
+          {tab === 'shop' && <ShopPreview onBack={() => { setTab('affiliate'); window.scrollTo(0, 0) }} />}
           {tab === 'team' && isAdmin && <ProviderTeamPanel onBack={() => setTab('affiliate')} />}
           {tab === 'contest' && (
             <ContestPage me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
