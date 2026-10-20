@@ -115,6 +115,7 @@ const I18N = {
     codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
     gotIt: 'Got it',
+    home: 'Home', homeLogo: 'Wepawao, go to the home page',
     aff: {
       bannerTitle: 'Your Affiliate network',
       linkTitle: 'Who opened your links',
@@ -454,6 +455,7 @@ const I18N = {
     codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios niveles, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
+    home: 'Inicio', homeLogo: 'Wepawao, ir a la página de inicio',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
       linkTitle: 'Quién abrió tus enlaces',
@@ -4698,6 +4700,8 @@ export default function App() {
     if (fromHistory.current) { fromHistory.current = false; return }
     if (window.history.state?.wpTab !== tab) window.history.pushState({ wpTab: tab }, '')
   }, [tab])
+  // Home: the Everyone tab, from the top. Used by the logo and the floating Home button.
+  const goHome = () => { setVipId(null); setTab('everyone'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   // Signed in from "Join or sign in" / "open my page": go straight to My page.
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
@@ -4978,7 +4982,9 @@ export default function App() {
             paddingRight: 'max(16px, env(safe-area-inset-right))',
           }}>
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
-          <img src={logoImg} alt="Wepawao" className="h-9 w-auto shrink-0 sm:h-12" />
+          <button type="button" onClick={goHome} aria-label={t.homeLogo} className="shrink-0">
+            <img src={logoImg} alt="" className="h-9 w-auto sm:h-12" />
+          </button>
           <div className="flex items-center gap-2">
             <LangToggle lang={lang} setLang={setLang} />
             {me
@@ -5127,6 +5133,16 @@ export default function App() {
           </aside>
         )}
         </div>
+        {tab !== 'everyone' && (
+          <button type="button" onClick={goHome}
+            className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#14123a] px-5 py-3 text-base font-bold text-white shadow-lg ring-2 ring-[#f6d155]"
+            style={{ bottom: 'max(16px, calc(env(safe-area-inset-bottom) + 8px))' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f6d155" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M3 11l9-7 9 7" /><path d="M5 10v10h5v-6h4v6h5V10" />
+            </svg>
+            {t.home}
+          </button>
+        )}
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
         {!welcome && netStart && me && <NetworkStart me={me} onClose={closeNetStart} />}
         {!welcome && !netStart && netEvent && me && (
