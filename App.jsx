@@ -85,7 +85,7 @@ const I18N = {
     confirmReport: 'Report this moment for breaking the community rules?',
     inviteTitle: 'Invite people to Wepawao',
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
-    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free', calloutJoinWith: (n) => `Join ${n} on Wepawao`,
+    callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     inviteBtn: 'Share my invite link', inviteShareText: 'Wepa! I joined Wepawao and I am already building my network. Join with my link and grow yours too: you watch it grow right in front of you.',
@@ -445,7 +445,7 @@ const I18N = {
     confirmReport: '¿Reportar este momento por no cumplir las reglas de la comunidad?',
     inviteTitle: 'Invita personas a Wepawao',
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
-    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis', calloutJoinWith: (n) => `Únete a ${n} en Wepawao`,
+    callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao y ya estoy armando mi red. Únete con mi enlace y crece la tuya también: la ves crecer frente a tus ojos.',
@@ -870,9 +870,9 @@ function ShareCallout({ me, inviter, onJoin }) {
             {note || t.calloutShare}
           </button>
         )
-        : (
+        : !inviter && (
           <button onClick={onJoin} className="shrink-0 rounded-2xl bg-[#f6d155] px-3 py-1 text-center text-xs font-bold leading-tight text-[#14123a]">
-            {inviter?.display_name ? t.calloutJoinWith(inviter.display_name) : t.calloutJoin}
+            {t.calloutJoin}
           </button>
         )}
     </div>
