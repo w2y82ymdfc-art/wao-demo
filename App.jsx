@@ -4702,20 +4702,6 @@ export default function App() {
   }, [tab])
   // Home: the Everyone tab, from the top. Used by the logo and the floating Home button.
   const goHome = () => { setVipId(null); setTab('everyone'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
-  // The floating Home button tucks away while scrolling down (reading) and comes back when scrolling up.
-  const [homeShown, setHomeShown] = useState(true)
-  useEffect(() => {
-    let last = window.scrollY
-    const onScroll = () => {
-      const y = window.scrollY
-      if (y < 80 || y < last - 6) setHomeShown(true)
-      else if (y > last + 6) setHomeShown(false)
-      last = y
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  useEffect(() => { setHomeShown(true) }, [tab])
   // Signed in from "Join or sign in" / "open my page": go straight to My page.
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
@@ -5149,9 +5135,8 @@ export default function App() {
         </div>
         {tab !== 'everyone' && (
           <button type="button" onClick={goHome}
-            aria-hidden={!homeShown} tabIndex={homeShown ? 0 : -1}
-            className={`fixed z-40 flex items-center gap-1.5 rounded-full bg-[#14123a] px-4 py-2.5 text-sm font-bold text-white shadow-lg ring-2 ring-[#f6d155] transition-all duration-300 ${homeShown ? 'opacity-100' : 'pointer-events-none translate-y-24 opacity-0'}`}
-            style={{ bottom: 'max(16px, calc(env(safe-area-inset-bottom) + 8px))', right: 'max(16px, env(safe-area-inset-right))' }}>
+            className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-[#14123a] px-4 py-2.5 text-sm font-bold text-white shadow-lg ring-2 ring-[#f6d155]"
+            style={{ bottom: 'max(16px, calc(env(safe-area-inset-bottom) + 8px))' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6d155" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 11l9-7 9 7" /><path d="M5 10v10h5v-6h4v6h5V10" />
             </svg>
