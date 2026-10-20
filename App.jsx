@@ -136,6 +136,8 @@ const I18N = {
       teaserTitle: 'Coming soon: the Wepawao Face Challenge',
       teaserText: 'Feel the excitement in advance! When advertisers arrive, affiliates will show their funniest face and members will vote. The winners will sponsor those advertisers, with the opportunity to receive the corresponding commission compensation.',
       teaserCta: 'You might want to be part of what is coming!',
+      linkMember: "You're a founding affiliate. See what's coming",
+      linkGuest: 'Free Affiliate Program. See what is coming',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
@@ -473,6 +475,8 @@ const I18N = {
       teaserTitle: 'Muy pronto: El Reto de la Cara Wepawao',
       teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes, con la oportunidad de recibir la compensación por comisiones correspondiente.',
       teaserCta: '¡Querrás ser parte de lo que viene!',
+      linkMember: 'Eres afiliado fundador. Mira lo que viene',
+      linkGuest: 'Programa de Afiliados gratis. Mira lo que viene',
       tier: (n) => `Nivel ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
@@ -3191,6 +3195,22 @@ function WepawaoFaces({ size = 44 }) {
 }
 
 // "Coming soon" card for the Wepawao Face Challenge, shown under the hero (where the member count was).
+// Home screen (phone): one slim line instead of the full Affiliate banner, so AI Moments come first.
+// While a Face Challenge is open, the line points to the challenge instead.
+function AffiliateTeaserLink({ me, refreshKey, onOpen, onContest }) {
+  const { t } = useLang()
+  const [contest] = useContest(refreshKey)
+  const live = !!contest?.open
+  return (
+    <button type="button" onClick={live ? onContest : onOpen}
+      className="flex w-full items-center gap-2.5 rounded-full border-2 border-[#f6d155] bg-[#fff8dc] px-3.5 py-2.5 text-left text-[#14123a]">
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f6d155] text-sm font-black">!</span>
+      <span className="flex-1 text-sm font-bold leading-snug">{live ? t.contest.bannerTitle : (me ? t.aff.linkMember : t.aff.linkGuest)}</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+    </button>
+  )
+}
+
 function TeaserCard({ onJoin, onContest, refreshKey }) {
   const { t } = useLang()
   const [contest] = useContest(refreshKey)
@@ -4993,8 +5013,6 @@ export default function App() {
           {signInBelowPost && signInBox}
           {tab === 'everyone' && (
             <>
-              {!wide && <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
-                onSignIn={() => setShowSignIn(true)} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
               <Hero signedIn={!!me} open={composerOpen} onShare={() => (composerOpen ? setComposerOpen(false) : openShare())}
                 onSignIn={() => { setShareAfterSignIn(true); setShowSignIn(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />
               {me && composerOpen && (
@@ -5003,7 +5021,8 @@ export default function App() {
                     onPosted={(notice) => { setComposerOpen(false); setFlash(notice || ''); offerHomeTip(); posted() }} />
                 </div>
               )}
-              {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => setShowSignIn(true)}
+              {!wide && <AffiliateTeaserLink me={me} refreshKey={refreshKey}
+                onOpen={() => { setTab('affiliate'); window.scrollTo(0, 0) }}
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
           )}
@@ -5050,8 +5069,19 @@ export default function App() {
             </>
           )}
           {tab === 'affiliate' && (
-            <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
-              isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />
+            <>
+              {!wide && !me && (
+                <>
+                  <button className="text-sm font-bold text-[#4a3af0]" onClick={() => setTab('everyone')}>{t.aff.back}</button>
+                  <AffiliateBanner me={me} refreshKey={refreshKey} onOpen={() => {}}
+                    onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />
+                </>
+              )}
+              {(me || wide) && <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
+                isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />}
+              {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => { setShowSignIn(true); scrollToSignIn() }}
+                onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
+            </>
           )}
           {tab === 'team' && isAdmin && <ProviderTeamPanel onBack={() => setTab('affiliate')} />}
           {tab === 'contest' && (
