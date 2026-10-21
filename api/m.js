@@ -80,7 +80,7 @@ d.forEach(function(e,j){e.onclick=function(){go(j);play()}});play()})()</script>
     ? (biz.logo_path.startsWith('/') ? `${site}${biz.logo_path}` : `${SB}/storage/v1/object/public/photos/${biz.logo_path.split('/').map(encodeURIComponent).join('/')}`)
     : ''
   const joinUrl = biz?.owner_id ? `${site}/?ref=${biz.owner_id}&lang=${lang}` : `${site}/?lang=${lang}`
-  const vipUrl = biz ? `${site}/?vip=${biz.id}&lang=${lang}` : ''
+  const vipUrl = biz ? `${site}/?vip=${biz.id}&join=1&lang=${lang}` : ''
   const self = `${site}/m/${id}`
   const pageTitle = biz ? t.title(biz.name) : 'Wepawao'
 

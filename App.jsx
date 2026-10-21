@@ -93,6 +93,7 @@ const I18N = {
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
     inviteBtn: 'Share my invite link', inviteShareText: "Wepa! I joined Wepawao. Join free with my link and see what's coming.",
     invitedBy: (n) => `${n} invited you to Wepawao!`,
+    vipJoinTitle: (n) => `Sign in to become a VIP customer of ${n}`, vipJoinSub: 'Free. Once you sign in, you are on their VIP list automatically.',
     nowContacts: (n) => `You and ${n} are now contacts!`,
     requestsTitle: 'Contact requests', accept: 'Accept', decline: 'Decline',
     myContacts: 'My contacts', noContacts: 'No contacts yet. Share your invite link to start!',
@@ -456,6 +457,7 @@ const I18N = {
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao. Únete gratis con mi enlace y mira lo que viene.',
     invitedBy: (n) => `${n} te invitó a Wepawao.`,
+    vipJoinTitle: (n) => `Entra para ser cliente VIP de ${n}`, vipJoinSub: 'Gratis. Al entrar, quedas en su lista VIP automáticamente.',
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
     requestsTitle: 'Solicitudes de contacto', accept: 'Aceptar', decline: 'Rechazar',
     myContacts: 'Mis contactos', noContacts: 'Aún no tienes contactos. ¡Comparte tu enlace de invitación para empezar!',
@@ -5144,12 +5146,16 @@ export default function App() {
   const [sharedId, setSharedId] = useState(() => new URLSearchParams(window.location.search).get('post'))
   // A VIP list opened from its link (?vip=…), or one a visitor was joining before signing in.
   const [vipId, setVipId] = useState(() => {
-    const q = new URLSearchParams(window.location.search).get('vip')
+    const sp = new URLSearchParams(window.location.search)
+    const q = sp.get('vip')
+    // From the menu's "Become a VIP customer" (?vip=…&join=1): join right away, signing in first if needed.
+    if (q && UUID_RE.test(q) && sp.get('join') === '1') { try { localStorage.setItem('wao_vip_pending', q) } catch { /* ignore */ } }
     if (q && UUID_RE.test(q)) return q
     try { const p = localStorage.getItem('wao_vip_pending'); if (p && UUID_RE.test(p)) return p } catch { /* ignore */ }
     return null
   })
   useEffect(() => { if (vipId) setTab('vip') }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const [vipJoinName, setVipJoinName] = useState(null)
   const [flash, setFlash] = useState('')
   // Advertiser link (?advertise=1&pref=<affiliate id>): show the advertiser form and remember who sent it.
   const [advertise, setAdvertise] = useState(() => new URLSearchParams(window.location.search).has('advertise'))
@@ -5459,9 +5465,22 @@ export default function App() {
     <div id="wp-signin" className="scroll-mt-20 space-y-4">
       {handoffExpired && <p className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm font-semibold">{t.wbExpired}</p>}
       {inviter && <p className="rounded-3xl bg-[#14123a] px-4 py-3 font-bold text-white">{t.invitedBy(inviter.display_name)}</p>}
+      {vipJoinName && (
+        <div className="rounded-3xl bg-[#14123a] px-4 py-3 text-white">
+          <p className="text-lg font-extrabold text-[#f6d155]">★ {t.vipJoinTitle(vipJoinName)}</p>
+          <p className="text-sm text-white/80">{t.vipJoinSub}</p>
+        </div>
+      )}
       <SignIn startWithPassword={pwFirst} allowPassword={returning} />
     </div>
   )
+  // Came from a menu's "Become a VIP customer" while signed out: sign-in first, titled with the restaurant's name.
+  useEffect(() => {
+    if (!authChecked || me || !vipId || new URLSearchParams(window.location.search).get('join') !== '1') return
+    setShowSignIn(true)
+    supabase.from('vip_lists').select('name').eq('id', vipId).maybeSingle().then(({ data }) => { if (data?.name) setVipJoinName(data.name) })
+    scrollToSignIn()
+  }, [authChecked, me]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!authChecked || me || !sharedId) return
     setShowSignIn(true)
