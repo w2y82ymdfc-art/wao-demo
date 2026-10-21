@@ -4583,7 +4583,7 @@ function MenuEditor({ list, me }) {
       </div>
       {qrOpen && <QrCodeModal me={me} onClose={() => setQrOpen(false)} url={menuLink(list.id)} caption={m.qrCaption(list.name)}
         title={m.qrTitle} text={m.qrText} file="menu-qr.png"
-        opts={{ top: m.qrTop, foot: m.qrFoot, center: list.logo_path ? (list.logo_path.startsWith('/') ? list.logo_path : photoUrl(list.logo_path)) : null }} />}
+        opts={{ center: list.logo_path ? (list.logo_path.startsWith('/') ? list.logo_path : photoUrl(list.logo_path)) : null }} />}
       {datalist}
       {!items.length && <p className="rounded-2xl bg-[#f4f5fd] p-3 text-sm text-stone-600">{m.empty}</p>}
       {groups.map((g) => (
