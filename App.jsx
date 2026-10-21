@@ -4426,7 +4426,7 @@ function PuertoRicoCard() {
   const { t } = useLang()
   return (
     <section className="overflow-hidden rounded-3xl bg-[#14123a] text-white">
-      <img src="/wepawao-pr.jpg" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
+      <img src="/wepawao-pr.jpg?v=2" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
       <div className="space-y-2 px-5 pb-5 pt-4">
         <span className="inline-block rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{t.prCard.pill}</span>
         <h2 className="text-[clamp(1.4rem,6vw,2rem)] font-black leading-tight tracking-tight">
@@ -4451,7 +4451,7 @@ function PuertoRicoMemberCard({ me }) {
   }, [me])
   return (
     <section className="overflow-hidden rounded-3xl bg-[#14123a] text-white">
-      <img src="/wepawao-pr.jpg" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
+      <img src="/wepawao-pr.jpg?v=2" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
       <div className="space-y-2 px-5 pb-5 pt-4">
         <span className="inline-block rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{t.prCard.pill}</span>
         <h2 className="text-[clamp(1.4rem,6vw,2rem)] font-black leading-tight tracking-tight">
