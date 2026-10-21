@@ -4491,7 +4491,7 @@ function MenuEditor({ list, me }) {
       </div>
       <p className="text-sm text-stone-600">{m.intro}</p>
       <div className="flex flex-wrap gap-2">
-        <a href={`${menuLink(list.id)}?lang=${lang}`} target="_blank" rel="noreferrer" className={primary}>{m.view}</a>
+        <a href={`${menuLink(list.id)}?lang=${lang}&from=app`} className={primary}>{m.view}</a>
         <button type="button" className={ghostSm} onClick={() => setQrOpen(true)}>{m.qr}</button>
         <button type="button" className={ghostSm} onClick={share}>{m.share}</button>
       </div>

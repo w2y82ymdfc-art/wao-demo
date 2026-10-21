@@ -9,13 +9,13 @@ const T = {
   es: {
     title: (n) => `Menú · ${n}`, other: 'Otros', soldOut: 'Agotado', market: 'Precio del mercado',
     updated: (d) => `Precios al ${d}`, empty: 'Este menú todavía no tiene platos.', notFound: 'Este menú no existe.',
-    made: 'Menú digital hecho con', join: 'Únete gratis', vip: 'Hazte cliente VIP', switchTo: 'English', switchLang: 'en',
+    back: 'Volver a Wepawao', made: 'Menú digital hecho con', join: 'Únete gratis', vip: 'Hazte cliente VIP', switchTo: 'English', switchLang: 'en',
     desc: (n) => `El menú de ${n}, siempre con los precios al día.`,
   },
   en: {
     title: (n) => `Menu · ${n}`, other: 'Other', soldOut: 'Sold out', market: 'Market price',
     updated: (d) => `Prices as of ${d}`, empty: 'This menu has no dishes yet.', notFound: 'This menu does not exist.',
-    made: 'Digital menu made with', join: 'Join free', vip: 'Become a VIP customer', switchTo: 'Español', switchLang: 'es',
+    back: 'Back to Wepawao', made: 'Digital menu made with', join: 'Join free', vip: 'Become a VIP customer', switchTo: 'Español', switchLang: 'es',
     desc: (n) => `${n}'s menu, always with up-to-date prices.`,
   },
 }
@@ -25,6 +25,7 @@ const money = (cents) => `$${(cents / 100).toFixed(2)}`
 export default async function handler(req, res) {
   const id = String(req.query.id || '')
   const lang = req.query.lang === 'en' ? 'en' : 'es'
+  const fromApp = req.query.from === 'app'
   const t = T[lang]
   const site = `https://${req.headers['x-forwarded-host'] || req.headers.host}`
   const SB = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
@@ -98,6 +99,7 @@ header{background:#14123a;color:#fff;padding:calc(20px + env(safe-area-inset-top
 h1{margin:0;font-size:26px;line-height:1.15;font-weight:900}
 .town{color:rgba(255,255,255,.75);font-size:14px;margin-top:2px}
 .about{max-width:640px;margin:12px auto 0;color:rgba(255,255,255,.85);font-size:15px}
+.back{display:block;max-width:640px;margin:0 auto 14px;color:#fff;font-weight:700;font-size:15px;text-decoration:none}
 .lang{color:#f6d155;font-weight:700;font-size:14px;text-decoration:none;border:2px solid #f6d155;border-radius:999px;padding:5px 12px;white-space:nowrap}
 main{max-width:640px;margin:0 auto;padding:8px 16px 8px}
 h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#4a3af0}
@@ -118,9 +120,10 @@ footer{max-width:640px;margin:16px auto 0;padding:18px 16px calc(28px + env(safe
 </style>
 </head><body>
 <header>
+  ${fromApp ? `<a class="back" href="${esc(`${site}/?lang=${lang}`)}">← ${t.back}</a>` : ''}
   <div class="top">
     <div class="biz">${logo ? `<img src="${esc(logo)}" alt="">` : ''}<div><h1>${esc(biz?.name || 'Wepawao')}</h1>${biz?.town ? `<div class="town">${esc(biz.town)}</div>` : ''}</div></div>
-    <a class="lang" href="${esc(`${self}?lang=${t.switchLang}`)}">${t.switchTo}</a>
+    <a class="lang" href="${esc(`${self}?lang=${t.switchLang}${fromApp ? '&from=app' : ''}`)}">${t.switchTo}</a>
   </div>
   ${biz?.about ? `<p class="about">${esc(biz.about)}</p>` : ''}
 </header>
