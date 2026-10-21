@@ -7,6 +7,10 @@
     {
       "source": "/v/:id",
       "destination": "/api/v?id=:id"
+    },
+    {
+      "source": "/m/:id",
+      "destination": "/api/m?id=:id"
     }
   ],
   "redirects": [

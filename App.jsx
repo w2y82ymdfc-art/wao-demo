@@ -87,6 +87,7 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
+    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -449,6 +450,7 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
+    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -3082,7 +3084,7 @@ function QrCodeButton({ me, className = ghost }) {
   )
 }
 
-function QrCodeModal({ me, onClose }) {
+function QrCodeModal({ me, onClose, url, caption, title, text, file = 'wepawao-qr.png' }) {
   const { t, lang } = useLang()
   const canvasRef = useRef(null)
   const [src, setSrc] = useState('')
@@ -3090,20 +3092,20 @@ function QrCodeModal({ me, onClose }) {
   useEffect(() => {
     const cv = canvasRef.current
     if (!cv) return
-    drawInviteQr(cv, inviteLink(me, lang), t.qr.caption).then(() => setSrc(cv.toDataURL('image/png'))).catch(() => {})
-  }, [me, lang, t.qr.caption])
+    drawInviteQr(cv, url || inviteLink(me, lang), caption || t.qr.caption).then(() => setSrc(cv.toDataURL('image/png'))).catch(() => {})
+  }, [me, lang, t.qr.caption, url, caption])
 
   async function save() {
     const cv = canvasRef.current
     if (!cv) return
     const blob = await new Promise((r) => cv.toBlob(r, 'image/png'))
     if (!blob) return
-    const file = new File([blob], 'wepawao-qr.png', { type: 'image/png' })
-    if (navigator.canShare?.({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: 'Wepawao' }); return } catch (e) { if (e?.name === 'AbortError') return }
+    const f = new File([blob], file, { type: 'image/png' })
+    if (navigator.canShare?.({ files: [f] })) {
+      try { await navigator.share({ files: [f], title: 'Wepawao' }); return } catch (e) { if (e?.name === 'AbortError') return }
     }
     const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob); a.download = 'wepawao-qr.png'
+    a.href = URL.createObjectURL(blob); a.download = file
     document.body.appendChild(a); a.click(); a.remove()
     setTimeout(() => URL.revokeObjectURL(a.href), 4000)
     setNote(t.qr.saved); setTimeout(() => setNote(''), 2500)
@@ -3113,12 +3115,12 @@ function QrCodeModal({ me, onClose }) {
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
       <div className="max-h-[92vh] w-full max-w-sm space-y-3 overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"
         onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-        <h3 className="text-xl font-extrabold">{t.qr.title}</h3>
+        <h3 className="text-xl font-extrabold">{title || t.qr.title}</h3>
         <canvas ref={canvasRef} hidden />
         {src
-          ? <img src={src} alt={t.qr.title} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
+          ? <img src={src} alt={title || t.qr.title} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
           : <div className="aspect-[4/5] w-full rounded-2xl bg-[#eef0fc]" />}
-        <p className="text-sm text-stone-600">{t.qr.text}</p>
+        <p className="text-sm text-stone-600">{text || t.qr.text}</p>
         <button type="button" className={`${primary} w-full`} disabled={!src} onClick={save}>{t.qr.save}</button>
         <p className="text-center text-xs text-stone-500">{t.qr.saveHint}</p>
         {note && <p className="text-center text-sm font-semibold text-emerald-700">{note}</p>}
@@ -4334,6 +4336,7 @@ function VipOwner({ me, onOpenList }) {
           {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
         </div>
       </div>
+      <MenuEditor list={list} me={me} />
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
         <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
@@ -4345,6 +4348,175 @@ function VipOwner({ me, onOpenList }) {
       </form>
       {sent.length > 0 && <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.sentList}</h3>}
       {sent.map((m) => <VipMessage key={m.id} m={m} />)}
+    </div>
+  )
+}
+
+// ---------- Menú digital (beta) ----------
+// The business's menu lives with its VIP list. Diners open it at /m/<list id> (api/m.js): plain, instant, no sign-in.
+const menuLink = (id) => `${shareOrigin()}/m/${id}`
+const centsToText = (c) => (c == null ? '' : (c / 100).toFixed(2))
+// "12.95", "$12", "12,50" → cents; '' → null (market price); anything else → undefined (invalid).
+function parsePrice(str) {
+  const v = String(str || '').replace(/[$\s]/g, '').replace(',', '.')
+  if (!v) return null
+  if (!/^\d{1,5}(\.\d{0,2})?$/.test(v)) return undefined
+  return Math.round(parseFloat(v) * 100)
+}
+
+function MenuItemRow({ it, m, onChange, onRemove }) {
+  const [price, setPrice] = useState(centsToText(it.price_cents))
+  const [editing, setEditing] = useState(false)
+  const [f, setF] = useState({ name: it.name, category: it.category || '', description: it.description || '' })
+  const [state, setState] = useState('') // '', 'saving', 'saved', 'bad'
+  useEffect(() => { setPrice(centsToText(it.price_cents)) }, [it.price_cents])
+  async function patch(fields) {
+    setState('saving')
+    const { error } = await supabase.from('menu_items').update(fields).eq('id', it.id)
+    if (error) { setState('error'); return false }
+    onChange({ ...it, ...fields }); setState('saved'); setTimeout(() => setState(''), 1500)
+    return true
+  }
+  function savePrice() {
+    const c = parsePrice(price)
+    if (c === undefined) { setState('bad'); return }
+    if (c === it.price_cents) return
+    patch({ price_cents: c })
+  }
+  if (editing) {
+    return (
+      <form className="space-y-2 border-t-2 border-[#eef0fc] py-3" onSubmit={async (e) => {
+        e.preventDefault()
+        if (!f.name.trim()) return
+        if (await patch({ name: f.name.trim(), category: f.category.trim() || null, description: f.description.trim() || null })) setEditing(false)
+      }}>
+        <input className={field} maxLength={80} required placeholder={m.name} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
+        <input className={field} maxLength={40} list="wp-menu-cats" placeholder={m.category} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })} />
+        <input className={field} maxLength={200} placeholder={m.desc} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} />
+        <div className="flex flex-wrap items-center gap-3">
+          <button className={primary}>{m.save}</button>
+          <button type="button" className="font-bold text-[#4a3af0]" onClick={() => setEditing(false)}>{m.cancel}</button>
+          <button type="button" className="ml-auto font-bold text-red-600" onClick={() => { if (window.confirm(m.confirmRemove(it.name))) onRemove(it) }}>{m.remove}</button>
+        </div>
+      </form>
+    )
+  }
+  return (
+    <div className="border-t-2 border-[#eef0fc] py-3">
+      <div className="flex items-center gap-2">
+        <button type="button" className={`min-w-0 flex-1 text-left ${it.sold_out ? 'text-stone-400 line-through' : ''}`} onClick={() => setEditing(true)} aria-label={`${m.edit}: ${it.name}`}>
+          <div className="truncate font-bold">{it.name}</div>
+          {it.description && <div className="truncate text-xs text-stone-500 no-underline">{it.description}</div>}
+        </button>
+        <div className="flex items-center rounded-xl border-2 border-[#dcdff5] bg-[#f4f5fd] px-2 focus-within:border-[#4a3af0]">
+          <span className="font-bold text-stone-500">$</span>
+          <input className="w-[4.5rem] bg-transparent py-2 text-right text-base font-extrabold outline-none" inputMode="decimal" placeholder="—" aria-label={m.price}
+            value={price} onChange={(e) => { setPrice(e.target.value); setState('') }} onBlur={savePrice}
+            onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }} />
+        </div>
+      </div>
+      <div className="mt-2 flex items-center gap-3 text-sm">
+        <button type="button" onClick={() => patch({ sold_out: !it.sold_out })}
+          className={`rounded-full px-3 py-1 font-bold ${it.sold_out ? 'bg-red-100 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
+          {it.sold_out ? `● ${m.soldOut}` : `● ${m.available}`}
+        </button>
+        {it.price_cents == null && <span className="text-xs text-stone-500">{m.market}</span>}
+        <span className="ml-auto text-xs font-semibold">
+          {state === 'saved' && <span className="text-emerald-700">✓ {m.saved}</span>}
+          {state === 'bad' && <span className="text-red-600">{m.badPrice}</span>}
+          {state === 'error' && <span className="text-red-600">{m.error}</span>}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function MenuEditor({ list, me }) {
+  const { t, lang } = useLang()
+  const m = t.menu
+  const [items, setItems] = useState(null)
+  const [f, setF] = useState({ category: '', name: '', price: '', description: '' })
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [qrOpen, setQrOpen] = useState(false)
+  useEffect(() => {
+    let live = true
+    supabase.from('menu_items').select('*').eq('list_id', list.id).order('sort').order('created_at')
+      .then(({ data }) => { if (live) setItems(data || []) })
+    return () => { live = false }
+  }, [list.id])
+  const cats = [...new Set((items || []).map((it) => (it.category || '').trim()).filter(Boolean))]
+  const groups = []
+  for (const it of items || []) {
+    const name = (it.category || '').trim() || m.other
+    let g = groups.find((x) => x.name === name)
+    if (!g) groups.push((g = { name, items: [] }))
+    g.items.push(it)
+  }
+  const datalist = <datalist id="wp-menu-cats">{cats.map((c) => <option key={c} value={c} />)}</datalist>
+  async function add(e) {
+    e.preventDefault()
+    if (!f.name.trim() || busy) return
+    const price_cents = parsePrice(f.price)
+    if (price_cents === undefined) { setNote(m.badPrice); return }
+    setBusy(true); setNote('')
+    // New dishes go right after the last dish of their category, so categories stay together.
+    const cat = f.category.trim()
+    const sameCat = (items || []).filter((it) => (it.category || '').trim() === cat)
+    const sort = sameCat.length ? Math.max(...sameCat.map((it) => it.sort)) + 1 : ((items || []).reduce((a, it) => Math.max(a, it.sort), 0) + 100)
+    const { data, error } = await supabase.from('menu_items')
+      .insert({ list_id: list.id, category: cat || null, name: f.name.trim(), description: f.description.trim() || null, price_cents, sort })
+      .select().single()
+    setBusy(false)
+    if (error) { setNote(String(error.message || '').includes('menu_limit') ? m.limit : m.error); return }
+    setItems([...(items || []), data].sort((a, b) => a.sort - b.sort || a.created_at.localeCompare(b.created_at)))
+    setF({ category: cat, name: '', price: '', description: '' })
+  }
+  async function remove(it) {
+    const { error } = await supabase.from('menu_items').delete().eq('id', it.id)
+    if (error) { setNote(m.error); return }
+    setItems((items || []).filter((x) => x.id !== it.id))
+  }
+  async function share() {
+    const url = menuLink(list.id)
+    if (navigator.share) { try { await navigator.share({ title: list.name, url }); return } catch (e2) { if (e2?.name === 'AbortError') return } }
+    try { await navigator.clipboard.writeText(url); setNote(m.copied) } catch { window.prompt('', url) }
+  }
+  if (items === null) return null
+  return (
+    <div className={`${card} space-y-3`}>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-xl font-extrabold">{m.title}</h3>
+        <span className="rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{m.beta} · {t.vip.free}</span>
+      </div>
+      <p className="text-sm text-stone-600">{m.intro}</p>
+      <div className="flex flex-wrap gap-2">
+        <a href={`${menuLink(list.id)}?lang=${lang}`} target="_blank" rel="noreferrer" className={primary}>{m.view}</a>
+        <button type="button" className={ghostSm} onClick={() => setQrOpen(true)}>{m.qr}</button>
+        <button type="button" className={ghostSm} onClick={share}>{m.share}</button>
+      </div>
+      {qrOpen && <QrCodeModal me={me} onClose={() => setQrOpen(false)} url={menuLink(list.id)} caption={m.qrCaption(list.name)}
+        title={m.qrTitle} text={m.qrText} file="menu-qr.png" />}
+      {datalist}
+      {!items.length && <p className="rounded-2xl bg-[#f4f5fd] p-3 text-sm text-stone-600">{m.empty}</p>}
+      {groups.map((g) => (
+        <div key={g.name}>
+          <h4 className="pt-2 text-xs font-extrabold uppercase tracking-wide text-[#4a3af0]">{g.name}</h4>
+          {g.items.map((it) => (
+            <MenuItemRow key={it.id} it={it} m={m} onRemove={remove}
+              onChange={(next) => setItems((items || []).map((x) => (x.id === next.id ? next : x)))} />
+          ))}
+        </div>
+      ))}
+      <form onSubmit={add} className="space-y-2 rounded-2xl bg-[#f4f5fd] p-3">
+        <h4 className="font-extrabold">{m.add}</h4>
+        <input className={field} maxLength={40} list="wp-menu-cats" placeholder={m.category} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })} />
+        <input className={field} maxLength={80} required placeholder={m.name} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
+        <input className={field} inputMode="decimal" placeholder={m.pricePh} value={f.price} onChange={(e) => setF({ ...f, price: e.target.value })} />
+        <input className={field} maxLength={200} placeholder={m.desc} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} />
+        <button className={`${primary} w-full`} disabled={busy}>{m.addBtn}</button>
+      </form>
+      {note && <p className="text-sm font-semibold text-stone-700">{note}</p>}
     </div>
   )
 }
