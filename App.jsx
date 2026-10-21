@@ -3050,6 +3050,24 @@ function loadImg(src) {
   // Logos from storage come from another address: ask for them CORS-clean so the QR image can still be saved.
   return new Promise((res) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src })
 }
+// Where a logo's drawing is inside its picture (white or see-through margins trimmed), and whether it is round
+// (its trimmed corners are still empty). If the picture can't be read, the whole picture is used.
+function logoBox(img) {
+  const full = { x: 0, y: 0, w: img.width, h: img.height, round: false }
+  try {
+    const N = 120, cv = document.createElement('canvas'); cv.width = N; cv.height = N
+    const g = cv.getContext('2d'); g.drawImage(img, 0, 0, N, N)
+    const d = g.getImageData(0, 0, N, N).data
+    const empty = (x, y) => { const i = (y * N + x) * 4; return d[i + 3] < 40 || (d[i] > 235 && d[i + 1] > 235 && d[i + 2] > 235) }
+    let x0 = N, y0 = N, x1 = -1, y1 = -1
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!empty(x, y)) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y }
+    if (x1 < 0) return full
+    const corners = [[x0, y0], [x1, y0], [x0, y1], [x1, y1]].map(([x, y]) => [x + (x === x0 ? 2 : -2), y + (y === y0 ? 2 : -2)])
+    const round = corners.every(([x, y]) => empty(x, y)) && Math.abs((x1 - x0) - (y1 - y0)) < N * 0.15
+    const sx = img.width / N, sy = img.height / N
+    return { x: x0 * sx, y: y0 * sy, w: (x1 - x0 + 1) * sx, h: (y1 - y0 + 1) * sy, round }
+  } catch { return full }
+}
 // opts (menu QR): center = the business's logo, top = a line of text instead of the Wepawao wordmark, foot = a small line under the caption.
 async function drawInviteQr(canvas, url, caption, opts = {}) {
   const W = 1080, H = 1350
@@ -3068,13 +3086,25 @@ async function drawInviteQr(canvas, url, caption, opts = {}) {
   for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) {
     if (qr.modules.get(r, k)) c.fillRect(x0 + (k + quiet) * cell, y0 + (r + quiet) * cell, Math.ceil(cell), Math.ceil(cell))
   }
-  if (icon) {
+  if (own) {
+    // A business logo: trimmed of its white margins and drawn large, round if the logo itself is round.
+    const box = logoBox(own)
+    const s = side * 0.27, ix = (W - s) / 2, iy = y0 + (side - s) / 2, cx = W / 2, cy = iy + s / 2
+    c.fillStyle = '#ffffff'
+    c.beginPath()
+    if (box.round) c.arc(cx, cy, s / 2 + 8, 0, Math.PI * 2); else c.roundRect(ix - 8, iy - 8, s + 16, s + 16, 30)
+    c.fill()
+    c.save(); c.beginPath()
+    if (box.round) c.arc(cx, cy, s / 2, 0, Math.PI * 2); else c.roundRect(ix, iy, s, s, 24)
+    c.clip()
+    const k = Math.max(s / box.w, s / box.h), w = box.w * k, h = box.h * k
+    c.drawImage(own, box.x, box.y, box.w, box.h, cx - w / 2, cy - h / 2, w, h)
+    c.restore()
+  } else if (icon) {
     const s = side * 0.2, ix = (W - s) / 2, iy = y0 + (side - s) / 2, pad = 14
     c.fillStyle = '#ffffff'
     c.beginPath(); c.roundRect(ix - pad, iy - pad, s + pad * 2, s + pad * 2, 36); c.fill()
-    c.save(); c.beginPath(); c.roundRect(ix, iy, s, s, 30); c.clip()
-    if (own) { c.fillStyle = '#ffffff'; c.fillRect(ix, iy, s, s); const k = Math.min(s / icon.width, s / icon.height), w = icon.width * k, h = icon.height * k; c.drawImage(icon, ix + (s - w) / 2, iy + (s - h) / 2, w, h) } else c.drawImage(icon, ix, iy, s, s)
-    c.restore()
+    c.save(); c.beginPath(); c.roundRect(ix, iy, s, s, 30); c.clip(); c.drawImage(icon, ix, iy, s, s); c.restore()
   }
   c.fillStyle = '#4a3af0'; c.font = '800 54px system-ui, -apple-system, sans-serif'; c.textAlign = 'center'
   c.fillText(caption, W / 2, y0 + side + 110)
