@@ -87,7 +87,7 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
-    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 6 dishes.', featuredHint: 'Feature up to 6 dishes with a photo: they show as a slideshow at the top of your menu.', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
+    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, qrTop: 'Scan to see our menu', qrFoot: 'Digital menu by Wepawao', add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 6 dishes.', featuredHint: 'Feature up to 6 dishes with a photo: they show as a slideshow at the top of your menu.', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -451,7 +451,7 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
-    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 6 platos.', featuredHint: 'Destaca hasta 6 platos con foto: salen en una presentación de fotos arriba de tu menú.', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
+    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, qrTop: 'Escanea para ver el menú', qrFoot: 'Menú digital por Wepawao', add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 6 platos.', featuredHint: 'Destaca hasta 6 platos con foto: salen en una presentación de fotos arriba de tu menú.', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -3047,15 +3047,19 @@ async function shareInviteLink(me, lang, t, onCopied) {
 
 // ---------- My QR code: the affiliate's invite link as a QR image to print or share ----------
 function loadImg(src) {
-  return new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src })
+  // Logos from storage come from another address: ask for them CORS-clean so the QR image can still be saved.
+  return new Promise((res) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src })
 }
-async function drawInviteQr(canvas, url, caption) {
+// opts (menu QR): center = the business's logo, top = a line of text instead of the Wepawao wordmark, foot = a small line under the caption.
+async function drawInviteQr(canvas, url, caption, opts = {}) {
   const W = 1080, H = 1350
   canvas.width = W; canvas.height = H
   const c = canvas.getContext('2d')
   c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H)
-  const [word, icon] = await Promise.all([loadImg(logoImg), loadImg('/apple-touch-icon.png')])
+  const [word, own, wp] = await Promise.all([opts.top ? null : loadImg(logoImg), opts.center ? loadImg(opts.center) : null, loadImg('/apple-touch-icon.png')])
+  const icon = own || wp
   if (word) { const h = 150, w = (word.width / word.height) * h; c.drawImage(word, (W - w) / 2, 70, w, h) }
+  if (opts.top) { c.fillStyle = '#14123a'; c.font = '800 64px system-ui, -apple-system, sans-serif'; c.textAlign = 'center'; c.fillText(opts.top, W / 2, 190) }
   // High error correction so the logo in the middle doesn't stop the code from scanning.
   const qr = QRCode.create(url, { errorCorrectionLevel: 'H' })
   const n = qr.modules.size, quiet = 2, side = 820, cell = side / (n + quiet * 2)
@@ -3068,10 +3072,13 @@ async function drawInviteQr(canvas, url, caption) {
     const s = side * 0.2, ix = (W - s) / 2, iy = y0 + (side - s) / 2, pad = 14
     c.fillStyle = '#ffffff'
     c.beginPath(); c.roundRect(ix - pad, iy - pad, s + pad * 2, s + pad * 2, 36); c.fill()
-    c.save(); c.beginPath(); c.roundRect(ix, iy, s, s, 30); c.clip(); c.drawImage(icon, ix, iy, s, s); c.restore()
+    c.save(); c.beginPath(); c.roundRect(ix, iy, s, s, 30); c.clip()
+    if (own) { c.fillStyle = '#ffffff'; c.fillRect(ix, iy, s, s); const k = Math.min(s / icon.width, s / icon.height), w = icon.width * k, h = icon.height * k; c.drawImage(icon, ix + (s - w) / 2, iy + (s - h) / 2, w, h) } else c.drawImage(icon, ix, iy, s, s)
+    c.restore()
   }
   c.fillStyle = '#4a3af0'; c.font = '800 54px system-ui, -apple-system, sans-serif'; c.textAlign = 'center'
   c.fillText(caption, W / 2, y0 + side + 110)
+  if (opts.foot) { c.fillStyle = '#6b6f93'; c.font = '600 36px system-ui, -apple-system, sans-serif'; c.fillText(opts.foot, W / 2, y0 + side + 175) }
 }
 
 function QrCodeButton({ me, className = ghost }) {
@@ -3086,7 +3093,7 @@ function QrCodeButton({ me, className = ghost }) {
   )
 }
 
-function QrCodeModal({ me, onClose, url, caption, title, text, file = 'wepawao-qr.png' }) {
+function QrCodeModal({ me, onClose, url, caption, title, text, file = 'wepawao-qr.png', opts }) {
   const { t, lang } = useLang()
   const canvasRef = useRef(null)
   const [src, setSrc] = useState('')
@@ -3094,8 +3101,8 @@ function QrCodeModal({ me, onClose, url, caption, title, text, file = 'wepawao-q
   useEffect(() => {
     const cv = canvasRef.current
     if (!cv) return
-    drawInviteQr(cv, url || inviteLink(me, lang), caption || t.qr.caption).then(() => setSrc(cv.toDataURL('image/png'))).catch(() => {})
-  }, [me, lang, t.qr.caption, url, caption])
+    drawInviteQr(cv, url || inviteLink(me, lang), caption || t.qr.caption, opts).then(() => setSrc(cv.toDataURL('image/png'))).catch(() => {})
+  }, [me, lang, t.qr.caption, url, caption]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function save() {
     const cv = canvasRef.current
@@ -4575,7 +4582,8 @@ function MenuEditor({ list, me }) {
         <button type="button" className={ghostSm} onClick={share}>{m.share}</button>
       </div>
       {qrOpen && <QrCodeModal me={me} onClose={() => setQrOpen(false)} url={menuLink(list.id)} caption={m.qrCaption(list.name)}
-        title={m.qrTitle} text={m.qrText} file="menu-qr.png" />}
+        title={m.qrTitle} text={m.qrText} file="menu-qr.png"
+        opts={{ top: m.qrTop, foot: m.qrFoot, center: list.logo_path ? (list.logo_path.startsWith('/') ? list.logo_path : photoUrl(list.logo_path)) : null }} />}
       {datalist}
       {!items.length && <p className="rounded-2xl bg-[#f4f5fd] p-3 text-sm text-stone-600">{m.empty}</p>}
       {groups.map((g) => (
