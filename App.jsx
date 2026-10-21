@@ -88,8 +88,8 @@ const I18N = {
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
-    prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Invite your people', btn: 'Invite' },
-    prCard: { pill: 'Made in Puerto Rico', motto: 'From Puerto Rico, for the benefit of all', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
+    prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
+    prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
     inviteBtn: 'Share my invite link', inviteShareText: "Wepa! I joined Wepawao. Join free with my link and see what's coming.",
     invitedBy: (n) => `${n} invited you to Wepawao!`,
     nowContacts: (n) => `You and ${n} are now contacts!`,
@@ -450,8 +450,8 @@ const I18N = {
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
-    prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'Puerto Rico ya tiene ', l2: 'su red social', sub: 'Invita a tu gente', btn: 'Invitar' },
-    prCard: { pill: 'Hecha en Puerto Rico', motto: 'De Puerto Rico, para beneficio de todos', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
+    prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
+    prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
     inviteBtn: 'Compartir mi enlace de invitación', inviteShareText: '¡Wepa! Me uní a Wepawao. Únete gratis con mi enlace y mira lo que viene.',
     invitedBy: (n) => `${n} te invitó a Wepawao.`,
     nowContacts: (n) => `¡Tú y ${n} ahora son contactos!`,
@@ -4429,7 +4429,6 @@ function PuertoRicoCard() {
       <img src="/wepawao-pr.jpg" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
       <div className="space-y-2 px-5 pb-5 pt-4">
         <span className="inline-block rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{t.prCard.pill}</span>
-        <p className="text-sm font-bold italic text-[#f6d155]">{t.prCard.motto}</p>
         <h2 className="text-[clamp(1.4rem,6vw,2rem)] font-black leading-tight tracking-tight">
           {t.prCard.l1}<span className="text-[#f6d155]">{t.prCard.l2}</span>
         </h2>
@@ -4455,7 +4454,6 @@ function PuertoRicoMemberCard({ me }) {
       <img src="/wepawao-pr.jpg" alt={t.prCard.alt} width="1080" height="540" className="block aspect-[5/2] w-full object-cover" />
       <div className="space-y-2 px-5 pb-5 pt-4">
         <span className="inline-block rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{t.prCard.pill}</span>
-        <p className="text-sm font-bold italic text-[#f6d155]">{t.prCard.motto}</p>
         <h2 className="text-[clamp(1.4rem,6vw,2rem)] font-black leading-tight tracking-tight">
           {t.prMember.hi(first)}{t.prMember.l1}<span className="text-[#f6d155]">{t.prMember.l2}</span>
         </h2>
