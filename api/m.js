@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     try {
       const [b, m] = await Promise.all([
         fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=id,name,town,about,owner_id,logo_path`, { headers, signal: AbortSignal.timeout(4000) }),
-        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=category,name,description,price_cents,sold_out,sort,updated_at,image_path&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
+        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=id,category,name,description,price_cents,sold_out,sort,updated_at,image_path,featured&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
       ])
       biz = b.ok ? (await b.json())[0] || null : null
       items = m.ok ? await m.json() : []
@@ -58,6 +58,24 @@ export default async function handler(req, res) {
     ? new Date(last).toLocaleDateString(lang === 'es' ? 'es-PR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/Puerto_Rico' })
     : ''
 
+  const photo = (path) => `${(SB || '').replace(/\/$/, '')}/storage/v1/object/public/photos/${path.split('/').map(encodeURIComponent).join('/')}`
+  // Featured dishes with a photo make the slideshow at the top.
+  const slides = items.filter((it) => it.featured && it.image_path).slice(0, 6)
+  const show = !biz || !slides.length ? '' : `
+<div class="show" aria-roledescription="carousel">
+  <div class="track" id="track">${slides.map((it) => `
+    <a class="slide" href="#d-${esc(it.id)}"><img src="${esc(photo(it.image_path))}" alt="${esc(it.name)}"${slides[0] === it ? '' : ' loading="lazy"'}>
+      <span class="cap"><b>${esc(it.name)}</b>${it.sold_out ? `<span class="badge">${t.soldOut}</span>` : (it.price_cents == null ? '' : `<span>${money(it.price_cents)}</span>`)}</span></a>`).join('')}
+  </div>
+  ${slides.length > 1 ? `<div class="dots">${slides.map((_, i) => `<i data-i="${i}"${i ? '' : ' class="on"'}></i>`).join('')}</div>` : ''}
+</div>
+${slides.length > 1 ? `<script>(function(){var t=document.getElementById('track'),d=[].slice.call(document.querySelectorAll('.dots i')),n=d.length,i=0,h;
+function go(k){i=(k+n)%n;t.scrollTo({left:i*t.clientWidth,behavior:'smooth'})}
+t.addEventListener('scroll',function(){var k=Math.round(t.scrollLeft/t.clientWidth);d.forEach(function(e,j){e.className=j===k?'on':''});i=k},{passive:true});
+function play(){clearInterval(h);h=setInterval(function(){go(i+1)},4000)}
+['touchstart','mousedown'].forEach(function(e){t.addEventListener(e,function(){clearInterval(h);setTimeout(play,8000)},{passive:true})});
+d.forEach(function(e,j){e.onclick=function(){go(j);play()}});play()})()</script>` : ''}`
+
   const logo = biz?.logo_path
     ? (biz.logo_path.startsWith('/') ? `${site}${biz.logo_path}` : `${SB}/storage/v1/object/public/photos/${biz.logo_path.split('/').map(encodeURIComponent).join('/')}`)
     : ''
@@ -70,8 +88,8 @@ export default async function handler(req, res) {
     ? `<p class="empty">${t.notFound}</p>`
     : (groups.length
       ? groups.map((g) => `<section><h2>${esc(g.name)}</h2>${g.items.map((it) => `
-        <div class="item${it.sold_out ? ' out' : ''}${it.image_path ? ' pic' : ''}">
-          ${it.image_path ? `<img class="dish" loading="lazy" alt="" src="${esc(`${SB.replace(/\/$/, '')}/storage/v1/object/public/photos/${it.image_path.split('/').map(encodeURIComponent).join('/')}`)}">` : ''}
+        <div id="d-${esc(it.id)}" class="item${it.sold_out ? ' out' : ''}${it.image_path ? ' pic' : ''}">
+          ${it.image_path ? `<img class="dish" loading="lazy" alt="" src="${esc(photo(it.image_path))}">` : ''}
           <div class="txt"><div class="row"><span class="name">${esc(it.name)}</span><span class="price">${it.sold_out ? `<span class="badge">${t.soldOut}</span>` : (it.price_cents == null ? `<span class="market">${t.market}</span>` : money(it.price_cents))}</span></div>
           ${it.description ? `<p class="desc">${esc(it.description)}</p>` : ''}
         </div></div>`).join('')}</section>`).join('')
@@ -107,6 +125,12 @@ h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-
 .item{background:#fff;border:2px solid #e6e8f8;border-radius:18px;padding:14px 16px;margin-bottom:8px}
 .pic{display:flex;gap:12px;align-items:flex-start;padding:10px}.pic .txt{flex:1;min-width:0;padding-top:4px}
 .dish{width:96px;height:96px;border-radius:14px;object-fit:cover;flex-shrink:0;background:#eef0fc}.out .dish{opacity:.45}
+.show{margin:16px 0 4px}.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:20px;scrollbar-width:none}.track::-webkit-scrollbar{display:none}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;display:block;aspect-ratio:4/3;color:#fff;text-decoration:none}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:40px 16px 14px;background:linear-gradient(transparent,rgba(20,18,58,.85));font-size:18px;font-weight:900}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.dots i{width:7px;height:7px;border-radius:9px;background:#c9cdf0;cursor:pointer}.dots i.on{width:20px;background:#4a3af0}
+.item{scroll-margin-top:16px}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .name{font-weight:800;font-size:17px}
 .price{font-weight:900;font-size:17px;white-space:nowrap}
@@ -130,7 +154,7 @@ footer{max-width:640px;margin:16px auto 0;padding:18px 16px calc(28px + env(safe
   </div>
   ${biz?.about ? `<p class="about">${esc(biz.about)}</p>` : ''}
 </header>
-<main>${body}
+<main>${show}${body}
 ${lastText ? `<p class="updated">${t.updated(esc(lastText))}</p>` : ''}
 </main>
 <footer>

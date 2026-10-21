@@ -29,3 +29,6 @@ create trigger menu_items_touch before insert or update on public.menu_items for
 
 -- Dish photos, applied Oct 21, 2026.
 alter table public.menu_items add column image_path text check (char_length(image_path) <= 300);
+
+-- Featured dishes (slideshow), applied Oct 21, 2026. Trigger menu_items_touch also caps featured at 6 (raises featured_limit).
+alter table public.menu_items add column featured boolean not null default false;

@@ -87,7 +87,7 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
-    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
+    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 6 dishes.', featuredHint: 'Feature up to 6 dishes with a photo: they show as a slideshow at the top of your menu.', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -450,7 +450,7 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
-    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
+    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 6 platos.', featuredHint: 'Destaca hasta 6 platos con foto: salen en una presentación de fotos arriba de tu menú.', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -4388,7 +4388,7 @@ function MenuItemRow({ it, m, me, onChange, onRemove }) {
   async function patch(fields) {
     setState('saving')
     const { error } = await supabase.from('menu_items').update(fields).eq('id', it.id)
-    if (error) { setState('error'); return false }
+    if (error) { setState(String(error.message || '').includes('featured_limit') ? 'limit' : 'error'); return false }
     onChange({ ...it, ...fields }); setState('saved'); setTimeout(() => setState(''), 1500)
     return true
   }
@@ -4441,15 +4441,21 @@ function MenuItemRow({ it, m, me, onChange, onRemove }) {
             onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }} />
         </div>
       </div>
-      <div className="mt-2 flex items-center gap-3 text-sm">
+      <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
         <button type="button" onClick={() => patch({ sold_out: !it.sold_out })}
           className={`rounded-full px-3 py-1 font-bold ${it.sold_out ? 'bg-red-100 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
           {it.sold_out ? `● ${m.soldOut}` : `● ${m.available}`}
+        </button>
+        <button type="button" onClick={() => { if (!it.featured && !it.image_path) { setState('needPhoto'); return } patch({ featured: !it.featured }) }}
+          className={`rounded-full px-3 py-1 font-bold ${it.featured ? 'bg-[#f6d155] text-[#14123a]' : 'border-2 border-[#dcdff5] text-stone-500'}`}>
+          {it.featured ? `★ ${m.featured}` : `☆ ${m.feature}`}
         </button>
         {it.price_cents == null && <span className="text-xs text-stone-500">{m.market}</span>}
         <span className="ml-auto text-xs font-semibold">
           {state === 'saved' && <span className="text-emerald-700">✓ {m.saved}</span>}
           {state === 'uploading' && <span className="text-stone-500">{m.uploading}</span>}
+          {state === 'needPhoto' && <span className="text-red-600">{m.needPhoto}</span>}
+          {state === 'limit' && <span className="text-red-600">{m.featuredLimit}</span>}
           {state === 'bad' && <span className="text-red-600">{m.badPrice}</span>}
           {state === 'error' && <span className="text-red-600">{m.error}</span>}
         </span>
@@ -4517,6 +4523,7 @@ function MenuEditor({ list, me }) {
         <span className="rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{m.beta} · {t.vip.free}</span>
       </div>
       <p className="text-sm text-stone-600">{m.intro}</p>
+      <p className="text-xs text-stone-500">★ {m.featuredHint}</p>
       <div className="flex flex-wrap gap-2">
         <a href={`${menuLink(list.id)}?lang=${lang}&from=app`} className={primary}>{m.view}</a>
         <button type="button" className={ghostSm} onClick={() => setQrOpen(true)}>{m.qr}</button>
