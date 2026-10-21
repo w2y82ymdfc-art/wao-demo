@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     try {
       const [b, m] = await Promise.all([
         fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=id,name,town,about,owner_id,logo_path`, { headers, signal: AbortSignal.timeout(4000) }),
-        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=id,category,name,description,price_cents,sold_out,sort,updated_at,image_path,featured,name_en,description_en,category_en&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
+        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=id,category,name,description,price_cents,sold_out,sort,updated_at,image_path,featured,featured_rank,name_en,description_en,category_en&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
       ])
       biz = b.ok ? (await b.json())[0] || null : null
       items = m.ok ? await m.json() : []
@@ -63,8 +63,9 @@ export default async function handler(req, res) {
     : ''
 
   const photo = (path) => `${(SB || '').replace(/\/$/, '')}/storage/v1/object/public/photos/${path.split('/').map(encodeURIComponent).join('/')}`
-  // Featured dishes with a photo make the slideshow at the top.
-  const slides = items.filter((it) => it.featured && it.image_path).slice(0, 6)
+  // Up to 5 featured dishes with a photo make the slideshow at the top, in the order the owner set.
+  const slides = items.filter((it) => it.featured && it.image_path)
+    .sort((a, b) => (a.featured_rank ?? 99) - (b.featured_rank ?? 99)).slice(0, 5)
   const show = !biz || !slides.length ? '' : `
 <div class="show" aria-roledescription="carousel">
   <div class="track" id="track">${slides.map((it) => `
@@ -130,11 +131,11 @@ h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-
 .item{background:#fff;border:2px solid #e6e8f8;border-radius:18px;padding:14px 16px;margin-bottom:8px}
 .pic{display:flex;gap:12px;align-items:flex-start;padding:10px}.pic .txt{flex:1;min-width:0;padding-top:4px}
 .dish{width:96px;height:96px;border-radius:14px;object-fit:cover;flex-shrink:0;background:#eef0fc}.out .dish{opacity:.45}
-.show{margin:16px 0 4px}.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:20px;scrollbar-width:none}.track::-webkit-scrollbar{display:none}
-.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;display:block;aspect-ratio:4/3;color:#fff;text-decoration:none}
+.show{max-width:640px;margin:16px auto 0}.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:20px;scrollbar-width:none}.track::-webkit-scrollbar{display:none}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;display:block;aspect-ratio:16/10;max-height:260px;color:#fff;text-decoration:none}
 .slide img{width:100%;height:100%;object-fit:cover;display:block}
 .cap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:40px 16px 14px;background:linear-gradient(transparent,rgba(20,18,58,.85));font-size:18px;font-weight:900}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.dots i{width:7px;height:7px;border-radius:9px;background:#c9cdf0;cursor:pointer}.dots i.on{width:20px;background:#4a3af0}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.dots i{width:7px;height:7px;border-radius:9px;background:#5b5980;cursor:pointer}.dots i.on{width:20px;background:#f6d155}
 .item{scroll-margin-top:16px}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .name{font-weight:800;font-size:17px}
@@ -160,9 +161,10 @@ footer{max-width:640px;margin:16px auto 0;padding:18px 16px calc(28px + env(safe
       : `<a href="${esc(`${self}?lang=${l}${fromApp ? '&from=app' : ''}`)}">${l.toUpperCase()}</a>`).join('')}</div>
   </div>
   ${biz?.about ? `<p class="about">${esc(biz.about)}</p>` : ''}
+  ${show}
   ${biz ? `<a class="viptop" href="${esc(vipUrl)}">${t.vipTop}</a>` : ''}
 </header>
-<main>${show}${body}
+<main>${body}
 ${lastText ? `<p class="updated">${t.updated(esc(lastText))}</p>` : ''}
 </main>
 <footer>

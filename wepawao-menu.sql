@@ -39,3 +39,7 @@ create index if not exists vip_lists_owner_idx on public.vip_lists(owner_id);
 
 -- Bilingual menus (Oct 21, 2026): English text per dish, filled in automatically, editable by the owner.
 alter table public.menu_items add column name_en text check (char_length(name_en) <= 80), add column description_en text check (char_length(description_en) <= 200), add column category_en text check (char_length(category_en) <= 40);
+
+-- Slideshow: up to 5 featured dishes, in the order the owner sets (Oct 21, 2026).
+alter table public.menu_items add column featured_rank integer;
+-- menu_items_touch now caps featured at 5 (raises featured_limit), puts a newly featured dish last (featured_rank = max + 1) and clears featured_rank when a dish is unfeatured.
