@@ -4219,6 +4219,9 @@ function VipOwner({ me, onOpenList }) {
   const { t, lang } = useLang()
   const v = t.vip
   const [list, setList] = useState(undefined)
+  // A member can hold more than one business (e.g. the Wepawao Team showing restaurants in beta): pick which one.
+  const [lists, setLists] = useState([])
+  const [selId, setSelId] = useState(null)
   const [count, setCount] = useState(0)
   const [sent, setSent] = useState([])
   const [form, setForm] = useState({ name: '', town: '', about: '' })
@@ -4242,8 +4245,10 @@ function VipOwner({ me, onOpenList }) {
     } catch { setNote(v.error) } finally { setBusy(false) }
   }
   const load = useCallback(async () => {
-    const { data } = await supabase.from('vip_lists').select('*').eq('owner_id', me).maybeSingle()
-    setList(data || null)
+    const { data: all } = await supabase.from('vip_lists').select('*').eq('owner_id', me).order('created_at')
+    setLists(all || [])
+    const data = (all || []).find((l) => l.id === selId) || (all || [])[0] || null
+    setList(data)
     if (data) {
       const [{ data: n }, { data: m }] = await Promise.all([
         supabase.rpc('vip_member_count', { p_list: data.id }),
@@ -4251,7 +4256,7 @@ function VipOwner({ me, onOpenList }) {
       ])
       setCount(n || 0); setSent(m || [])
     }
-  }, [me])
+  }, [me, selId])
   useEffect(() => { load() }, [load])
   const weekAgo = Date.now() - 7 * 24 * 3600 * 1000
   const thisWeek = sent.filter((m) => new Date(m.created_at).getTime() > weekAgo).length
@@ -4312,6 +4317,16 @@ function VipOwner({ me, onOpenList }) {
   }
   return (
     <div className="space-y-4">
+      {lists.length > 1 && (
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {lists.map((l) => (
+            <button key={l.id} type="button" onClick={() => { setSelId(l.id); logo.reset(); setNote('') }} aria-pressed={l.id === list.id}
+              className={`flex shrink-0 items-center gap-2 rounded-full border-2 py-1 pl-1 pr-4 font-bold ${l.id === list.id ? 'border-[#4a3af0] bg-[#4a3af0] text-white' : 'border-[#dcdff5] bg-white text-[#14123a]'}`}>
+              <VipLogo path={l.logo_path} size={32} />{l.name}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="space-y-3 rounded-3xl bg-[#14123a] p-5 text-white">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3">
@@ -4336,7 +4351,7 @@ function VipOwner({ me, onOpenList }) {
           {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
         </div>
       </div>
-      <MenuEditor list={list} me={me} />
+      <MenuEditor key={list.id} list={list} me={me} />
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
         <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
