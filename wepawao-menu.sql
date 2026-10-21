@@ -32,3 +32,7 @@ alter table public.menu_items add column image_path text check (char_length(imag
 
 -- Featured dishes (slideshow), applied Oct 21, 2026. Trigger menu_items_touch also caps featured at 6 (raises featured_limit).
 alter table public.menu_items add column featured boolean not null default false;
+
+-- A member can own several businesses (Oct 21, 2026).
+alter table public.vip_lists drop constraint vip_lists_owner_id_key;
+create index if not exists vip_lists_owner_idx on public.vip_lists(owner_id);
