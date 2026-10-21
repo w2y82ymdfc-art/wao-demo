@@ -38,13 +38,17 @@ export default async function handler(req, res) {
     try {
       const [b, m] = await Promise.all([
         fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=id,name,town,about,owner_id,logo_path`, { headers, signal: AbortSignal.timeout(4000) }),
-        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=id,category,name,description,price_cents,sold_out,sort,updated_at,image_path,featured&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
+        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=id,category,name,description,price_cents,sold_out,sort,updated_at,image_path,featured,name_en,description_en,category_en&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
       ])
       biz = b.ok ? (await b.json())[0] || null : null
       items = m.ok ? await m.json() : []
     } catch { /* shown as "not found" below */ }
   }
 
+  // English menu: each dish's English name, description and category where it has them.
+  if (lang === 'en') {
+    items = items.map((it) => ({ ...it, name: it.name_en || it.name, description: it.description_en || it.description, category: it.category_en || it.category }))
+  }
   // Categories in the order their first dish appears.
   const groups = []
   for (const it of items) {

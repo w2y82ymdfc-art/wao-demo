@@ -36,3 +36,6 @@ alter table public.menu_items add column featured boolean not null default false
 -- A member can own several businesses (Oct 21, 2026).
 alter table public.vip_lists drop constraint vip_lists_owner_id_key;
 create index if not exists vip_lists_owner_idx on public.vip_lists(owner_id);
+
+-- Bilingual menus (Oct 21, 2026): English text per dish, filled in automatically, editable by the owner.
+alter table public.menu_items add column name_en text check (char_length(name_en) <= 80), add column description_en text check (char_length(description_en) <= 200), add column category_en text check (char_length(category_en) <= 40);

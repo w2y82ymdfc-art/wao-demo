@@ -87,7 +87,7 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
-    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 6 dishes.', featuredHint: 'Feature up to 6 dishes with a photo: they show as a slideshow at the top of your menu.', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
+    menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 6 dishes.', featuredHint: 'Feature up to 6 dishes with a photo: they show as a slideshow at the top of your menu.', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -451,7 +451,7 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
-    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 6 platos.', featuredHint: 'Destaca hasta 6 platos con foto: salen en una presentación de fotos arriba de tu menú.', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
+    menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 6 platos.', featuredHint: 'Destaca hasta 6 platos con foto: salen en una presentación de fotos arriba de tu menú.', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -4381,7 +4381,17 @@ function parsePrice(str) {
   return Math.round(parseFloat(v) * 100)
 }
 
-function MenuItemRow({ it, m, me, onChange, onRemove }) {
+// English for a dish, filled in automatically from Spanish (the owner can correct it when editing).
+// Categories already translated on another dish are reused, so each one is translated once.
+async function dishEnglish({ name, description, category }, items) {
+  const tr = (s) => (s ? translateText(s, 'es', 'en').catch(() => null) : Promise.resolve(null))
+  const known = category ? (items || []).find((x) => (x.category || '').trim() === category && x.category_en)?.category_en : null
+  const [name_en, description_en, category_en] = await Promise.all([tr(name), tr(description), known ? Promise.resolve(known) : tr(category)])
+  const cut = (s, n) => (s ? String(s).slice(0, n) : null)
+  return { name_en: cut(name_en, 80), description_en: cut(description_en, 200), category_en: cut(category_en, 40) }
+}
+
+function MenuItemRow({ it, m, me, onChange, onRemove, items }) {
   const [price, setPrice] = useState(centsToText(it.price_cents))
   const photoRef = useRef(null)
   // A dish photo: resized on the phone, uploaded, then saved on the dish.
@@ -4399,7 +4409,7 @@ function MenuItemRow({ it, m, me, onChange, onRemove }) {
   }
   const photoInput = <input ref={photoRef} type="file" accept="image/*" hidden onChange={pickPhoto} />
   const [editing, setEditing] = useState(false)
-  const [f, setF] = useState({ name: it.name, category: it.category || '', description: it.description || '' })
+  const [f, setF] = useState({ name: it.name, category: it.category || '', description: it.description || '', name_en: it.name_en || '', description_en: it.description_en || '' })
   const [state, setState] = useState('') // '', 'saving', 'saved', 'bad'
   useEffect(() => { setPrice(centsToText(it.price_cents)) }, [it.price_cents])
   async function patch(fields) {
@@ -4420,11 +4430,23 @@ function MenuItemRow({ it, m, me, onChange, onRemove }) {
       <form className="space-y-2 border-t-2 border-[#eef0fc] py-3" onSubmit={async (e) => {
         e.preventDefault()
         if (!f.name.trim()) return
-        if (await patch({ name: f.name.trim(), category: f.category.trim() || null, description: f.description.trim() || null })) setEditing(false)
+        const fields = { name: f.name.trim(), category: f.category.trim() || null, description: f.description.trim() || null, name_en: f.name_en.trim() || null, description_en: f.description_en.trim() || null }
+        // Spanish changed but the English was left as it was: translate the new Spanish.
+        const redo = { name: fields.name !== it.name && f.name_en === (it.name_en || ''), description: fields.description !== it.description && f.description_en === (it.description_en || ''), category: fields.category !== it.category }
+        if (redo.name || redo.description || redo.category) {
+          const en = await dishEnglish({ name: redo.name ? fields.name : null, description: redo.description ? fields.description : null, category: redo.category ? fields.category : null }, items)
+          if (redo.name) fields.name_en = en.name_en
+          if (redo.description) fields.description_en = en.description_en
+          if (redo.category) fields.category_en = en.category_en
+        }
+        if (await patch(fields)) setEditing(false)
       }}>
         <input className={field} maxLength={80} required placeholder={m.name} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />
         <input className={field} maxLength={40} list="wp-menu-cats" placeholder={m.category} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })} />
         <input className={field} maxLength={200} placeholder={m.desc} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} />
+        <p className="pt-1 text-xs font-bold text-stone-500">🇺🇸 {m.english}</p>
+        <input className={field} maxLength={80} placeholder={m.nameEn} value={f.name_en} onChange={(e) => setF({ ...f, name_en: e.target.value })} />
+        <input className={field} maxLength={200} placeholder={m.descEn} value={f.description_en} onChange={(e) => setF({ ...f, description_en: e.target.value })} />
         <div className="flex flex-wrap items-center gap-3">
           {photoInput}
           {it.image_path && <img src={photoUrl(it.image_path)} alt="" className="h-14 w-14 rounded-xl object-cover" />}
@@ -4519,8 +4541,13 @@ function MenuEditor({ list, me }) {
       .select().single()
     setBusy(false)
     if (error) { setNote(String(error.message || '').includes('menu_limit') ? m.limit : m.error); return }
-    setItems([...(items || []), data].sort((a, b) => a.sort - b.sort || a.created_at.localeCompare(b.created_at)))
+    setItems((cur) => [...(cur || []), data].sort((a, b) => a.sort - b.sort || a.created_at.localeCompare(b.created_at)))
     setF({ category: cat, name: '', price: '', description: '' })
+    // English is filled in in the background; the dish is already on the menu in Spanish.
+    dishEnglish({ name: data.name, description: data.description, category: data.category }, items).then(async (en) => {
+      const { error: e2 } = await supabase.from('menu_items').update(en).eq('id', data.id)
+      if (!e2) setItems((cur) => (cur || []).map((x) => (x.id === data.id ? { ...x, ...en } : x)))
+    }).catch(() => {})
   }
   async function remove(it) {
     const { error } = await supabase.from('menu_items').delete().eq('id', it.id)
@@ -4540,6 +4567,7 @@ function MenuEditor({ list, me }) {
         <span className="rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{m.beta} · {t.vip.free}</span>
       </div>
       <p className="text-sm text-stone-600">{m.intro}</p>
+      <p className="text-xs text-stone-500">🇺🇸 {m.bilingual}</p>
       <p className="text-xs text-stone-500">★ {m.featuredHint}</p>
       <div className="flex flex-wrap gap-2">
         <a href={`${menuLink(list.id)}?lang=${lang}&from=app`} className={primary}>{m.view}</a>
@@ -4554,7 +4582,7 @@ function MenuEditor({ list, me }) {
         <div key={g.name}>
           <h4 className="pt-2 text-xs font-extrabold uppercase tracking-wide text-[#4a3af0]">{g.name}</h4>
           {g.items.map((it) => (
-            <MenuItemRow key={it.id} it={it} m={m} me={me} onRemove={remove}
+            <MenuItemRow key={it.id} it={it} m={m} me={me} items={items} onRemove={remove}
               onChange={(next) => setItems((items || []).map((x) => (x.id === next.id ? next : x)))} />
           ))}
         </div>
