@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     try {
       const [b, m] = await Promise.all([
         fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=id,name,town,about,owner_id,logo_path`, { headers, signal: AbortSignal.timeout(4000) }),
-        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=category,name,description,price_cents,sold_out,sort,updated_at&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
+        fetch(`${SB}/rest/v1/menu_items?list_id=eq.${id}&select=category,name,description,price_cents,sold_out,sort,updated_at,image_path&order=sort.asc,created_at.asc`, { headers, signal: AbortSignal.timeout(4000) }),
       ])
       biz = b.ok ? (await b.json())[0] || null : null
       items = m.ok ? await m.json() : []
@@ -70,10 +70,11 @@ export default async function handler(req, res) {
     ? `<p class="empty">${t.notFound}</p>`
     : (groups.length
       ? groups.map((g) => `<section><h2>${esc(g.name)}</h2>${g.items.map((it) => `
-        <div class="item${it.sold_out ? ' out' : ''}">
-          <div class="row"><span class="name">${esc(it.name)}</span><span class="price">${it.sold_out ? `<span class="badge">${t.soldOut}</span>` : (it.price_cents == null ? `<span class="market">${t.market}</span>` : money(it.price_cents))}</span></div>
+        <div class="item${it.sold_out ? ' out' : ''}${it.image_path ? ' pic' : ''}">
+          ${it.image_path ? `<img class="dish" loading="lazy" alt="" src="${esc(`${SB.replace(/\/$/, '')}/storage/v1/object/public/photos/${it.image_path.split('/').map(encodeURIComponent).join('/')}`)}">` : ''}
+          <div class="txt"><div class="row"><span class="name">${esc(it.name)}</span><span class="price">${it.sold_out ? `<span class="badge">${t.soldOut}</span>` : (it.price_cents == null ? `<span class="market">${t.market}</span>` : money(it.price_cents))}</span></div>
           ${it.description ? `<p class="desc">${esc(it.description)}</p>` : ''}
-        </div>`).join('')}</section>`).join('')
+        </div></div>`).join('')}</section>`).join('')
       : `<p class="empty">${t.empty}</p>`)
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
@@ -104,6 +105,8 @@ h1{margin:0;font-size:26px;line-height:1.15;font-weight:900}
 main{max-width:640px;margin:0 auto;padding:8px 16px 8px}
 h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#4a3af0}
 .item{background:#fff;border:2px solid #e6e8f8;border-radius:18px;padding:14px 16px;margin-bottom:8px}
+.pic{display:flex;gap:12px;align-items:flex-start;padding:10px}.pic .txt{flex:1;min-width:0;padding-top:4px}
+.dish{width:96px;height:96px;border-radius:14px;object-fit:cover;flex-shrink:0;background:#eef0fc}.out .dish{opacity:.45}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .name{font-weight:800;font-size:17px}
 .price{font-weight:900;font-size:17px;white-space:nowrap}

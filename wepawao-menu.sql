@@ -26,3 +26,6 @@ begin
   return new;
 end $$;
 create trigger menu_items_touch before insert or update on public.menu_items for each row execute function public.menu_items_touch();
+
+-- Dish photos, applied Oct 21, 2026.
+alter table public.menu_items add column image_path text check (char_length(image_path) <= 300);
