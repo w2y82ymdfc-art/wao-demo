@@ -308,6 +308,7 @@ const I18N = {
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
     vip: {"beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again."},
+    stats: {"title": "Wepawao in numbers", "open": "📊 Wepawao in numbers", "openText": "Real counts from the whole community: views, members and businesses, week by week.", "intro": "Real counts from the whole community, updated live. Nothing here is estimated or boosted.", "views": "Views", "viewsWeek": "+{n} this week", "members": "Members", "businesses": "Businesses", "moment": "Moments", "menu": "Menus", "vip": "VIP messages", "weekly": "Views per week", "membersGrowth": "Members over time", "weekOf": "Week of {n}", "howTitle": "How we count", "how": ["A view counts when a moment or VIP message stays on screen for about a second, or when a menu is opened.", "One view per person, per item, per day. Your own views of your own posts never count.", "We show how many, never who.", "No algorithm decides who gets to see a post here."], "since": "Counting since {n}", "none": "Counting has just started. The numbers grow from here.", "back": "← Back", "loading": "Loading…", "bizTitle": "Who saw your business", "menuViews": "Menu views", "people": "People", "vipViews": "VIP message views", "days": "Last 30 days", "bizNone": "No views yet. Share your menu QR or VIP link and they will show up here.", "seen": "👀 {n} views", "seenOne": "👀 1 view"},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
     promiseItems: [
@@ -672,6 +673,7 @@ const I18N = {
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
     vip: {"beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez."},
+    stats: {"title": "Wepawao en números", "open": "📊 Wepawao en números", "openText": "Cifras reales de toda la comunidad: vistas, miembros y negocios, semana a semana.", "intro": "Cifras reales de toda la comunidad, al día. Nada aquí es un estimado ni está inflado.", "views": "Vistas", "viewsWeek": "+{n} esta semana", "members": "Miembros", "businesses": "Negocios", "moment": "Momentos", "menu": "Menús", "vip": "Mensajes VIP", "weekly": "Vistas por semana", "membersGrowth": "Miembros con el tiempo", "weekOf": "Semana del {n}", "howTitle": "Cómo contamos", "how": ["Una vista cuenta cuando un momento o mensaje VIP se queda en pantalla cerca de un segundo, o cuando se abre un menú.", "Una vista por persona, por publicación, por día. Tus propias vistas de lo tuyo nunca cuentan.", "Mostramos cuántos, nunca quiénes.", "Aquí ningún algoritmo decide quién ve una publicación."], "since": "Contando desde el {n}", "none": "El conteo acaba de empezar. Las cifras crecen desde aquí.", "back": "← Volver", "loading": "Cargando…", "bizTitle": "Quién vio tu negocio", "menuViews": "Vistas del menú", "people": "Personas", "vipViews": "Vistas de mensajes VIP", "days": "Últimos 30 días", "bizNone": "Todavía no hay vistas. Comparte el QR de tu menú o tu enlace VIP y aparecerán aquí.", "seen": "👀 {n} vistas", "seenOne": "👀 1 vista"},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
     promiseItems: [
@@ -2322,6 +2324,7 @@ function PostCard({ p, me, onChanged }) {
   const isPublic = moment && p.visibility === 'public' && !p.public_block_reason
   const canShare = !inactive && (!moment || isPublic)
   const canReport = !!me && !mine && moment && p.visibility === 'public'
+  const seenRef = useSeen('moment', p.id, moment && !mine)
 
   async function close() {
     if (!window.confirm(ongoing ? t.confirmClose : t.confirmFulfil)) return
@@ -2359,7 +2362,7 @@ function PostCard({ p, me, onChanged }) {
   }
 
   return (
-    <article className={`${card} ${inactive ? 'opacity-70' : ''}`}>
+    <article ref={seenRef} className={`${card} ${inactive ? 'opacity-70' : ''}`}>
       <div className="flex items-center gap-3">
         <Avatar url={p.author_avatar_url} name={p.author_display_name} />
         {/* Name, then date and labels on one compact line that wraps only if needed. */}
@@ -3594,7 +3597,7 @@ function LinkStatsCard({ stats }) {
   )
 }
 
-function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
+function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam, onStats }) {
   const { t, lang } = useLang()
   const { data, error, loading } = useAffiliateTiers(me, refreshKey)
   const linkStats = useLinkStats(me, refreshKey)
@@ -3630,6 +3633,7 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam }) {
           </div>
 
           <LinkStatsCard stats={linkStats} />
+          {onStats && <CommunityStatsLink onOpen={onStats} />}
 
           <div className={`${card} space-y-2`}>
             <h3 className="font-bold">{t.aff.growth}</h3>
@@ -4180,17 +4184,21 @@ function LogoPicker({ picker, current, label }) {
   )
 }
 
-function VipMessage({ m, listName }) {
-  const { lang } = useLang()
+function VipMessage({ m, listName, track = false, views }) {
+  const { t, lang } = useLang()
+  const seenRef = useSeen('vip', m.id, track)
   return (
-    <div className="overflow-hidden rounded-3xl border-2 border-[#dcdff5] bg-white">
+    <div ref={seenRef} className="overflow-hidden rounded-3xl border-2 border-[#dcdff5] bg-white">
       {m.image_path && <img loading="lazy" alt="" src={photoUrl(m.image_path)} className="max-h-72 w-full object-cover" />}
       <div className="space-y-1 p-4">
         {listName && <div className="text-sm font-bold text-[#4a3af0]">{listName}</div>}
         {m.when_text && <span className="inline-block rounded-full bg-[#4a3af0] px-3 py-1 text-xs font-extrabold text-white">{m.when_text}</span>}
         <div className="text-lg font-extrabold">{m.title}</div>
         {m.body && <p className="whitespace-pre-wrap text-stone-700">{m.body}</p>}
-        <div className="text-xs text-stone-500">{whenShort(m.created_at, lang)}</div>
+        <div className="flex items-center justify-between gap-2 text-xs text-stone-500">
+          <span>{whenShort(m.created_at, lang)}</span>
+          {views != null && <span className="font-bold text-[#4a3af0]">{seenText(t.stats, views)}</span>}
+        </div>
       </div>
     </div>
   )
@@ -4254,7 +4262,7 @@ function VipListPage({ id, me, onSignIn, onBack }) {
   )
 }
 
-function VipOwner({ me, onOpenList }) {
+function VipOwner({ me, onOpenList, onStats }) {
   const { t, lang } = useLang()
   const v = t.vip
   const [list, setList] = useState(undefined)
@@ -4263,6 +4271,7 @@ function VipOwner({ me, onOpenList }) {
   const [selId, setSelId] = useState(null)
   const [count, setCount] = useState(0)
   const [sent, setSent] = useState([])
+  const [vstats, setVstats] = useState(null)
   const [form, setForm] = useState({ name: '', town: '', about: '' })
   const [msg, setMsg] = useState({ title: '', when: '', body: '' })
   const [busy, setBusy] = useState(false)
@@ -4289,11 +4298,12 @@ function VipOwner({ me, onOpenList }) {
     const data = (all || []).find((l) => l.id === selId) || (all || [])[0] || null
     setList(data)
     if (data) {
-      const [{ data: n }, { data: m }] = await Promise.all([
+      const [{ data: n }, { data: m }, { data: vs }] = await Promise.all([
         supabase.rpc('vip_member_count', { p_list: data.id }),
         supabase.from('vip_messages').select('*').eq('list_id', data.id).order('created_at', { ascending: false }).limit(10),
+        supabase.rpc('business_view_stats', { p_list: data.id }),
       ])
-      setCount(n || 0); setSent(m || [])
+      setCount(n || 0); setSent(m || []); setVstats(vs || null)
     }
   }, [me, selId])
   useEffect(() => { load() }, [load])
@@ -4390,6 +4400,7 @@ function VipOwner({ me, onOpenList }) {
           {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
         </div>
       </div>
+      <BusinessViewsCard stats={vstats} onCommunity={onStats} />
       <MenuEditor key={list.id} list={list} me={me} />
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
@@ -4401,7 +4412,7 @@ function VipOwner({ me, onOpenList }) {
         {note && <p className="text-sm font-semibold text-stone-700">{note}</p>}
       </form>
       {sent.length > 0 && <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.sentList}</h3>}
-      {sent.map((m) => <VipMessage key={m.id} m={m} />)}
+      {sent.map((m) => <VipMessage key={m.id} m={m} views={vstats ? (vstats.messages?.[m.id] || 0) : undefined} />)}
     </div>
   )
 }
@@ -4665,7 +4676,7 @@ function MenuEditor({ list, me }) {
   )
 }
 
-function VipHub({ me, onOpenList, onBack }) {
+function VipHub({ me, onOpenList, onBack, onStats }) {
   const { t } = useLang()
   const v = t.vip
   const [lists, setLists] = useState([])
@@ -4696,7 +4707,7 @@ function VipHub({ me, onOpenList, onBack }) {
         <p className="text-white/85">{v.hubIntro}</p>
       </div>
       <h3 className="px-1 text-xl font-extrabold">{v.inboxTitle}</h3>
-      {msgs.length ? msgs.map((m) => <VipMessage key={m.id} m={m} listName={nameOf(m.list_id)} />) : <p className="px-1 text-stone-600">{v.inboxEmpty}</p>}
+      {msgs.length ? msgs.map((m) => <VipMessage key={m.id} m={m} listName={nameOf(m.list_id)} track />) : <p className="px-1 text-stone-600">{v.inboxEmpty}</p>}
       {lists.length > 0 && (
         <div className={card}>
           <h3 className="mb-1 font-extrabold">{v.myLists}</h3>
@@ -4708,7 +4719,7 @@ function VipHub({ me, onOpenList, onBack }) {
           ))}
         </div>
       )}
-      <VipOwner me={me} onOpenList={onOpenList} />
+      <VipOwner me={me} onOpenList={onOpenList} onStats={onStats} />
       <button type="button" className="px-1 font-bold text-[#4a3af0] underline" onClick={onBack}>{t.myPage.title}</button>
     </div>
   )
@@ -5155,7 +5166,7 @@ function ShopPreview({ onBack }) {
   )
 }
 
-function OurPromise({ onReplay }) {
+function OurPromise({ onReplay, onStats }) {
   const { t } = useLang()
   return (
     <>
@@ -5174,6 +5185,7 @@ function OurPromise({ onReplay }) {
         ))}
       </div>
       <AiFaq />
+      {onStats && <CommunityStatsLink onOpen={onStats} />}
       {SHOW_PRICING ? (
         <div className={card}>
           <h2 className="mb-3 text-xl font-bold">{t.pricingTitle}</h2>
@@ -5201,6 +5213,183 @@ function OurPromise({ onReplay }) {
       </div>
       {onReplay && <button className={ghost} onClick={onReplay}>{t.welcome.replay}</button>}
     </>
+  )
+}
+
+// ---------- Views and "Wepawao in numbers" (Oct 21, 2026) ----------
+// A view counts once per person, per item, per day (wepawao-views.sql): a moment or VIP message that stays
+// on screen about a second, or a menu that is opened (api/m.js). The owner's own views never count, and
+// only counts are ever shown, never who looked.
+function visitorId() {
+  try {
+    let v = localStorage.getItem('wao_visitor')
+    if (!v) { v = crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`; localStorage.setItem('wao_visitor', v) }
+    return v
+  } catch { return null }
+}
+const seenOnce = new Set()
+function useSeen(kind, id, on = true) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    const key = `${kind}:${id}`
+    if (!on || !el || !id || seenOnce.has(key) || typeof IntersectionObserver === 'undefined') return
+    let timer
+    const io = new IntersectionObserver(([e]) => {
+      clearTimeout(timer)
+      // Half the item on screen, or half the screen filled by it (a tall post on a phone).
+      const shown = e.isIntersecting && (e.intersectionRatio >= 0.5 || e.intersectionRect.height >= window.innerHeight * 0.5)
+      if (!shown) return
+      timer = setTimeout(() => {
+        if (seenOnce.has(key)) return
+        seenOnce.add(key); io.disconnect()
+        supabase.rpc('record_view', { p_kind: kind, p_target: id, p_visitor: visitorId() }).then(() => {}, () => {})
+      }, 1000)
+    }, { threshold: [0, 0.25, 0.5, 0.75] })
+    io.observe(el)
+    return () => { clearTimeout(timer); io.disconnect() }
+  }, [kind, id, on])
+  return ref
+}
+
+const VIEW_COLORS = { moment: '#4a3af0', menu: '#e0a800', vip: '#9a8ff7', members: '#14123a' }
+const shortDate = (iso, lang) => new Date(`${String(iso).slice(0, 10)}T12:00:00`).toLocaleDateString(lang === 'es' ? 'es-PR' : 'en-US', { day: 'numeric', month: 'short' })
+
+// Stacked bars, one per day or week. Tap or hover a bar to read its numbers; the latest is shown by default.
+function ViewBars({ rows, keys, label }) {
+  const { t } = useLang()
+  const [hover, setHover] = useState(null)
+  const H = 130
+  const max = Math.max(1, ...rows.map((r) => keys.reduce((a, k) => a + (r[k] || 0), 0)))
+  const shown = hover ?? rows.length - 1
+  const r = rows[shown]
+  if (!rows.length) return null
+  return (
+    <div>
+      <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-stone-600">
+        {r && <span className="font-bold text-[#14123a]">{label(r)}</span>}
+        {keys.map((k) => (
+          <span key={k} className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: VIEW_COLORS[k] }} />
+            {t.stats[k] || t.stats.views} <b className="tabular-nums text-[#14123a]">{r ? (r[k] || 0).toLocaleString() : 0}</b>
+          </span>
+        ))}
+      </div>
+      <div className="flex items-end gap-[3px]" style={{ height: H }} onMouseLeave={() => setHover(null)}>
+        {rows.map((row, i) => {
+          const total = keys.reduce((a, k) => a + (row[k] || 0), 0)
+          return (
+            <button key={i} type="button" aria-label={label(row)} onMouseEnter={() => setHover(i)} onClick={() => setHover(i)}
+              className={`flex h-full min-w-0 flex-1 flex-col-reverse rounded-md ${i === shown ? 'bg-[#eef0fc]' : ''}`}>
+              {total === 0 && <span className="block h-0.5 w-full rounded bg-[#dcdff5]" />}
+              {keys.map((k) => (row[k] || 0) > 0 && (
+                <span key={k} className="block w-full first:rounded-b-sm last:rounded-t-sm"
+                  style={{ height: `${Math.max(2, ((row[k] || 0) / max) * (H - 8))}px`, background: VIEW_COLORS[k], marginTop: 1 }} />
+              ))}
+            </button>
+          )
+        })}
+      </div>
+      <div className="mt-1 flex justify-between text-[11px] text-stone-500">
+        <span>{label(rows[0])}</span><span>{label(rows.at(-1))}</span>
+      </div>
+    </div>
+  )
+}
+
+function StatTile({ label, value, sub, tone = 'bg-[#eef0fc]' }) {
+  return (
+    <div className={`rounded-2xl p-3 ${tone}`}>
+      <div className="text-xs text-stone-600">{label}</div>
+      <div className="text-3xl font-extrabold tabular-nums text-[#14123a]">{value == null ? '–' : Number(value).toLocaleString()}</div>
+      {sub && <div className="text-xs font-bold text-emerald-700">{sub}</div>}
+    </div>
+  )
+}
+
+const seenText = (s, n) => (n === 1 ? s.seenOne : fill(s.seen, Number(n || 0).toLocaleString()))
+
+// For the business owner (Mi negocio): menu and VIP message views, last 30 days.
+function BusinessViewsCard({ stats, onCommunity }) {
+  const { t, lang } = useLang()
+  const s = t.stats
+  if (!stats) return null
+  const empty = !stats.menu_total && !stats.vip_total
+  return (
+    <div className={`${card} space-y-3`}>
+      <h3 className="text-xl font-extrabold">{s.bizTitle}</h3>
+      <div className="grid grid-cols-3 gap-2">
+        <StatTile label={s.menuViews} value={stats.menu_total} sub={stats.menu_week ? fill(s.viewsWeek, stats.menu_week) : null} />
+        <StatTile label={s.people} value={stats.menu_people} />
+        <StatTile label={s.vipViews} value={stats.vip_total} tone="bg-[#fff8dc]" />
+      </div>
+      {empty ? <p className="text-stone-600">{s.bizNone}</p> : (
+        <>
+          <h4 className="text-sm font-bold text-[#6b6f93]">{s.days}</h4>
+          <ViewBars rows={stats.days || []} keys={['menu', 'vip']} label={(r) => shortDate(r.day, lang)} />
+        </>
+      )}
+      {stats.since && <p className="text-xs text-stone-500">{fill(s.since, shortDate(stats.since, lang))}</p>}
+      {onCommunity && <button type="button" className="text-sm font-bold text-[#4a3af0]" onClick={onCommunity}>{s.open} →</button>}
+    </div>
+  )
+}
+
+function CommunityStatsLink({ onOpen }) {
+  const { t } = useLang()
+  return (
+    <button type="button" onClick={onOpen} className={`${card} block w-full text-left`}>
+      <div className="text-lg font-extrabold text-[#4a3af0]">{t.stats.open} →</div>
+      <p className="text-sm text-stone-600">{t.stats.openText}</p>
+    </button>
+  )
+}
+
+// Open to everyone, signed in or not: the whole community's numbers, week by week.
+function CommunityStatsPage({ onBack, refreshKey }) {
+  const { t, lang } = useLang()
+  const s = t.stats
+  const [data, setData] = useState(null)
+  const [failed, setFailed] = useState(false)
+  useEffect(() => {
+    let live = true
+    supabase.rpc('community_view_stats').then(({ data, error }) => { if (!live) return; setFailed(!!error); setData(error ? null : data) })
+    return () => { live = false }
+  }, [refreshKey])
+  const weeks = data?.weeks || []
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2 rounded-3xl bg-[#14123a] p-5 text-white">
+        <button type="button" className="text-sm font-bold text-[#f6d155]" onClick={onBack}>{s.back}</button>
+        <h2 className="text-2xl font-extrabold text-[#f6d155]">{s.title}</h2>
+        <p className="text-white/85">{s.intro}</p>
+      </div>
+      {!data && <div className={`${card} text-stone-600`}>{failed ? t.vip.error : s.loading}</div>}
+      {data && (
+        <>
+          <div className="grid grid-cols-2 gap-2">
+            <StatTile label={s.views} value={data.views} sub={data.views_week ? fill(s.viewsWeek, data.views_week) : null} />
+            <StatTile label={s.members} value={data.members} tone="bg-[#fff8dc]" />
+            <StatTile label={s.moment} value={data.moment} />
+            <StatTile label={s.businesses} value={data.businesses} tone="bg-[#fff8dc]" />
+          </div>
+          <div className={`${card} space-y-2`}>
+            <h3 className="font-bold">{s.weekly}</h3>
+            {!data.views && <p className="text-sm text-stone-600">{s.none}</p>}
+            <ViewBars rows={weeks} keys={['moment', 'menu', 'vip']} label={(r) => fill(s.weekOf, shortDate(r.week, lang))} />
+            {data.since && <p className="text-xs text-stone-500">{fill(s.since, shortDate(data.since, lang))}</p>}
+          </div>
+          <div className={`${card} space-y-2`}>
+            <h3 className="font-bold">{s.membersGrowth}</h3>
+            <ViewBars rows={weeks} keys={['members']} label={(r) => fill(s.weekOf, shortDate(r.week, lang))} />
+          </div>
+        </>
+      )}
+      <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] p-5">
+        <h3 className="font-bold">{s.howTitle}</h3>
+        <ul className="list-disc space-y-1 pl-5 text-sm text-stone-700">{s.how.map((l) => <li key={l}>{l}</li>)}</ul>
+      </div>
+    </div>
   )
 }
 
@@ -5309,6 +5498,9 @@ export default function App() {
     if (window.history.state?.wpTab !== tab) window.history.pushState({ wpTab: tab }, '')
   }, [tab])
   // Home: the Everyone tab, from the top. Used by the logo and the floating Home button.
+  // "Wepawao in numbers" remembers where it was opened from, so Back returns there.
+  const statsFrom = useRef('promise')
+  const openStats = () => { statsFrom.current = tab; setTab('stats'); window.scrollTo(0, 0) }
   const goHome = () => { setVipId(null); setTab('everyone'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   // Signed in from "Join or sign in" / "open my page": go straight to My page.
   useEffect(() => {
@@ -5707,7 +5899,7 @@ export default function App() {
               {(me || wide) && (
                 <div id="wp-aff-dashboard" className="scroll-mt-3">
                   <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
-                    isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} />
+                    isAdmin={isAdmin} onTeam={() => { setTab('team'); window.scrollTo(0, 0) }} onStats={openStats} />
                 </div>
               )}
               {!wide && <TeaserCard refreshKey={refreshKey} onJoin={me ? null : () => { setShowSignIn(true); scrollToSignIn() }}
@@ -5727,7 +5919,7 @@ export default function App() {
           )}
           {tab === 'viphub' && me && (
             <VipHub me={me} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
-              onBack={() => { setTab('mypage'); window.scrollTo(0, 0) }} />
+              onBack={() => { setTab('mypage'); window.scrollTo(0, 0) }} onStats={openStats} />
           )}
           {tab === 'mypage' && me && (
             <>
@@ -5746,7 +5938,8 @@ export default function App() {
                 onSaved={posted} onClose={() => setTab('everyone')} onSignOut={() => { supabase.auth.signOut({ scope: 'local' }); setTab('everyone') }} />
             </>
           )}
-          {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} />}
+          {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} onStats={openStats} />}
+          {tab === 'stats' && <CommunityStatsPage refreshKey={refreshKey} onBack={() => { setTab(statsFrom.current); window.scrollTo(0, 0) }} />}
         </main>
         {wide && (
           <aside className="sticky top-4 space-y-4">

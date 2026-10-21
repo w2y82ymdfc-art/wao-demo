@@ -20,6 +20,19 @@ const T = {
   },
 }
 
+// Counts a menu view once per person per day (see record_view in wepawao-views.sql). A signed-in member
+// is counted by account, so the owner opening their own menu doesn't count; everyone else by a random
+// device id. Only counts are kept, never who looked.
+const viewScript = (sb, key, id) => `<script>(function(){try{
+var k=${JSON.stringify(key)},h={'Content-Type':'application/json',apikey:k},v=null,tok=null;
+if(k.indexOf('sb_')!==0)h.Authorization='Bearer '+k;
+try{v=localStorage.getItem('wao_visitor');if(!v){v=(crypto.randomUUID&&crypto.randomUUID())||(Date.now()+'-'+Math.random().toString(36).slice(2));localStorage.setItem('wao_visitor',v)}
+for(var i=0;i<localStorage.length;i++){var n=localStorage.key(i);if(/^sb-.*-auth-token$/.test(n)){var s=JSON.parse(localStorage.getItem(n)||'null');if(s&&s.access_token&&s.expires_at*1000>Date.now()+60000)tok=s.access_token}}}catch(e){}
+var b=JSON.stringify({p_kind:'menu',p_target:${JSON.stringify(id)},p_visitor:v});
+function send(a){var hh=Object.assign({},h);if(a)hh.Authorization='Bearer '+a;return fetch(${JSON.stringify(sb.replace(/\/$/, '') + '/rest/v1/rpc/record_view')},{method:'POST',headers:hh,body:b,keepalive:true})}
+send(tok).then(function(r){if(!r.ok&&tok)send(null)},function(){});
+}catch(e){}})()</script>`
+
 const money = (cents) => `$${(cents / 100).toFixed(2)}`
 
 export default async function handler(req, res) {
@@ -171,5 +184,6 @@ ${lastText ? `<p class="updated">${t.updated(esc(lastText))}</p>` : ''}
   ${biz ? `<a class="vip" href="${esc(vipUrl)}">${t.vip}</a>` : ''}
   <a class="made" href="${esc(joinUrl)}">${t.made} <img src="/wepawao-wordmark.png" alt="Wepawao"> · <b>${t.join}</b></a>
 </footer>
+${biz && SB && KEY ? viewScript(SB, KEY, biz.id) : ''}
 </body></html>`)
 }
