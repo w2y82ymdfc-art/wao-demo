@@ -124,7 +124,7 @@ h1{margin:0;font-size:26px;line-height:1.15;font-weight:900}
 .about{max-width:640px;margin:12px auto 0;color:rgba(255,255,255,.85);font-size:15px}
 .back{display:block;max-width:640px;margin:0 auto 14px;color:#fff;font-weight:700;font-size:15px;text-decoration:none}
 .viptop{display:block;max-width:640px;margin:14px auto 0;background:#f6d155;color:#14123a;font-weight:800;font-size:14px;text-decoration:none;border-radius:14px;padding:10px 14px;text-align:center}
-.lang{color:#f6d155;font-weight:700;font-size:14px;text-decoration:none;border:2px solid #f6d155;border-radius:999px;padding:5px 12px;white-space:nowrap}
+.lang{display:flex;flex-shrink:0;border:2px solid #f6d155;border-radius:999px;overflow:hidden;font-weight:800;font-size:15px}.lang a,.lang span{padding:6px 13px;text-decoration:none;color:#f6d155}.lang .on{background:#f6d155;color:#14123a}
 main{max-width:640px;margin:0 auto;padding:8px 16px 8px}
 h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#4a3af0}
 .item{background:#fff;border:2px solid #e6e8f8;border-radius:18px;padding:14px 16px;margin-bottom:8px}
@@ -155,7 +155,9 @@ footer{max-width:640px;margin:16px auto 0;padding:18px 16px calc(28px + env(safe
   ${fromApp ? `<a class="back" href="${esc(`${site}/?lang=${lang}`)}">← ${t.back}</a>` : ''}
   <div class="top">
     <div class="biz">${logo ? `<img src="${esc(logo)}" alt="">` : ''}<div><h1>${esc(biz?.name || 'Wepawao')}</h1>${biz?.town ? `<div class="town">${esc(biz.town)}</div>` : ''}</div></div>
-    <a class="lang" href="${esc(`${self}?lang=${t.switchLang}${fromApp ? '&from=app' : ''}`)}">${t.switchTo}</a>
+    <div class="lang" role="group" aria-label="Idioma / Language">${['es', 'en'].map((l) => l === lang
+      ? `<span class="on" aria-current="true">${l.toUpperCase()}</span>`
+      : `<a href="${esc(`${self}?lang=${l}${fromApp ? '&from=app' : ''}`)}">${l.toUpperCase()}</a>`).join('')}</div>
   </div>
   ${biz?.about ? `<p class="about">${esc(biz.about)}</p>` : ''}
   ${biz ? `<a class="viptop" href="${esc(vipUrl)}">${t.vipTop}</a>` : ''}
