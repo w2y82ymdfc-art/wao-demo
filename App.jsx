@@ -798,6 +798,20 @@ const I18N = {
 
 const BUCKET = 'photos'
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+// A VIP join a visitor started before signing in. It expires after an hour so nobody gets stuck on that list.
+const VIP_PENDING_MS = 60 * 60 * 1000
+function setVipPending(id) {
+  try { localStorage.setItem('wao_vip_pending', id); localStorage.setItem('wao_vip_pending_at', String(Date.now())) } catch { /* ignore */ }
+}
+function takeVipPending(remove) {
+  try {
+    const p = localStorage.getItem('wao_vip_pending')
+    const at = Number(localStorage.getItem('wao_vip_pending_at') || 0)
+    const fresh = p && UUID_RE.test(p) && Date.now() - at < VIP_PENDING_MS
+    if (remove || !fresh) { localStorage.removeItem('wao_vip_pending'); localStorage.removeItem('wao_vip_pending_at') }
+    return fresh ? p : null
+  } catch { return null }
+}
 const PAGE = 20
 const CATEGORIES = ['general', 'produce', 'tools', 'services', 'household', 'free']
 const TABS = ['everyone', 'mine', 'contacts', 'discover', 'offer', 'promise']
@@ -4631,7 +4645,7 @@ function VipListPage({ id, me, onSignIn, onBack }) {
     return () => { live = false }
   }, [id, me])
   async function toggle() {
-    if (!me) { try { localStorage.setItem('wao_vip_pending', id) } catch { /* ignore */ } onSignIn(); return }
+    if (!me) { setVipPending(id); onSignIn(); return }
     setBusy(true)
     const q = joined
       ? supabase.from('vip_members').delete().eq('list_id', id).eq('user_id', me)
@@ -5838,10 +5852,11 @@ export default function App() {
     const sp = new URLSearchParams(window.location.search)
     const q = sp.get('vip')
     // From the menu's "Become a VIP customer" (?vip=…&join=1): join right away, signing in first if needed.
-    if (q && UUID_RE.test(q) && sp.get('join') === '1') { try { localStorage.setItem('wao_vip_pending', q) } catch { /* ignore */ } }
+    if (q && UUID_RE.test(q) && sp.get('join') === '1') setVipPending(q)
     if (q && UUID_RE.test(q)) return q
-    try { const p = localStorage.getItem('wao_vip_pending'); if (p && UUID_RE.test(p)) return p } catch { /* ignore */ }
-    return null
+    // A link with its own purpose (invite, shared post, advertiser) wins over an unfinished VIP join.
+    if (sp.has('invite') || sp.has('post') || sp.has('advertise')) return null
+    return takeVipPending(false)
   })
   useEffect(() => { if (vipId) setTab('vip') }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [vipJoinName, setVipJoinName] = useState(null)
@@ -6031,9 +6046,8 @@ export default function App() {
   // A visitor tapped "Quiero ser cliente VIP" and then signed in: finish the join for them.
   useEffect(() => {
     if (!me) return
-    let p = null
-    try { p = localStorage.getItem('wao_vip_pending'); localStorage.removeItem('wao_vip_pending') } catch { /* ignore */ }
-    if (!p || !UUID_RE.test(p)) return
+    const p = takeVipPending(true)
+    if (!p) return
     supabase.from('vip_members').upsert({ list_id: p, user_id: me }, { onConflict: 'list_id,user_id', ignoreDuplicates: true })
       .then(() => { setVipId(p); setTab('vip'); setShowSignIn(false); posted(); window.scrollTo(0, 0) })
   }, [me]) // eslint-disable-line react-hooks/exhaustive-deps
