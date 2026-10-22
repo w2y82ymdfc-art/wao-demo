@@ -4844,6 +4844,10 @@ function VipOwner({ me, onOpenList, onStats }) {
           </div>
           <span className="shrink-0 rounded-full bg-[#f6d155] px-2.5 py-1 text-xs font-extrabold text-[#14123a]">{v.free}</span>
         </div>
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white/10 p-3">
+          <LogoPicker picker={logo} current={list.logo_path} label={logo.items[0] ? t.ai.change : (list.logo_path ? v.logoChange : v.logoAdd)} />
+          {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-white/10 p-3"><div className="text-xs text-white/70">{v.count}</div><div className="text-3xl font-black text-[#f6d155]">{count}</div></div>
           <div className="rounded-2xl bg-white/10 p-3"><div className="text-xs text-white/70">{v.week}</div><div className="text-lg font-extrabold">{fill(v.weekOf, thisWeek)}</div></div>
@@ -4852,13 +4856,7 @@ function VipOwner({ me, onOpenList, onStats }) {
           <button type="button" onClick={share} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.share}</button>
           <button type="button" onClick={() => onOpenList(list.id)} className="rounded-full border-2 border-white/70 px-5 py-2 font-bold text-white">{v.open}</button>
         </div>
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white/10 p-3">
-          <LogoPicker picker={logo} current={list.logo_path} label={logo.items[0] ? t.ai.change : (list.logo_path ? v.logoChange : v.logoAdd)} />
-          {logo.items[0] && <button type="button" disabled={busy} onClick={saveLogo} className="rounded-full bg-[#f6d155] px-5 py-2.5 font-bold text-[#14123a]">{v.logoSave}</button>}
-        </div>
       </div>
-      <BusinessViewsCard stats={vstats} onCommunity={onStats} />
-      <MenuEditor key={list.id} list={list} me={me} />
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
         <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
@@ -4870,6 +4868,8 @@ function VipOwner({ me, onOpenList, onStats }) {
       </form>
       {sent.length > 0 && <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.sentList}</h3>}
       {sent.map((m) => <VipMessage key={m.id} m={m} views={vstats ? (vstats.messages?.[m.id] || 0) : undefined} />)}
+      <MenuEditor key={list.id} list={list} me={me} />
+      <BusinessViewsCard stats={vstats} onCommunity={onStats} />
     </div>
   )
 }
@@ -5757,7 +5757,7 @@ function ViewBars({ rows, keys, label }) {
 function StatTile({ label, value, sub, tone = 'bg-[#eef0fc]' }) {
   return (
     <div className={`rounded-2xl p-3 ${tone}`}>
-      <div className="text-xs text-stone-600">{label}</div>
+      <div className="min-h-8 text-xs text-stone-600">{label}</div>
       <div className="text-3xl font-extrabold tabular-nums text-[#14123a]">{value == null ? '–' : Number(value).toLocaleString()}</div>
       {sub && <div className="text-xs font-bold text-emerald-700">{sub}</div>}
     </div>
