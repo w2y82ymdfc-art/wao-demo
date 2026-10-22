@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // The repo is flat (no folders), so these files are published at the site root by this plugin.
-const STATIC_FILES = ['wepawao-share.jpg', 'wepawao-pr.jpg', 'wepawao-icon-192.png', 'wepawao-icon-512.png', 'apple-touch-icon.png', 'vip-la-parrilla.jpg', 'vip-brasa-panoramica.jpg', 'wepawao-wordmark.png']
+const STATIC_FILES = ['wepawao-share.jpg', 'wepawao-pr.jpg', 'wepawao-icon-192.png', 'wepawao-icon-512.png', 'apple-touch-icon.png', 'vip-la-parrilla.jpg', 'vip-brasa-panoramica.jpg', 'vip-vokas.jpg', 'wepawao-wordmark.png']
 
 // Full site address for link previews (WhatsApp needs a full https:// address). Vercel provides it at build time.
 const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || ''
