@@ -1887,13 +1887,19 @@ function MomentComposer({ userId, onPosted }) {
   const { t } = useLang()
   const ready = useAiReady()
   const [ai, setAi] = useState(true)
+  // "Momento normal" glows softly until the member opens it once, so they notice the option is there.
+  const [seenRegular, setSeenRegular] = useState(() => { try { return !!localStorage.getItem('wp_seen_regular') } catch { return true } })
+  function pick(v) {
+    setAi(v)
+    if (!v && !seenRegular) { setSeenRegular(true); try { localStorage.setItem('wp_seen_regular', '1') } catch { /* ignore */ } }
+  }
   return (
     <div className="space-y-2">
       {ready && (
         <div className="grid grid-cols-2 gap-1 rounded-full bg-white p-1 ring-2 ring-[#dcdff5]">
           {[[true, t.ai.tab], [false, t.ai.regular]].map(([v, l]) => (
-            <button key={l} type="button" onClick={() => setAi(v)}
-              className={`rounded-full px-3 py-2 text-sm font-bold ${ai === v ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'}`}>{l}</button>
+            <button key={l} type="button" onClick={() => pick(v)}
+              className={`rounded-full px-3 py-2 text-sm font-bold ${ai === v ? 'bg-[#4a3af0] text-white' : 'text-[#6b6f93]'} ${!v && ai && !seenRegular ? 'wp-tab-glow' : ''}`}>{l}</button>
           ))}
         </div>
       )}
