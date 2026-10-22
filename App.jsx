@@ -372,6 +372,11 @@ const I18N = {
       captionPh: 'Tell the story behind your caricature…',
       howTitle: 'How I made it (optional)', toolPh: 'AI app you used (e.g. ChatGPT, Gemini)', promptPh: 'The prompt you used, so others can try it',
       needBoth: 'Add both pictures: your photo and your caricature.',
+      postalTitle: 'Postal de Puerto Rico',
+      postalNone: 'No postal',
+      postalMorro: 'El Morro',
+      postalHint: 'Show your caricature on a Puerto Rico postcard.',
+      postalAlt: 'Caricature on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       helpBtn: 'Never used AI? Help me make my caricature', helpHide: 'Hide the guide',
       guideTitle: 'Your caricature in 3 steps',
       bubbleTitle: 'Make your caricature with AI. It’s easy!',
@@ -737,6 +742,11 @@ const I18N = {
       captionPh: 'Cuenta la historia de tu caricatura…',
       howTitle: 'Cómo lo hice (opcional)', toolPh: 'App de IA que usaste (ej. ChatGPT, Gemini)', promptPh: 'La instrucción (prompt) que usaste, para que otros la prueben',
       needBoth: 'Añade las dos imágenes: tu foto y tu caricatura.',
+      postalTitle: 'Postal de Puerto Rico',
+      postalNone: 'Sin postal',
+      postalMorro: 'El Morro',
+      postalHint: 'Muestra tu caricatura en una postal de Puerto Rico.',
+      postalAlt: 'Caricatura en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       helpBtn: '¿Nunca has usado IA? Ayúdame a hacer mi caricatura', helpHide: 'Ocultar la guía',
       guideTitle: 'Tu caricatura en 3 pasos',
       steps: ['Tómate un selfie o elige una foto clara de tu cara.', 'Abre una app de IA gratis que haga imágenes (ChatGPT, Google Gemini, Meta AI o Microsoft Copilot), sube tu foto y pega una de las ideas de abajo.', 'Guarda la caricatura que crea, vuelve aquí y publica las dos imágenes.'],
@@ -952,9 +962,10 @@ async function sharePost(p, t, lang, me) {
 async function fetchMine(me, cursor, kind) {
   const multi = await supportsMultiPhoto()
   const ai = multi && await supportsAi()
+  const postal = ai && await supportsPostal()
   let q = supabase
     .from('posts')
-    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
+    .select(`id,user_id,kind,category,title,body,price_cents,location_text,image_path,${multi ? NEW_COLS : ''}${ai ? 'ai_moment,ai_prompt,ai_tool,' : ''}${postal ? 'postal,' : ''}caricature_image_url,status,listing_type,expires_at,created_at`)
     .eq('user_id', me)
     .order('created_at', { ascending: false })
     .order('id', { ascending: false })
@@ -1601,6 +1612,22 @@ function supportsAi() {
   }
   return aiCheck
 }
+// Puerto Rico postal frames: the AI version shown like a polaroid over the El Morro art (wepawao-pr.jpg,
+// never altered). Turns on by itself once the posts.postal column exists (wepawao-postal.sql).
+let postalCheck = null
+function supportsPostal() {
+  if (!postalCheck) {
+    postalCheck = supabase.from('posts').select('postal').limit(1)
+      .then(({ error }) => !error).catch(() => false)
+      .then((ok) => { if (!ok) postalCheck = null; return ok })
+  }
+  return postalCheck
+}
+function usePostalReady() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { let alive = true; supportsPostal().then((ok) => alive && setReady(ok)); return () => { alive = false } }, [])
+  return ready
+}
 function useAiReady() {
   const [ready, setReady] = useState(false)
   useEffect(() => { let alive = true; supportsAi().then((ok) => alive && setReady(ok)); return () => { alive = false } }, [])
@@ -1731,6 +1758,8 @@ function AiComposer({ userId, onPosted }) {
   const original = usePhotoPicker([], 1, () => setError(t.couldNotRead))
   const aiVersion = usePhotoPicker([], 1, () => setError(t.couldNotRead))
   const both = original.items.length === 1 && aiVersion.items.length === 1
+  const postalReady = usePostalReady()
+  const [postal, setPostal] = useState(null)
 
   async function submit(e, opts = {}) {
     e?.preventDefault?.()
@@ -1755,6 +1784,7 @@ function AiComposer({ userId, onPosted }) {
         id: postId, user_id: userId, kind: 'update', listing_type: 'one_time', category: 'general',
         body: body.trim(), ...imageFields(up.paths, true), visibility: vis,
         ai_moment: true, ai_tool: tool.trim() || null, ai_prompt: prompt.trim() || null,
+        ...(postalReady && postal ? { postal } : {}),
       })
       if (postErr) throw postErr
       let notice = ''
@@ -1762,7 +1792,7 @@ function AiComposer({ userId, onPosted }) {
         const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
         if (data?.public_block_reason) notice = t.blockedNotice(t.blocked[data.public_block_reason])
       }
-      setBody(''); setTool(''); setPrompt(''); original.reset(); aiVersion.reset()
+      setBody(''); setTool(''); setPrompt(''); setPostal(null); original.reset(); aiVersion.reset()
       try { localStorage.setItem(AI_POSTED_KEY, '1') } catch { /* ignore */ }
       onPosted(notice)
     } catch (err) {
@@ -1786,6 +1816,23 @@ function AiComposer({ userId, onPosted }) {
         <PhotoSlot label={t.ai.original} picker={original} />
         <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} tone="ai" icon="✨" />
       </div>
+      {postalReady && (
+        <div className="space-y-2">
+          <div className="text-sm font-bold">{t.ai.postalTitle}</div>
+          <p className="text-xs text-stone-500">{t.ai.postalHint}</p>
+          <div className="flex flex-wrap gap-2">
+            {[[null, t.ai.postalNone], ['morro', t.ai.postalMorro]].map(([v, l]) => (
+              <button key={l} type="button" onClick={() => setPostal(v)} aria-pressed={postal === v}
+                className={`min-h-11 rounded-full px-4 text-sm font-bold ${postal === v ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`}>{l}</button>
+            ))}
+          </div>
+          {postal && aiVersion.items[0] && (
+            <PostalFrame alt={t.ai.postalAlt}>
+              <img src={aiVersion.items[0].url || photoUrl(aiVersion.items[0].path)} alt="" className="aspect-square w-full object-cover" />
+            </PostalFrame>
+          )}
+        </div>
+      )}
       <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} required maxLength={500} placeholder={t.ai.captionPh}
         value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
       <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
@@ -1835,7 +1882,7 @@ function MomentComposer({ userId, onPosted }) {
 // Before/after reveal, nonstop like the landing slideshow: the original photo, then the divider sweeps
 // across to the AI version, holds it, fades back to the original and starts again, constantly.
 // It pauses only while the post is off screen (to save battery) and picks up again when it comes back.
-function BeforeAfter({ original, aiVersion }) {
+function BeforeAfter({ original, aiVersion, compact = false }) {
   const { t } = useLang()
   const [pos, setPos] = useState(100)
   const [round, setRound] = useState(0)
@@ -1873,16 +1920,34 @@ function BeforeAfter({ original, aiVersion }) {
     return () => { io.disconnect(); stop() }
   }, [loop])
   return (
-    <div className="mt-3 space-y-1">
-      <div ref={box} className="relative aspect-square w-full select-none overflow-hidden rounded-2xl bg-[#eef0fc]">
+    <div className={compact ? '' : 'mt-3 space-y-1'}>
+      <div ref={box} className={`relative aspect-square w-full select-none overflow-hidden bg-[#eef0fc] ${compact ? '' : 'rounded-2xl'}`}>
         <img loading="lazy" alt="" src={photoUrl(aiVersion)} className="absolute inset-0 h-full w-full object-cover" />
         <img key={round} loading="lazy" alt="" src={photoUrl(original)} className={`absolute inset-0 h-full w-full object-cover ${round ? 'wp-fade-in' : ''}`}
           style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} />
         <div className="pointer-events-none absolute inset-y-0 w-1 bg-white shadow" style={{ left: `calc(${pos}% - 2px)`, opacity: pos > 98 || pos < 2 ? 0 : 1 }}>
           <div className="absolute top-1/3 left-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-sm font-extrabold text-[#4a3af0] shadow">✨</div>
         </div>
-        {pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
-        {pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
+        {!compact && pos > 8 && <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelOriginal}</span>}
+        {!compact && pos < 92 && <span className="absolute right-2 top-2 rounded-full bg-[#4a3af0] px-2 py-0.5 text-xs font-bold text-white">{t.ai.labelAi} ✨</span>}
+      </div>
+    </div>
+  )
+}
+
+// The El Morro art stays whole underneath; the photo sits on top like a polaroid, with a ¡Wepa! stamp.
+function PostalFrame({ alt, children }) {
+  return (
+    <div className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#fde6a2]" role="img" aria-label={alt}>
+      <img src="/wepawao-pr.jpg?v=2" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute right-[6%] top-[12%] w-[44%] rotate-3 rounded-sm bg-white p-1.5 pb-0 shadow-[0_6px_18px_rgba(20,18,58,0.3)]">
+        {children}
+        <div className="py-1.5 text-center text-[11px] font-extrabold text-[#14123a]">Puerto Rico</div>
+      </div>
+      <div className="absolute left-3 top-3 -rotate-6 rounded border-2 border-dashed border-[#14123a] bg-[#fffdf7] px-2 py-1 text-center leading-tight text-[#14123a]">
+        <div className="text-[9px] font-extrabold tracking-wide">PUERTO RICO</div>
+        <div className="text-sm font-extrabold text-[#d93a2b]">¡Wepa!</div>
+        <div className="text-[9px] font-bold">wepawao</div>
       </div>
     </div>
   )
@@ -2389,7 +2454,9 @@ function PostCard({ p, me, onChanged }) {
           {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
           {p.ai_moment && images.length >= 2 && (
             <>
-              <BeforeAfter original={images[0]} aiVersion={images[1]} />
+              {p.postal === 'morro'
+                ? <PostalFrame alt={t.ai.postalAlt}><BeforeAfter compact original={images[0]} aiVersion={images[1]} /></PostalFrame>
+                : <BeforeAfter original={images[0]} aiVersion={images[1]} />}
               <AiHow p={p} />
             </>
           )}
@@ -2804,9 +2871,9 @@ function SharedPost({ id, me, onClose, onChanged }) {
     let cancelled = false
     // All photo and AI columns exist now, so ask for them directly. Right after a link is opened,
     // sign-in may still be settling and the first request can fail: try a few times before giving up.
-    const cols = `id,user_id,kind,category,title,body,price_cents,location_text,image_path,${NEW_COLS}ai_moment,ai_prompt,ai_tool,caricature_image_url,status,listing_type,expires_at,created_at,profiles!posts_user_id_fkey(username,display_name,avatar_url)`
+    const cols = (postal) => `id,user_id,kind,category,title,body,price_cents,location_text,image_path,${NEW_COLS}ai_moment,ai_prompt,ai_tool,${postal ? 'postal,' : ''}caricature_image_url,status,listing_type,expires_at,created_at,profiles!posts_user_id_fkey(username,display_name,avatar_url)`
     const load = async (tries) => {
-      const { data, error } = await supabase.from('posts').select(cols).eq('id', id).maybeSingle()
+      const { data, error } = await supabase.from('posts').select(cols(await supportsPostal())).eq('id', id).maybeSingle()
       if (cancelled) return
       if (error && tries > 0) { setTimeout(() => load(tries - 1), 900); return }
       setP(data ? { ...data, author_username: data.profiles?.username, author_display_name: data.profiles?.display_name, author_avatar_url: data.profiles?.avatar_url } : null)
