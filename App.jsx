@@ -1954,11 +1954,17 @@ function PostalPicker({ value, onChange, item, hint, alt }) {
     <div className="space-y-2">
       <div className="text-sm font-bold">{t.ai.postalTitle}</div>
       <p className="text-xs text-stone-500">{hint}</p>
-      <div className="flex flex-wrap gap-2">
-        {[[null, t.ai.postalNone], ['morro', t.ai.postalMorro]].map(([v, l]) => (
-          <button key={l} type="button" onClick={() => onChange(v)} aria-pressed={value === v}
-            className={`min-h-11 rounded-full px-4 text-sm font-bold ${value === v ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`}>{l}</button>
-        ))}
+      <div className="flex flex-wrap items-stretch gap-2">
+        <button type="button" onClick={() => onChange(null)} aria-pressed={value === null}
+          className={`min-h-11 rounded-2xl px-4 text-sm font-bold ${value === null ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`}>{t.ai.postalNone}</button>
+        {/* Each postal shows its own scene, so members see it before choosing. */}
+        <button type="button" onClick={() => onChange('morro')} aria-pressed={value === 'morro'}
+          className={`relative h-20 w-36 overflow-hidden rounded-2xl ${value === 'morro' ? 'ring-4 ring-[#14123a]' : 'ring-2 ring-[#dcdff5]'}`}>
+          <img src="/wepawao-pr.jpg?v=2" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <span className={`absolute inset-x-1.5 bottom-1.5 rounded-full px-2 py-0.5 text-center text-xs font-extrabold ${value === 'morro' ? 'bg-[#14123a] text-white' : 'bg-white/90 text-[#14123a]'}`}>
+            {value === 'morro' ? '✓ ' : ''}{t.ai.postalMorro}
+          </span>
+        </button>
       </div>
       {value && item && (
         <PostalFrame alt={alt}>
