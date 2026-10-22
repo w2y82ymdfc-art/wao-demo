@@ -370,7 +370,7 @@ const I18N = {
       title: 'Share your caricature',
       intro: 'Use a selfie or your profile photo, turn it into a caricature with any free AI app, and post both. Everyone sees the before and after.',
       original: '1. Your photo', aiVersion: '2. Your caricature', choose: 'Choose photo', change: 'Change',
-      captionPh: 'Tell the story behind your caricature…',
+      captionPh: 'Tell the story behind your photo (optional)…',
       howTitle: 'How I made it (optional)', toolPh: 'AI app you used (e.g. ChatGPT, Gemini)', promptPh: 'The prompt you used, so others can try it',
       needBoth: 'Add both pictures: your photo and your caricature.',
       postalTitle: 'Postal de Puerto Rico',
@@ -744,7 +744,7 @@ const I18N = {
       title: 'Comparte tu caricatura',
       intro: 'Usa un selfie o tu foto de perfil, conviértela en caricatura con cualquier app de IA gratis y publica las dos. Todos verán el antes y el después.',
       original: '1. Tu foto', aiVersion: '2. Tu caricatura', choose: 'Elegir foto', change: 'Cambiar',
-      captionPh: 'Cuenta la historia de tu caricatura…',
+      captionPh: 'Cuenta la historia de tu foto (opcional)…',
       howTitle: 'Cómo lo hice (opcional)', toolPh: 'App de IA que usaste (ej. ChatGPT, Gemini)', promptPh: 'La instrucción (prompt) que usaste, para que otros la prueben',
       needBoth: 'Añade las dos imágenes: tu foto y tu caricatura.',
       postalTitle: 'Postal de Puerto Rico',
@@ -1870,7 +1870,7 @@ function AiComposer({ userId, onPosted }) {
         <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} tone="ai" icon="✨" />
       </div>
       {postalReady && <PostalPicker value={postal} onChange={setPostal} item={aiVersion.items[0]} hint={t.ai.postalHintPhoto} alt={t.ai.postalAlt} />}
-      <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} required maxLength={500} placeholder={t.ai.captionPh}
+      <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} maxLength={500} placeholder={t.ai.captionPh}
         value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
       <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
         <div className="text-sm font-bold text-[#f6d155]">{t.ai.howTitle}</div>
