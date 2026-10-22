@@ -263,7 +263,7 @@ const I18N = {
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
     sentAgain: 'Send it again', sentWait: (s) => `You can send it again in ${s}s`, sentOther: 'Use a different email',
     pwHint: 'Already have a Wepawao password? Sign in with it here.', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'My password', pwSetHint: 'Set a password so you can sign in quickly on any phone or computer. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'Sign in once here', outText: 'On iPhone, the Wepawao icon on your home screen keeps its own sign-in, separate from Safari. Tap "Sign in with my password", enter your email and your Wepawao password, and you stay signed in here from then on.', outBtn: 'Sign in with my password', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Prefer to use your password? Sign in with it here', newHere: 'No password needed. Type your email (and your name if you are new) and we will email you a code to sign in.', pwSame: 'That is already your password. You can sign in with it now.', forgot: 'Forgot your password?', forgotSent: (e) => `We sent a link to ${e} to choose a new password. Open it on this same phone or computer.`, resetTitle: 'Choose a new password', resetHint: 'You opened the password link from your email. Type a new password (at least 8 characters).', resetDone: 'New password saved. You are signed in.',
-    wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…",
+    wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…", wowPlaceholderOpt: "Tell the story behind your photo (optional)…",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
     photoConsent: 'This is a photo of me, and I agree to show it on my public profile.',
@@ -637,7 +637,7 @@ const I18N = {
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
     sentAgain: 'Enviarlo otra vez', sentWait: (s) => `Puedes enviarlo otra vez en ${s}s`, sentOther: 'Usar otro correo',
     pwHint: '¿Ya tienes contraseña de Wepawao? Entra con ella aquí.', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Mi contraseña', pwSetHint: 'Crea una contraseña para entrar rápido desde cualquier teléfono o computadora. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'Entra una vez aquí', outText: 'En iPhone, el ícono de Wepawao en tu pantalla de inicio guarda su propia sesión, aparte de Safari. Toca "Entrar con mi contraseña", escribe tu correo y tu contraseña de Wepawao, y quedarás con la sesión abierta aquí desde entonces.', outBtn: 'Entrar con mi contraseña', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Prefieres usar tu contraseña? Entra con ella aquí', newHere: 'No necesitas contraseña. Escribe tu correo (y tu nombre si eres nuevo) y te enviaremos un código por correo para entrar.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.', forgot: '¿Olvidaste tu contraseña?', forgotSent: (e) => `Enviamos un enlace a ${e} para crear una contraseña nueva. Ábrelo en este mismo teléfono o computadora.`, resetTitle: 'Crea una contraseña nueva', resetHint: 'Abriste el enlace de contraseña de tu correo. Escribe una contraseña nueva (mínimo 8 caracteres).', resetDone: 'Contraseña nueva guardada. Ya entraste.',
-    wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…',
+    wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…', wowPlaceholderOpt: 'Cuenta la historia de tu foto (opcional)…',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
     photoConsent: 'Esta es una foto mía y acepto mostrarla en mi perfil público.',
@@ -1606,8 +1606,9 @@ function Composer({ userId, mode, onPosted }) {
       )}
 
       {detailed && <input className={field} maxLength={120} placeholder={t.offeringPh} value={f.title} onChange={set('title')} />}
-      <textarea className={`${field} min-h-24`} required maxLength={500}
-        placeholder={kind === 'offer' ? t.describePh : t.wowPlaceholder}
+      {/* A moment with a photo can go without text; offers and text-only moments still need it. */}
+      <textarea className={`${field} min-h-24`} required={kind !== 'update' || !photos.items.length} maxLength={500}
+        placeholder={kind === 'offer' ? t.describePh : photos.items.length ? t.wowPlaceholderOpt : t.wowPlaceholder}
         value={f.body} onChange={set('body')} />
 
       {detailed && (
