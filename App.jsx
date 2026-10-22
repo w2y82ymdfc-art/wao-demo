@@ -1869,7 +1869,7 @@ function AiComposer({ userId, onPosted }) {
         <PhotoSlot label={t.ai.original} picker={original} />
         <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} tone="ai" icon="✨" />
       </div>
-      {postalReady && <PostalPicker value={postal} onChange={setPostal} item={aiVersion.items[0]} hint={t.ai.postalHint} alt={t.ai.postalAlt} />}
+      {postalReady && <PostalPicker value={postal} onChange={setPostal} item={aiVersion.items[0]} hint={t.ai.postalHintPhoto} alt={t.ai.postalAlt} />}
       <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} required maxLength={500} placeholder={t.ai.captionPh}
         value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
       <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
