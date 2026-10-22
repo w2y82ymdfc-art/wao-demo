@@ -376,6 +376,8 @@ const I18N = {
       postalNone: 'No postal',
       postalMorro: 'El Morro',
       postalHint: 'Show your caricature on a Puerto Rico postcard.',
+      postalHintPhoto: 'Show your photo on a Puerto Rico postcard.',
+      postalAltPhoto: 'Photo on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       postalAlt: 'Caricature on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       helpBtn: 'Never used AI? Help me make my caricature', helpHide: 'Hide the guide',
       guideTitle: 'Your caricature in 3 steps',
@@ -746,6 +748,8 @@ const I18N = {
       postalNone: 'Sin postal',
       postalMorro: 'El Morro',
       postalHint: 'Muestra tu caricatura en una postal de Puerto Rico.',
+      postalHintPhoto: 'Muestra tu foto en una postal de Puerto Rico.',
+      postalAltPhoto: 'Foto en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       postalAlt: 'Caricatura en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       helpBtn: '¿Nunca has usado IA? Ayúdame a hacer mi caricatura', helpHide: 'Ocultar la guía',
       guideTitle: 'Tu caricatura en 3 pasos',
@@ -1465,6 +1469,9 @@ function Composer({ userId, mode, onPosted }) {
   const ready = useSchemaReady()
   const maxPhotos = useMaxPhotos()
   const photos = usePhotoPicker([], maxPhotos, () => setError(t.couldNotRead))
+  const postalReady = usePostalReady()
+  const [postal, setPostal] = useState(null)
+  const withPostal = postalReady && kind === 'update' && postal && photos.items.length > 0
 
   const [adWhy, setAdWhy] = useState(null) // null = no notice; string = looks like an ad
   const [checking, setChecking] = useState(false)
@@ -1511,6 +1518,7 @@ function Composer({ userId, mode, onPosted }) {
         location_text: detailed ? f.area || null : null,
         ...imageFields(up.paths, multi),
         ...(multi && kind === 'update' ? { visibility: vis } : {}),
+        ...(withPostal ? { postal } : {}),
         ...where,
       })
       if (postErr) throw postErr
@@ -1521,6 +1529,7 @@ function Composer({ userId, mode, onPosted }) {
       }
       setF({ category: 'general', title: '', body: '', price: '', area: '' })
       setGeo(false)
+      setPostal(null)
       photos.reset()
       onPosted(notice)
     } catch (err) {
@@ -1576,6 +1585,10 @@ function Composer({ userId, mode, onPosted }) {
       <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
 
       {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
+
+      {postalReady && kind === 'update' && photos.items.length > 0 && (
+        <PostalPicker value={postal} onChange={setPostal} item={photos.items[0]} hint={t.ai.postalHintPhoto} alt={t.ai.postalAltPhoto} />
+      )}
 
       {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={(v) => { setAdWhy(null); setVisibility(v) }} />}
 
@@ -1816,23 +1829,7 @@ function AiComposer({ userId, onPosted }) {
         <PhotoSlot label={t.ai.original} picker={original} />
         <PhotoSlot label={t.ai.aiVersion} picker={aiVersion} tone="ai" icon="✨" />
       </div>
-      {postalReady && (
-        <div className="space-y-2">
-          <div className="text-sm font-bold">{t.ai.postalTitle}</div>
-          <p className="text-xs text-stone-500">{t.ai.postalHint}</p>
-          <div className="flex flex-wrap gap-2">
-            {[[null, t.ai.postalNone], ['morro', t.ai.postalMorro]].map(([v, l]) => (
-              <button key={l} type="button" onClick={() => setPostal(v)} aria-pressed={postal === v}
-                className={`min-h-11 rounded-full px-4 text-sm font-bold ${postal === v ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`}>{l}</button>
-            ))}
-          </div>
-          {postal && aiVersion.items[0] && (
-            <PostalFrame alt={t.ai.postalAlt}>
-              <img src={aiVersion.items[0].url || photoUrl(aiVersion.items[0].path)} alt="" className="aspect-square w-full object-cover" />
-            </PostalFrame>
-          )}
-        </div>
-      )}
+      {postalReady && <PostalPicker value={postal} onChange={setPostal} item={aiVersion.items[0]} hint={t.ai.postalHint} alt={t.ai.postalAlt} />}
       <textarea className={`${field} min-h-20 !border-[#c9c2fb] !bg-[#f3f1ff] placeholder:!text-[#8a82c9]`} required maxLength={500} placeholder={t.ai.captionPh}
         value={body} onChange={(e) => { setAdWhy(null); setBody(e.target.value) }} />
       <div className="space-y-2 rounded-2xl bg-[#14123a] p-3">
@@ -1946,6 +1943,28 @@ function PostalFrame({ alt, children }) {
         {children}
         <div className="py-1 text-center text-[10px] font-extrabold tracking-wide text-[#14123a] sm:text-xs">Puerto Rico</div>
       </div>
+    </div>
+  )
+}
+
+// Postal choice in the moment composers: No postal (default) or El Morro, with a preview of the photo on it.
+function PostalPicker({ value, onChange, item, hint, alt }) {
+  const { t } = useLang()
+  return (
+    <div className="space-y-2">
+      <div className="text-sm font-bold">{t.ai.postalTitle}</div>
+      <p className="text-xs text-stone-500">{hint}</p>
+      <div className="flex flex-wrap gap-2">
+        {[[null, t.ai.postalNone], ['morro', t.ai.postalMorro]].map(([v, l]) => (
+          <button key={l} type="button" onClick={() => onChange(v)} aria-pressed={value === v}
+            className={`min-h-11 rounded-full px-4 text-sm font-bold ${value === v ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`}>{l}</button>
+        ))}
+      </div>
+      {value && item && (
+        <PostalFrame alt={alt}>
+          <img src={item.url || photoUrl(item.path)} alt="" className="aspect-square w-full object-cover" />
+        </PostalFrame>
+      )}
     </div>
   )
 }
@@ -2457,9 +2476,14 @@ function PostCard({ p, me, onChanged }) {
               <AiHow p={p} />
             </>
           )}
-          {!(p.ai_moment && images.length >= 2) && images.length > 0 && (
+          {!p.ai_moment && p.postal === 'morro' && images.length > 0 && (
+            <PostalFrame alt={t.ai.postalAltPhoto}>
+              <img loading="lazy" src={photoUrl(images[0])} alt="" className="aspect-square w-full object-cover" />
+            </PostalFrame>
+          )}
+          {!(p.ai_moment && images.length >= 2) && images.length > (!p.ai_moment && p.postal === 'morro' ? 1 : 0) && (
             <div className={`mt-3 grid gap-2 ${images.length > 1 ? 'grid-cols-2' : ''}`}>
-              {images.map((path) => (
+              {(!p.ai_moment && p.postal === 'morro' ? images.slice(1) : images).map((path) => (
                 <a key={path} href={photoUrl(path)} target="_blank" rel="noreferrer">
                   <img loading="lazy" alt="" src={photoUrl(path)}
                     className={`w-full rounded-2xl object-cover ${images.length > 1 ? 'aspect-square' : 'max-h-96'}`} />
