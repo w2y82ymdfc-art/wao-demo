@@ -308,7 +308,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
-    vip: {"beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again."},
+    vip: {"managersTitle": "Managers", "managersIntro": "Let someone you trust work this page with their own Wepawao sign-in: menu, prices, VIP messages and logo. Only you can add or remove managers.", "addManager": "Add a manager", "managerInviteText": "You are invited to manage {n} on Wepawao. Open this link and sign in:", "managerLinkNote": "Send this link to your manager. It works once and expires in 7 days.", "noManagers": "No managers yet.", "removeManager": "Remove", "managerBadge": "Manager", "managerOf": "Business I manage", "leaveManager": "Stop managing this business", "managerNow": "You now manage {n}. It is here in My business.", "managerInvalid": "This manager link was already used or expired. Ask the owner for a new one.", "managerSignIn": "Sign in to start managing the business you were invited to.", "beta": "Beta", "hubBtn": "VIP Customers (beta)", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their VIP customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "copied": "Link copied", "newMsg": "New VIP message", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again."},
     stats: {"title": "Wepawao in numbers", "open": "📊 Wepawao in numbers", "openText": "Real counts from the whole community: views, members and businesses, week by week.", "intro": "Real counts from the whole community, updated live. Nothing here is estimated or boosted.", "views": "Views", "viewsWeek": "+{n} this week", "members": "Members", "businesses": "Businesses", "moment": "Moments", "menu": "Menus", "vip": "VIP messages", "weekly": "Views per week", "membersGrowth": "Members over time", "weekOf": "Week of {n}", "howTitle": "How we count", "how": ["A view counts when a moment or VIP message stays on screen for about a second, or when a menu is opened.", "One view per person, per item, per day. Your own views of your own posts never count.", "We show how many, never who.", "No algorithm decides who gets to see a post here."], "since": "Counting since {n}", "none": "Counting has just started. The numbers grow from here.", "back": "← Back", "loading": "Loading…", "bizTitle": "Who saw your business", "menuViews": "Menu views", "people": "People", "vipViews": "VIP message views", "days": "Last 30 days", "bizNone": "No views yet. Share your menu QR or VIP link and they will show up here.", "seen": "👀 {n} views", "seenOne": "👀 1 view"},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
@@ -682,7 +682,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
-    vip: {"beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez."},
+    vip: {"managersTitle": "Gerentes", "managersIntro": "Deja que alguien de confianza trabaje esta página con su propia cuenta de Wepawao: menú, precios, mensajes VIP y logo. Solo tú puedes añadir o quitar gerentes.", "addManager": "Añadir gerente", "managerInviteText": "Te invitan a manejar {n} en Wepawao. Abre este enlace y entra:", "managerLinkNote": "Envía este enlace a tu gerente. Funciona una vez y vence en 7 días.", "noManagers": "Aún no hay gerentes.", "removeManager": "Quitar", "managerBadge": "Gerente", "managerOf": "Negocio que manejo", "leaveManager": "Dejar de manejar este negocio", "managerNow": "Ya manejas {n}. Está aquí, en Mi negocio.", "managerInvalid": "Este enlace de gerente ya se usó o venció. Pide uno nuevo al dueño.", "managerSignIn": "Entra para empezar a manejar el negocio al que te invitaron.", "beta": "Beta", "hubBtn": "Clientes VIP (beta)", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes VIP cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez."},
     stats: {"title": "Wepawao en números", "open": "📊 Wepawao en números", "openText": "Cifras reales de toda la comunidad: vistas, miembros y negocios, semana a semana.", "intro": "Cifras reales de toda la comunidad, al día. Nada aquí es un estimado ni está inflado.", "views": "Vistas", "viewsWeek": "+{n} esta semana", "members": "Miembros", "businesses": "Negocios", "moment": "Momentos", "menu": "Menús", "vip": "Mensajes VIP", "weekly": "Vistas por semana", "membersGrowth": "Miembros con el tiempo", "weekOf": "Semana del {n}", "howTitle": "Cómo contamos", "how": ["Una vista cuenta cuando un momento o mensaje VIP se queda en pantalla cerca de un segundo, o cuando se abre un menú.", "Una vista por persona, por publicación, por día. Tus propias vistas de lo tuyo nunca cuentan.", "Mostramos cuántos, nunca quiénes.", "Aquí ningún algoritmo decide quién ve una publicación."], "since": "Contando desde el {n}", "none": "El conteo acaba de empezar. Las cifras crecen desde aquí.", "back": "← Volver", "loading": "Cargando…", "bizTitle": "Quién vio tu negocio", "menuViews": "Vistas del menú", "people": "Personas", "vipViews": "Vistas de mensajes VIP", "days": "Últimos 30 días", "bizNone": "Todavía no hay vistas. Comparte el QR de tu menú o tu enlace VIP y aparecerán aquí.", "seen": "👀 {n} vistas", "seenOne": "👀 1 vista"},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
@@ -802,6 +802,18 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const VIP_PENDING_MS = 60 * 60 * 1000
 function setVipPending(id) {
   try { localStorage.setItem('wao_vip_pending', id); localStorage.setItem('wao_vip_pending_at', String(Date.now())) } catch { /* ignore */ }
+}
+// A manager link opened before signing in; also kept only for an hour.
+function setManagePending(token) {
+  try { localStorage.setItem('wao_manage_pending', token); localStorage.setItem('wao_manage_pending_at', String(Date.now())) } catch { /* ignore */ }
+}
+function takeManagePending() {
+  try {
+    const p = localStorage.getItem('wao_manage_pending')
+    const at = Number(localStorage.getItem('wao_manage_pending_at') || 0)
+    localStorage.removeItem('wao_manage_pending'); localStorage.removeItem('wao_manage_pending_at')
+    return p && UUID_RE.test(p) && Date.now() - at < VIP_PENDING_MS ? p : null
+  } catch { return null }
 }
 function takeVipPending(remove) {
   try {
@@ -4719,13 +4731,13 @@ function VipListPage({ id, me, onSignIn, onBack }) {
   )
 }
 
-function VipOwner({ me, onOpenList, onStats }) {
+function VipOwner({ me, onOpenList, onStats, focus }) {
   const { t, lang } = useLang()
   const v = t.vip
   const [list, setList] = useState(undefined)
   // A member can hold more than one business (e.g. the Wepawao Team showing restaurants in beta): pick which one.
   const [lists, setLists] = useState([])
-  const [selId, setSelId] = useState(null)
+  const [selId, setSelId] = useState(focus || null)
   const [count, setCount] = useState(0)
   const [sent, setSent] = useState([])
   const [vstats, setVstats] = useState(null)
@@ -4750,8 +4762,15 @@ function VipOwner({ me, onOpenList, onStats }) {
     } catch { setNote(v.error) } finally { setBusy(false) }
   }
   const load = useCallback(async () => {
-    const { data: all } = await supabase.from('vip_lists').select('*').eq('owner_id', me).order('created_at')
-    setLists(all || [])
+    // Businesses the member owns, then the ones they manage for someone else.
+    const [{ data: own }, { data: mg }] = await Promise.all([
+      supabase.from('vip_lists').select('*').eq('owner_id', me).order('created_at'),
+      supabase.from('vip_managers').select('list_id').eq('user_id', me),
+    ])
+    const ids = (mg || []).map((r) => r.list_id)
+    const { data: managed } = ids.length ? await supabase.from('vip_lists').select('*').in('id', ids).order('created_at') : { data: [] }
+    const all = [...(own || []).map((l) => ({ ...l, mine: true })), ...(managed || []).filter((l) => l.owner_id !== me).map((l) => ({ ...l, mine: false }))]
+    setLists(all)
     const data = (all || []).find((l) => l.id === selId) || (all || [])[0] || null
     setList(data)
     if (data) {
@@ -4798,6 +4817,10 @@ function VipOwner({ me, onOpenList, onStats }) {
       setNote(String(err?.message || '').includes('vip_weekly_limit') ? v.limit : v.error)
     } finally { setBusy(false) }
   }
+  async function leaveManaging() {
+    await supabase.from('vip_managers').delete().eq('list_id', list.id).eq('user_id', me)
+    setSelId(null); load()
+  }
   async function share() {
     const url = vipLink(list.id, lang)
     if (navigator.share) { try { await navigator.share({ title: list.name, text: v.pitch, url }); return } catch (e2) { if (e2?.name === 'AbortError') return } }
@@ -4829,6 +4852,7 @@ function VipOwner({ me, onOpenList, onStats }) {
             <button key={l.id} type="button" onClick={() => { setSelId(l.id); logo.reset(); setNote('') }} aria-pressed={l.id === list.id}
               className={`flex shrink-0 items-center gap-2 rounded-full border-2 py-1 pl-1 pr-4 font-bold ${l.id === list.id ? 'border-[#4a3af0] bg-[#4a3af0] text-white' : 'border-[#dcdff5] bg-white text-[#14123a]'}`}>
               <VipLogo path={l.logo_path} size={32} />{l.name}
+              {!l.mine && <span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-xs font-extrabold text-[#14123a]">{v.managerBadge}</span>}
             </button>
           ))}
         </div>
@@ -4838,7 +4862,7 @@ function VipOwner({ me, onOpenList, onStats }) {
           <div className="flex items-center gap-3">
             <VipLogo path={list.logo_path} size={56} />
             <div>
-              <div className="text-sm text-white/70">{v.ownerTitle}</div>
+              <div className="text-sm text-white/70">{list.mine ? v.ownerTitle : v.managerOf}</div>
               <h3 className="text-xl font-extrabold">{list.name}</h3>
             </div>
           </div>
@@ -4870,6 +4894,9 @@ function VipOwner({ me, onOpenList, onStats }) {
       {sent.map((m) => <VipMessage key={m.id} m={m} views={vstats ? (vstats.messages?.[m.id] || 0) : undefined} />)}
       <MenuEditor key={list.id} list={list} me={me} />
       <BusinessViewsCard stats={vstats} onCommunity={onStats} />
+      {list.mine ? <VipManagers key={`mg-${list.id}`} list={list} /> : (
+        <button type="button" className="px-1 text-sm font-bold text-stone-500 underline" onClick={leaveManaging}>{v.leaveManager}</button>
+      )}
     </div>
   )
 }
@@ -5133,7 +5160,59 @@ function MenuEditor({ list, me }) {
   )
 }
 
-function VipHub({ me, onOpenList, onBack, onStats }) {
+// The owner adds managers with a single-use link; each manager signs in with their own account.
+function VipManagers({ list }) {
+  const { t, lang } = useLang()
+  const v = t.vip
+  const [rows, setRows] = useState(null)
+  const [link, setLink] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState('')
+  const load = useCallback(async () => {
+    const { data } = await supabase.rpc('vip_list_managers', { p_list: list.id })
+    setRows(data || [])
+  }, [list.id])
+  useEffect(() => { load() }, [load])
+  async function add() {
+    setBusy(true); setNote('')
+    try {
+      const { data, error } = await supabase.rpc('create_vip_manager_invite', { p_list: list.id })
+      if (error || !data) throw error
+      const url = `${shareOrigin()}/?manage=${data}&lang=${lang}`
+      const text = fill(v.managerInviteText, list.name)
+      setLink(url)
+      if (navigator.share) { try { await navigator.share({ title: list.name, text, url }); return } catch (e) { if (e?.name === 'AbortError') return } }
+      try { await navigator.clipboard.writeText(`${text} ${url}`); setNote(v.copied) } catch { /* the link is shown below to copy by hand */ }
+    } catch { setNote(v.error) } finally { setBusy(false) }
+  }
+  async function remove(uid) {
+    await supabase.from('vip_managers').delete().eq('list_id', list.id).eq('user_id', uid)
+    load()
+  }
+  return (
+    <div className={`${card} space-y-3`}>
+      <h3 className="text-xl font-extrabold">{v.managersTitle}</h3>
+      <p className="text-sm text-stone-600">{v.managersIntro}</p>
+      {rows && rows.length === 0 && <p className="text-sm text-stone-500">{v.noManagers}</p>}
+      {(rows || []).map((r) => (
+        <div key={r.user_id} className="flex items-center justify-between gap-3 border-t-2 border-[#eef0fc] pt-2">
+          <span className="font-bold">{r.display_name || (r.username ? `@${r.username}` : v.managerBadge)}</span>
+          <button type="button" className="min-h-11 px-2 font-bold text-[#4a3af0]" onClick={() => remove(r.user_id)}>{v.removeManager}</button>
+        </div>
+      ))}
+      <button type="button" className={`${primary} w-full`} disabled={busy} onClick={add}>{v.addManager}</button>
+      {link && (
+        <div className="space-y-1 rounded-2xl bg-[#eef0fc] p-3">
+          <p className="text-xs text-stone-600">{v.managerLinkNote}</p>
+          <p className="break-all text-sm font-semibold">{link}</p>
+        </div>
+      )}
+      {note && <p className="text-sm font-semibold text-emerald-700">{note}</p>}
+    </div>
+  )
+}
+
+function VipHub({ me, onOpenList, onBack, onStats, focus }) {
   const { t } = useLang()
   const v = t.vip
   const [lists, setLists] = useState([])
@@ -5176,7 +5255,7 @@ function VipHub({ me, onOpenList, onBack, onStats }) {
           ))}
         </div>
       )}
-      <VipOwner me={me} onOpenList={onOpenList} onStats={onStats} />
+      <VipOwner me={me} onOpenList={onOpenList} onStats={onStats} focus={focus} />
       <button type="button" className="px-1 font-bold text-[#4a3af0] underline" onClick={onBack}>{t.myPage.title}</button>
     </div>
   )
@@ -5891,11 +5970,22 @@ export default function App() {
     if (q && UUID_RE.test(q) && sp.get('join') === '1') setVipPending(q)
     if (q && UUID_RE.test(q)) return q
     // A link with its own purpose (invite, shared post, advertiser) wins over an unfinished VIP join.
-    if (sp.has('invite') || sp.has('post') || sp.has('advertise')) return null
+    if (sp.has('invite') || sp.has('post') || sp.has('advertise') || sp.has('manage')) return null
     return takeVipPending(false)
   })
   useEffect(() => { if (vipId) setTab('vip') }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [vipJoinName, setVipJoinName] = useState(null)
+  // A manager link (?manage=<token>): remembered through sign-in, then accepted.
+  const [hasManageLink] = useState(() => {
+    const sp = new URLSearchParams(window.location.search)
+    const q = sp.get('manage')
+    if (!q || !UUID_RE.test(q)) return false
+    setManagePending(q)
+    sp.delete('manage')
+    try { window.history.replaceState(null, '', `${window.location.pathname}${sp.toString() ? `?${sp}` : ''}`) } catch { /* ignore */ }
+    return true
+  })
+  const [vipFocus, setVipFocus] = useState(null)
   const [flash, setFlash] = useState('')
   // Advertiser link (?advertise=1&pref=<affiliate id>): show the advertiser form and remember who sent it.
   const [advertise, setAdvertise] = useState(() => new URLSearchParams(window.location.search).has('advertise'))
@@ -6086,6 +6176,20 @@ export default function App() {
     if (!p) return
     supabase.from('vip_members').upsert({ list_id: p, user_id: me }, { onConflict: 'list_id,user_id', ignoreDuplicates: true })
       .then(() => { setVipId(p); setTab('vip'); setShowSignIn(false); posted(); window.scrollTo(0, 0) })
+  }, [me]) // eslint-disable-line react-hooks/exhaustive-deps
+  // A manager link: visitors sign in first; then the invite is accepted and the business page opens.
+  useEffect(() => {
+    if (authChecked && !me && hasManageLink) { setFlash(t.vip.managerSignIn); setShowSignIn(true); scrollToSignIn() }
+  }, [authChecked]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!me) return
+    const token = takeManagePending()
+    if (!token) return
+    supabase.rpc('accept_vip_manager_invite', { p_token: token }).then(({ data, error }) => {
+      setShowSignIn(false)
+      if (error || !data) { setFlash(t.vip.managerInvalid); return }
+      setVipFocus(data.list_id); setTab('viphub'); setFlash(fill(t.vip.managerNow, data.name)); window.scrollTo(0, 0)
+    })
   }, [me]) // eslint-disable-line react-hooks/exhaustive-deps
   // Counts each time the tip is offered, so a tip closed with "Not now" can show again after the next moment.
   const [homeTip, setHomeTip] = useState(0)
@@ -6375,7 +6479,7 @@ export default function App() {
               onBack={() => { setVipId(null); setTab('everyone') }} />
           )}
           {tab === 'viphub' && me && (
-            <VipHub me={me} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
+            <VipHub me={me} focus={vipFocus} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
               onBack={() => { setTab('mypage'); window.scrollTo(0, 0) }} onStats={openStats} />
           )}
           {tab === 'mypage' && me && (
