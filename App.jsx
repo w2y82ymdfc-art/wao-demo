@@ -1935,19 +1935,15 @@ function BeforeAfter({ original, aiVersion, compact = false }) {
   )
 }
 
-// The El Morro art stays whole underneath; the photo sits on top like a polaroid, with a ¡Wepa! stamp.
+// The El Morro art stays whole underneath; the photo sits on the sea side like a polaroid,
+// with the Wepawao logo above the photo, so the sentry box, flag and sun stay in view.
 function PostalFrame({ alt, children }) {
   return (
-    <div className="relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#fde6a2]" role="img" aria-label={alt}>
+    <div className="relative mt-3 aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[#fde6a2]" role="img" aria-label={alt}>
       <img src="/wepawao-pr.jpg?v=2" alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute right-[6%] top-[12%] w-[44%] rotate-3 rounded-sm bg-white p-1.5 pb-0 shadow-[0_6px_18px_rgba(20,18,58,0.3)]">
+      <div className="absolute right-[5%] top-[8%] w-[36%] rotate-3 rounded-sm bg-white px-1.5 pb-1.5 shadow-[0_6px_18px_rgba(20,18,58,0.3)]">
+        <img src={logoImg} alt="" className="mx-auto h-5 w-auto py-1 sm:h-7" />
         {children}
-        <div className="py-1.5 text-center text-[11px] font-extrabold text-[#14123a]">Puerto Rico</div>
-      </div>
-      <div className="absolute left-3 top-3 -rotate-6 rounded border-2 border-dashed border-[#14123a] bg-[#fffdf7] px-2 py-1 text-center leading-tight text-[#14123a]">
-        <div className="text-[9px] font-extrabold tracking-wide">PUERTO RICO</div>
-        <div className="text-sm font-extrabold text-[#d93a2b]">¡Wepa!</div>
-        <div className="text-[9px] font-bold">wepawao</div>
       </div>
     </div>
   )
