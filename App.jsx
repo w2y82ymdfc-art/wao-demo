@@ -1941,9 +1941,10 @@ function PostalFrame({ alt, children }) {
   return (
     <div className="relative mt-3 aspect-[3/2] w-full overflow-hidden rounded-2xl bg-[#fde6a2]" role="img" aria-label={alt}>
       <img src="/wepawao-pr.jpg?v=2" alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute right-[5%] top-[8%] w-[36%] rotate-3 rounded-sm bg-white px-1.5 pb-1.5 shadow-[0_6px_18px_rgba(20,18,58,0.3)]">
+      <div className="absolute right-[5%] top-[6%] w-[36%] rotate-3 rounded-sm bg-white px-1.5 shadow-[0_6px_18px_rgba(20,18,58,0.3)]">
         <img src={logoImg} alt="" className="mx-auto h-5 w-auto py-1 sm:h-7" />
         {children}
+        <div className="py-1 text-center text-[10px] font-extrabold tracking-wide text-[#14123a] sm:text-xs">Puerto Rico</div>
       </div>
     </div>
   )
