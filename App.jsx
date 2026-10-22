@@ -88,7 +88,7 @@ const I18N = {
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, qrTop: 'Scan to see our menu', qrFoot: 'Digital menu by Wepawao', add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 5 dishes.', featuredHint: 'Feature up to 5 dishes with a photo: they show as a slideshow at the top of your menu.', order: 'Slideshow order', orderHint: 'The first photo gets the most views.', up: 'Move up', down: 'Move down', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
-    collage: { btn: 'Make my collage', btnSub: 'Your best moments in one picture to share', title: 'My Wepawao collage', include: 'What to include', moments: 'Moments', caricatures: 'Caricatures', postals: 'Postals', period: 'Period', thisWeek: 'This week', thisMonth: 'This month', thisYear: 'This year', how: 'The moments with the most Wao! and Wepa! are picked for you (this year: the best of each month). It is made on your phone: nothing is uploaded.', make: 'Make collage', making: 'Making your collage…', again: 'Change options', none: 'No photos in that period yet. Try another period or include more.', error: 'The collage could not be made. Try again.', week: 'My week on Wepawao', monthTitle: (m) => `My ${m} on Wepawao`, yearTitle: (y) => `My ${y} on Wepawao`, motto: 'From Puerto Rico, for the benefit of all' },
+    collage: { btn: 'Make my collage', btnSub: 'Your best moments in one picture to share', title: 'My Wepawao collage', include: 'What to include', moments: 'Moments', caricatures: 'Caricatures', postals: 'Postals', period: 'Period', thisWeek: 'This week', thisMonth: 'This month', thisYear: 'This year', how: 'The moments with the most Wao! and Wepa! are picked for you (this year: the best of each month). It is made on your phone: nothing is uploaded.', make: 'Make collage', making: 'Making your collage…', again: 'Change options', removeHint: 'Tap × on a photo to take it out. The next best one takes its place.', remove: 'Remove this photo', restore: 'Put all photos back', none: 'No photos in that period yet. Try another period or include more.', error: 'The collage could not be made. Try again.', week: 'My week on Wepawao', monthTitle: (m) => `My ${m} on Wepawao`, yearTitle: (y) => `My ${y} on Wepawao`, motto: 'From Puerto Rico, for the benefit of all' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -462,7 +462,7 @@ const I18N = {
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, qrTop: 'Escanea para ver el menú', qrFoot: 'Menú digital por Wepawao', add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 5 platos.', featuredHint: 'Destaca hasta 5 platos con foto: salen en una presentación de fotos arriba de tu menú.', order: 'Orden de la presentación', orderHint: 'La primera foto es la que más se ve.', up: 'Subir', down: 'Bajar', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
-    collage: { btn: 'Hacer mi collage', btnSub: 'Tus mejores momentos en una imagen para compartir', title: 'Mi collage Wepawao', include: 'Qué incluir', moments: 'Momentos', caricatures: 'Caricaturas', postals: 'Postales', period: 'Período', thisWeek: 'Esta semana', thisMonth: 'Este mes', thisYear: 'Este año', how: 'Se escogen los momentos con más Wao! y Wepa! (este año: el mejor de cada mes). Se hace en tu teléfono: no se sube nada.', make: 'Crear collage', making: 'Creando tu collage…', again: 'Cambiar opciones', none: 'Aún no hay fotos en ese período. Prueba otro período o incluye más.', error: 'No se pudo crear el collage. Inténtalo otra vez.', week: 'Mi semana en Wepawao', monthTitle: (m) => `Mi ${m} en Wepawao`, yearTitle: (y) => `Mi ${y} en Wepawao`, motto: 'De Puerto Rico, para beneficio de todos' },
+    collage: { btn: 'Hacer mi collage', btnSub: 'Tus mejores momentos en una imagen para compartir', title: 'Mi collage Wepawao', include: 'Qué incluir', moments: 'Momentos', caricatures: 'Caricaturas', postals: 'Postales', period: 'Período', thisWeek: 'Esta semana', thisMonth: 'Este mes', thisYear: 'Este año', how: 'Se escogen los momentos con más Wao! y Wepa! (este año: el mejor de cada mes). Se hace en tu teléfono: no se sube nada.', make: 'Crear collage', making: 'Creando tu collage…', again: 'Cambiar opciones', removeHint: 'Toca × en una foto para quitarla. La siguiente mejor toma su lugar.', remove: 'Quitar esta foto', restore: 'Devolver todas las fotos', none: 'Aún no hay fotos en ese período. Prueba otro período o incluye más.', error: 'No se pudo crear el collage. Inténtalo otra vez.', week: 'Mi semana en Wepawao', monthTitle: (m) => `Mi ${m} en Wepawao`, yearTitle: (y) => `Mi ${y} en Wepawao`, motto: 'De Puerto Rico, para beneficio de todos' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -2734,7 +2734,7 @@ function collageKindOf(p) {
   if (p.ai_moment) return null
   return { kind: 'moments', path: imgs[0] }
 }
-async function collagePick(me, period, include) {
+async function collagePool(me, period, include) {
   const postal = await supportsPostal()
   const { data, error } = await supabase.from('posts')
     .select(`id,created_at,image_path,image_paths,ai_moment${postal ? ',postal' : ''}`)
@@ -2742,13 +2742,19 @@ async function collagePick(me, period, include) {
     .order('created_at', { ascending: false }).limit(300)
   if (error) throw error
   const items = (data || []).map((p) => ({ ...p, ...collageKindOf(p) })).filter((p) => p.path && include[p.kind])
-  if (!items.length) return []
+  if (!items.length) return { items, score: new Map() }
   const score = new Map(items.map((p) => [p.id, 0]))
   const ids = items.map((p) => p.id)
   for (let i = 0; i < ids.length; i += 100) {
     const { data: w } = await supabase.from('waos').select('post_id').in('post_id', ids.slice(i, i + 100))
     for (const r of w || []) score.set(r.post_id, (score.get(r.post_id) || 0) + 1)
   }
+  return { items, score }
+}
+// Picks the photos for the collage from the pool, leaving out any the member removed (the next best fill in).
+function collageChoose({ items, score }, period, removed) {
+  items = items.filter((p) => !removed.has(p.id))
+  if (!items.length) return []
   const best = (a, b) => (score.get(b.id) - score.get(a.id)) || (b.created_at > a.created_at ? 1 : -1)
   let chosen
   if (period === 'year') {
@@ -2825,6 +2831,9 @@ function CollageModal({ me, onClose }) {
   const [stage, setStage] = useState('pick') // pick | making | done | empty | error
   const [src, setSrc] = useState('')
   const [note, setNote] = useState('')
+  const [pool, setPool] = useState(null)
+  const [removed, setRemoved] = useState(() => new Set())
+  const [shown, setShown] = useState([])
   const canvasRef = useRef(null)
   const kinds = [['moments', c.moments], ['caricatures', c.caricatures], ...(postalReady ? [['postals', c.postals]] : [])]
   const any = kinds.some(([k]) => include[k])
@@ -2832,19 +2841,30 @@ function CollageModal({ me, onClose }) {
   async function make() {
     setStage('making')
     try {
-      const chosen = await collagePick(me, period, include)
-      if (!chosen.length) { setStage('empty'); return }
-      const now = new Date()
-      const title = period === 'week' ? c.week : period === 'month'
-        ? c.monthTitle(now.toLocaleDateString(loc(lang), { month: 'long' }))
-        : c.yearTitle(now.getFullYear())
-      await drawCollage(canvasRef.current, chosen, title, c.motto)
-      setSrc(canvasRef.current.toDataURL('image/jpeg', 0.9))
-      setStage('done')
+      const fresh = await collagePool(me, period, include)
+      setPool(fresh); setRemoved(new Set())
+      await render(fresh, new Set())
     } catch {
       setStage('error')
     }
   }
+  async function render(from, gone) {
+    const chosen = collageChoose(from, period, gone)
+    if (!chosen.length) { setStage('empty'); return }
+    const now = new Date()
+    const title = period === 'week' ? c.week : period === 'month'
+      ? c.monthTitle(now.toLocaleDateString(loc(lang), { month: 'long' }))
+      : c.yearTitle(now.getFullYear())
+    await drawCollage(canvasRef.current, chosen, title, c.motto)
+    setSrc(canvasRef.current.toDataURL('image/jpeg', 0.9))
+    setShown(chosen)
+    setStage('done')
+  }
+  async function changeRemoved(next) {
+    setRemoved(next)
+    try { await render(pool, next) } catch { setStage('error') }
+  }
+  const takeOut = (id) => changeRemoved(new Set([...removed, id]))
   async function save() {
     const blob = await new Promise((r) => canvasRef.current.toBlob(r, 'image/jpeg', 0.9))
     if (!blob) return
@@ -2869,6 +2889,21 @@ function CollageModal({ me, onClose }) {
         {stage === 'done' ? (
           <>
             <img src={src} alt={c.title} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
+            <p className="text-xs text-stone-500">{c.removeHint}</p>
+            <div className="grid grid-cols-5 gap-2">
+              {shown.map((p) => (
+                <div key={p.id} className="relative aspect-square">
+                  <img src={photoUrl(p.path)} alt="" className="h-full w-full rounded-xl object-cover" />
+                  {shown.length > 1 && (
+                    <button type="button" aria-label={c.remove} onClick={() => takeOut(p.id)}
+                      className="absolute -right-1.5 -top-1.5 grid h-7 w-7 place-items-center rounded-full bg-[#14123a] text-base font-bold leading-none text-white shadow ring-2 ring-white">×</button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {removed.size > 0 && (
+              <button type="button" className="w-full text-center text-sm font-bold text-[#4a3af0]" onClick={() => changeRemoved(new Set())}>{c.restore}</button>
+            )}
             <button type="button" className={`${primary} w-full`} onClick={save}>{t.qr.save}</button>
             <p className="text-center text-xs text-stone-500">{t.qr.saveHint}</p>
             {note && <p className="text-center text-sm font-semibold text-emerald-700">{note}</p>}
