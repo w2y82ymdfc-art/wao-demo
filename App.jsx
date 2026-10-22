@@ -378,7 +378,7 @@ const I18N = {
       postalMorro: 'El Morro',
       postalHint: 'Show your caricature on a Puerto Rico postcard.',
       postalHintPhoto: 'Show your photo on a Puerto Rico postcard.',
-      momentPhoto: 'Your photo', addMore: '+ Add another photo',
+      momentPhoto: 'Your photo', addMore: '+ Add another photo', postalSave: 'Save postal',
       postalAltPhoto: 'Photo on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       postalAlt: 'Caricature on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       helpBtn: 'Never used AI? Help me make my caricature', helpHide: 'Hide the guide',
@@ -752,7 +752,7 @@ const I18N = {
       postalMorro: 'El Morro',
       postalHint: 'Muestra tu caricatura en una postal de Puerto Rico.',
       postalHintPhoto: 'Muestra tu foto en una postal de Puerto Rico.',
-      momentPhoto: 'Tu foto', addMore: '+ Añadir otra foto',
+      momentPhoto: 'Tu foto', addMore: '+ Añadir otra foto', postalSave: 'Guardar postal',
       postalAltPhoto: 'Foto en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       postalAlt: 'Caricatura en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       helpBtn: '¿Nunca has usado IA? Ayúdame a hacer mi caricatura', helpHide: 'Ocultar la guía',
@@ -2438,6 +2438,8 @@ function PostCard({ p, me, onChanged }) {
   const canShare = !inactive && (!moment || isPublic)
   const canReport = !!me && !mine && moment && p.visibility === 'public'
   const seenRef = useSeen('moment', p.id, moment && !mine)
+  const [savingPostal, setSavingPostal] = useState(false)
+  const postalPath = p.postal === 'morro' && images.length ? (p.ai_moment && images.length >= 2 ? images[1] : images[0]) : null
 
   async function close() {
     if (!window.confirm(ongoing ? t.confirmClose : t.confirmFulfil)) return
@@ -2540,6 +2542,7 @@ function PostCard({ p, me, onChanged }) {
         {!inactive && <WaoButton p={p} me={me} mine={mine} />}
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
         {canShare && <button className={ghostSm} onClick={share}>{t.share}</button>}
+        {mine && postalPath && <button className={ghostSm} onClick={() => setSavingPostal(true)}>{t.ai.postalSave}</button>}
         {canReport && <button className={ghostSm} onClick={() => setReporting((v) => !v)} aria-expanded={reporting}>{t.report}</button>}
         {mine && !editing && <button className={ghostSm} onClick={() => setEditing(true)}>{t.edit}</button>}
         {mine && <button className={ghostSm} disabled={deleting} onClick={remove}>{deleting ? t.deleting : t.deletePost}</button>}
@@ -2562,6 +2565,7 @@ function PostCard({ p, me, onChanged }) {
       )}
       {err && <p className="mt-2 text-sm text-red-600">{err}</p>}
       {open && <Comments postId={p.id} me={me} />}
+      {savingPostal && <PostalSaveModal path={postalPath} onClose={() => setSavingPostal(false)} />}
     </article>
   )
 }
@@ -2902,6 +2906,77 @@ function CollageButton({ me }) {
       </button>
       {open && <CollageModal me={me} onClose={() => setOpen(false)} />}
     </>
+  )
+}
+
+// ---------- Save a postal as a picture ----------
+// Draws the El Morro postal (scene + polaroid with the logo, the photo and "Puerto Rico") on the phone,
+// so members can post it on Instagram or WhatsApp. Nothing is uploaded or stored.
+async function drawPostal(cv, path) {
+  const W = 1500, H = 1000
+  cv.width = W; cv.height = H
+  const ctx = cv.getContext('2d')
+  const font = getComputedStyle(document.body).fontFamily || 'system-ui, sans-serif'
+  const [scene, logo, img] = await Promise.all([loadImg('/wepawao-pr.jpg?v=2'), loadImg(logoImg), loadImg(`${photoUrl(path)}?postal=1`)])
+  ctx.fillStyle = '#fde6a2'; ctx.fillRect(0, 0, W, H)
+  if (scene) drawCover(ctx, scene, 0, 0, W, H)
+  // Polaroid: same place as in the app (right side, over the sea), slightly turned.
+  const pw = W * 0.36, pad = pw * 0.04, logoH = pw * 0.11, capH = pw * 0.12
+  const ph = logoH + (pw - pad * 2) + capH
+  ctx.save()
+  ctx.translate(W - W * 0.05 - pw / 2, H * 0.06 + ph / 2); ctx.rotate(0.05)
+  ctx.shadowColor = 'rgba(20,18,58,0.3)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 10
+  ctx.fillStyle = '#fff'; roundRect(ctx, -pw / 2, -ph / 2, pw, ph, 6); ctx.fill()
+  ctx.shadowColor = 'transparent'
+  if (logo) { const lh = logoH * 0.7, lw = logo.width * (lh / logo.height); ctx.drawImage(logo, -lw / 2, -ph / 2 + (logoH - lh) / 2, lw, lh) }
+  const side = pw - pad * 2, top = -ph / 2 + logoH
+  ctx.fillStyle = '#eef0fc'; ctx.fillRect(-pw / 2 + pad, top, side, side)
+  if (img) drawCover(ctx, img, -pw / 2 + pad, top, side, side)
+  ctx.fillStyle = '#14123a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.font = `800 ${Math.round(capH * 0.45)}px ${font}`
+  ctx.fillText('Puerto Rico', 0, top + side + capH / 2)
+  ctx.restore()
+}
+function PostalSaveModal({ path, onClose }) {
+  const { t } = useLang()
+  const canvasRef = useRef(null)
+  const [src, setSrc] = useState('')
+  const [failed, setFailed] = useState(false)
+  const [note, setNote] = useState('')
+  useEffect(() => {
+    drawPostal(canvasRef.current, path)
+      .then(() => setSrc(canvasRef.current.toDataURL('image/jpeg', 0.92)))
+      .catch(() => setFailed(true))
+  }, [path])
+  async function save() {
+    const blob = await new Promise((r) => canvasRef.current.toBlob(r, 'image/jpeg', 0.92))
+    if (!blob) return
+    const f = new File([blob], 'wepawao-postal.jpg', { type: 'image/jpeg' })
+    if (navigator.canShare?.({ files: [f] })) {
+      try { await navigator.share({ files: [f], title: 'Wepawao' }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob); a.download = f.name
+    document.body.appendChild(a); a.click(); a.remove()
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000)
+    setNote(t.qr.saved); setTimeout(() => setNote(''), 2500)
+  }
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
+      <div className="max-h-[92vh] w-full max-w-sm space-y-3 overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"
+        onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t.ai.postalSave}>
+        <h3 className="text-xl font-extrabold">{t.ai.postalSave}</h3>
+        <canvas ref={canvasRef} hidden />
+        {src
+          ? <img src={src} alt={t.ai.postalAlt} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
+          : <div className="aspect-[3/2] w-full rounded-2xl bg-[#eef0fc]" />}
+        {failed && <p className="text-sm text-red-600">{t.collage.error}</p>}
+        <button type="button" className={`${primary} w-full`} disabled={!src} onClick={save}>{t.qr.save}</button>
+        <p className="text-center text-xs text-stone-500">{t.qr.saveHint}</p>
+        {note && <p className="text-center text-sm font-semibold text-emerald-700">{note}</p>}
+        <button type="button" className="w-full text-center text-sm font-bold text-stone-500" onClick={onClose}>{t.qr.close}</button>
+      </div>
+    </div>
   )
 }
 
