@@ -377,6 +377,7 @@ const I18N = {
       postalMorro: 'El Morro',
       postalHint: 'Show your caricature on a Puerto Rico postcard.',
       postalHintPhoto: 'Show your photo on a Puerto Rico postcard.',
+      momentPhoto: 'Your photo', addMore: '+ Add another photo',
       postalAltPhoto: 'Photo on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       postalAlt: 'Caricature on a Puerto Rico postcard: an El Morro sentry box and the flag by the sea',
       helpBtn: 'Never used AI? Help me make my caricature', helpHide: 'Hide the guide',
@@ -749,6 +750,7 @@ const I18N = {
       postalMorro: 'El Morro',
       postalHint: 'Muestra tu caricatura en una postal de Puerto Rico.',
       postalHintPhoto: 'Muestra tu foto en una postal de Puerto Rico.',
+      momentPhoto: 'Tu foto', addMore: '+ Añadir otra foto',
       postalAltPhoto: 'Foto en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       postalAlt: 'Caricatura en una postal de Puerto Rico: una garita de El Morro y la bandera frente al mar',
       helpBtn: '¿Nunca has usado IA? Ayúdame a hacer mi caricatura', helpHide: 'Ocultar la guía',
@@ -1561,6 +1563,32 @@ function Composer({ userId, mode, onPosted }) {
         </>
       )}
 
+      {/* Moments use the same order as the caricature box: photo first, postal, then the text. */}
+      {kind === 'update' && (
+        <div className="space-y-2">
+          <div className="text-sm font-bold">{t.ai.momentPhoto}</div>
+          {photos.items.length
+            ? (
+              <>
+                <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
+                {photos.items.length < maxPhotos && (
+                  <button type="button" onClick={photos.open} className="text-sm font-bold text-[#4a3af0]">{t.ai.addMore}</button>
+                )}
+              </>
+            )
+            : (
+              <button type="button" onClick={photos.open}
+                className={`grid aspect-[4/3] w-full place-items-center rounded-2xl border-2 border-dashed text-sm font-bold ${SLOT_TONES.photo}`}>
+                <span className="flex flex-col items-center gap-1"><span className="text-3xl" aria-hidden="true">📷</span>+ {t.ai.choose}</span>
+              </button>
+            )}
+          {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
+        </div>
+      )}
+      {postalReady && kind === 'update' && (
+        <PostalPicker value={postal} onChange={setPostal} item={photos.items[0]} hint={t.ai.postalHintPhoto} alt={t.ai.postalAltPhoto} />
+      )}
+
       {detailed && <input className={field} maxLength={120} placeholder={t.offeringPh} value={f.title} onChange={set('title')} />}
       <textarea className={`${field} min-h-24`} required maxLength={500}
         placeholder={kind === 'offer' ? t.describePh : t.wowPlaceholder}
@@ -1582,13 +1610,9 @@ function Composer({ userId, mode, onPosted }) {
         </>
       )}
 
-      <PhotoGrid items={photos.items} onRemove={photos.removeAt} />
+      {kind !== 'update' && <PhotoGrid items={photos.items} onRemove={photos.removeAt} />}
 
-      {photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
-
-      {postalReady && kind === 'update' && photos.items.length > 0 && (
-        <PostalPicker value={postal} onChange={setPostal} item={photos.items[0]} hint={t.ai.postalHintPhoto} alt={t.ai.postalAltPhoto} />
-      )}
+      {kind !== 'update' && photos.limitHit && <p className="text-sm font-semibold text-[#4a3af0]">{t.photoLimit(maxPhotos)}</p>}
 
       {ready && kind === 'update' && <VisibilityPicker value={visibility} onChange={(v) => { setAdWhy(null); setVisibility(v) }} />}
 
@@ -1603,7 +1627,7 @@ function Composer({ userId, mode, onPosted }) {
 
       <div className="flex flex-wrap items-center gap-3">
         {photos.input}
-        <button type="button" className={ghost} onClick={photos.open}>{t.addPhoto}</button>
+        {kind !== 'update' && <button type="button" className={ghost} onClick={photos.open}>{t.addPhoto}</button>}
         <span className="text-sm text-stone-500">{f.body.length} / 500</span>
         {adWhy === null && (
           <button disabled={busy || checking || !f.body.trim()} className={`${primary} ml-auto`}>{checking ? t.adCheck.checking : busy ? t.posting : t.post}</button>
