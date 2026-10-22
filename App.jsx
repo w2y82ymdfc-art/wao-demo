@@ -88,6 +88,7 @@ const I18N = {
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
     menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, qrTop: 'Scan to see our menu', qrFoot: 'Digital menu by Wepawao', add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 5 dishes.', featuredHint: 'Feature up to 5 dishes with a photo: they show as a slideshow at the top of your menu.', order: 'Slideshow order', orderHint: 'The first photo gets the most views.', up: 'Move up', down: 'Move down', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
+    collage: { btn: 'Make my collage', btnSub: 'Your best moments in one picture to share', title: 'My Wepawao collage', include: 'What to include', moments: 'Moments', caricatures: 'Caricatures', postals: 'Postals', period: 'Period', thisWeek: 'This week', thisMonth: 'This month', thisYear: 'This year', how: 'The moments with the most Wao! and Wepa! are picked for you (this year: the best of each month). It is made on your phone: nothing is uploaded.', make: 'Make collage', making: 'Making your collage…', again: 'Change options', none: 'No photos in that period yet. Try another period or include more.', error: 'The collage could not be made. Try again.', week: 'My week on Wepawao', monthTitle: (m) => `My ${m} on Wepawao`, yearTitle: (y) => `My ${y} on Wepawao`, motto: 'From Puerto Rico, for the benefit of all' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
     prMember: { hi: (n) => (n ? `Wepa, ${n}! ` : 'Wepa! '), l1: 'From Puerto Rico, ', l2: 'for the benefit of all', sub: 'Invite your people', btn: 'Invite' },
     prCard: { pill: 'Made in Puerto Rico', l1: 'Puerto Rico now has ', l2: 'its own social network', sub: 'Share your AI Moments. Joining is free.', alt: 'An El Morro sentry box and the Puerto Rico flag by the sea' },
@@ -461,6 +462,7 @@ const I18N = {
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
     menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, qrTop: 'Escanea para ver el menú', qrFoot: 'Menú digital por Wepawao', add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 5 platos.', featuredHint: 'Destaca hasta 5 platos con foto: salen en una presentación de fotos arriba de tu menú.', order: 'Orden de la presentación', orderHint: 'La primera foto es la que más se ve.', up: 'Subir', down: 'Bajar', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
+    collage: { btn: 'Hacer mi collage', btnSub: 'Tus mejores momentos en una imagen para compartir', title: 'Mi collage Wepawao', include: 'Qué incluir', moments: 'Momentos', caricatures: 'Caricaturas', postals: 'Postales', period: 'Período', thisWeek: 'Esta semana', thisMonth: 'Este mes', thisYear: 'Este año', how: 'Se escogen los momentos con más Wao! y Wepa! (este año: el mejor de cada mes). Se hace en tu teléfono: no se sube nada.', make: 'Crear collage', making: 'Creando tu collage…', again: 'Cambiar opciones', none: 'Aún no hay fotos en ese período. Prueba otro período o incluye más.', error: 'No se pudo crear el collage. Inténtalo otra vez.', week: 'Mi semana en Wepawao', monthTitle: (m) => `Mi ${m} en Wepawao`, yearTitle: (y) => `Mi ${y} en Wepawao`, motto: 'De Puerto Rico, para beneficio de todos' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
     prMember: { hi: (n) => (n ? `¡Wepa, ${n}! ` : '¡Wepa! '), l1: 'De Puerto Rico, ', l2: 'para beneficio de todos', sub: 'Invita a tu gente', btn: 'Invitar' },
     prCard: { pill: 'Hecha en Puerto Rico', l1: 'Puerto Rico ya tiene ', l2: 'su propia red social', sub: 'Comparte tus Momentos IA. Unirse es gratis.', alt: 'Una garita de El Morro y la bandera de Puerto Rico frente al mar' },
@@ -2694,6 +2696,215 @@ function PasswordReset({ onDone }) {
 }
 
 // ---------- Feed ----------
+// ---------- My collage ----------
+// Made entirely on the member's phone from their own moments: nothing is uploaded or stored, so it costs nothing.
+// Picks the moments with the most Wao! and Wepa! (this year: the best one of each month), draws a 4:5 image, then share or save.
+const COLLAGE_W = 1080, COLLAGE_H = 1350
+function collageStart(period) {
+  const d = new Date()
+  if (period === 'week') return new Date(d.getTime() - 7 * 864e5)
+  if (period === 'month') return new Date(d.getFullYear(), d.getMonth(), 1)
+  return new Date(d.getFullYear(), 0, 1)
+}
+function collageKindOf(p) {
+  const imgs = postImages(p)
+  if (!imgs.length) return null
+  if (p.postal === 'morro') return { kind: 'postals', path: p.ai_moment && imgs.length >= 2 ? imgs[1] : imgs[0], postal: true }
+  if (p.ai_moment && imgs.length >= 2) return { kind: 'caricatures', path: imgs[1] }
+  if (p.ai_moment) return null
+  return { kind: 'moments', path: imgs[0] }
+}
+async function collagePick(me, period, include) {
+  const postal = await supportsPostal()
+  const { data, error } = await supabase.from('posts')
+    .select(`id,created_at,image_path,image_paths,ai_moment${postal ? ',postal' : ''}`)
+    .eq('user_id', me).eq('kind', 'update').gte('created_at', collageStart(period).toISOString())
+    .order('created_at', { ascending: false }).limit(300)
+  if (error) throw error
+  const items = (data || []).map((p) => ({ ...p, ...collageKindOf(p) })).filter((p) => p.path && include[p.kind])
+  if (!items.length) return []
+  const score = new Map(items.map((p) => [p.id, 0]))
+  const ids = items.map((p) => p.id)
+  for (let i = 0; i < ids.length; i += 100) {
+    const { data: w } = await supabase.from('waos').select('post_id').in('post_id', ids.slice(i, i + 100))
+    for (const r of w || []) score.set(r.post_id, (score.get(r.post_id) || 0) + 1)
+  }
+  const best = (a, b) => (score.get(b.id) - score.get(a.id)) || (b.created_at > a.created_at ? 1 : -1)
+  let chosen
+  if (period === 'year') {
+    const byMonth = new Map()
+    for (const p of [...items].sort(best)) { const m = new Date(p.created_at).getMonth(); if (!byMonth.has(m)) byMonth.set(m, p) }
+    chosen = [...byMonth.values()]
+    // A quiet year (few months with photos): fill up with the next best, up to 9.
+    if (chosen.length < 9) for (const p of [...items].sort(best)) { if (chosen.length >= 9) break; if (!chosen.includes(p)) chosen.push(p) }
+  } else {
+    chosen = [...items].sort(best).slice(0, 9)
+  }
+  return chosen.sort((a, b) => (a.created_at < b.created_at ? -1 : 1))
+}
+function drawCover(ctx, img, x, y, w, h) {
+  const s = Math.max(w / img.width, h / img.height)
+  const sw = w / s, sh = h / s
+  ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, x, y, w, h)
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath()
+}
+async function drawCollage(cv, chosen, title, sub) {
+  cv.width = COLLAGE_W; cv.height = COLLAGE_H
+  const ctx = cv.getContext('2d')
+  const font = getComputedStyle(document.body).fontFamily || 'system-ui, sans-serif'
+  const [logo, scene, ...imgs] = await Promise.all([
+    loadImg(logoImg), loadImg('/wepawao-pr.jpg?v=2'),
+    ...chosen.map((p) => loadImg(`${photoUrl(p.path)}?collage=1`)),
+  ])
+  ctx.fillStyle = '#fdf6e3'; ctx.fillRect(0, 0, COLLAGE_W, COLLAGE_H)
+  ctx.textAlign = 'center'; ctx.fillStyle = '#14123a'
+  ctx.font = `800 64px ${font}`; ctx.fillText(title, COLLAGE_W / 2, 110)
+  ctx.fillStyle = '#6b6f93'; ctx.font = `600 30px ${font}`; ctx.fillText(sub, COLLAGE_W / 2, 158)
+  // Grid area between the title and the logo.
+  const n = chosen.length, gap = 18, top = 200, areaW = 960, areaH = 960
+  const cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 9 ? 3 : 4
+  const rows = Math.ceil(n / cols)
+  const cell = Math.min((areaW - gap * (cols - 1)) / cols, (areaH - gap * (rows - 1)) / rows)
+  const gridH = rows * cell + (rows - 1) * gap
+  const y0 = top + (areaH - gridH) / 2
+  chosen.forEach((p, i) => {
+    const r = Math.floor(i / cols), inRow = Math.min(cols, n - r * cols), c = i - r * cols
+    const rowW = inRow * cell + (inRow - 1) * gap
+    const x = (COLLAGE_W - rowW) / 2 + c * (cell + gap), y = y0 + r * (cell + gap)
+    ctx.save(); roundRect(ctx, x, y, cell, cell, 22); ctx.clip()
+    ctx.fillStyle = '#eef0fc'; ctx.fillRect(x, y, cell, cell)
+    const img = imgs[i]
+    if (p.postal && scene) {
+      // A small El Morro postal: the scene, with the photo as a polaroid over the sea.
+      drawCover(ctx, scene, x, y, cell, cell)
+      const pw = cell * 0.5, pad = pw * 0.06
+      ctx.translate(x + cell * 0.7, y + cell * 0.48); ctx.rotate(0.05)
+      ctx.shadowColor = 'rgba(20,18,58,0.3)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 5
+      ctx.fillStyle = '#fff'; ctx.fillRect(-pw / 2, -pw / 2 - pad, pw, pw + pad * 4)
+      ctx.shadowColor = 'transparent'
+      if (img) drawCover(ctx, img, -pw / 2 + pad, -pw / 2, pw - pad * 2, pw - pad * 2)
+      ctx.fillStyle = '#14123a'; ctx.font = `800 ${Math.round(pw * 0.09)}px ${font}`
+      ctx.fillText('Puerto Rico', 0, pw / 2 + pad * 1.6)
+    } else if (img) {
+      drawCover(ctx, img, x, y, cell, cell)
+    }
+    ctx.restore()
+  })
+  if (logo) { const h = 70, w = logo.width * (h / logo.height); ctx.drawImage(logo, (COLLAGE_W - w) / 2, COLLAGE_H - 150, w, h) }
+  ctx.fillStyle = '#6b6f93'; ctx.font = `700 26px ${font}`; ctx.fillText('wepawao.com', COLLAGE_W / 2, COLLAGE_H - 45)
+}
+function CollageModal({ me, onClose }) {
+  const { t, lang } = useLang()
+  const c = t.collage
+  const postalReady = usePostalReady()
+  const [include, setInclude] = useState({ moments: true, caricatures: true, postals: true })
+  const [period, setPeriod] = useState('month')
+  const [stage, setStage] = useState('pick') // pick | making | done | empty | error
+  const [src, setSrc] = useState('')
+  const [note, setNote] = useState('')
+  const canvasRef = useRef(null)
+  const kinds = [['moments', c.moments], ['caricatures', c.caricatures], ...(postalReady ? [['postals', c.postals]] : [])]
+  const any = kinds.some(([k]) => include[k])
+
+  async function make() {
+    setStage('making')
+    try {
+      const chosen = await collagePick(me, period, include)
+      if (!chosen.length) { setStage('empty'); return }
+      const now = new Date()
+      const title = period === 'week' ? c.week : period === 'month'
+        ? c.monthTitle(now.toLocaleDateString(loc(lang), { month: 'long' }))
+        : c.yearTitle(now.getFullYear())
+      await drawCollage(canvasRef.current, chosen, title, c.motto)
+      setSrc(canvasRef.current.toDataURL('image/jpeg', 0.9))
+      setStage('done')
+    } catch {
+      setStage('error')
+    }
+  }
+  async function save() {
+    const blob = await new Promise((r) => canvasRef.current.toBlob(r, 'image/jpeg', 0.9))
+    if (!blob) return
+    const f = new File([blob], 'wepawao-collage.jpg', { type: 'image/jpeg' })
+    if (navigator.canShare?.({ files: [f] })) {
+      try { await navigator.share({ files: [f], title: 'Wepawao' }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob); a.download = f.name
+    document.body.appendChild(a); a.click(); a.remove()
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000)
+    setNote(t.qr.saved); setTimeout(() => setNote(''), 2500)
+  }
+  const pill = (on) => `min-h-11 rounded-full px-4 text-sm font-bold ${on ? 'bg-[#14123a] text-white' : 'bg-white text-[#14123a] ring-2 ring-[#dcdff5]'}`
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4" onClick={onClose}>
+      <div className="max-h-[92vh] w-full max-w-sm space-y-4 overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl"
+        onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={c.title}>
+        <h3 className="text-xl font-extrabold">{c.title}</h3>
+        <canvas ref={canvasRef} hidden />
+        {stage === 'done' ? (
+          <>
+            <img src={src} alt={c.title} className="w-full rounded-2xl border-2 border-[#dcdff5]" />
+            <button type="button" className={`${primary} w-full`} onClick={save}>{t.qr.save}</button>
+            <p className="text-center text-xs text-stone-500">{t.qr.saveHint}</p>
+            {note && <p className="text-center text-sm font-semibold text-emerald-700">{note}</p>}
+            <button type="button" className="w-full text-center text-sm font-bold text-[#4a3af0]" onClick={() => setStage('pick')}>{c.again}</button>
+          </>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <div className="text-sm font-bold">{c.include}</div>
+              <div className="flex flex-wrap gap-2">
+                {kinds.map(([k, l]) => (
+                  <button key={k} type="button" aria-pressed={include[k]} className={pill(include[k])}
+                    onClick={() => { setStage('pick'); setInclude({ ...include, [k]: !include[k] }) }}>{include[k] ? '✓ ' : ''}{l}</button>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-sm font-bold">{c.period}</div>
+              <div className="flex flex-wrap gap-2">
+                {[['week', c.thisWeek], ['month', c.thisMonth], ['year', c.thisYear]].map(([k, l]) => (
+                  <button key={k} type="button" aria-pressed={period === k} className={pill(period === k)}
+                    onClick={() => { setStage('pick'); setPeriod(k) }}>{l}</button>
+                ))}
+              </div>
+            </div>
+            <p className="text-xs text-stone-500">{c.how}</p>
+            {stage === 'empty' && <p className="rounded-2xl bg-[#fff8dc] px-3 py-2 text-sm">{c.none}</p>}
+            {stage === 'error' && <p className="text-sm text-red-600">{c.error}</p>}
+            <button type="button" className={`${primary} w-full`} disabled={!any || stage === 'making'} onClick={make}>
+              {stage === 'making' ? c.making : c.make}
+            </button>
+          </>
+        )}
+        <button type="button" className="w-full text-center text-sm font-bold text-stone-500" onClick={onClose}>{t.qr.close}</button>
+      </div>
+    </div>
+  )
+}
+function CollageButton({ me }) {
+  const { t } = useLang()
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)}
+        className="flex w-full items-center justify-between gap-3 rounded-3xl bg-[#14123a] px-5 py-4 text-left text-white shadow">
+        <span>
+          <span className="block text-lg font-extrabold text-[#f6d155]">{t.collage.btn}</span>
+          <span className="block text-sm text-white/80">{t.collage.btnSub}</span>
+        </span>
+        <span className="text-3xl" aria-hidden="true">🖼️</span>
+      </button>
+      {open && <CollageModal me={me} onClose={() => setOpen(false)} />}
+    </>
+  )
+}
+
 function Feed({ mode, session, refreshKey, onChanged }) {
   const { t } = useLang()
   const me = session?.user.id
@@ -2793,6 +3004,7 @@ function Feed({ mode, session, refreshKey, onChanged }) {
         </div>
       )}
 
+      {mode === 'mine' && me && <CollageButton me={me} />}
       {needsLogin && <div className={`${card} text-stone-600`}>{t.needLogin}</div>}
       {error && <p className="text-sm text-red-600">{error}</p>}
       {loading && !needsLogin && <p className="text-stone-500">{t.loading}</p>}
