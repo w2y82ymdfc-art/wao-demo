@@ -90,6 +90,7 @@ const I18N = {
     rest: {
       btn: 'For restaurants',
       title: 'Wepawao for restaurants',
+      sample: 'Sample table sticker (4 × 5 in). Yours carries your own logo and your menu’s QR code.',
       intro: 'Why this is good for your restaurant:',
       points: [
         ['📱', 'QR code on every table', 'Customers scan it and see your menu instantly on their phone, no app to download. Fewer printed menus to replace or keep clean.'],
@@ -458,6 +459,7 @@ const I18N = {
     rest: {
       btn: 'Para restaurantes',
       title: 'Wepawao para restaurantes',
+      sample: 'Ejemplo de sticker para las mesas (4 × 5 pulg.). El tuyo lleva tu logo y el QR de tu menú.',
       intro: 'Por qué esto es bueno para tu restaurante:',
       points: [
         ['📱', 'Código QR en cada mesa', 'El cliente lo escanea y ve tu menú al instante en su teléfono, sin descargar ninguna app. Menos menús impresos que reponer o limpiar.'],
@@ -5580,6 +5582,34 @@ function Welcome({ name, number, onDone }) {
 }
 
 // ---------- Wepawao for restaurants: selling points page (?restaurants=1) ----------
+// A sample of the 4x5 table sticker, drawn with a real, scannable QR (Brasa Panorámica's demo menu).
+const SAMPLE_MENU_URL = 'https://www.wepawao.com/m/dcc17a7e-2662-498e-9437-ff2e2495c082'
+function StickerSample({ caption }) {
+  const qr = QRCode.create(SAMPLE_MENU_URL, { errorCorrectionLevel: 'M' })
+  const n = qr.modules.size
+  const cells = []
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (qr.modules.get(r, k)) cells.push(`M${k} ${r}h1v1h-1z`)
+  return (
+    <figure className="mt-3">
+      <div className="mx-auto flex aspect-[4/5] w-full max-w-[260px] flex-col items-center gap-2 overflow-hidden rounded-2xl border border-stone-200 bg-white pt-4 pb-3 text-[#14123a] shadow-md">
+        <img src="/vip-brasa-panoramica.jpg" alt="Brasa Panorámica" className="h-12 w-12 object-contain" />
+        <div className="text-2xl font-black leading-none">Menú <span className="text-[#4a3af0]">·</span> Menu</div>
+        <div className="rounded-xl border-[3px] border-[#14123a] bg-white p-1.5">
+          <svg viewBox={`-1 -1 ${n + 2} ${n + 2}`} className="h-24 w-24" role="img" aria-label="QR">
+            <path d={cells.join('')} fill="#14123a" shapeRendering="crispEdges" />
+          </svg>
+        </div>
+        <div className="text-[10px] font-bold text-[#4b4f73]">Escanea con la cámara · Scan with your camera</div>
+        <div className="w-full bg-[#f6d155] py-1.5 text-center leading-tight">
+          <div className="text-[11px] font-black">★ Únete gratis a nuestra lista VIP</div>
+          <div className="text-[9px] font-extrabold">★ Join our VIP list, free</div>
+        </div>
+        <div className="mt-auto flex items-center gap-1 text-[8px] font-bold text-[#4b4f73]">Hecho con <img src={logoImg} alt="Wepawao" className="h-3.5 w-auto" /></div>
+      </div>
+      <figcaption className="mt-2 text-center text-xs text-stone-600">{caption}</figcaption>
+    </figure>
+  )
+}
 function RestaurantsPage({ onBack }) {
   const { t, lang } = useLang()
   const r = t.rest
@@ -5598,12 +5628,13 @@ function RestaurantsPage({ onBack }) {
         <h2 className="text-2xl font-extrabold">{r.title}</h2>
         <p className="text-white/85">{r.intro}</p>
       </div>
-      {r.points.map(([icon, head, text]) => (
+      {r.points.map(([icon, head, text], i) => (
         <div key={head} className={`${card} flex gap-3`}>
           <span className="text-3xl leading-none" aria-hidden="true">{icon}</span>
           <div>
             <h3 className="font-extrabold">{head}</h3>
             <p className="mt-1 text-stone-700">{text}</p>
+            {i === 0 && <StickerSample caption={r.sample} />}
           </div>
         </div>
       ))}
