@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const lang = req.query.lang === 'en' ? 'en' : 'es'
   const es = lang === 'es'
   const site = `https://${req.headers['x-forwarded-host'] || req.headers.host}`
-  const target = UUID_RE.test(id) ? `${site}/?vip=${id}&lang=${lang}` : `${site}/?lang=${lang}`
+  const target = UUID_RE.test(id) ? `${site}/?vip=${id}&join=1&lang=${lang}` : `${site}/?lang=${lang}`
   let title = es ? 'Clientes VIP · Wepawao' : 'VIP Customers · Wepawao'
   const desc = es
     ? 'Para nosotros, cada cliente es VIP. Únete gratis y te enviaremos un mensaje cuando haya una ocasión especial.'
