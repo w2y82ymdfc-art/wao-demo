@@ -60,7 +60,7 @@ const I18N = {
     adCheck: {
       checking: 'Checking…',
       title: 'This looks like an ad',
-      text: 'On Wepawao, ads are paid, and that is what funds the commissions members earn. Recommending a place you visited is always welcome.',
+      text: 'On Wepawao, ads are paid, and that is what keeps Wepawao free for everyone. Recommending a place you visited is always welcome.',
       why: 'What we noticed:',
       personal: 'It is a personal recommendation',
       personalSub: 'Post it publicly',
@@ -149,8 +149,9 @@ const I18N = {
       linkWeek: (n) => `${n} this week`,
       linkSince: (d) => `Counting since ${new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Counts people who were not signed in, once a day each, from your invite link and the posts you share.`,
       linkNone: 'No one has opened your links yet. Share your invite link or a post to start.',
-      bannerOutTitle: 'Free Three-Tier Affiliate Program',
-      bannerOutNote: 'Invite people and share in the advertising revenue Wepawao receives. Joining is always free.',
+      bannerOutTitle: 'Coming soon: earn with Wepawao',
+      bannerOutNote: 'Our earnings structure for members is being finalized. Join now and be ready to benefit when it launches.',
+      soon: 'Soon',
       tierShort: ['Your invites', 'Their invites', 'Next tier'],
       join: 'Join today',
       yourTier: (n) => `Your Tier ${n}`,
@@ -161,25 +162,24 @@ const I18N = {
       howSteps: ['You share your invite link', 'They join: your Tier 1', 'They invite: your Tier 2', 'And again: your Tier 3'],
       slide: (i, n) => `Slide ${i} of ${n}`,
       teaserTitle: 'Coming soon: the Wepawao Face Challenge',
-      teaserText: 'Feel the excitement in advance! When advertisers arrive, affiliates will show their funniest face and members will vote. The winners will sponsor those advertisers, with the opportunity to receive the corresponding commission compensation.',
+      teaserText: 'Feel the excitement in advance! A fun challenge where members show their funniest face and everyone votes. The details come with our earnings structure for members, now being finalized.',
       teaserCta: 'You might want to be part of what is coming!',
       linkMember: 'You as affiliate partner',
-      linkGuest: 'Free Affiliate Program. See what is coming',
+      linkGuest: 'Free to join. See what is coming',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
       title: 'Affiliate marketing dashboard', back: '← Back',
       intro: 'Your network grows when someone joins Wepawao through your invite link, and again when they invite others.',
       tierDesc: ['People you invited', 'Invited by your Tier 1', 'Invited by your Tier 2'],
-      shareOf: (r) => `${r}% share of ad revenue`,
       total: (n) => `${n.toLocaleString('en')} in your network`,
       growth: 'Growth by week',
       weekOf: (d) => new Date(`${d}T12:00:00`).toLocaleDateString('en', { month: 'short', day: 'numeric' }),
       firstTier: 'Your Tier 1',
       noneYet: 'No sub-affiliates yet. Share your invite link to start your network.',
       joined: (d) => `Joined ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
-      earningsTitle: 'Commissions',
-      earningsText: 'Commissions start once advertising begins. They come only from advertising revenue Wepawao actually receives and has cleared, are paid monthly, and are never guaranteed.',
+      earningsTitle: 'Member earnings',
+      earningsText: 'Our earnings structure for members is being finalized. Keep growing your Tiers and be ready to benefit when it launches. Until then, nobody earns or is owed anything.',
       loading: 'Loading your network…', error: 'Your network could not be loaded right now. Please try again soon.',
       providersLbl: 'advertisers in the provider bank',
     },
@@ -204,7 +204,7 @@ const I18N = {
       winners: (n) => `${n} ${n === 1 ? 'winner' : 'winners'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `${Math.ceil(h / 24)} days left` : `${h} ${h === 1 ? 'hour' : 'hours'} left` },
       seeEntries: 'Vote now',
-      intro: 'A company came to Wepawao directly to advertise. Active affiliates post their funniest face, and members vote. The entries with the most votes win: each winner sponsors one advertiser for 12 months (20% for you, 10% and 5% for your upline).',
+      intro: 'A company came to Wepawao directly to advertise. Active affiliates post their funniest face, and members vote. The entries with the most votes win.',
       rules: ['Enter with a public moment with a photo of your own face, posted after the challenge opened.', 'Nothing offensive or unsafe, no children, and nobody else\'s face without their permission.', 'Members vote once per entry; accounts must be at least 7 days old, and you cannot vote for yourself.', 'Ties go to whoever entered first. Moments hidden by reports leave the challenge.'],
       enterTitle: 'Enter the challenge',
       enterHow: 'First share your Wepawao Face as a public moment with a photo. Then choose it here.',
@@ -223,13 +223,13 @@ const I18N = {
     },
     prov: {
       bankTitle: 'Provider bank',
-      bankIntro: 'Bring an advertiser to Wepawao with your advertiser link. For 12 months, the advertising they pay for shares 20% with you, 10% with your Tier 2 and 5% with your Tier 3. Your own business counts too: bring it in with your link like any other advertiser.',
+      bankIntro: 'Know a business that could advertise on Wepawao? Share your advertiser link so it can reach us. Your own business counts too. How members benefit is being finalized.',
       linkBtn: 'Share my advertiser link', linkShareText: 'Advertise your business on Wepawao, the new social network for entrepreneurs.',
       contestNote: 'Advertisers who come straight to Wepawao are won in the Wepawao Face Challenge: active affiliates post a fun photo of their face and members vote. There are as many winners as direct advertisers waiting. You can win again and again.',
       mine: 'Advertisers you sponsor', noneMine: 'None yet. Share your advertiser link to bring in your first one.',
       viaReferral: 'Your advertiser link', viaContest: 'Won in the Wepawao Face Challenge',
       pending: 'Waiting for Wepawao approval', until: (d) => `Sponsored until ${new Date(d).toLocaleDateString('en', { dateStyle: 'medium' })}`,
-      earned: 'Commissions from cleared advertising', earnedTotal: 'Total',
+      earned: 'Earnings from cleared advertising', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('en')} ${n === 1 ? 'advertiser' : 'advertisers'} in the bank`,
       contestsWon: (n) => `${n} ${n === 1 ? 'challenge' : 'challenges'} won`,
       teamBtn: 'Wepawao Team: manage the provider bank',
@@ -348,13 +348,10 @@ const I18N = {
         'A public moment reported by 3 different members leaves Everyone. Your contacts can still see it.',
         'Use Report on any moment that breaks these rules.',
       ]],
-      ['Affiliate Program', [
+      ['Member earnings', [
         'Joining is free, and nobody ever has to buy anything.',
-        'Shares come only from advertising revenue Wepawao actually receives: 20% to your first tier, 10% to your second, 5% to your third.',
-        'Earnings depend on real advertising revenue and are never guaranteed.',
-        'Payments are calculated at the end of each month and sent through Stripe. Taxes are each member\'s responsibility.',
-        'Provider bank: every advertiser is sponsored by one affiliate for 12 months. Bring one in with your advertiser link (your own business counts too) and you sponsor it.',
-        'Advertisers who come directly to Wepawao are won in the Wepawao Face Challenge, open only while direct advertisers are waiting: one winner per advertiser, chosen by member votes. Wepawao does not have to share these, and does it in good faith. Anyone can win more than once.',
+        'Our earnings structure for members is being finalized. Its rules will be published here before it launches.',
+        'Until then, nobody earns or is owed anything from Wepawao.',
       ]],
     ],
     pricingTitle: 'Pricing',
@@ -434,7 +431,7 @@ const I18N = {
     adCheck: {
       checking: 'Revisando…',
       title: 'Esto parece un anuncio',
-      text: 'En Wepawao los anuncios son pagados, y eso es lo que paga las comisiones que ganan los miembros. Recomendar un lugar que visitaste siempre es bienvenido.',
+      text: 'En Wepawao los anuncios son pagados, y eso es lo que mantiene Wepawao gratis para todos. Recomendar un lugar que visitaste siempre es bienvenido.',
       why: 'Lo que notamos:',
       personal: 'Es una recomendación personal',
       personalSub: 'Publicarlo para Todos',
@@ -523,8 +520,9 @@ const I18N = {
       linkWeek: (n) => `${n} esta semana`,
       linkSince: (d) => `Contando desde el ${new Date(d).toLocaleDateString('es-PR', { day: 'numeric', month: 'short', year: 'numeric' })}. Cuenta a personas que no habían iniciado sesión, una vez al día cada una, desde tu enlace de invitación y las publicaciones que compartes.`,
       linkNone: 'Nadie ha abierto tus enlaces todavía. Comparte tu enlace de invitación o una publicación para empezar.',
-      bannerOutTitle: 'Programa de Afiliados de Tres Tiers',
-      bannerOutNote: 'Invita personas y participa de los ingresos por publicidad que recibe Wepawao. Unirse siempre es gratis.',
+      bannerOutTitle: 'Próximamente: gana con Wepawao',
+      bannerOutNote: 'Nuestra estructura de ganancias para miembros está en su etapa final. Únete ahora y prepárate para beneficiarte cuando se lance.',
+      soon: 'Pronto',
       tierShort: ['Tus invitados', 'Sus invitados', 'Siguiente tier'],
       join: 'Únete hoy',
       yourTier: (n) => `Tu Tier ${n}`,
@@ -535,25 +533,24 @@ const I18N = {
       howSteps: ['Compartes tu enlace de invitación', 'Se unen: tu Tier 1', 'Invitan: tu Tier 2', 'Y otra vez: tu Tier 3'],
       slide: (i, n) => `Diapositiva ${i} de ${n}`,
       teaserTitle: 'Muy pronto: El Reto de la Cara Wepawao',
-      teaserText: '¡Siente la emoción por adelantado! Cuando lleguen los anunciantes, los afiliados mostrarán su cara más divertida y los miembros votarán. Los ganadores patrocinarán a esos anunciantes, con la oportunidad de recibir la compensación por comisiones correspondiente.',
+      teaserText: '¡Siente la emoción por adelantado! Un reto divertido donde los miembros muestran su cara más divertida y todos votan. Los detalles llegan con nuestra estructura de ganancias para miembros, que está en su etapa final.',
       teaserCta: '¡Querrás ser parte de lo que viene!',
       linkMember: 'Tú como socio afiliado',
-      linkGuest: 'Programa de Afiliados gratis. Mira lo que viene',
+      linkGuest: 'Unirse es gratis. Mira lo que viene',
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
       title: 'Panel de marketing de afiliados', back: '← Volver',
       intro: 'Tu red crece cuando alguien se une a Wepawao con tu enlace de invitación, y otra vez cuando esa persona invita a otros.',
       tierDesc: ['Personas que invitaste', 'Invitados por tu Tier 1', 'Invitados por tu Tier 2'],
-      shareOf: (r) => `${r}% de los ingresos por publicidad`,
       total: (n) => `${n.toLocaleString('es')} en tu red`,
       growth: 'Crecimiento por semana',
       weekOf: (d) => new Date(`${d}T12:00:00`).toLocaleDateString('es', { month: 'short', day: 'numeric' }),
       firstTier: 'Tu Tier 1',
       noneYet: 'Aún no tienes subafiliados. Comparte tu enlace de invitación para empezar tu red.',
       joined: (d) => `Se unió el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
-      earningsTitle: 'Comisiones',
-      earningsText: 'Las comisiones comienzan cuando empiece la publicidad. Provienen solo de los ingresos por publicidad que Wepawao recibe y que ya se han acreditado, se pagan mensualmente y nunca están garantizadas.',
+      earningsTitle: 'Ganancias de miembros',
+      earningsText: 'Nuestra estructura de ganancias para miembros está en su etapa final. Sigue creciendo tus Tiers y prepárate para beneficiarte cuando se lance. Hasta entonces, nadie gana ni se le debe nada.',
       loading: 'Cargando tu red…', error: 'No se pudo cargar tu red en este momento. Inténtalo de nuevo pronto.',
       providersLbl: 'anunciantes en el banco de proveedores',
     },
@@ -578,7 +575,7 @@ const I18N = {
       winners: (n) => `${n} ${n === 1 ? 'ganador' : 'ganadores'}`,
       endsIn: (ms) => { const h = Math.max(0, Math.ceil(ms / 3600000)); return h > 48 ? `quedan ${Math.ceil(h / 24)} días` : `${h === 1 ? 'queda 1 hora' : `quedan ${h} horas`}` },
       seeEntries: 'Vota ya',
-      intro: 'Una empresa llegó directamente a Wepawao para anunciarse. Los afiliados activos publican su cara más divertida y los miembros votan. Las participaciones con más votos ganan: cada ganador patrocina a un anunciante por 12 meses (20% para ti, 10% y 5% para tu línea).',
+      intro: 'Una empresa llegó directamente a Wepawao para anunciarse. Los afiliados activos publican su cara más divertida y los miembros votan. Las participaciones con más votos ganan.',
       rules: ['Participa con un momento público con una foto de tu propia cara, publicado después de abrir el reto.', 'Nada ofensivo ni peligroso, sin niños, y sin la cara de otra persona sin su permiso.', 'Cada miembro vota una vez por participación; la cuenta debe tener al menos 7 días y no puedes votar por ti.', 'Los empates los gana quien participó primero. Los momentos ocultos por reportes salen del reto.'],
       enterTitle: 'Participa en el reto',
       enterHow: 'Primero comparte tu Cara Wepawao como un momento público con foto. Luego elígelo aquí.',
@@ -597,13 +594,13 @@ const I18N = {
     },
     prov: {
       bankTitle: 'Banco de proveedores',
-      bankIntro: 'Trae un anunciante a Wepawao con tu enlace de anunciante. Durante 12 meses, la publicidad que pague comparte 20% contigo, 10% con tu Tier 2 y 5% con tu Tier 3. Tu propio negocio también cuenta: tráelo con tu enlace como cualquier otro anunciante.',
+      bankIntro: '¿Conoces un negocio que podría anunciarse en Wepawao? Comparte tu enlace de anunciante para que llegue a nosotros. Tu propio negocio también cuenta. Cómo se benefician los miembros está en su etapa final.',
       linkBtn: 'Compartir mi enlace de anunciante', linkShareText: 'Anuncia tu negocio en Wepawao, la nueva red social para emprendedores.',
       contestNote: 'Los anunciantes que llegan directamente a Wepawao se ganan en el Reto de la Cara Wepawao: los afiliados activos publican una foto divertida de su cara y los miembros votan. Hay tantos ganadores como anunciantes directos esperando. Puedes ganar una y otra vez.',
       mine: 'Anunciantes que patrocinas', noneMine: 'Ninguno todavía. Comparte tu enlace de anunciante para traer el primero.',
       viaReferral: 'Tu enlace de anunciante', viaContest: 'Ganado en el Reto de la Cara Wepawao',
       pending: 'Esperando aprobación de Wepawao', until: (d) => `Patrocinado hasta el ${new Date(d).toLocaleDateString('es', { dateStyle: 'medium' })}`,
-      earned: 'Comisiones de publicidad acreditada', earnedTotal: 'Total',
+      earned: 'Ganancias de publicidad acreditada', earnedTotal: 'Total',
       bankSize: (n) => `${n.toLocaleString('es')} ${n === 1 ? 'anunciante' : 'anunciantes'} en el banco`,
       contestsWon: (n) => `${n} ${n === 1 ? 'reto ganado' : 'retos ganados'}`,
       teamBtn: 'Equipo Wepawao: administrar el banco de proveedores',
@@ -722,13 +719,10 @@ const I18N = {
         'Un momento público reportado por 3 miembros distintos sale de Todos. Tus contactos aún pueden verlo.',
         'Usa Reportar en cualquier momento que no cumpla estas reglas.',
       ]],
-      ['Programa de Afiliados', [
+      ['Ganancias de miembros', [
         'Unirse es gratis y nadie tiene que comprar nada nunca.',
-        'Las partes salen solo de los ingresos por publicidad que Wepawao realmente reciba: 20% por tu primer tier, 10% por el segundo y 5% por el tercero.',
-        'Las ganancias dependen de ingresos reales por publicidad y nunca están garantizadas.',
-        'Los pagos se calculan al final de cada mes y se envían por Stripe. Los impuestos son responsabilidad de cada miembro.',
-        'Banco de proveedores: cada anunciante tiene un afiliado patrocinador por 12 meses. Trae uno con tu enlace de anunciante (tu propio negocio también cuenta) y tú lo patrocinas.',
-        'Los anunciantes que llegan directamente a Wepawao se ganan en el Reto de la Cara Wepawao, que solo se abre cuando hay anunciantes directos esperando: un ganador por anunciante, elegido por los votos de los miembros. Wepawao no tiene la obligación de compartirlos y lo hace de buena fe. Cualquiera puede ganar más de una vez.',
+        'Nuestra estructura de ganancias para miembros está en su etapa final. Sus reglas se publicarán aquí antes de que se lance.',
+        'Hasta entonces, nadie gana ni se le debe nada de parte de Wepawao.',
       ]],
     ],
     pricingTitle: 'Precios',
@@ -3492,7 +3486,6 @@ function WelcomeBack({ name, busy, onContinue }) {
 // ---------- Affiliate Program: tier banner + dashboard ----------
 // Data comes from the my_affiliate_tiers() database function (built from profiles.referred_by).
 // Tier 1 = people you invited, Tier 2 = people they invited, Tier 3 = the next tier.
-const TIER_RATES = [20, 10, 5]
 const TIER_COLORS = ['#4a3af0', '#9a8ff7', '#e0a800']
 
 function useAffiliateTiers(me, refreshKey) {
@@ -3743,11 +3736,10 @@ function TierTiles({ values, sub, active, money }) {
         <div key={i} className="rounded-2xl bg-white/10 px-3 py-2">
           <div className="flex items-center gap-1.5 whitespace-nowrap text-xs text-white/75"><TierDot i={i} />{t.aff.tier(i + 1)}</div>
           {money
-            ? <div className="text-2xl font-extrabold text-[#f6d155]">{TIER_RATES[i]}%</div>
+            ? <div className="text-2xl font-extrabold text-[#f6d155]">{t.aff.soon}</div>
             : (
               <div className="flex items-baseline justify-between gap-1">
                 <span className="text-2xl font-extrabold"><CountUp value={values[i]} active={active} /></span>
-                <span className="text-xs font-bold text-[#f6d155]">{TIER_RATES[i]}%</span>
               </div>
             )}
           <div className={`text-xs leading-tight ${sub[i].hot ? 'font-bold text-emerald-300' : 'text-white/60'}`}>{sub[i].text}</div>
@@ -3932,7 +3924,6 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
                   ? <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#f6d155] text-[10px] font-extrabold text-[#14123a]">!</span>
                   : <span className="ml-1 h-3 w-3 shrink-0 rounded-full" style={{ background: TIER_COLORS[i - 1] }} />}
                 <span className="flex-1">{step}</span>
-                {i > 0 && <b className="text-[#f6d155]">{TIER_RATES[i - 1]}%</b>}
               </li>
             ))}
           </ol>
@@ -3956,7 +3947,7 @@ function AffiliateBanner({ me, refreshKey, onOpen, onSignIn, onContest }) {
     ),
     ...[0, 1, 2].map((i) => (active) => (
       <>
-        <SlideHead title={t.aff.yourTier(i + 1)} right={`${TIER_RATES[i]}%`} />
+        <SlideHead title={t.aff.yourTier(i + 1)} />
         <div className="mt-2 flex items-end gap-3">
           <span className="h-12 w-1.5 rounded-full" style={{ background: TIER_COLORS[i] }} />
           <div className="text-5xl font-extrabold leading-none"><CountUp value={counts[i]} active={active} /></div>
@@ -4096,7 +4087,6 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam, onStats }
                 <div className="mt-1 text-4xl font-extrabold tabular-nums">{counts[i]}</div>
                 <div className={`text-sm tabular-nums ${fresh[i] ? 'font-bold text-emerald-700' : 'text-stone-500'}`}>{t.aff.newWeek(fresh[i])}</div>
                 <div className="mt-2 text-xs text-stone-600">{t.aff.tierDesc[i]}</div>
-                <div className="mt-1 text-xs font-bold text-[#4a3af0]">{t.aff.shareOf(TIER_RATES[i])}</div>
               </div>
             ))}
           </div>
