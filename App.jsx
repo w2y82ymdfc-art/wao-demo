@@ -3531,6 +3531,7 @@ function logoBox(img) {
 }
 // opts (menu QR): center = the business's logo, top = a line of text instead of the Wepawao wordmark, foot = a small line under the caption.
 async function drawInviteQr(canvas, url, caption, opts = {}) {
+  if (opts.sticker) return drawMenuSticker(canvas, url, opts)
   const W = 1080, H = 1350
   canvas.width = W; canvas.height = H
   const c = canvas.getContext('2d')
@@ -3570,6 +3571,61 @@ async function drawInviteQr(canvas, url, caption, opts = {}) {
   c.fillStyle = '#4a3af0'; c.font = '800 54px system-ui, -apple-system, sans-serif'; c.textAlign = 'center'
   c.fillText(caption, W / 2, y0 + side + 110)
   if (opts.foot) { c.fillStyle = '#6b6f93'; c.font = '600 36px system-ui, -apple-system, sans-serif'; c.fillText(opts.foot, W / 2, y0 + side + 175) }
+}
+
+// The 4x5 table sticker for a restaurant's menu: its logo, "Menú · Menu", the QR, the scan line and the VIP band.
+// Same layout as the sample on the For restaurants page, ready to send to the print shop.
+async function drawMenuSticker(canvas, url, opts = {}) {
+  const W = 1080, H = 1350, F = 'system-ui, -apple-system, sans-serif', NAVY = '#14123a', GREY = '#4b4f73'
+  canvas.width = W; canvas.height = H
+  const c = canvas.getContext('2d')
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H)
+  const [own, word] = await Promise.all([opts.center ? loadImg(opts.center) : null, loadImg(logoImg)])
+  c.textAlign = 'center'; c.textBaseline = 'alphabetic'
+  // The restaurant's logo on top (white margins trimmed); the Wepawao wordmark when it has no logo yet.
+  if (own) {
+    const b = logoBox(own), h = 210, w = Math.min(560, (b.w / b.h) * h), hh = w / (b.w / b.h)
+    c.drawImage(own, b.x, b.y, b.w, b.h, (W - w) / 2, 60 + (h - hh) / 2, w, hh)
+  } else if (word) {
+    const h = 110, w = (word.width / word.height) * h
+    c.drawImage(word, (W - w) / 2, 110, w, h)
+  }
+  // Menú · Menu
+  c.font = `900 112px ${F}`
+  const a = 'Menú ', dot = '·', z = ' Menu'
+  const wa = c.measureText(a).width, wd = c.measureText(dot).width, wz = c.measureText(z).width
+  let x = (W - (wa + wd + wz)) / 2
+  c.textAlign = 'left'
+  c.fillStyle = NAVY; c.fillText(a, x, 400); x += wa
+  c.fillStyle = '#4a3af0'; c.fillText(dot, x, 400); x += wd
+  c.fillStyle = NAVY; c.fillText(z, x, 400)
+  c.textAlign = 'center'
+  // The QR in a navy rounded frame.
+  const box = 500, bx = (W - box) / 2, by = 445
+  c.fillStyle = NAVY; c.beginPath(); c.roundRect(bx, by, box, box, 52); c.fill()
+  c.fillStyle = '#ffffff'; c.beginPath(); c.roundRect(bx + 10, by + 10, box - 20, box - 20, 44); c.fill()
+  const qr = QRCode.create(url, { errorCorrectionLevel: 'M' })
+  const n = qr.modules.size, side = box - 70, cell = side / n, q0x = bx + 35, q0y = by + 35
+  c.fillStyle = NAVY
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) {
+    if (qr.modules.get(r, k)) c.fillRect(q0x + k * cell, q0y + r * cell, Math.ceil(cell), Math.ceil(cell))
+  }
+  c.fillStyle = GREY; c.font = `700 38px ${F}`
+  c.fillText('Escanea con la cámara · Scan with your camera', W / 2, by + box + 62)
+  // The VIP band.
+  const vy = by + box + 100
+  c.fillStyle = '#f6d155'; c.fillRect(0, vy, W, 160)
+  c.fillStyle = NAVY; c.font = `900 46px ${F}`; c.fillText('★ Únete gratis a nuestra lista VIP', W / 2, vy + 70)
+  c.font = `800 38px ${F}`; c.fillText('★ Join our VIP list, free', W / 2, vy + 125)
+  // Hecho con Wepawao
+  if (word) {
+    c.font = `700 32px ${F}`
+    const label = 'Hecho con ', lw = c.measureText(label).width, h = 58, w = (word.width / word.height) * h
+    const sx = (W - (lw + w)) / 2, base = H - 52
+    c.textAlign = 'left'; c.fillStyle = GREY; c.fillText(label, sx, base)
+    c.drawImage(word, sx + lw, base - h + 14, w, h)
+    c.textAlign = 'center'
+  }
 }
 
 function QrCodeButton({ me, className = ghost }) {
@@ -5108,7 +5164,7 @@ function MenuEditor({ list, me }) {
       </div>
       {qrOpen && <QrCodeModal me={me} onClose={() => setQrOpen(false)} url={menuLink(list.id)} caption={m.qrCaption(list.name)}
         title={m.qrTitle} text={m.qrText} file="menu-qr.png"
-        opts={{ center: list.logo_path ? (list.logo_path.startsWith('/') ? list.logo_path : photoUrl(list.logo_path)) : null }} />}
+        opts={{ sticker: true, center: list.logo_path ? (list.logo_path.startsWith('/') ? list.logo_path : photoUrl(list.logo_path)) : null }} />}
       {featured.length > 1 && (
         <div className="rounded-2xl bg-[#f4f5fd] p-3">
           <h4 className="font-extrabold">★ {m.order}</h4>
