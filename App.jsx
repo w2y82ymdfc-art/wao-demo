@@ -96,7 +96,7 @@ const I18N = {
         ['💲', 'Change prices anytime, in seconds', 'When food costs go up, update your prices from your phone in a few taps. No reprinting, no crossed-out prices.'],
         ['⭐', 'Feature your 5 best dishes', 'Show up to 5 dishes in a slideshow with your own photos at the top of your menu, and change them whenever you want: a new special, the weekend dish, what you need to sell today.'],
         ['🌎', 'Menu in Spanish and English', 'Serve locals and tourists equally well, without a separate menu.'],
-        ['👑', 'VIP Customers', 'Keep a list of your best customers and let them know directly about special occasions and events. Every customer is VIP for you.'],
+        ['👑', 'VIP Customers (All)', 'Keep a list of your customers and let them know directly about special occasions and events. Every customer is VIP for you.'],
       ],
       also: 'Also: it is free, a manager can run it with their own account, and you see how many people viewed your menu and your VIP messages.',
       ask: 'I want my free menu', askSubject: 'Free digital menu for my restaurant',
@@ -464,7 +464,7 @@ const I18N = {
         ['💲', 'Cambia precios cuando quieras, en segundos', 'Cuando suben los costos, actualizas tus precios desde el teléfono con unos toques. Sin reimprimir, sin precios tachados.'],
         ['⭐', 'Destaca tus 5 mejores platos', 'Muestra hasta 5 platos en un carrusel con tus propias fotos al inicio de tu menú, y cámbialos cuando quieras: un especial nuevo, el plato del fin de semana, lo que necesitas vender hoy.'],
         ['🌎', 'Menú en español e inglés', 'Atiende igual de bien a la gente local y a los turistas, sin un menú aparte.'],
-        ['👑', 'Clientes VIP', 'Guarda una lista de tus mejores clientes y avísales directamente de ocasiones y eventos especiales. Para ti, cada cliente es VIP.'],
+        ['👑', 'Clientes VIP (Todos)', 'Guarda una lista de tus clientes y avísales directamente de ocasiones y eventos especiales. Para ti, cada cliente es VIP.'],
       ],
       also: 'Además: es gratis, un gerente puede manejarlo con su propia cuenta, y ves cuántas personas vieron tu menú y tus mensajes VIP.',
       ask: 'Quiero mi menú gratis', askSubject: 'Menú digital gratis para mi restaurante',
@@ -5612,6 +5612,7 @@ function RestaurantsPage({ onBack }) {
         <button className={ghost} onClick={share}>{r.share}</button>
       </div>
       {note && <p className="text-sm font-bold text-emerald-700">{note}</p>}
+      <div className="h-20" aria-hidden="true" />
     </div>
   )
 }
