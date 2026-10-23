@@ -46,7 +46,7 @@ if (typeof document !== 'undefined') {
 // ---------- Languages (EN / ES) ----------
 const I18N = {
   en: {
-    signIn: 'Join', profile: 'My page', signOut: 'Sign out', myPage: { title: 'My page', network: 'My network dashboard', posts: 'My posts', edit: 'Edit my profile' },
+    signIn: 'Join', profile: 'My page', signOut: 'Sign out', myPage: { title: 'My page', network: 'My member dashboard', posts: 'My posts', edit: 'Edit my profile' },
     tabs: { everyone: 'Everyone', mine: 'My posts', contacts: 'Contacts', discover: 'Discover', offer: 'What I offer', promise: 'Our promise' },
     tr: { btn: 'Translate', back: 'See original', busy: 'Translating…', note: 'Translated automatically', fail: 'Could not translate right now.', google: 'Open in Google Translate' },
     share: 'Share', linkCopied: 'Link copied!', shareText: 'A moment on Wepawao',
@@ -398,7 +398,7 @@ const I18N = {
     },
   },
   es: {
-    signIn: 'Únete', profile: 'Mi página', signOut: 'Cerrar sesión', myPage: { title: 'Mi página', network: 'Panel de mi red', posts: 'Mis publicaciones', edit: 'Editar mi perfil' },
+    signIn: 'Únete', profile: 'Mi página', signOut: 'Cerrar sesión', myPage: { title: 'Mi página', network: 'Mi panel de miembro', posts: 'Mis publicaciones', edit: 'Editar mi perfil' },
     tabs: { everyone: 'Todos', mine: 'Mis publicaciones', contacts: 'Contactos', discover: 'Descubrir', offer: 'Lo que ofrezco', promise: 'Nuestra promesa' },
     tr: { btn: 'Traducir', back: 'Ver original', busy: 'Traduciendo…', note: 'Traducido automáticamente', fail: 'No se pudo traducir ahora.', google: 'Abrir en Google Traductor' },
     share: 'Compartir', linkCopied: '¡Enlace copiado!', shareText: 'Un momento en Wepawao',
