@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Keep the page from sliding sideways on phones: nothing may make it wider than the screen. */
+html, body { overflow-x: hidden; max-width: 100%; }
+@supports (overflow-x: clip) { html, body { overflow-x: clip; } }
+
 /* Wepawao Face teaser: each face bobs and tilts in turn */
 @keyframes wepawao-face-bob {
   0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
