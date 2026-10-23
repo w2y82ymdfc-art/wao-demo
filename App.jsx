@@ -120,27 +120,8 @@ const I18N = {
     wbExpired: 'That welcome link has expired. Sign in once here and Wepawao will remember you from then on.',
     pasteCode: 'Paste code',
     codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
-    banner: 'Wepawao is live for connection today. Coming soon: a fair marketplace and a completely free, multi-tier Affiliate Program tied to your profile email, to reward the people who build this community.',
+    banner: 'Wepawao is live for connection today. Coming soon: an earnings structure for members, now being finalized, to reward the people who build this community.',
     gotIt: 'Got it',
-    shop: {
-      soon: 'Coming soon',
-      cardTitle: 'Coming soon: Wepawao Shop',
-      cardText: 'Online and local businesses, with commissions for affiliate partners on real sales.',
-      cardBtn: 'See the preview',
-      title: 'Wepawao Shop',
-      intro: 'Online and local businesses, with commissions for affiliate partners on real sales. This is a preview: the Shop is not open yet.',
-      s1: 'Shop online and local', s2: 'Buy, or share with your link', s3: 'See your commissions',
-      online: 'Online', local: 'Local near you',
-      seasonal: 'Seasonal pick', premium: 'High-ticket pick', store: 'Online store',
-      localBiz: 'Local business', prepaid: 'Pay here, redeem in store', orderAhead: 'Order ahead, pick up',
-      buy: 'Buy now', shareTitle: 'You as affiliate partner',
-      shareText: 'Share a product with your link. When someone buys through it, the commission goes to you and your network.',
-      shareBtn: 'Share with my link',
-      saleTitle: 'New sale through your link',
-      saleNote: 'Split from the sale\'s commission pool. Pending until the return window closes, then paid with the monthly payout.',
-      you: 'You · Tier 1',
-      back: '← Back',
-    },
     home: 'Home', homeLogo: 'Wepawao, go to the home page',
     aff: {
       bannerTitle: 'Your Affiliate network',
@@ -169,7 +150,7 @@ const I18N = {
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} this week`,
       open: 'Open my dashboard',
-      title: 'Affiliate marketing dashboard', back: '← Back',
+      title: 'Member Audience Dashboard', back: '← Back',
       intro: 'Your network grows when someone joins Wepawao through your invite link, and again when they invite others.',
       tierDesc: ['People you invited', 'Invited by your Tier 1', 'Invited by your Tier 2'],
       total: (n) => `${n.toLocaleString('en')} in your network`,
@@ -293,7 +274,7 @@ const I18N = {
     writeComment: 'Write a comment…', send: 'Send', del: 'delete',
     yourProfile: 'Your profile', close: 'close',
     usernameLabel: 'Username (letters, numbers, underscore; 3–30)', nameLabel: 'Name', areaLabel: 'Area', aboutLabel: 'About you',
-    affiliateNote: 'Coming soon: your sign-in email will link you to the free Affiliate Program. It is never shown on your public profile.',
+    affiliateNote: 'Your sign-in email is never shown on your public profile.',
     save: 'Save', saving: 'Saving…', saved: 'Saved!', usernameTaken: 'That username is taken.',
     loadMore: 'Load more',
     empty: { everyone: 'Nothing here yet. Be the first to post!', mine: 'You have not posted yet.', offer: 'You have no offers yet. List one above!', discover: 'Nothing matches these filters.' },
@@ -304,7 +285,7 @@ const I18N = {
     peopleTitle: 'People on Wepawao', newestFirst: 'Newest members first.',
     visionTitle: 'The vision of Wepawao',
     visionLines: [
-      'A new social network that feels like yours, because it shares its advertising income with its members through a free Affiliate Program.',
+      'A new social network that feels like yours, because members will benefit from the audience they help build.',
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
@@ -320,7 +301,7 @@ const I18N = {
       ['Your email stays private.', 'It is never shown on your public profile.'],
       ['Less noise.', 'Real moments from real people, without a machine deciding what keeps you scrolling.'],
       ['Transparency.', 'Our rules are published here. When they change, we tell you what changed and why.'],
-      ['You share in what Wepawao earns.', 'Through our free Three-Tier Affiliate Program, members who help Wepawao grow will receive a share of the advertising revenue Wepawao actually receives. It costs nothing to join, and it starts paying once advertising begins.'],
+      ['You benefit from the audience you build.', 'Our earnings structure for members is being finalized. It costs nothing to join, and the details will be published before it launches.'],
     ],
     differentTitle: 'Why Wepawao is different',
     differentText: 'Most big social networks are built to keep you scrolling and to sell your attention. Wepawao shows you what is happening, newest first, and shares the advertising revenue with the members who build the community.',
@@ -361,7 +342,7 @@ const I18N = {
     pricingNote: 'Billing is not live yet, so everything is free during the demo. You pay for time listed, never for position: the feed is always newest first.',
     comingTitle: "What's coming",
     comingToday: ['Today:', ' Wepawao is a place to connect. Share your Wepawao moment and see what is happening, newest first.'],
-    comingSoon: ['Soon:', ' a fair marketplace, and a completely free, multi-tier Affiliate Program tied to your profile email, to reward active community builders.'],
+    comingSoon: ['Soon:', ' an earnings structure for members, now being finalized, to reward active community builders.'],
     ai: {
       tab: 'My caricature ✨', regular: 'Regular moment',
       title: 'Share your caricature',
@@ -491,27 +472,8 @@ const I18N = {
     wbExpired: 'Ese enlace de bienvenida ya venció. Entra una vez aquí y Wepawao te recordará desde entonces.',
     pasteCode: 'Pegar código',
     codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
-    banner: 'Wepawao está activo hoy para conectar. Próximamente: un mercado justo y un Programa de Afiliados completamente gratuito de varios tiers, ligado al correo de tu perfil, para recompensar a quienes construyen esta comunidad.',
+    banner: 'Wepawao está activo hoy para conectar. Próximamente: una estructura de ganancias para miembros, en su etapa final, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
-    shop: {
-      soon: 'Próximamente',
-      cardTitle: 'Próximamente: Tienda Wepawao',
-      cardText: 'Negocios en línea y locales, con comisiones para socios afiliados por ventas reales.',
-      cardBtn: 'Ver la vista previa',
-      title: 'Tienda Wepawao',
-      intro: 'Negocios en línea y locales, con comisiones para socios afiliados por ventas reales. Esta es una vista previa: la Tienda aún no está abierta.',
-      s1: 'Compra en línea y local', s2: 'Compra, o comparte con tu enlace', s3: 'Mira tus comisiones',
-      online: 'En línea', local: 'Locales cerca de ti',
-      seasonal: 'Selección de temporada', premium: 'Selección de alto valor', store: 'Tienda en línea',
-      localBiz: 'Negocio local', prepaid: 'Paga aquí, redime en la tienda', orderAhead: 'Ordena y recoge',
-      buy: 'Comprar', shareTitle: 'Tú como socio afiliado',
-      shareText: 'Comparte un producto con tu enlace. Cuando alguien compra a través de él, la comisión es para ti y tu red.',
-      shareBtn: 'Compartir con mi enlace',
-      saleTitle: 'Nueva venta a través de tu enlace',
-      saleNote: 'Se reparte del fondo de comisiones de la venta. Pendiente hasta que cierre el periodo de devoluciones; luego se paga con el pago mensual.',
-      you: 'Tú · Tier 1',
-      back: '← Volver',
-    },
     home: 'Inicio', homeLogo: 'Wepawao, ir a la página de inicio',
     aff: {
       bannerTitle: 'Tu red de Afiliados',
@@ -540,7 +502,7 @@ const I18N = {
       tier: (n) => `Tier ${n}`,
       newWeek: (n) => `+${n} esta semana`,
       open: 'Abrir mi panel',
-      title: 'Panel de marketing de afiliados', back: '← Volver',
+      title: 'Panel de Audiencia del Miembro', back: '← Volver',
       intro: 'Tu red crece cuando alguien se une a Wepawao con tu enlace de invitación, y otra vez cuando esa persona invita a otros.',
       tierDesc: ['Personas que invitaste', 'Invitados por tu Tier 1', 'Invitados por tu Tier 2'],
       total: (n) => `${n.toLocaleString('es')} en tu red`,
@@ -664,7 +626,7 @@ const I18N = {
     writeComment: 'Escribe un comentario…', send: 'Enviar', del: 'borrar',
     yourProfile: 'Tu perfil', close: 'cerrar',
     usernameLabel: 'Nombre de usuario (letras, números y guion bajo; 3–30)', nameLabel: 'Nombre', areaLabel: 'Zona', aboutLabel: 'Sobre ti',
-    affiliateNote: 'Próximamente: tu correo de inicio de sesión te vinculará al Programa de Afiliados gratuito. Nunca se muestra en tu perfil público.',
+    affiliateNote: 'Tu correo de inicio de sesión nunca se muestra en tu perfil público.',
     save: 'Guardar', saving: 'Guardando…', saved: '¡Guardado!', usernameTaken: 'Ese nombre de usuario ya está en uso.',
     loadMore: 'Cargar más',
     empty: { everyone: 'Aún no hay nada aquí. ¡Sé la primera persona en publicar!', mine: 'Todavía no has publicado.', offer: 'Todavía no tienes ofertas. ¡Publica una arriba!', discover: 'Nada coincide con estos filtros.' },
@@ -675,7 +637,7 @@ const I18N = {
     peopleTitle: 'Personas en Wepawao', newestFirst: 'Miembros más recientes primero.',
     visionTitle: 'La visión de Wepawao',
     visionLines: [
-      'Una nueva red social que se siente tuya, porque comparte sus ingresos de publicidad con sus miembros a través de un Programa de Afiliados gratuito.',
+      'Una nueva red social que se siente tuya, porque los miembros se beneficiarán de la audiencia que ayudan a crear.',
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
@@ -691,7 +653,7 @@ const I18N = {
       ['Tu correo es privado.', 'Nunca se muestra en tu perfil público.'],
       ['Menos ruido.', 'Momentos reales de personas reales, sin una máquina que decida qué te mantiene deslizando.'],
       ['Transparencia.', 'Nuestras reglas están publicadas aquí. Cuando cambien, te diremos qué cambió y por qué.'],
-      ['Compartes lo que Wepawao gana.', 'Con nuestro Programa de Afiliados de Tres Tiers, gratuito, los miembros que ayuden a Wepawao a crecer recibirán una parte de los ingresos por publicidad que Wepawao realmente reciba. Unirse no cuesta nada y empieza a pagar cuando comience la publicidad.'],
+      ['Te beneficias de la audiencia que creas.', 'Nuestra estructura de ganancias para miembros está en su etapa final. Unirse no cuesta nada y los detalles se publicarán antes de que se lance.'],
     ],
     differentTitle: 'Por qué Wepawao es diferente',
     differentText: 'La mayoría de las grandes redes sociales están hechas para mantenerte deslizando y vender tu atención. Wepawao te muestra lo que está pasando, lo más reciente primero, y comparte los ingresos por publicidad con los miembros que construyen la comunidad.',
@@ -732,7 +694,7 @@ const I18N = {
     pricingNote: 'La facturación aún no está activa, así que todo es gratis durante la demostración. Pagas por el tiempo publicado, nunca por la posición: el feed siempre muestra lo más reciente primero.',
     comingTitle: 'Lo que viene',
     comingToday: ['Hoy:', ' Wepawao es un lugar para conectar. Comparte tu momento Wepawao y mira lo que está pasando, lo más reciente primero.'],
-    comingSoon: ['Pronto:', ' un mercado justo y un Programa de Afiliados completamente gratuito de varios tiers, ligado al correo de tu perfil, para recompensar a quienes construyen la comunidad.'],
+    comingSoon: ['Pronto:', ' una estructura de ganancias para miembros, en su etapa final, para recompensar a quienes construyen la comunidad.'],
     ai: {
       tab: 'Mi caricatura ✨', regular: 'Momento normal',
       title: 'Comparte tu caricatura',
@@ -5584,114 +5546,6 @@ function Welcome({ name, number, onDone }) {
 }
 
 // ---------- Our promise ----------
-// ---------- Wepawao Shop: "coming soon" card and preview (nothing here buys or pays yet) ----------
-function ShopSoonCard({ onOpen }) {
-  const { t } = useLang()
-  const s = t.shop
-  return (
-    <div className="space-y-2 rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-4">
-      <span className="inline-block rounded-full bg-[#f6d155] px-2.5 py-0.5 text-xs font-extrabold text-[#14123a]">{s.soon}</span>
-      <h3 className="text-lg font-extrabold">{s.cardTitle}</h3>
-      <p className="text-sm text-stone-700">{s.cardText}</p>
-      <button className={primary} onClick={onOpen}>{s.cardBtn}</button>
-    </div>
-  )
-}
-
-function MockPhoto({ h = 'h-28' }) {
-  return <div className={`${h} rounded-2xl bg-[#e8e9fb]`} />
-}
-function MockBar({ w = 'w-16' }) {
-  return <div className={`h-3 ${w} rounded-full bg-[#dcdff5]`} />
-}
-// Looks like a button, does nothing: the Shop is a preview.
-function MockBtn({ children, gold }) {
-  return (
-    <div className={`rounded-full py-3 text-center font-extrabold ${gold ? 'bg-[#f6d155] text-[#14123a]' : 'bg-[#4a3af0] text-white'}`}>{children}</div>
-  )
-}
-
-function ShopPreview({ onBack }) {
-  const { t } = useLang()
-  const s = t.shop
-  const step = (n, label) => (
-    <h3 className="flex items-center gap-2 text-lg font-extrabold">
-      <span className="grid h-7 w-7 place-items-center rounded-full bg-[#14123a] text-sm text-[#f6d155]">{n}</span>{label}
-    </h3>
-  )
-  return (
-    <div className="space-y-4">
-      <div className="relative overflow-hidden rounded-3xl bg-[#14123a] p-5 text-white">
-        <button className="text-sm font-bold text-[#f6d155]" onClick={onBack}>{s.back}</button>
-        <span className="absolute right-4 top-4 rounded-full bg-[#f6d155] px-3 py-1 text-xs font-extrabold text-[#14123a]">{s.soon}</span>
-        <h2 className="mt-2 text-2xl font-extrabold">{s.title}</h2>
-        <p className="mt-1 text-sm text-white/85">{s.intro}</p>
-      </div>
-
-      {step(1, s.s1)}
-      <div className={`${card} space-y-3`} aria-hidden="true">
-        <div className="grid grid-cols-2 gap-1 rounded-full bg-[#eef0fc] p-1 text-center text-sm font-extrabold">
-          <div className="rounded-full bg-[#f6d155] py-2">{s.online}</div>
-          <div className="py-2 text-stone-600">{s.local}</div>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {[0, 1].map((i) => (
-            <div key={i} className="space-y-1.5">
-              <MockPhoto />
-              <div className="text-[11px] font-extrabold uppercase text-[#4a3af0]">{s.store}</div>
-              <div className="text-sm font-bold">{s.seasonal}</div>
-              <MockBar />
-            </div>
-          ))}
-        </div>
-        <div className="flex gap-3 rounded-2xl border-2 border-[#f6d155] p-2">
-          <div className="h-20 w-20 shrink-0 rounded-xl bg-[#e8e9fb]" />
-          <div className="space-y-1.5 py-1">
-            <span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-[11px] font-extrabold">{s.premium}</span>
-            <div className="text-sm font-bold">{s.store}</div>
-            <MockBar w="w-20" />
-          </div>
-        </div>
-        <div className="flex items-center gap-3 rounded-2xl bg-[#eef0fc] p-3">
-          <div className="h-11 w-11 shrink-0 rounded-xl bg-[#dcdff5]" />
-          <div>
-            <div className="text-sm font-bold">{s.localBiz}</div>
-            <div className="text-xs text-stone-600">{s.prepaid} · {s.orderAhead}</div>
-          </div>
-        </div>
-      </div>
-
-      {step(2, s.s2)}
-      <div className={`${card} space-y-3`} aria-hidden="true">
-        <MockPhoto h="h-40" />
-        <div className="text-[11px] font-extrabold uppercase text-[#4a3af0]">{s.store}</div>
-        <div className="font-bold">{s.seasonal}</div>
-        <MockBar w="w-24" />
-        <MockBtn>{s.buy}</MockBtn>
-        <div className="space-y-2 rounded-2xl bg-[#14123a] p-4 text-white">
-          <div className="font-extrabold">{s.shareTitle}</div>
-          <p className="text-sm text-white/85">{s.shareText}</p>
-          <MockBtn gold>{s.shareBtn}</MockBtn>
-        </div>
-      </div>
-
-      {step(3, s.s3)}
-      <div className="space-y-3 rounded-3xl bg-[#14123a] p-4 text-white ring-2 ring-[#f6d155]" aria-hidden="true">
-        <div className="font-extrabold">{s.saleTitle}</div>
-        <div className="grid grid-cols-3 gap-2 text-center">
-          {[s.you, t.aff.tier(2), t.aff.tier(3)].map((label, i) => (
-            <div key={i} className="rounded-2xl bg-white/10 px-1 py-2.5">
-              <div className="text-[11px] text-white/85">{label}</div>
-              <div className="mx-auto mt-2 h-3 w-10 rounded-full bg-[#f6d155]/70" />
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-white/85">{s.saleNote}</p>
-      </div>
-    </div>
-  )
-}
-
 function OurPromise({ onReplay, onStats }) {
   const { t } = useLang()
   return (
@@ -6446,7 +6300,6 @@ export default function App() {
               {!wide && <AffiliateBanner me={me} refreshKey={refreshKey}
                 onOpen={null}
                 onSignIn={() => { setShowSignIn(true); scrollToSignIn() }} onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
-              <ShopSoonCard onOpen={() => { setTab('shop'); window.scrollTo(0, 0) }} />
               {(me || wide) && (
                 <div id="wp-aff-dashboard" className="scroll-mt-3">
                   <AffiliateDashboard me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
@@ -6457,7 +6310,6 @@ export default function App() {
                 onContest={() => { setTab('contest'); window.scrollTo(0, 0) }} />}
             </>
           )}
-          {tab === 'shop' && <ShopPreview onBack={() => { setTab('affiliate'); window.scrollTo(0, 0) }} />}
           {tab === 'team' && isAdmin && <ProviderTeamPanel onBack={() => setTab('affiliate')} />}
           {tab === 'contest' && (
             <ContestPage me={me} refreshKey={refreshKey} onBack={() => setTab('everyone')}
