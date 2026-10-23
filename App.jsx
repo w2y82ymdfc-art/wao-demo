@@ -87,6 +87,22 @@ const I18N = {
     inviteText: 'Share your personal link. Anyone who opens it and joins becomes your contact right away.',
     callout: ['Use me, share me', ' and be ready to enjoy what is coming!'], calloutShare: 'Share', calloutJoin: 'Join free',
     calloutShareText: 'Wao! Have you seen yourself as an AI caricature? 😮 Try it free on Wepawao. Use it, share it, and be ready to enjoy what is coming!',
+    rest: {
+      btn: 'For restaurants',
+      title: 'Wepawao for restaurants',
+      intro: 'Why this is good for your restaurant:',
+      points: [
+        ['📱', 'QR code on every table', 'Customers scan it and see your menu instantly on their phone, no app to download. Fewer printed menus to replace or keep clean.'],
+        ['💲', 'Change prices anytime, in seconds', 'When food costs go up, update your prices from your phone in a few taps. No reprinting, no crossed-out prices.'],
+        ['⭐', 'Feature your 5 best dishes', 'Show up to 5 dishes in a slideshow with your own photos at the top of your menu, and change them whenever you want: a new special, the weekend dish, what you need to sell today.'],
+        ['🌎', 'Menu in Spanish and English', 'Serve locals and tourists equally well, without a separate menu.'],
+        ['👑', 'VIP Customers', 'Keep a list of your best customers and let them know directly about special occasions and events. Every customer is VIP for you.'],
+      ],
+      also: 'Also: it is free, a manager can run it with their own account, and you see how many people viewed your menu and your VIP messages.',
+      ask: 'I want my free menu', askSubject: 'Free digital menu for my restaurant',
+      share: 'Share this page', shareText: 'A free digital menu for your restaurant, in Spanish and English, with prices you change in seconds.',
+      back: '← Back',
+    },
     menu: { title: 'Digital menu', beta: 'Beta', intro: 'Your menu on your customers’ phones. Change a price or mark a dish sold out in seconds: it shows right away, no reprinting.', view: 'View menu', share: 'Share link', qr: 'QR code for tables', qrTitle: 'Menu QR code', qrText: 'Print it for your tables. Customers scan it with their phone camera and your menu opens right away, no app or sign-in needed.', qrCaption: (n) => `${n} · Menu`, qrTop: 'Scan to see our menu', qrFoot: 'Digital menu by Wepawao', add: 'Add a dish', category: 'Category (e.g. Burgers)', name: 'Dish name', price: 'Price', pricePh: 'Price (empty = market price)', desc: 'Description (optional)', addBtn: 'Add to menu', empty: 'Your menu is empty. Add your first dish below.', soldOut: 'Sold out', available: 'Available', market: 'Market price', edit: 'Edit', save: 'Save', cancel: 'Cancel', remove: 'Remove', english: 'In English (filled in automatically, you can correct it)', nameEn: 'Dish name in English', descEn: 'Description in English', bilingual: 'Your menu shows in Spanish and English: dishes are translated automatically.', featured: 'Featured', feature: 'Feature', needPhoto: 'Add a photo first, featured dishes show in the slideshow.', featuredLimit: 'You can feature up to 5 dishes.', featuredHint: 'Feature up to 5 dishes with a photo: they show as a slideshow at the top of your menu.', order: 'Slideshow order', orderHint: 'The first photo gets the most views.', up: 'Move up', down: 'Move down', addPhoto: 'Add photo', changePhoto: 'Change photo', removePhoto: 'Remove photo', uploading: 'Uploading…', confirmRemove: (n) => `Remove "${n}" from the menu?`, saved: 'Saved', other: 'Other', copied: 'Link copied', error: 'Something went wrong. Try again.', limit: 'Your menu reached 300 dishes.', badPrice: 'Write the price as a number, like 12.95' },
     collage: { btn: 'Make my collage', btnSub: 'Your best moments in one picture to share', title: 'My Wepawao collage', include: 'What to include', moments: 'Moments', caricatures: 'Caricatures', postals: 'Postals', period: 'Period', thisWeek: 'This week', thisMonth: 'This month', thisYear: 'This year', how: 'The moments with the most Wao! and Wepa! are picked for you (this year: the best of each month). It is made on your phone: nothing is uploaded.', make: 'Make collage', making: 'Making your collage…', again: 'Change options', removeHint: 'Tap × on a photo to take it out. The next best one takes its place.', remove: 'Remove this photo', restore: 'Put all photos back', none: 'No photos in that period yet. Try another period or include more.', error: 'The collage could not be made. Try again.', week: 'My week on Wepawao', monthTitle: (m) => `My ${m} on Wepawao`, yearTitle: (y) => `My ${y} on Wepawao`, motto: 'From Puerto Rico, for the benefit of all' },
     qr: { btn: 'My QR code', title: 'My QR code', text: 'Anyone who scans it with their phone camera joins Wepawao with your link, so they count in your network. Print it on a flyer, a business card or a restaurant table.', caption: 'Scan me and join Wepawao free', save: 'Share or save', saveHint: 'On iPhone: tap “Save Image” in the menu that opens, or press and hold the picture and tap “Save to Photos”.', close: 'Close', saved: 'Image saved' },
@@ -439,6 +455,22 @@ const I18N = {
     inviteText: 'Comparte tu enlace personal. Quien lo abra y se una será tu contacto de inmediato.',
     callout: ['Úsame, compárteme', ' y prepárate para disfrutar lo que viene!'], calloutShare: 'Compartir', calloutJoin: 'Únete gratis',
     calloutShareText: '¡Wao! ¿Ya te viste como caricatura con IA? 😮 Pruébalo gratis en Wepawao. Úsala, compártela y prepárate para disfrutar lo que viene.',
+    rest: {
+      btn: 'Para restaurantes',
+      title: 'Wepawao para restaurantes',
+      intro: 'Por qué esto es bueno para tu restaurante:',
+      points: [
+        ['📱', 'Código QR en cada mesa', 'El cliente lo escanea y ve tu menú al instante en su teléfono, sin descargar ninguna app. Menos menús impresos que reponer o limpiar.'],
+        ['💲', 'Cambia precios cuando quieras, en segundos', 'Cuando suben los costos, actualizas tus precios desde el teléfono con unos toques. Sin reimprimir, sin precios tachados.'],
+        ['⭐', 'Destaca tus 5 mejores platos', 'Muestra hasta 5 platos en un carrusel con tus propias fotos al inicio de tu menú, y cámbialos cuando quieras: un especial nuevo, el plato del fin de semana, lo que necesitas vender hoy.'],
+        ['🌎', 'Menú en español e inglés', 'Atiende igual de bien a la gente local y a los turistas, sin un menú aparte.'],
+        ['👑', 'Clientes VIP', 'Guarda una lista de tus mejores clientes y avísales directamente de ocasiones y eventos especiales. Para ti, cada cliente es VIP.'],
+      ],
+      also: 'Además: es gratis, un gerente puede manejarlo con su propia cuenta, y ves cuántas personas vieron tu menú y tus mensajes VIP.',
+      ask: 'Quiero mi menú gratis', askSubject: 'Menú digital gratis para mi restaurante',
+      share: 'Compartir esta página', shareText: 'Un menú digital gratis para tu restaurante, en español e inglés, con precios que cambias en segundos.',
+      back: '← Volver',
+    },
     menu: { title: 'Menú digital', beta: 'Beta', intro: 'Tu menú en el teléfono de tus clientes. Cambia un precio o marca un plato agotado en segundos: se ve al momento, sin reimprimir.', view: 'Ver menú', share: 'Compartir enlace', qr: 'Código QR para mesas', qrTitle: 'Código QR del menú', qrText: 'Imprímelo para tus mesas. Tus clientes lo escanean con la cámara del teléfono y tu menú abre al momento, sin app ni registro.', qrCaption: (n) => `${n} · Menú`, qrTop: 'Escanea para ver el menú', qrFoot: 'Menú digital por Wepawao', add: 'Añadir un plato', category: 'Categoría (ej. Hamburguesas)', name: 'Nombre del plato', price: 'Precio', pricePh: 'Precio (vacío = precio del mercado)', desc: 'Descripción (opcional)', addBtn: 'Añadir al menú', empty: 'Tu menú está vacío. Añade tu primer plato abajo.', soldOut: 'Agotado', available: 'Disponible', market: 'Precio del mercado', edit: 'Editar', save: 'Guardar', cancel: 'Cancelar', remove: 'Quitar', english: 'En inglés (se llena solo, puedes corregirlo)', nameEn: 'Nombre del plato en inglés', descEn: 'Descripción en inglés', bilingual: 'Tu menú sale en español e inglés: los platos se traducen solos.', featured: 'Destacado', feature: 'Destacar', needPhoto: 'Añade una foto primero; los destacados salen en la presentación de fotos.', featuredLimit: 'Puedes destacar hasta 5 platos.', featuredHint: 'Destaca hasta 5 platos con foto: salen en una presentación de fotos arriba de tu menú.', order: 'Orden de la presentación', orderHint: 'La primera foto es la que más se ve.', up: 'Subir', down: 'Bajar', addPhoto: 'Añadir foto', changePhoto: 'Cambiar foto', removePhoto: 'Quitar foto', uploading: 'Subiendo…', confirmRemove: (n) => `¿Quitar "${n}" del menú?`, saved: 'Guardado', other: 'Otros', copied: 'Enlace copiado', error: 'Algo falló. Inténtalo otra vez.', limit: 'Tu menú llegó a 300 platos.', badPrice: 'Escribe el precio como número, por ejemplo 12.95' },
     collage: { btn: 'Hacer mi collage', btnSub: 'Tus mejores momentos en una imagen para compartir', title: 'Mi collage Wepawao', include: 'Qué incluir', moments: 'Momentos', caricatures: 'Caricaturas', postals: 'Postales', period: 'Período', thisWeek: 'Esta semana', thisMonth: 'Este mes', thisYear: 'Este año', how: 'Se escogen los momentos con más Wao! y Wepa! (este año: el mejor de cada mes). Se hace en tu teléfono: no se sube nada.', make: 'Crear collage', making: 'Creando tu collage…', again: 'Cambiar opciones', removeHint: 'Toca × en una foto para quitarla. La siguiente mejor toma su lugar.', remove: 'Quitar esta foto', restore: 'Devolver todas las fotos', none: 'Aún no hay fotos en ese período. Prueba otro período o incluye más.', error: 'No se pudo crear el collage. Inténtalo otra vez.', week: 'Mi semana en Wepawao', monthTitle: (m) => `Mi ${m} en Wepawao`, yearTitle: (y) => `Mi ${y} en Wepawao`, motto: 'De Puerto Rico, para beneficio de todos' },
     qr: { btn: 'Mi código QR', title: 'Mi código QR', text: 'Quien lo escanee con la cámara de su teléfono se une a Wepawao con tu enlace, así cuenta en tu red. Imprímelo en un volante, una tarjeta de presentación o la mesa de un restaurante.', caption: 'Escanéame y únete gratis a Wepawao', save: 'Compartir o guardar', saveHint: 'En iPhone: toca “Guardar imagen” en el menú que se abre, o mantén presionada la foto y toca “Guardar en Fotos”.', close: 'Cerrar', saved: 'Imagen guardada' },
@@ -5546,6 +5578,44 @@ function Welcome({ name, number, onDone }) {
   )
 }
 
+// ---------- Wepawao for restaurants: selling points page (?restaurants=1) ----------
+function RestaurantsPage({ onBack }) {
+  const { t, lang } = useLang()
+  const r = t.rest
+  const [note, setNote] = useState('')
+  const url = `${shareOrigin()}/?restaurants=1&lang=${lang}`
+  const share = async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: r.title, text: r.shareText, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+    }
+    try { await navigator.clipboard.writeText(url); setNote(t.linkCopied) } catch { window.prompt('', url) }
+  }
+  return (
+    <div className="space-y-4">
+      <div className="space-y-3 rounded-3xl bg-gradient-to-br from-[#14123a] to-[#2a2370] p-5 text-white">
+        <button className="text-sm font-bold text-[#f6d155]" onClick={onBack}>{r.back}</button>
+        <h2 className="text-2xl font-extrabold">{r.title}</h2>
+        <p className="text-white/85">{r.intro}</p>
+      </div>
+      {r.points.map(([icon, head, text]) => (
+        <div key={head} className={`${card} flex gap-3`}>
+          <span className="text-3xl leading-none" aria-hidden="true">{icon}</span>
+          <div>
+            <h3 className="font-extrabold">{head}</h3>
+            <p className="mt-1 text-stone-700">{text}</p>
+          </div>
+        </div>
+      ))}
+      <div className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm font-bold text-stone-800">{r.also}</div>
+      <div className="flex flex-wrap gap-2">
+        <a className={primary} href={`mailto:support@wepawao.com?subject=${encodeURIComponent(r.askSubject)}`}>{r.ask}</a>
+        <button className={ghost} onClick={share}>{r.share}</button>
+      </div>
+      {note && <p className="text-sm font-bold text-emerald-700">{note}</p>}
+    </div>
+  )
+}
+
 // ---------- Our promise ----------
 function OurPromise({ onReplay, onStats }) {
   const { t } = useLang()
@@ -5778,7 +5848,7 @@ function CommunityStatsPage({ onBack, refreshKey }) {
 export default function App() {
   const [session, setSession] = useState(null)
   const [authChecked, setAuthChecked] = useState(false)
-  const [tab, setTab] = useState('everyone')
+  const [tab, setTab] = useState(() => (new URLSearchParams(window.location.search).has('restaurants') ? 'restaurants' : 'everyone'))
   const [showSignIn, setShowSignIn] = useState(false)
   const [pwFirst, setPwFirst] = useState(false)
   // A returning member on a screen with no sign-in yet: the home-screen app, or a browser used before.
@@ -6336,12 +6406,14 @@ export default function App() {
                   <button className="rounded-full bg-[#f6d155] px-6 py-3 font-bold text-[#14123a]" onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
                   <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('mine'); window.scrollTo(0, 0) }}>{t.myPage.posts}</button>
                   <button className="rounded-full border-2 border-[#f6d155] px-5 py-2.5 font-bold text-[#f6d155]" onClick={() => { setTab('viphub'); window.scrollTo(0, 0) }}>{t.vip.hubBtn}</button>
+                  <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('restaurants'); window.scrollTo(0, 0) }}>{t.rest.btn}</button>
                 </div>
               </div>
               <ProfileEditor me={me} avatarUrl={avatarUrl} onAvatar={(u) => { setAvatarUrl(u); posted() }}
                 onSaved={posted} onClose={() => setTab('everyone')} onSignOut={() => { supabase.auth.signOut({ scope: 'local' }); setTab('everyone') }} />
             </>
           )}
+          {tab === 'restaurants' && <RestaurantsPage onBack={() => { setTab(me ? 'mypage' : 'everyone'); window.scrollTo(0, 0) }} />}
           {tab === 'promise' && <OurPromise onReplay={me ? () => openWelcome(true) : null} onStats={openStats} />}
           {tab === 'stats' && <CommunityStatsPage refreshKey={refreshKey} onBack={() => { setTab(statsFrom.current); window.scrollTo(0, 0) }} />}
         </main>

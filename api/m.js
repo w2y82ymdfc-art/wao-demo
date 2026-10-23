@@ -9,13 +9,13 @@ const T = {
   es: {
     title: (n) => `Menú · ${n}`, other: 'Otros', soldOut: 'Agotado', market: 'Precio del mercado',
     updated: (d) => `Precios al ${d}`, empty: 'Este menú todavía no tiene platos.', notFound: 'Este menú no existe.',
-    back: 'Volver a Wepawao', made: 'Menú digital hecho con', join: 'Únete gratis', vip: 'Hazte cliente VIP', vipTop: '★ Hazte cliente VIP: entérate de sus ocasiones especiales', switchTo: 'English', switchLang: 'en',
+    back: 'Volver a Wepawao', made: 'Menú digital hecho con', join: 'Únete gratis', vip: 'Hazte cliente VIP', vipTop: '★ Hazte cliente VIP: entérate de sus ocasiones especiales', rest: '¿Tienes un restaurante? Consigue este menú gratis →', switchTo: 'English', switchLang: 'en',
     desc: (n) => `El menú de ${n}, siempre con los precios al día.`,
   },
   en: {
     title: (n) => `Menu · ${n}`, other: 'Other', soldOut: 'Sold out', market: 'Market price',
     updated: (d) => `Prices as of ${d}`, empty: 'This menu has no dishes yet.', notFound: 'This menu does not exist.',
-    back: 'Back to Wepawao', made: 'Digital menu made with', join: 'Join free', vip: 'Become a VIP customer', vipTop: '★ Become a VIP customer: hear about special occasions', switchTo: 'Español', switchLang: 'es',
+    back: 'Back to Wepawao', made: 'Digital menu made with', join: 'Join free', vip: 'Become a VIP customer', vipTop: '★ Become a VIP customer: hear about special occasions', rest: 'Have a restaurant? Get this menu free →', switchTo: 'Español', switchLang: 'es',
     desc: (n) => `${n}'s menu, always with up-to-date prices.`,
   },
 }
@@ -98,6 +98,7 @@ d.forEach(function(e,j){e.onclick=function(){go(j);play()}});play()})()</script>
     ? (biz.logo_path.startsWith('/') ? `${site}${biz.logo_path}` : `${SB}/storage/v1/object/public/photos/${biz.logo_path.split('/').map(encodeURIComponent).join('/')}`)
     : ''
   const joinUrl = biz?.owner_id ? `${site}/?ref=${biz.owner_id}&lang=${lang}` : `${site}/?lang=${lang}`
+  const restUrl = `${site}/?restaurants=1&lang=${lang}`
   const vipUrl = biz ? `${site}/?vip=${biz.id}&join=1&lang=${lang}` : ''
   const self = `${site}/m/${id}`
   const pageTitle = biz ? t.title(biz.name) : 'Wepawao'
@@ -162,6 +163,7 @@ h2{margin:22px 4px 8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-
 footer{max-width:640px;margin:16px auto 0;padding:18px 16px calc(28px + env(safe-area-inset-bottom));text-align:center}
 .vip{display:block;background:#f6d155;color:#14123a;font-weight:900;text-decoration:none;border-radius:999px;padding:13px;margin-bottom:16px}
 .made{display:inline-flex;align-items:center;gap:8px;color:#6b6f93;font-size:13px;text-decoration:none}
+.rest{display:block;color:#4a3af0;font-weight:800;font-size:15px;text-decoration:none;margin-bottom:14px}
 .made img{height:22px}.made b{color:#4a3af0}
 </style>
 </head><body>
@@ -182,6 +184,7 @@ ${lastText ? `<p class="updated">${t.updated(esc(lastText))}</p>` : ''}
 </main>
 <footer>
   ${biz ? `<a class="vip" href="${esc(vipUrl)}">${t.vip}</a>` : ''}
+  <a class="rest" href="${esc(restUrl)}">${t.rest}</a>
   <a class="made" href="${esc(joinUrl)}">${t.made} <img src="/wepawao-wordmark.png" alt="Wepawao"> · <b>${t.join}</b></a>
 </footer>
 ${biz && SB && KEY ? viewScript(SB, KEY, biz.id) : ''}
