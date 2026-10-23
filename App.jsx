@@ -4037,6 +4037,11 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam, onStats }
         {data && <p className="text-sm font-bold text-[#4a3af0]">{t.aff.total(total)}</p>}
       </div>
 
+      <div className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm">
+        <p className="font-bold">{t.aff.earningsTitle}</p>
+        <p className="text-stone-700">{t.aff.earningsText}</p>
+      </div>
+
       {loading && !data && <div className={`${card} text-stone-600`}>{t.aff.loading}</div>}
       {error && <div className={`${card} text-stone-600`}>{t.aff.error}</div>}
 
@@ -4089,10 +4094,6 @@ function AffiliateDashboard({ me, refreshKey, onBack, isAdmin, onTeam, onStats }
 
       <ProviderBankSection me={me} refreshKey={refreshKey} isAdmin={isAdmin} onTeam={onTeam} />
 
-      <div className="rounded-3xl border-2 border-[#f6d155] bg-[#fff8dc] px-4 py-3 text-sm">
-        <p className="font-bold">{t.aff.earningsTitle}</p>
-        <p className="text-stone-700">{t.aff.earningsText}</p>
-      </div>
     </div>
   )
 }
