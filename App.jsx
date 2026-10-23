@@ -6404,7 +6404,6 @@ export default function App() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button className="rounded-full bg-[#f6d155] px-6 py-3 font-bold text-[#14123a]" onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
-                  <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('mine'); window.scrollTo(0, 0) }}>{t.myPage.posts}</button>
                   <button className="rounded-full border-2 border-[#f6d155] px-5 py-2.5 font-bold text-[#f6d155]" onClick={() => { setTab('viphub'); window.scrollTo(0, 0) }}>{t.vip.hubBtn}</button>
                   <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('restaurants'); window.scrollTo(0, 0) }}>{t.rest.btn}</button>
                 </div>
