@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const lang = req.query.lang === 'en' ? 'en' : 'es'
   const es = lang === 'es'
   const site = `https://${req.headers['x-forwarded-host'] || req.headers.host}`
-  const target = UUID_RE.test(id) ? `${site}/?vip=${id}&join=1&lang=${lang}` : `${site}/?lang=${lang}`
+  let target = UUID_RE.test(id) ? `${site}/?vip=${id}&join=1&lang=${lang}` : `${site}/?lang=${lang}`
   let title = es ? 'Clientes VIP · Wepawao' : 'VIP Customers · Wepawao'
   const desc = es
     ? 'Para nosotros, cada cliente es VIP. Únete gratis y te enviaremos un mensaje cuando haya una ocasión especial.'
@@ -20,12 +20,14 @@ export default async function handler(req, res) {
   const KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
   if (UUID_RE.test(id) && SB && KEY) {
     try {
-      const r = await fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=name,logo_path`, {
+      const r = await fetch(`${SB}/rest/v1/vip_lists?id=eq.${id}&select=name,logo_path,owner_id`, {
         headers: KEY.startsWith('sb_') ? { apikey: KEY } : { apikey: KEY, Authorization: `Bearer ${KEY}` },
         signal: AbortSignal.timeout(4000),
       })
       const l = r.ok ? (await r.json())[0] : null
       if (l) {
+        // New people who join through this link count in the restaurant owner's member audience.
+        if (UUID_RE.test(l.owner_id || '')) target += `&ref=${l.owner_id}`
         title = es ? `Únete gratis a la lista VIP de ${l.name}` : `Join ${l.name}'s VIP list, free`
         if (l.logo_path) {
           // Logos prepared by the Wepawao Team ship with the site; owners' uploads live in storage.

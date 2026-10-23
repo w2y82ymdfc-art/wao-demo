@@ -99,7 +99,7 @@ d.forEach(function(e,j){e.onclick=function(){go(j);play()}});play()})()</script>
     : ''
   const joinUrl = biz?.owner_id ? `${site}/?ref=${biz.owner_id}&lang=${lang}` : `${site}/?lang=${lang}`
   const restUrl = `${site}/?restaurants=1&lang=${lang}`
-  const vipUrl = biz ? `${site}/?vip=${biz.id}&join=1&lang=${lang}` : ''
+  const vipUrl = biz ? `${site}/?vip=${biz.id}&join=1${biz.owner_id ? `&ref=${biz.owner_id}` : ''}&lang=${lang}` : ''
   const self = `${site}/m/${id}`
   const pageTitle = biz ? t.title(biz.name) : 'Wepawao'
 
