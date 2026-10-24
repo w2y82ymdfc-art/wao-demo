@@ -306,7 +306,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
-    vip: {"managersTitle": "Managers", "managersIntro": "Let someone you trust work this page with their own Wepawao sign-in: menu, prices, VIP messages and logo. Only you can add or remove managers.", "addManager": "Add a manager", "managerInviteText": "You are invited to manage {n} on Wepawao. Open this link and sign in:", "managerLinkNote": "Send this link to your manager. It works once and expires in 7 days.", "noManagers": "No managers yet.", "removeManager": "Remove", "managerBadge": "Manager", "managerOf": "Business I manage", "leaveManager": "Stop managing this business", "managerNow": "You now manage {n}. It is here in My business.", "managerInvalid": "This manager link was already used or expired. Ask the owner for a new one.", "managerSignIn": "Sign in to start managing the business you were invited to.", "beta": "Beta", "hubBtn": "My Restaurant", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "shareHint": "Customers join with this link to get your special occasions.", "copied": "Link copied", "newMsg": "New VIP message (Event)", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again.", "edit": "Edit", "del": "Delete", "delSure": "Tap again to delete", "save": "Save changes", "cancel": "Cancel", "notSaved": "Could not save the changes. Try again.", "shareEvent": "Share", "shareEventText": "Published on Wepawao:"},
+    vip: {"managersTitle": "Managers", "managersIntro": "Let someone you trust work this page with their own Wepawao sign-in: menu, prices, VIP messages and logo. Only you can add or remove managers.", "addManager": "Add a manager", "managerInviteText": "You are invited to manage {n} on Wepawao. Open this link and sign in:", "managerLinkNote": "Send this link to your manager. It works once and expires in 7 days.", "noManagers": "No managers yet.", "removeManager": "Remove", "managerBadge": "Manager", "managerOf": "Business I manage", "leaveManager": "Stop managing this business", "managerNow": "You now manage {n}. It is here in My business.", "managerInvalid": "This manager link was already used or expired. Ask the owner for a new one.", "managerSignIn": "Sign in to start managing the business you were invited to.", "beta": "Beta", "hubBtn": "My Restaurant", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "shareHint": "Customers join with this link to get your special occasions.", "copied": "Link copied", "newMsg": "New VIP message (Event)", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again.", "edit": "Edit", "del": "Delete", "delSure": "Tap again to delete", "save": "Save changes", "cancel": "Cancel", "notSaved": "Could not save the changes. Try again.", "shareEvent": "Share", "shareEventText": "Published on Wepawao:", "celebrate": "🎉 Add a celebration: confetti and the Wepawao mark", "celebrateHint": "Makes the photo stand out when you share it on Facebook and WhatsApp."},
     stats: {"title": "Wepawao in numbers", "open": "📊 Wepawao in numbers", "openText": "Real counts from the whole community: views, members and businesses, week by week.", "intro": "Real counts from the whole community, updated live. Nothing here is estimated or boosted.", "views": "Views", "viewsWeek": "+{n} this week", "members": "Members", "businesses": "Businesses", "moment": "Moments", "menu": "Menus", "vip": "VIP messages", "weekly": "Views per week", "membersGrowth": "Members over time", "weekOf": "Week of {n}", "howTitle": "How we count", "how": ["A view counts when a moment or VIP message stays on screen for about a second, or when a menu is opened.", "One view per person, per item, per day. Your own views of your own posts never count.", "We show how many, never who.", "No algorithm decides who gets to see a post here."], "since": "Counting since {n}", "none": "Counting has just started. The numbers grow from here.", "back": "← Back", "loading": "Loading…", "bizTitle": "Who saw your business", "menuViews": "Menu views", "people": "People", "vipViews": "VIP message views", "days": "Last 30 days", "bizNone": "No views yet. Share your menu QR or VIP link and they will show up here.", "seen": "👀 {n} views", "seenOne": "👀 1 view"},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
@@ -675,7 +675,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
-    vip: {"managersTitle": "Gerentes", "managersIntro": "Deja que alguien de confianza trabaje esta página con su propia cuenta de Wepawao: menú, precios, mensajes VIP y logo. Solo tú puedes añadir o quitar gerentes.", "addManager": "Añadir gerente", "managerInviteText": "Te invitan a manejar {n} en Wepawao. Abre este enlace y entra:", "managerLinkNote": "Envía este enlace a tu gerente. Funciona una vez y vence en 7 días.", "noManagers": "Aún no hay gerentes.", "removeManager": "Quitar", "managerBadge": "Gerente", "managerOf": "Negocio que manejo", "leaveManager": "Dejar de manejar este negocio", "managerNow": "Ya manejas {n}. Está aquí, en Mi negocio.", "managerInvalid": "Este enlace de gerente ya se usó o venció. Pide uno nuevo al dueño.", "managerSignIn": "Entra para empezar a manejar el negocio al que te invitaron.", "beta": "Beta", "hubBtn": "Mi restaurante", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "shareHint": "Tus clientes se unen con este enlace para recibir tus ocasiones especiales.", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP (Evento)", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez.", "edit": "Editar", "del": "Borrar", "delSure": "Toca otra vez para borrar", "save": "Guardar cambios", "cancel": "Cancelar", "notSaved": "No se pudieron guardar los cambios. Inténtalo otra vez.", "shareEvent": "Compartir", "shareEventText": "Publicado en Wepawao:"},
+    vip: {"managersTitle": "Gerentes", "managersIntro": "Deja que alguien de confianza trabaje esta página con su propia cuenta de Wepawao: menú, precios, mensajes VIP y logo. Solo tú puedes añadir o quitar gerentes.", "addManager": "Añadir gerente", "managerInviteText": "Te invitan a manejar {n} en Wepawao. Abre este enlace y entra:", "managerLinkNote": "Envía este enlace a tu gerente. Funciona una vez y vence en 7 días.", "noManagers": "Aún no hay gerentes.", "removeManager": "Quitar", "managerBadge": "Gerente", "managerOf": "Negocio que manejo", "leaveManager": "Dejar de manejar este negocio", "managerNow": "Ya manejas {n}. Está aquí, en Mi negocio.", "managerInvalid": "Este enlace de gerente ya se usó o venció. Pide uno nuevo al dueño.", "managerSignIn": "Entra para empezar a manejar el negocio al que te invitaron.", "beta": "Beta", "hubBtn": "Mi restaurante", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "shareHint": "Tus clientes se unen con este enlace para recibir tus ocasiones especiales.", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP (Evento)", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez.", "edit": "Editar", "del": "Borrar", "delSure": "Toca otra vez para borrar", "save": "Guardar cambios", "cancel": "Cancelar", "notSaved": "No se pudieron guardar los cambios. Inténtalo otra vez.", "shareEvent": "Compartir", "shareEventText": "Publicado en Wepawao:", "celebrate": "🎉 Añadir celebración: confeti y la marca de Wepawao", "celebrateHint": "Hace que la foto resalte cuando la compartes en Facebook y WhatsApp."},
     stats: {"title": "Wepawao en números", "open": "📊 Wepawao en números", "openText": "Cifras reales de toda la comunidad: vistas, miembros y negocios, semana a semana.", "intro": "Cifras reales de toda la comunidad, al día. Nada aquí es un estimado ni está inflado.", "views": "Vistas", "viewsWeek": "+{n} esta semana", "members": "Miembros", "businesses": "Negocios", "moment": "Momentos", "menu": "Menús", "vip": "Mensajes VIP", "weekly": "Vistas por semana", "membersGrowth": "Miembros con el tiempo", "weekOf": "Semana del {n}", "howTitle": "Cómo contamos", "how": ["Una vista cuenta cuando un momento o mensaje VIP se queda en pantalla cerca de un segundo, o cuando se abre un menú.", "Una vista por persona, por publicación, por día. Tus propias vistas de lo tuyo nunca cuentan.", "Mostramos cuántos, nunca quiénes.", "Aquí ningún algoritmo decide quién ve una publicación."], "since": "Contando desde el {n}", "none": "El conteo acaba de empezar. Las cifras crecen desde aquí.", "back": "← Volver", "loading": "Cargando…", "bizTitle": "Quién vio tu negocio", "menuViews": "Vistas del menú", "people": "Personas", "vipViews": "Vistas de mensajes VIP", "days": "Últimos 30 días", "bizNone": "Todavía no hay vistas. Comparte el QR de tu menú o tu enlace VIP y aparecerán aquí.", "seen": "👀 {n} vistas", "seenOne": "👀 1 vista"},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
@@ -855,6 +855,93 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
   canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height)
   return new Promise((resolve, reject) =>
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not process image'))), 'image/jpeg', quality)
+  )
+}
+
+// Event photos "with celebration": Wepawao confetti along the top and sides (the middle stays clear
+// for the photo) and the Wepawao wordmark in a white tag at the bottom right. Made on the phone.
+const loadImg = (src) => new Promise((resolve, reject) => {
+  const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => resolve(im); im.onerror = reject; im.src = src
+})
+async function photoBlob(item) {
+  if (item.blob) return item.blob
+  const r = await fetch(photoUrl(item.path))
+  if (!r.ok) throw new Error('photo')
+  return r.blob()
+}
+async function addCelebration(blob) {
+  const url = URL.createObjectURL(blob)
+  try {
+    const [img, mark] = await Promise.all([loadImg(url), loadImg(logoImg)])
+    const scale = Math.min(1, 1600 / img.width)
+    const w = Math.round(img.width * scale), h = Math.round(img.height * scale)
+    const c = document.createElement('canvas'); c.width = w; c.height = h
+    const g = c.getContext('2d')
+    g.drawImage(img, 0, 0, w, h)
+    // Same seed every time, so a photo always gets the same confetti.
+    let seed = 7
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 }
+    const colors = ['#f6d155', '#4a3af0', '#9a8ff7', '#ffffff', '#e0a800', '#ff6b8b', '#3ec7a3']
+    const u = Math.max(w, h) / 55
+    const n = Math.round(90 * (w * h) / (1600 * 1600)) + 60
+    for (let i = 0; i < n; i++) {
+      let x = rnd() * w, y = rnd() * h
+      const band = rnd()
+      if (band < 0.55) y = rnd() * h * 0.3 // top
+      else if (band < 0.78) x = rnd() * w * 0.16 // left side
+      else x = w - rnd() * w * 0.16 // right side
+      g.save(); g.translate(x, y); g.rotate(rnd() * Math.PI)
+      g.globalAlpha = 0.92
+      g.fillStyle = colors[i % colors.length]
+      const k = i % 4
+      if (k === 0) { g.beginPath(); g.arc(0, 0, u * (0.35 + rnd() * 0.3), 0, Math.PI * 2); g.fill() }
+      else if (k === 3) {
+        g.strokeStyle = g.fillStyle; g.lineWidth = u * 0.28; g.lineCap = 'round'
+        g.beginPath(); g.moveTo(-u, 0); g.quadraticCurveTo(-u * 0.3, -u, 0, 0); g.quadraticCurveTo(u * 0.3, u, u, 0); g.stroke()
+      } else g.fillRect(-u * 0.45, -u * 0.25, u * (0.9 + rnd() * 0.4), u * 0.5)
+      g.restore()
+    }
+    // Wepawao tag.
+    const mw = Math.round(w * 0.22), mh = Math.round(mw * mark.height / mark.width)
+    const pad = Math.round(mw * 0.09), r = Math.round((mh + pad * 2) / 2)
+    const bx = w - mw - pad * 2 - Math.round(w * 0.03), by = h - mh - pad * 2 - Math.round(w * 0.03)
+    g.save()
+    g.shadowColor = 'rgba(0,0,0,0.35)'; g.shadowBlur = u * 0.8
+    g.fillStyle = '#ffffff'
+    g.beginPath()
+    if (g.roundRect) g.roundRect(bx, by, mw + pad * 2, mh + pad * 2, r); else g.rect(bx, by, mw + pad * 2, mh + pad * 2)
+    g.fill()
+    g.restore()
+    g.drawImage(mark, bx + pad, by + pad, mw, mh)
+    return await new Promise((resolve, reject) =>
+      c.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not process image'))), 'image/jpeg', 0.88))
+  } finally { URL.revokeObjectURL(url) }
+}
+// Keeps a "with celebration" preview of the picked photo while the option is on.
+function useCelebration(item, on) {
+  const [res, setRes] = useState({ url: null, blob: null })
+  useEffect(() => {
+    if (!on || !item) { setRes({ url: null, blob: null }); return }
+    let live = true, made = null
+    photoBlob(item).then(addCelebration).then((blob) => {
+      if (!live) return
+      made = URL.createObjectURL(blob)
+      setRes({ url: made, blob })
+    }).catch(() => { if (live) setRes({ url: null, blob: null }) })
+    return () => { live = false; if (made) URL.revokeObjectURL(made) }
+  }, [item, on])
+  return res
+}
+function CelebrateToggle({ on, onChange, disabled }) {
+  const { t } = useLang()
+  return (
+    <label className={`flex cursor-pointer items-start gap-3 rounded-2xl border-2 p-3 ${on ? 'border-[#f6d155] bg-[#fff6d6]' : 'border-[#dcdff5] bg-white'} ${disabled ? 'opacity-50' : ''}`}>
+      <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#4a3af0]" checked={on} disabled={disabled} onChange={(e) => onChange(e.target.checked)} />
+      <span>
+        <span className="block font-bold text-[#14123a]">{t.vip.celebrate}</span>
+        <span className="block text-sm text-stone-600">{t.vip.celebrateHint}</span>
+      </span>
+    </label>
   )
 }
 
@@ -1739,7 +1826,7 @@ const SLOT_TONES = {
   photo: 'border-[#7b6ff5] bg-[#e6e2ff] text-[#4a3af0]',
   ai: 'border-[#e0b200] bg-[#fff3c4] text-[#14123a]',
 }
-function PhotoSlot({ label, picker, tone = 'photo', icon = '📷' }) {
+function PhotoSlot({ label, picker, tone = 'photo', icon = '📷', previewUrl = null }) {
   const { t } = useLang()
   const item = picker.items[0]
   return (
@@ -1749,7 +1836,7 @@ function PhotoSlot({ label, picker, tone = 'photo', icon = '📷' }) {
       {item
         ? (
           <div className="relative">
-            <img src={item.url || photoUrl(item.path)} alt="" className="aspect-square w-full rounded-2xl object-cover" />
+            <img src={previewUrl || item.url || photoUrl(item.path)} alt="" className="aspect-square w-full rounded-2xl object-cover" />
             <button type="button" onClick={() => picker.removeAt(0)}
               className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white">{t.ai.change}</button>
           </div>
@@ -4743,10 +4830,12 @@ function VipSentMessage({ m, me, views, onChanged }) {
   const [note, setNote] = useState('')
   const [form, setForm] = useState({ title: m.title || '', when: m.when_text || '', body: m.body || '' })
   const photo = usePhotoPicker(m.image_path ? [{ path: m.image_path }] : [], 1, () => setNote(t.couldNotRead))
+  const [celebrate, setCelebrate] = useState(false)
+  const cel = useCelebration(editing ? photo.items[0] : null, celebrate)
   function startEdit() {
     setForm({ title: m.title || '', when: m.when_text || '', body: m.body || '' })
     photo.reset(m.image_path ? [{ path: m.image_path }] : [])
-    setNote(''); setSure(false); setEditing(true)
+    setNote(''); setSure(false); setCelebrate(false); setEditing(true)
   }
   async function save(e) {
     e.preventDefault()
@@ -4756,7 +4845,8 @@ function VipSentMessage({ m, me, views, onChanged }) {
     try {
       let image_path = null
       if (photo.items[0]) {
-        const up = await uploadPhotos([photo.items[0]], me, `vip-${crypto.randomUUID().slice(0, 8)}`)
+        const item = celebrate ? { blob: cel.blob || await addCelebration(await photoBlob(photo.items[0])) } : photo.items[0]
+        const up = await uploadPhotos([item], me, `vip-${crypto.randomUUID().slice(0, 8)}`)
         uploaded = up.uploaded; image_path = up.paths[0]
       }
       const { data, error } = await supabase.from('vip_messages')
@@ -4780,7 +4870,8 @@ function VipSentMessage({ m, me, views, onChanged }) {
   if (editing) {
     return (
       <form onSubmit={save} className={`${card} space-y-3`}>
-        <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
+        <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" previewUrl={cel.url} />
+        <CelebrateToggle on={celebrate} onChange={setCelebrate} disabled={!photo.items[0]} />
         <input className={field} maxLength={80} required placeholder={v.msgTitle} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
         <input className={field} maxLength={60} placeholder={v.when} value={form.when} onChange={(e) => setForm({ ...form, when: e.target.value })} />
         <textarea className={`${field} min-h-20`} maxLength={500} placeholder={v.body} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
@@ -4882,6 +4973,8 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
   const [note, setNote] = useState('')
   const photo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
   const logo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
+  const [celebrate, setCelebrate] = useState(false)
+  const cel = useCelebration(photo.items[0], celebrate)
   async function uploadLogo() {
     if (!logo.items[0]) return null
     const up = await uploadPhotos([logo.items[0]], me, `vip-logo-${crypto.randomUUID().slice(0, 8)}`)
@@ -4939,14 +5032,15 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
     try {
       let image_path = null
       if (photo.items[0]) {
-        const up = await uploadPhotos([photo.items[0]], me, `vip-${crypto.randomUUID().slice(0, 8)}`)
+        const item = celebrate ? { blob: cel.blob || await addCelebration(await photoBlob(photo.items[0])) } : photo.items[0]
+        const up = await uploadPhotos([item], me, `vip-${crypto.randomUUID().slice(0, 8)}`)
         uploaded = up.uploaded; image_path = up.paths[0]
       }
       const { error } = await supabase.from('vip_messages').insert({
         list_id: list.id, title: msg.title.trim(), when_text: msg.when.trim() || null, body: msg.body.trim() || null, image_path,
       })
       if (error) throw error
-      setMsg({ title: '', when: '', body: '' }); photo.reset(); setNote(v.sent); load()
+      setMsg({ title: '', when: '', body: '' }); photo.reset(); setCelebrate(false); setNote(v.sent); load()
     } catch (err) {
       if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
       setNote(String(err?.message || '').includes('vip_weekly_limit') ? v.limit : v.error)
@@ -5021,7 +5115,8 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
       </div>
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
-        <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" />
+        <PhotoSlot label={v.photo} picker={photo} tone="ai" icon="✨" previewUrl={cel.url} />
+        <CelebrateToggle on={celebrate} onChange={setCelebrate} disabled={!photo.items[0]} />
         <input className={field} maxLength={80} required placeholder={v.msgTitle} value={msg.title} onChange={(e) => setMsg({ ...msg, title: e.target.value })} />
         <input className={field} maxLength={60} placeholder={v.when} value={msg.when} onChange={(e) => setMsg({ ...msg, when: e.target.value })} />
         <textarea className={`${field} min-h-20`} maxLength={500} placeholder={v.body} value={msg.body} onChange={(e) => setMsg({ ...msg, body: e.target.value })} />
