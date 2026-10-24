@@ -4672,7 +4672,7 @@ function HeroShow() {
 // Shared as /v/<id> so WhatsApp and Facebook show the business's name and logo (api/v.js).
 const vipLink = (id, lang) => `${window.location.origin}/v/${id}?lang=${lang}`
 // One event, shared on its own: the preview shows its photo and title and says it was published on Wepawao.
-const eventLink = (id, lang) => `${window.location.origin}/e/${id}?lang=${lang}`
+const eventLink = (id, lang) => `${window.location.origin}/e/${id}${lang === 'en' ? '?lang=en' : ''}`
 const fill = (str, n) => str.replace('{n}', n)
 // The business's logo, or a gold tile with a fork-and-knife when it has none.
 function VipLogo({ path, size = 56 }) {
@@ -4705,7 +4705,7 @@ function VipMessage({ m, listName, track = false, views }) {
   async function shareEvent() {
     const url = eventLink(m.id, lang)
     if (navigator.share) {
-      try { await navigator.share({ title: m.title, text: `${t.vip.shareEventText} ${m.title}`, url }); return } catch (e) { if (e?.name === 'AbortError') return }
+      try { await navigator.share({ url }); return } catch (e) { if (e?.name === 'AbortError') return }
     }
     try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2500) } catch { window.prompt('', url) }
   }
