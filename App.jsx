@@ -860,7 +860,7 @@ async function resizeImage(file, maxW = 1600, quality = 0.85) {
 
 // Event photos "with celebration": Wepawao confetti along the top and sides (the middle stays clear
 // for the photo) and the Wepawao wordmark in a white tag at the bottom right. Made on the phone.
-const loadImg = (src) => new Promise((resolve, reject) => {
+const loadCelebImg = (src) => new Promise((resolve, reject) => {
   const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => resolve(im); im.onerror = reject; im.src = src
 })
 async function photoBlob(item) {
@@ -872,7 +872,7 @@ async function photoBlob(item) {
 async function addCelebration(blob) {
   const url = URL.createObjectURL(blob)
   try {
-    const [img, mark] = await Promise.all([loadImg(url), loadImg(logoImg)])
+    const [img, mark] = await Promise.all([loadCelebImg(url), loadCelebImg(logoImg)])
     const scale = Math.min(1, 1600 / img.width)
     const w = Math.round(img.width * scale), h = Math.round(img.height * scale)
     const c = document.createElement('canvas'); c.width = w; c.height = h
