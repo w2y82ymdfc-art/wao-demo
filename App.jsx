@@ -139,7 +139,7 @@ const I18N = {
     codeTip: 'Tip: on iPhone with the Mail app, the code may show above the keyboard. Tap it to fill it in.',
     banner: 'Wepawao is live for connection today. Coming soon: an earnings structure for members, now being finalized, to reward the people who build this community.',
     gotIt: 'Got it',
-    home: 'Home', homeLogo: 'Wepawao, go to the home page',
+    home: 'Home', goBack: 'Back', homeLogo: 'Wepawao, go to the home page',
     aff: {
       bannerTitle: 'Your audience',
       linkTitle: 'Who opened your links',
@@ -508,7 +508,7 @@ const I18N = {
     codeTip: 'Consejo: en iPhone con la app Mail, el código puede aparecer encima del teclado. Tócalo para llenarlo.',
     banner: 'Wepawao está activo hoy para conectar. Próximamente: una estructura de ganancias para miembros, en su etapa final, para recompensar a quienes construyen esta comunidad.',
     gotIt: 'Entendido',
-    home: 'Inicio', homeLogo: 'Wepawao, ir a la página de inicio',
+    home: 'Inicio', goBack: 'Volver', homeLogo: 'Wepawao, ir a la página de inicio',
     aff: {
       bannerTitle: 'Tu audiencia',
       linkTitle: 'Quién abrió tus enlaces',
@@ -6037,8 +6037,10 @@ export default function App() {
   // Back button: each section (My page, a tab, the dashboard…) is a step in the browser history,
   // so Back returns to the previous section instead of leaving Wepawao.
   const fromHistory = useRef(false)
+  // How many sections deep the member is inside Wepawao, so the floating Back never leaves the site.
+  const steps = useRef(0)
   useEffect(() => {
-    const onPop = (e) => { fromHistory.current = true; setTab(e.state?.wpTab || 'everyone') }
+    const onPop = (e) => { fromHistory.current = true; steps.current = Math.max(0, steps.current - 1); setTab(e.state?.wpTab || 'everyone') }
     const onJoinAsk = () => { setShowSignIn(true); scrollToSignIn() }
     window.addEventListener('wp-signin', onJoinAsk)
     window.addEventListener('popstate', onPop)
@@ -6047,13 +6049,18 @@ export default function App() {
   }, [])
   useEffect(() => {
     if (fromHistory.current) { fromHistory.current = false; return }
-    if (window.history.state?.wpTab !== tab) window.history.pushState({ wpTab: tab }, '')
+    if (window.history.state?.wpTab !== tab) { window.history.pushState({ wpTab: tab }, ''); steps.current += 1 }
   }, [tab])
   // Home: the Everyone tab, from the top. Used by the logo and the floating Home button.
   // "Wepawao in numbers" remembers where it was opened from, so Back returns there.
   const statsFrom = useRef('promise')
   const openStats = () => { statsFrom.current = tab; setTab('stats'); window.scrollTo(0, 0) }
   const goHome = () => { setVipId(null); setTab('everyone'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  // Back: the previous section inside Wepawao; opened straight on this page (QR, link), it goes Home.
+  const goBack = () => {
+    if (steps.current > 0) { window.history.back(); setTimeout(() => window.scrollTo(0, 0), 60) }
+    else goHome()
+  }
   // Signed in from "Join or sign in" / "open my page": go straight to My page.
   useEffect(() => {
     if (me && afterSignIn) { setAfterSignIn(false); setShowSignIn(false); setTab('mypage'); window.scrollTo(0, 0) }
@@ -6514,14 +6521,23 @@ export default function App() {
         )}
         </div>
         {tab !== 'everyone' && (
-          <button type="button" onClick={goHome}
-            className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-[#14123a] px-4 py-2.5 text-sm font-bold text-white shadow-lg ring-2 ring-[#f6d155]"
+          <div className="fixed left-1/2 z-40 flex -translate-x-1/2 items-center gap-2"
             style={{ bottom: 'max(16px, calc(env(safe-area-inset-bottom) + 8px))' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6d155" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M3 11l9-7 9 7" /><path d="M5 10v10h5v-6h4v6h5V10" />
-            </svg>
-            {t.home}
-          </button>
+            <button type="button" onClick={goBack}
+              className="flex items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-[#14123a] shadow-lg ring-2 ring-[#14123a]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14123a" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+              {t.goBack}
+            </button>
+            <button type="button" onClick={goHome}
+              className="flex items-center gap-1.5 rounded-full bg-[#14123a] px-4 py-2.5 text-sm font-bold text-white shadow-lg ring-2 ring-[#f6d155]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6d155" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M3 11l9-7 9 7" /><path d="M5 10v10h5v-6h4v6h5V10" />
+              </svg>
+              {t.home}
+            </button>
+          </div>
         )}
         {welcome && <Welcome name={welcome.name} number={welcome.number} onDone={closeWelcome} />}
         {!welcome && netStart && me && <NetworkStart me={me} onClose={closeNetStart} />}
