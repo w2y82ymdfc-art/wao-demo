@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   const KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
   if (UUID_RE.test(id) && SB && KEY) {
     try {
-      const r = await fetch(`${SB}/rest/v1/posts?id=eq.${id}&status=eq.active&select=title,body,image_path,image_paths,ai_moment,profiles!posts_user_id_fkey(display_name)`, {
+      const r = await fetch(`${SB}/rest/v1/posts?id=eq.${id}&status=eq.active&select=user_id,kind,title,body,image_path,image_paths,ai_moment,profiles!posts_user_id_fkey(display_name)`, {
         // New-style keys (sb_publishable_…) go only in the apikey header; older keys also as Bearer.
         headers: KEY.startsWith('sb_') ? { apikey: KEY } : { apikey: KEY, Authorization: `Bearer ${KEY}` },
         signal: AbortSignal.timeout(4000),
@@ -38,6 +38,11 @@ export default async function handler(req, res) {
         if (p.body || p.title) desc = clip(p.body || p.title, 180)
         const pick = ai ? imgs[1] : imgs[0]
         if (pick) { image = `${SB}/storage/v1/object/public/photos/${pick.split('/').map(encodeURIComponent).join('/')}`; big = true }
+        // Moments: use the copy with the "Mi momento Wepawao" tag when the author's phone has made it.
+        if (pick && p.kind === 'update' && p.user_id) {
+          const tagged = `${SB}/storage/v1/object/public/photos/${encodeURIComponent(p.user_id)}/mm-${id}.jpg`
+          try { if ((await fetch(tagged, { method: 'HEAD', signal: AbortSignal.timeout(1500) })).ok) image = tagged } catch { /* keep the plain photo */ }
+        }
       }
     } catch { /* fall back to the general Wepawao preview */ }
   }

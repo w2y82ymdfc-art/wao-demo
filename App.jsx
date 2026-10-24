@@ -261,7 +261,7 @@ const I18N = {
     sentSteps: ['Open the email from Wepawao.', 'Type the code from the email in the box below and tap "Sign in".', 'Not there in a minute? Check Spam or Promotions.'],
     sentAgain: 'Send it again', sentWait: (s) => `You can send it again in ${s}s`, sentOther: 'Use a different email',
     pwHint: 'Already have a Wepawao password? Sign in with it here.', pwPlaceholder: 'Password', pwSignIn: 'Sign in with password', pwBad: 'Wrong email or password, or no password set yet. Use the email link once, then set a password in your Profile.', pwTitle: 'My password', pwSetHint: 'Set a password so you can sign in quickly on any phone or computer. At least 8 characters.', pwNew: 'New password', pwSave: 'Save password', pwSaved: 'Password saved. You can now sign in with it anywhere.', pwShort: 'Use at least 8 characters.', pwShow: 'Show password', pwHide: 'Hide password', outTitle: 'Sign in once here', outText: 'On iPhone, the Wepawao icon on your home screen keeps its own sign-in, separate from Safari. Tap "Sign in with my password", enter your email and your Wepawao password, and you stay signed in here from then on.', outBtn: 'Sign in with my password', pwNeedEmail: 'Type your email in the Email box above first, then tap Sign in with password.', pwNeedPw: 'Type your password first.', pwOpen: 'Prefer to use your password? Sign in with it here', newHere: 'No password needed. Type your email (and your name if you are new) and we will email you a code to sign in.', pwSame: 'That is already your password. You can sign in with it now.', forgot: 'Forgot your password?', forgotSent: (e) => `We sent a link to ${e} to choose a new password. Open it on this same phone or computer.`, resetTitle: 'Choose a new password', resetHint: 'You opened the password link from your email. Type a new password (at least 8 characters).', resetDone: 'New password saved. You are signed in.',
-    wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…", wowPlaceholderOpt: "Tell the story behind your photo (optional)…",
+    wowTitle: "What's your Wepawao moment?", wowPlaceholder: "Tell your community what's happening…", wowPlaceholderOpt: "Tell us something (optional)…", momentTag: "My moment", momentTagAi: "My AI moment",
     signInToShareText: 'Join free (or sign in) to share it with the community.', signInToShare: 'Join free to share',
     addPhoto: 'Add photo', remove: 'Remove', post: 'Post', posting: 'Posting…',
     photoConsent: 'This is a photo of me, and I agree to show it on my public profile.',
@@ -365,7 +365,7 @@ const I18N = {
       title: 'Share your caricature',
       intro: 'Use a selfie or your profile photo, turn it into a caricature with any free AI app, and post both. Everyone sees the before and after.',
       original: '1. Your photo', aiVersion: '2. Your caricature', choose: 'Choose photo', change: 'Change',
-      captionPh: 'Tell the story behind your photo (optional)…',
+      captionPh: 'Tell us something (optional)…',
       howTitle: 'How I made it (optional)', toolPh: 'AI app you used (e.g. ChatGPT, Gemini)', promptPh: 'The prompt you used, so others can try it',
       needBoth: 'Add both pictures: your photo and your caricature.',
       postalTitle: 'Postal de Puerto Rico',
@@ -630,7 +630,7 @@ const I18N = {
     sentSteps: ['Abre el correo de Wepawao.', 'Escribe el código del correo en la casilla de abajo y toca "Entrar".', '¿No llega en un minuto? Revisa Spam o Promociones.'],
     sentAgain: 'Enviarlo otra vez', sentWait: (s) => `Puedes enviarlo otra vez en ${s}s`, sentOther: 'Usar otro correo',
     pwHint: '¿Ya tienes contraseña de Wepawao? Entra con ella aquí.', pwPlaceholder: 'Contraseña', pwSignIn: 'Entrar con contraseña', pwBad: 'Correo o contraseña incorrectos, o aún no has creado una contraseña. Entra una vez con el enlace del correo y crea tu contraseña en Perfil.', pwTitle: 'Mi contraseña', pwSetHint: 'Crea una contraseña para entrar rápido desde cualquier teléfono o computadora. Mínimo 8 caracteres.', pwNew: 'Nueva contraseña', pwSave: 'Guardar contraseña', pwSaved: 'Contraseña guardada. Ya puedes entrar con ella en cualquier lugar.', pwShort: 'Usa al menos 8 caracteres.', pwShow: 'Mostrar contraseña', pwHide: 'Ocultar contraseña', outTitle: 'Entra una vez aquí', outText: 'En iPhone, el ícono de Wepawao en tu pantalla de inicio guarda su propia sesión, aparte de Safari. Toca "Entrar con mi contraseña", escribe tu correo y tu contraseña de Wepawao, y quedarás con la sesión abierta aquí desde entonces.', outBtn: 'Entrar con mi contraseña', pwNeedEmail: 'Primero escribe tu correo en la casilla de correo de arriba y luego toca Entrar con contraseña.', pwNeedPw: 'Primero escribe tu contraseña.', pwOpen: '¿Prefieres usar tu contraseña? Entra con ella aquí', newHere: 'No necesitas contraseña. Escribe tu correo (y tu nombre si eres nuevo) y te enviaremos un código por correo para entrar.', pwSame: 'Esa ya es tu contraseña. Ya puedes entrar con ella.', forgot: '¿Olvidaste tu contraseña?', forgotSent: (e) => `Enviamos un enlace a ${e} para crear una contraseña nueva. Ábrelo en este mismo teléfono o computadora.`, resetTitle: 'Crea una contraseña nueva', resetHint: 'Abriste el enlace de contraseña de tu correo. Escribe una contraseña nueva (mínimo 8 caracteres).', resetDone: 'Contraseña nueva guardada. Ya entraste.',
-    wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…', wowPlaceholderOpt: 'Cuenta la historia de tu foto (opcional)…',
+    wowTitle: '¿Cuál es tu momento Wepawao?', wowPlaceholder: 'Cuéntale a tu comunidad qué está pasando…', wowPlaceholderOpt: 'Cuéntanos algo (opcional)…', momentTag: 'Mi momento', momentTagAi: 'Mi momento IA',
     signInToShareText: 'Únete gratis (o inicia sesión) para compartirlo con la comunidad.', signInToShare: 'Únete gratis para compartir',
     addPhoto: 'Añadir foto', remove: 'Quitar', post: 'Publicar', posting: 'Publicando…',
     photoConsent: 'Esta es una foto mía y acepto mostrarla en mi perfil público.',
@@ -734,7 +734,7 @@ const I18N = {
       title: 'Comparte tu caricatura',
       intro: 'Usa un selfie o tu foto de perfil, conviértela en caricatura con cualquier app de IA gratis y publica las dos. Todos verán el antes y el después.',
       original: '1. Tu foto', aiVersion: '2. Tu caricatura', choose: 'Elegir foto', change: 'Cambiar',
-      captionPh: 'Cuenta la historia de tu foto (opcional)…',
+      captionPh: 'Cuéntanos algo (opcional)…',
       howTitle: 'Cómo lo hice (opcional)', toolPh: 'App de IA que usaste (ej. ChatGPT, Gemini)', promptPh: 'La instrucción (prompt) que usaste, para que otros la prueben',
       needBoth: 'Añade las dos imágenes: tu foto y tu caricatura.',
       postalTitle: 'Postal de Puerto Rico',
@@ -931,6 +931,68 @@ function useCelebration(item, on) {
     return () => { live = false; if (made) URL.revokeObjectURL(made) }
   }, [item, on])
   return res
+}
+// "Mi momento Wepawao": every moment carries this tag. On screen it's a small badge on the post;
+// for sharing, a copy of the photo gets the same tag at the bottom right, saved next to the author's
+// photos as <author>/mm-<post id>.jpg. The /p/ link preview uses that copy when it exists.
+const momentShareKey = (p) => `${p.user_id}/mm-${p.id}.jpg`
+const momentSharePick = (p) => {
+  const imgs = postImages(p)
+  return p.ai_moment && imgs.length >= 2 ? imgs[1] : imgs[0] || null
+}
+async function addMomentTag(blob, label) {
+  const url = URL.createObjectURL(blob)
+  try {
+    const [img, mark] = await Promise.all([loadCelebImg(url), loadCelebImg(logoImg)])
+    const scale = Math.min(1, 1600 / img.width)
+    const w = Math.round(img.width * scale), h = Math.round(img.height * scale)
+    const c = document.createElement('canvas'); c.width = w; c.height = h
+    const g = c.getContext('2d')
+    g.drawImage(img, 0, 0, w, h)
+    const mh = Math.round(Math.max(w, h) * 0.035), mw = Math.round(mh * mark.width / mark.height)
+    const fs = Math.round(mh * 0.62)
+    g.font = `800 ${fs}px system-ui, -apple-system, sans-serif`
+    const tw = Math.ceil(g.measureText(label).width)
+    const pad = Math.round(mh * 0.45), gap = Math.round(mh * 0.3)
+    const bw = pad * 2 + tw + gap + mw, bh = mh + pad * 2
+    const m = Math.round(Math.min(w, h) * 0.03)
+    const bx = w - bw - m, by = h - bh - m
+    g.save()
+    g.shadowColor = 'rgba(0,0,0,0.35)'; g.shadowBlur = mh * 0.5
+    g.fillStyle = '#ffffff'
+    g.beginPath()
+    if (g.roundRect) g.roundRect(bx, by, bw, bh, bh / 2); else g.rect(bx, by, bw, bh)
+    g.fill()
+    g.restore()
+    g.fillStyle = '#14123a'; g.textBaseline = 'middle'
+    g.fillText(label, bx + pad, by + bh / 2)
+    g.drawImage(mark, bx + pad + tw + gap, by + pad, mw, mh)
+    return await new Promise((resolve, reject) =>
+      c.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not process image'))), 'image/jpeg', 0.88))
+  } finally { URL.revokeObjectURL(url) }
+}
+// Makes the tagged share copy once per post (only the author can write it). Quietly does nothing on failure.
+const momentShareDone = new Set()
+async function ensureMomentShareImage(p, label, blob) {
+  const pick = momentSharePick(p)
+  const key = momentShareKey(p)
+  if (!pick || momentShareDone.has(key)) return
+  momentShareDone.add(key)
+  try {
+    const head = await fetch(photoUrl(key), { method: 'HEAD', cache: 'no-store' })
+    if (head.ok) return
+    const tagged = await addMomentTag(blob || await photoBlob({ path: pick }), label)
+    await supabase.storage.from(BUCKET).upload(key, tagged, { contentType: 'image/jpeg' })
+  } catch { /* the preview falls back to the plain photo */ }
+}
+function MomentTag({ ai }) {
+  const { t } = useLang()
+  return (
+    <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border-2 border-[#dcdff5] bg-white px-3 py-1">
+      <span className="text-sm font-extrabold text-[#14123a]">{ai ? t.momentTagAi : t.momentTag}</span>
+      <img src={logoImg} alt="Wepawao" className="h-4 w-auto" />
+    </div>
+  )
 }
 function CelebrateToggle({ on, onChange, disabled }) {
   const { t } = useLang()
@@ -1629,6 +1691,7 @@ function Composer({ userId, mode, onPosted }) {
         ...where,
       })
       if (postErr) throw postErr
+      if (kind === 'update' && up.paths.length) ensureMomentShareImage({ id: postId, user_id: userId, image_paths: up.paths }, t.momentTag, photos.items[0]?.blob)
       let notice = ''
       if (multi && kind === 'update' && vis === 'public') {
         const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
@@ -1930,6 +1993,7 @@ function AiComposer({ userId, onPosted }) {
         ...(postalReady && postal ? { postal } : {}),
       })
       if (postErr) throw postErr
+      ensureMomentShareImage({ id: postId, user_id: userId, image_paths: up.paths, ai_moment: true }, t.momentTagAi, aiVersion.items[0]?.blob)
       let notice = ''
       if (vis === 'public') {
         const { data } = await supabase.from('posts').select('public_block_reason').eq('id', postId).single()
@@ -2546,6 +2610,10 @@ function PostCard({ p, me, onChanged }) {
   const seenRef = useSeen('moment', p.id, moment && !mine)
   const [savingPostal, setSavingPostal] = useState(false)
   const postalPath = p.postal === 'morro' && images.length ? (p.ai_moment && images.length >= 2 ? images[1] : images[0]) : null
+  const isMoment = p.kind === 'update'
+  useEffect(() => {
+    if (mine && isMoment && images.length) ensureMomentShareImage(p, p.ai_moment && images.length >= 2 ? t.momentTagAi : t.momentTag)
+  }, [mine, isMoment, p.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function close() {
     if (!window.confirm(ongoing ? t.confirmClose : t.confirmFulfil)) return
@@ -2606,6 +2674,7 @@ function PostCard({ p, me, onChanged }) {
       ) : (
         <>
           {p.title && <h3 className="mt-3 text-lg font-bold">{p.title}</h3>}
+          {isMoment && <MomentTag ai={p.ai_moment && images.length >= 2} />}
           <PostText text={p.body} />
           {p.caricature_image_url && <img loading="lazy" alt="" src={p.caricature_image_url} className="mt-3 w-full max-w-sm rounded-2xl bg-[#eef0fc]" />}
           {p.ai_moment && images.length >= 2 && (
