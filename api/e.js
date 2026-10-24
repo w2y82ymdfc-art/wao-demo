@@ -33,7 +33,10 @@ export default async function handler(req, res) {
         desc = es
           ? `${when}Publicado en Wepawao. Únete gratis a la lista VIP${name ? ` de ${name}` : ''} y entérate de sus ocasiones especiales.`
           : `${when}Published on Wepawao. Join ${name ? `${name}'s` : 'the'} VIP list free and hear about its special occasions.`
-        if (m.image_path) image = photo(m.image_path)
+        // Shared "with celebration": the confetti copy made on the phone (only that kind of picture is accepted).
+        const img = String(req.query.img || '')
+        if (/^[0-9a-f-]{36}\/vip-cel-[A-Za-z0-9-]+\.jpg$/i.test(img)) image = photo(img)
+        else if (m.image_path) image = photo(m.image_path)
         else if (l?.logo_path) {
           image = l.logo_path.startsWith('/') ? `${site}${l.logo_path}` : photo(l.logo_path)
           big = false
@@ -53,7 +56,7 @@ export default async function handler(req, res) {
 <meta property="og:site_name" content="Wepawao">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
-<meta property="og:url" content="${esc(`${site}/e/${id}?lang=${lang}`)}">
+<meta property="og:url" content="${esc(`${site}/e/${id}?lang=${lang}${req.query.img ? `&img=${encodeURIComponent(String(req.query.img))}` : ''}`)}">
 <meta property="og:image" content="${esc(image)}">
 <meta name="twitter:card" content="${big ? 'summary_large_image' : 'summary'}">
 <meta name="twitter:image" content="${esc(image)}">
