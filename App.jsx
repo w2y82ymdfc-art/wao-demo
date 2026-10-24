@@ -53,6 +53,7 @@ const I18N = {
     edit: 'Edit', deletePost: 'Delete', cancel: 'Cancel', edited: 'edited', deleting: 'Deleting…',
     editTitle: 'Edit your post', undoRemove: 'Keep the picture',
     visContacts: 'Contacts only', visPublic: 'Public',
+    sharePublicAsk: 'To share it outside Wepawao, this moment needs to be Public: everyone can see it, if it follows the rules.', sharePublicYes: 'Make it public', sharePublicDone: 'It is public now. Tap Share.',
     visTitle: 'Who can see your posts?',
     visContactsSub: 'Only your contacts see it', visPublicSub: 'Everyone, if it follows the rules',
     publicRulesTitle: 'Rules for public moments',
@@ -422,6 +423,7 @@ const I18N = {
     edit: 'Editar', deletePost: 'Borrar', cancel: 'Cancelar', edited: 'editado', deleting: 'Borrando…',
     editTitle: 'Edita tu publicación', undoRemove: 'Conservar la imagen',
     visContacts: 'Solo contactos', visPublic: 'Público',
+    sharePublicAsk: 'Para compartirlo fuera de Wepawao, este momento tiene que ser Público: lo ve todo el mundo, si cumple las reglas.', sharePublicYes: 'Hacerlo público', sharePublicDone: 'Ya es público. Toca Compartir.',
     visTitle: '¿Quién puede ver tus publicaciones?',
     visContactsSub: 'Solo tus contactos lo ven', visPublicSub: 'Todos, si cumple las reglas',
     publicRulesTitle: 'Reglas para momentos públicos',
@@ -2645,6 +2647,18 @@ function PostCard({ p, me, onChanged }) {
     const msg = !error ? t.reportedThanks : error.code === '23505' ? t.alreadyReported : error.message
     setNote(msg); setTimeout(() => setNote(''), 3000)
   }
+  // Contacts-only moments show Share too: it first asks to make the moment public (links work only for public ones).
+  const canMakePublic = mine && moment && p.visibility === 'contacts' && !inactive
+  const [askPublic, setAskPublic] = useState(false)
+  async function makePublic() {
+    setErr('')
+    const { error } = await supabase.from('posts').update({ visibility: 'public' }).eq('id', p.id).eq('user_id', me)
+    if (error) return setErr(error.message)
+    setAskPublic(false)
+    const { data } = await supabase.from('posts').select('public_block_reason').eq('id', p.id).single()
+    setNote(data?.public_block_reason ? '' : t.sharePublicDone); setTimeout(() => setNote(''), 4000)
+    onChanged()
+  }
   async function share() {
     const msg = await sharePost(p, t, lang, me)
     if (msg) { setNote(msg); setTimeout(() => setNote(''), 2500) }
@@ -2717,6 +2731,7 @@ function PostCard({ p, me, onChanged }) {
         {!inactive && <WaoButton p={p} me={me} mine={mine} />}
         <button className={ghostSm} onClick={() => setOpen((v) => !v)}>{open ? t.hideComments : t.comments}</button>
         {canShare && <button className={ghostSm} onClick={share}>{t.share}</button>}
+        {!canShare && canMakePublic && <button className={ghostSm} onClick={() => setAskPublic((v) => !v)} aria-expanded={askPublic}>{t.share}</button>}
         {mine && postalPath && <button className={ghostSm} onClick={() => setSavingPostal(true)}>{t.ai.postalSave}</button>}
         {canReport && <button className={ghostSm} onClick={() => setReporting((v) => !v)} aria-expanded={reporting}>{t.report}</button>}
         {mine && !editing && <button className={ghostSm} onClick={() => setEditing(true)}>{t.edit}</button>}
@@ -2725,6 +2740,15 @@ function PostCard({ p, me, onChanged }) {
         {mine && inactive && <button className={ghostSm} onClick={reopen}>{ongoing ? t.renew : t.reopen}</button>}
         {note && <span className="text-sm font-semibold text-emerald-700">{note}</span>}
       </div>
+      {askPublic && (
+        <div className="mt-3 space-y-2 rounded-2xl bg-[#eef0fc] p-3">
+          <p className="text-sm">{t.sharePublicAsk}</p>
+          <div className="flex flex-wrap gap-2">
+            <button className={ghostSm} onClick={makePublic}>{t.sharePublicYes}</button>
+            <button className="px-2 text-sm text-stone-500 underline" onClick={() => setAskPublic(false)}>{t.cancel}</button>
+          </div>
+        </div>
+      )}
       {reporting && (
         <div className="mt-3 rounded-2xl bg-[#eef0fc] p-3">
           <div className="mb-2 text-sm font-bold">{t.reportWhy}</div>
