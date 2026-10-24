@@ -307,7 +307,7 @@ const I18N = {
       'Businesses that advertise reach people directly: no algorithm decides who sees what, everyone sees the newest posts first.',
       'And taking part is fun: members share their moments as AI caricatures, a playful way to start using AI. AI is here; let\'s learn and grow with it, together.',
     ],
-    vip: {"managersTitle": "Managers", "managersIntro": "Let someone you trust work this page with their own Wepawao sign-in: menu, prices, VIP messages and logo. Only you can add or remove managers.", "addManager": "Add a manager", "managerInviteText": "You are invited to manage {n} on Wepawao. Open this link and sign in:", "managerLinkNote": "Send this link to your manager. It works once and expires in 7 days.", "noManagers": "No managers yet.", "removeManager": "Remove", "managerBadge": "Manager", "managerOf": "Business I manage", "leaveManager": "Stop managing this business", "managerNow": "You now manage {n}. It is here in My business.", "managerInvalid": "This manager link was already used or expired. Ask the owner for a new one.", "managerSignIn": "Sign in to start managing the business you were invited to.", "beta": "Beta", "hubBtn": "My Restaurant", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "shareHint": "Customers join with this link to get your special occasions.", "copied": "Link copied", "newMsg": "New VIP message (Event)", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again.", "edit": "Edit", "del": "Delete", "delSure": "Tap again to delete", "save": "Save changes", "cancel": "Cancel", "notSaved": "Could not save the changes. Try again.", "shareEvent": "Share", "shareEventText": "Published on Wepawao:", "celebrate": "🎉 Add a celebration: confetti and the Wepawao mark", "celebrateHint": "Makes the photo stand out when you share it on Facebook and WhatsApp.", "shareHow": "How do you want to share it?", "shareCel": "🎉 With celebration", "shareCelPrep": "Preparing the celebration…", "sharePlain": "Without celebration", "shareCelNote": "Only the shared picture gets the confetti. The event in Wepawao stays as it is."},
+    vip: {"managersTitle": "Managers", "managersIntro": "Let someone you trust work this page with their own Wepawao sign-in: menu, prices, VIP messages and logo. Only you can add or remove managers.", "addManager": "Add a manager", "managerInviteText": "You are invited to manage {n} on Wepawao. Open this link and sign in:", "managerLinkNote": "Send this link to your manager. It works once and expires in 7 days.", "noManagers": "No managers yet.", "removeManager": "Remove", "managerBadge": "Manager", "managerOf": "Business I manage", "leaveManager": "Stop managing this business", "managerNow": "You now manage {n}. It is here in My business.", "managerInvalid": "This manager link was already used or expired. Ask the owner for a new one.", "managerSignIn": "Sign in to start managing the business you were invited to.", "beta": "Beta", "hubBtn": "My Restaurant", "hubTitle": "VIP Customers", "hubIntro": "Businesses send their customers a direct message when a special occasion comes.", "pitch": "For us, every customer is VIP. That's why we will send you a direct message when a special occasion comes: live music, seasonal menus or a new dish.", "join": "I want to be a VIP customer", "joined": "You're a VIP customer · Leave", "joinSignIn": "Sign in to be a VIP customer", "fine": "Free · Leave with one tap · Special occasions only", "last": "Latest special occasions", "none": "No messages yet.", "notFound": "This VIP list doesn't exist anymore.", "inboxTitle": "My VIP messages", "inboxEmpty": "When you join a business's VIP list, its messages show up here.", "myLists": "Where I'm a VIP customer", "leave": "Leave", "ownerTitle": "My business", "free": "Free during the launch", "createIntro": "Create your business's VIP list. Your customers join with one tap and you send them a message when there's a special occasion.", "name": "Business name", "town": "Town", "about": "A line about your business (optional)", "create": "Create my VIP list", "count": "VIP customers", "week": "This week", "weekOf": "{n} of 2 messages", "share": "Share my VIP link", "shareHint": "Customers join with this link to get your special occasions.", "copied": "Link copied", "newMsg": "New VIP message (Event)", "photo": "Photo or caricature of the occasion", "msgTitle": "Title", "when": "Day and time", "body": "Details", "send": "Send to {n} VIP customers", "sent": "Sent", "limit": "You already sent 2 messages this week. You can send another in a few days.", "sentList": "Messages sent", "open": "View page", "logo": "Logo", "logoAdd": "Add your logo", "logoChange": "Change logo", "logoSave": "Save logo", "error": "Something went wrong. Try again.", "edit": "Edit", "del": "Delete", "delSure": "Tap again to delete", "save": "Save changes", "cancel": "Cancel", "notSaved": "Could not save the changes. Try again.", "shareEvent": "Share", "shareEventText": "Published on Wepawao:", "celebrate": "🎉 Add a celebration: confetti and the Wepawao mark", "celebrateHint": "Makes the photo stand out when you share it on Facebook and WhatsApp.", "shareHow": "How do you want to share it?", "shareCel": "🎉 With celebration", "shareCelPrep": "Preparing the celebration…", "sharePlain": "Without celebration", "shareCelNote": "Only the shared picture gets the confetti. The event in Wepawao stays as it is.", "fbTitle": "Facebook Page", "fbIntro": "Add the link to {n}'s Facebook Page. After each event, one tap copies it and opens the Page so you can post it there too.", "fbHint": "In Facebook, open the Page, tap Share, then Copy link, and paste it here.", "fbPlaceholder": "https://www.facebook.com/…", "fbSave": "Save", "fbSaved": "Facebook Page saved", "fbBad": "That doesn't look like a Facebook Page link. Copy it from the Page in Facebook (Share → Copy link).", "fbChange": "Change", "fbRemove": "Remove", "fbPost": "Also post on Facebook", "fbCopied": "Copied! In Facebook, switch to posting as {n}, tap to write a post and paste. The event photo shows up from the link.", "fbAfterSend": "Sent to your VIP customers. Want it on Facebook too?", "fbNoPage": "Add the business's Facebook Page above to post your events there with one tap."},
     stats: {"title": "Wepawao in numbers", "open": "📊 Wepawao in numbers", "openText": "Real counts from the whole community: views, members and businesses, week by week.", "intro": "Real counts from the whole community, updated live. Nothing here is estimated or boosted.", "views": "Views", "viewsWeek": "+{n} this week", "members": "Members", "businesses": "Businesses", "moment": "Moments", "menu": "Menus", "vip": "VIP messages", "weekly": "Views per week", "membersGrowth": "Members over time", "weekOf": "Week of {n}", "howTitle": "How we count", "how": ["A view counts when a moment or VIP message stays on screen for about a second, or when a menu is opened.", "One view per person, per item, per day. Your own views of your own posts never count.", "We show how many, never who.", "No algorithm decides who gets to see a post here."], "since": "Counting since {n}", "none": "Counting has just started. The numbers grow from here.", "back": "← Back", "loading": "Loading…", "bizTitle": "Who saw your business", "menuViews": "Menu views", "people": "People", "vipViews": "VIP message views", "days": "Last 30 days", "bizNone": "No views yet. Share your menu QR or VIP link and they will show up here.", "seen": "👀 {n} views", "seenOne": "👀 1 view"},
     aiFaq: {"title": "Questions about AI", "note": "Honest answers from the Wepawao Team.", "link": "Questions about AI?", "items": [["Is it safe to upload my photo to an AI app?", "It's as safe as uploading a photo to any big app: the photo leaves your phone and is stored on that company's servers. Use only well-known apps (ChatGPT, Gemini, Meta AI, Copilot) and upload only your own face or people who said yes. Never upload photos of children, documents, or anything you wouldn't post on social media."], ["Do they use my photo to train their AI?", "They may: several apps use what you upload to improve their AI unless you turn it off. In ChatGPT: Settings → Data Controls → turn off “Improve the model for everyone”. In Gemini: turn off “Gemini Apps Activity” (or “Keep Activity”). These options change over time, so check the settings of the app you use."], ["Can someone use my face or caricature without permission?", "Yes, it's a real risk: any public photo can be copied and altered, with or without AI. That's why on Wepawao you choose whether a moment is Public or Contacts only. If you see a fake use of your image, report it on the platform where it appears."], ["Can I believe everything AI tells me?", "No. AI makes mistakes, sometimes very confidently. Use it as a helper, not the final word, and check anything important (health, money, law, news) with a trusted source."]]},
     promiseTitle: 'Our promise',
@@ -677,7 +677,7 @@ const I18N = {
       'Los negocios que se anuncian llegan directo a la gente: ningún algoritmo decide quién ve qué, todos ven primero lo más nuevo.',
       'Y participar es divertido: los miembros comparten sus momentos como caricaturas hechas con IA, una forma divertida de empezar a usarla. La IA llegó; aprendamos y crezcamos con ella, juntos.',
     ],
-    vip: {"managersTitle": "Gerentes", "managersIntro": "Deja que alguien de confianza trabaje esta página con su propia cuenta de Wepawao: menú, precios, mensajes VIP y logo. Solo tú puedes añadir o quitar gerentes.", "addManager": "Añadir gerente", "managerInviteText": "Te invitan a manejar {n} en Wepawao. Abre este enlace y entra:", "managerLinkNote": "Envía este enlace a tu gerente. Funciona una vez y vence en 7 días.", "noManagers": "Aún no hay gerentes.", "removeManager": "Quitar", "managerBadge": "Gerente", "managerOf": "Negocio que manejo", "leaveManager": "Dejar de manejar este negocio", "managerNow": "Ya manejas {n}. Está aquí, en Mi negocio.", "managerInvalid": "Este enlace de gerente ya se usó o venció. Pide uno nuevo al dueño.", "managerSignIn": "Entra para empezar a manejar el negocio al que te invitaron.", "beta": "Beta", "hubBtn": "Mi restaurante", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "shareHint": "Tus clientes se unen con este enlace para recibir tus ocasiones especiales.", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP (Evento)", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez.", "edit": "Editar", "del": "Borrar", "delSure": "Toca otra vez para borrar", "save": "Guardar cambios", "cancel": "Cancelar", "notSaved": "No se pudieron guardar los cambios. Inténtalo otra vez.", "shareEvent": "Compartir", "shareEventText": "Publicado en Wepawao:", "celebrate": "🎉 Añadir celebración: confeti y la marca de Wepawao", "celebrateHint": "Hace que la foto resalte cuando la compartes en Facebook y WhatsApp.", "shareHow": "¿Cómo lo quieres compartir?", "shareCel": "🎉 Con celebración", "shareCelPrep": "Preparando la celebración…", "sharePlain": "Sin celebración", "shareCelNote": "Solo la foto compartida lleva el confeti. El evento en Wepawao se queda igual."},
+    vip: {"managersTitle": "Gerentes", "managersIntro": "Deja que alguien de confianza trabaje esta página con su propia cuenta de Wepawao: menú, precios, mensajes VIP y logo. Solo tú puedes añadir o quitar gerentes.", "addManager": "Añadir gerente", "managerInviteText": "Te invitan a manejar {n} en Wepawao. Abre este enlace y entra:", "managerLinkNote": "Envía este enlace a tu gerente. Funciona una vez y vence en 7 días.", "noManagers": "Aún no hay gerentes.", "removeManager": "Quitar", "managerBadge": "Gerente", "managerOf": "Negocio que manejo", "leaveManager": "Dejar de manejar este negocio", "managerNow": "Ya manejas {n}. Está aquí, en Mi negocio.", "managerInvalid": "Este enlace de gerente ya se usó o venció. Pide uno nuevo al dueño.", "managerSignIn": "Entra para empezar a manejar el negocio al que te invitaron.", "beta": "Beta", "hubBtn": "Mi restaurante", "hubTitle": "Clientes VIP", "hubIntro": "Los negocios envían un mensaje directo a sus clientes cuando llega una ocasión especial.", "pitch": "Para nosotros, cada cliente es VIP. Por eso te enviaremos un mensaje directo cuando llegue una ocasión especial: música en vivo, menús de temporada o un plato nuevo.", "join": "Quiero ser cliente VIP", "joined": "Eres cliente VIP · Salir", "joinSignIn": "Entra para ser cliente VIP", "fine": "Gratis · Sales con un toque · Solo ocasiones especiales", "last": "Últimas ocasiones especiales", "none": "Todavía no hay mensajes.", "notFound": "Esta lista VIP ya no existe.", "inboxTitle": "Mis mensajes VIP", "inboxEmpty": "Cuando te unas a la lista VIP de un negocio, sus mensajes aparecerán aquí.", "myLists": "Donde soy cliente VIP", "leave": "Salir", "ownerTitle": "Mi negocio", "free": "Gratis durante el lanzamiento", "createIntro": "Crea la lista VIP de tu negocio. Tus clientes se unen con un toque y les envías un mensaje cuando hay una ocasión especial.", "name": "Nombre del negocio", "town": "Pueblo", "about": "Una línea sobre tu negocio (opcional)", "create": "Crear mi lista VIP", "count": "Clientes VIP", "week": "Esta semana", "weekOf": "{n} de 2 mensajes", "share": "Compartir mi enlace VIP", "shareHint": "Tus clientes se unen con este enlace para recibir tus ocasiones especiales.", "copied": "Enlace copiado", "newMsg": "Nuevo mensaje VIP (Evento)", "photo": "Foto o caricatura de la ocasión", "msgTitle": "Título", "when": "Día y hora", "body": "Detalles", "send": "Enviar a {n} clientes VIP", "sent": "Enviado", "limit": "Ya enviaste 2 mensajes esta semana. Podrás enviar otro en unos días.", "sentList": "Mensajes enviados", "open": "Ver página", "logo": "Logo", "logoAdd": "Añade tu logo", "logoChange": "Cambiar logo", "logoSave": "Guardar logo", "error": "Algo falló. Inténtalo otra vez.", "edit": "Editar", "del": "Borrar", "delSure": "Toca otra vez para borrar", "save": "Guardar cambios", "cancel": "Cancelar", "notSaved": "No se pudieron guardar los cambios. Inténtalo otra vez.", "shareEvent": "Compartir", "shareEventText": "Publicado en Wepawao:", "celebrate": "🎉 Añadir celebración: confeti y la marca de Wepawao", "celebrateHint": "Hace que la foto resalte cuando la compartes en Facebook y WhatsApp.", "shareHow": "¿Cómo lo quieres compartir?", "shareCel": "🎉 Con celebración", "shareCelPrep": "Preparando la celebración…", "sharePlain": "Sin celebración", "shareCelNote": "Solo la foto compartida lleva el confeti. El evento en Wepawao se queda igual.", "fbTitle": "Página de Facebook", "fbIntro": "Añade el enlace de la página de Facebook de {n}. Después de cada evento, un toque lo copia y abre la página para que lo publiques allí también.", "fbHint": "En Facebook, abre la página, toca Compartir y luego Copiar enlace, y pégalo aquí.", "fbPlaceholder": "https://www.facebook.com/…", "fbSave": "Guardar", "fbSaved": "Página de Facebook guardada", "fbBad": "Ese no parece un enlace de una página de Facebook. Cópialo desde la página en Facebook (Compartir → Copiar enlace).", "fbChange": "Cambiar", "fbRemove": "Quitar", "fbPost": "Publicar también en Facebook", "fbCopied": "¡Copiado! En Facebook, cambia a publicar como {n}, toca para escribir una publicación y pega. La foto del evento sale del enlace.", "fbAfterSend": "Enviado a tus clientes VIP. ¿Lo quieres en Facebook también?", "fbNoPage": "Añade arriba la página de Facebook del negocio para publicar tus eventos allí con un toque."},
     stats: {"title": "Wepawao en números", "open": "📊 Wepawao en números", "openText": "Cifras reales de toda la comunidad: vistas, miembros y negocios, semana a semana.", "intro": "Cifras reales de toda la comunidad, al día. Nada aquí es un estimado ni está inflado.", "views": "Vistas", "viewsWeek": "+{n} esta semana", "members": "Miembros", "businesses": "Negocios", "moment": "Momentos", "menu": "Menús", "vip": "Mensajes VIP", "weekly": "Vistas por semana", "membersGrowth": "Miembros con el tiempo", "weekOf": "Semana del {n}", "howTitle": "Cómo contamos", "how": ["Una vista cuenta cuando un momento o mensaje VIP se queda en pantalla cerca de un segundo, o cuando se abre un menú.", "Una vista por persona, por publicación, por día. Tus propias vistas de lo tuyo nunca cuentan.", "Mostramos cuántos, nunca quiénes.", "Aquí ningún algoritmo decide quién ve una publicación."], "since": "Contando desde el {n}", "none": "El conteo acaba de empezar. Las cifras crecen desde aquí.", "back": "← Volver", "loading": "Cargando…", "bizTitle": "Quién vio tu negocio", "menuViews": "Vistas del menú", "people": "Personas", "vipViews": "Vistas de mensajes VIP", "days": "Últimos 30 días", "bizNone": "Todavía no hay vistas. Comparte el QR de tu menú o tu enlace VIP y aparecerán aquí.", "seen": "👀 {n} vistas", "seenOne": "👀 1 vista"},
     aiFaq: {"title": "Preguntas sobre la IA", "note": "Respuestas honestas del equipo de Wepawao.", "link": "¿Dudas sobre la IA?", "items": [["¿Es seguro subir mi foto a una app de IA?", "Es tan seguro como subir una foto a cualquier app grande: la foto sale de tu teléfono y queda en los servidores de esa compañía. Usa solo apps conocidas (ChatGPT, Gemini, Meta AI, Copilot) y sube solo tu cara o la de personas que te dieron permiso. Nunca subas fotos de niños, documentos o nada que no publicarías en una red social."], ["¿Usan mi foto para entrenar la IA?", "Puede pasar: varias apps usan lo que subes para mejorar su IA, a menos que lo apagues. En ChatGPT: Configuración → Controles de datos → apaga “Mejorar el modelo para todos”. En Gemini: apaga “Actividad en las apps de Gemini” (o “Conservar actividad”). Las opciones cambian con el tiempo, así que revisa la configuración de la app que uses."], ["¿Alguien puede usar mi cara o mi caricatura sin permiso?", "Sí, es un riesgo real: cualquier foto pública se puede copiar y alterar, con o sin IA. Por eso en Wepawao tú decides si tu momento es Público o Solo contactos. Si ves un uso falso de tu imagen, repórtalo en la plataforma donde aparezca."], ["¿Puedo creer todo lo que dice la IA?", "No. La IA se equivoca, a veces con mucha seguridad. Úsala como ayuda, no como la última palabra, y verifica en una fuente confiable lo que sea importante (salud, dinero, leyes, noticias)."]]},
     promiseTitle: 'Nuestra promesa',
@@ -4957,8 +4957,99 @@ function VipMessage({ m, listName, track = false, views }) {
   )
 }
 
+// ---------- "Also post on Facebook" ----------
+// No Meta app or approval: one tap copies the event (text + its Wepawao link, whose preview carries the photo)
+// and opens the business's own Facebook Page, where the owner or manager pastes it while posting as the Page.
+function cleanFacebookUrl(str) {
+  let u = String(str || '').trim()
+  if (!u) return null
+  if (!/^https?:\/\//i.test(u)) u = `https://${u}`
+  u = u.replace(/^http:\/\//i, 'https://')
+  try {
+    const host = new URL(u).hostname.toLowerCase()
+    if (!/(^|\.)(facebook\.com|fb\.com|fb\.me)$/.test(host) || u.length > 300) return undefined
+  } catch { return undefined }
+  return u
+}
+function facebookPostText(m, lang) {
+  return [m.title, m.when_text, m.body, eventLink(m.id, lang)].filter(Boolean).join('\n\n')
+}
+// The button itself: a real link (so the phone hands it to the Facebook app), copying the post on the same tap.
+function FacebookPostButton({ m, fbUrl, listName, big = false }) {
+  const { t, lang } = useLang()
+  const [copied, setCopied] = useState(false)
+  if (!fbUrl) return null
+  function copy() {
+    const text = facebookPostText(m, lang)
+    try { navigator.clipboard.writeText(text).catch(() => {}) } catch { /* the Page still opens */ }
+    setCopied(true)
+  }
+  return (
+    <div className="space-y-1.5">
+      <a href={fbUrl} target="_blank" rel="noopener noreferrer" onClick={copy}
+        className={`inline-flex items-center gap-2 rounded-full bg-[#1877f2] font-extrabold text-white ${big ? 'px-6 py-3' : 'px-4 py-1.5 text-sm'}`}>
+        <svg width={big ? 20 : 16} height={big ? 20 : 16} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.8c0-.8.5-1.3 1.4-1.3H17V2.2C16.6 2.1 15.4 2 14.1 2 11.3 2 9.6 3.7 9.6 6.6v1.9H7v3.6h2.6V22H14v-9.9h2.8l.4-3.6z" /></svg>
+        {t.vip.fbPost}
+      </a>
+      {copied && <p className="text-sm font-semibold text-stone-700">{fill(t.vip.fbCopied, listName)}</p>}
+    </div>
+  )
+}
+// Where the owner or a manager saves the business's Facebook Page link.
+function FacebookPageSetting({ list, onSaved }) {
+  const { t } = useLang()
+  const v = t.vip
+  const [editing, setEditing] = useState(!list.facebook_url)
+  const [val, setVal] = useState(list.facebook_url || '')
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState('')
+  useEffect(() => { setEditing(!list.facebook_url); setVal(list.facebook_url || ''); setNote('') }, [list.id, list.facebook_url])
+  async function save(url) {
+    setBusy(true); setNote('')
+    const { error } = await supabase.from('vip_lists').update({ facebook_url: url }).eq('id', list.id)
+    setBusy(false)
+    if (error) { setNote(v.error); return }
+    setNote(url ? v.fbSaved : ''); onSaved()
+  }
+  function submit(e) {
+    e.preventDefault()
+    const url = cleanFacebookUrl(val)
+    if (url === undefined || url === null) { setNote(v.fbBad); return }
+    save(url)
+  }
+  return (
+    <div className="space-y-2 rounded-2xl bg-white/10 p-3">
+      <div className="flex items-center gap-2 font-extrabold">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-[#1877f2]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M14 8.5V6.8c0-.8.5-1.3 1.4-1.3H17V2.2C16.6 2.1 15.4 2 14.1 2 11.3 2 9.6 3.7 9.6 6.6v1.9H7v3.6h2.6V22H14v-9.9h2.8l.4-3.6z" /></svg>
+        </span>
+        {v.fbTitle}
+      </div>
+      {editing ? (
+        <form onSubmit={submit} className="space-y-2">
+          <p className="text-sm text-white/80">{fill(v.fbIntro, list.name)}</p>
+          <input className={field} inputMode="url" autoCapitalize="off" autoCorrect="off" maxLength={300} placeholder={v.fbPlaceholder}
+            value={val} onChange={(e) => setVal(e.target.value)} />
+          <p className="text-xs text-white/65">{v.fbHint}</p>
+          <div className="flex flex-wrap gap-2">
+            <button disabled={busy || !val.trim()} className="rounded-full bg-[#f6d155] px-5 py-2 font-bold text-[#14123a] disabled:opacity-50">{v.fbSave}</button>
+            {list.facebook_url && <button type="button" disabled={busy} onClick={() => setEditing(false)} className="rounded-full border-2 border-white/70 px-4 py-1.5 font-bold text-white">{v.cancel}</button>}
+          </div>
+        </form>
+      ) : (
+        <div className="flex flex-wrap items-center gap-2">
+          <a href={list.facebook_url} target="_blank" rel="noopener noreferrer" className="min-w-0 max-w-full truncate text-sm font-semibold text-white underline">{list.facebook_url.replace(/^https:\/\/(www\.)?/, '')}</a>
+          <button type="button" disabled={busy} onClick={() => setEditing(true)} className="rounded-full border-2 border-white/70 px-3 py-1 text-sm font-bold text-white">{v.fbChange}</button>
+          <button type="button" disabled={busy} onClick={() => save(null)} className="text-sm font-bold text-white/70 underline">{v.fbRemove}</button>
+        </div>
+      )}
+      {note && <p className="text-sm font-semibold text-[#f6d155]">{note}</p>}
+    </div>
+  )
+}
+
 // A sent VIP message as the owner or a manager sees it: fix it (photo, title, date, details) or delete it.
-function VipSentMessage({ m, me, views, onChanged }) {
+function VipSentMessage({ m, me, views, onChanged, fbUrl, listName }) {
   const { t } = useLang()
   const v = t.vip
   const [editing, setEditing] = useState(false)
@@ -5023,6 +5114,7 @@ function VipSentMessage({ m, me, views, onChanged }) {
   return (
     <div className="space-y-2">
       <VipMessage m={m} views={views} />
+      <div className="px-1"><FacebookPostButton m={m} fbUrl={fbUrl} listName={listName} /></div>
       <div className="flex flex-wrap items-center gap-2 px-1">
         <button type="button" className={ghostSm} disabled={busy} onClick={startEdit}>{v.edit}</button>
         <button type="button" disabled={busy} onClick={remove}
@@ -5112,6 +5204,8 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
   const logo = usePhotoPicker([], 1, () => setNote(t.couldNotRead))
   const [celebrate, setCelebrate] = useState(false)
   const cel = useCelebration(photo.items[0], celebrate)
+  // The event just sent, so the "Also post on Facebook" button can show right under the form.
+  const [justSent, setJustSent] = useState(null)
   async function uploadLogo() {
     if (!logo.items[0]) return null
     const up = await uploadPhotos([logo.items[0]], me, `vip-logo-${crypto.randomUUID().slice(0, 8)}`)
@@ -5163,6 +5257,7 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
   async function send(e) {
     e.preventDefault()
     if (msg.title.trim().length < 2 || busy) return
+    setJustSent(null)
     if (thisWeek >= 2) { setNote(v.limit); return }
     setBusy(true); setNote('')
     let uploaded = []
@@ -5173,10 +5268,11 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
         const up = await uploadPhotos([item], me, `${celebrate ? 'vip-cel' : 'vip'}-${crypto.randomUUID().slice(0, 8)}`)
         uploaded = up.uploaded; image_path = up.paths[0]
       }
-      const { error } = await supabase.from('vip_messages').insert({
+      const { data: made, error } = await supabase.from('vip_messages').insert({
         list_id: list.id, title: msg.title.trim(), when_text: msg.when.trim() || null, body: msg.body.trim() || null, image_path,
-      })
+      }).select().single()
       if (error) throw error
+      setJustSent(made || null)
       setMsg({ title: '', when: '', body: '' }); photo.reset(); setCelebrate(false); setNote(v.sent); load()
     } catch (err) {
       if (uploaded.length) supabase.storage.from(BUCKET).remove(uploaded)
@@ -5217,7 +5313,7 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
       {lists.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-1">
           {lists.map((l) => (
-            <button key={l.id} type="button" onClick={() => { setSelId(l.id); logo.reset(); setNote('') }} aria-pressed={l.id === list.id}
+            <button key={l.id} type="button" onClick={() => { setSelId(l.id); logo.reset(); setNote(''); setJustSent(null) }} aria-pressed={l.id === list.id}
               className={`flex shrink-0 items-center gap-2 rounded-full border-2 py-1 pl-1 pr-4 font-bold ${l.id === list.id ? 'border-[#4a3af0] bg-[#4a3af0] text-white' : 'border-[#dcdff5] bg-white text-[#14123a]'}`}>
               <VipLogo path={l.logo_path} size={32} />{l.name}
               {!l.mine && <span className="rounded-full bg-[#f6d155] px-2 py-0.5 text-xs font-extrabold text-[#14123a]">{v.managerBadge}</span>}
@@ -5249,6 +5345,7 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
           <button type="button" onClick={() => onOpenList(list.id)} className="rounded-full border-2 border-white/70 px-5 py-2 font-bold text-white">{v.open}</button>
         </div>
         <p className="text-sm text-white/75">{v.shareHint}</p>
+        <FacebookPageSetting list={list} onSaved={load} />
       </div>
       <form onSubmit={send} className={`${card} space-y-3`}>
         <h3 className="text-xl font-extrabold">{v.newMsg}</h3>
@@ -5258,10 +5355,15 @@ function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
         <input className={field} maxLength={60} placeholder={v.when} value={msg.when} onChange={(e) => setMsg({ ...msg, when: e.target.value })} />
         <textarea className={`${field} min-h-20`} maxLength={500} placeholder={v.body} value={msg.body} onChange={(e) => setMsg({ ...msg, body: e.target.value })} />
         <button className={`${primary} w-full`} disabled={busy || thisWeek >= 2}>{fill(v.send, count)}</button>
-        {note && <p className="text-sm font-semibold text-stone-700">{note}</p>}
+        {justSent ? (
+          <div className="space-y-2 rounded-2xl border-2 border-[#1877f2] bg-[#e7f0fe] p-3">
+            <p className="font-extrabold text-[#14123a]">{v.fbAfterSend}</p>
+            {list.facebook_url ? <FacebookPostButton m={justSent} fbUrl={list.facebook_url} listName={list.name} big /> : <p className="text-sm text-stone-700">{v.fbNoPage}</p>}
+          </div>
+        ) : note && <p className="text-sm font-semibold text-stone-700">{note}</p>}
       </form>
       {sent.length > 0 && <h3 className="px-1 text-sm font-extrabold uppercase tracking-wide text-[#6b6f93]">{v.sentList}</h3>}
-      {sent.map((m) => <VipSentMessage key={m.id} m={m} me={me} onChanged={load} views={vstats ? (vstats.messages?.[m.id] || 0) : undefined} />)}
+      {sent.map((m) => <VipSentMessage key={m.id} m={m} me={me} onChanged={load} fbUrl={list.facebook_url} listName={list.name} views={vstats ? (vstats.messages?.[m.id] || 0) : undefined} />)}
       <MenuEditor key={list.id} list={list} me={me} />
       <BusinessViewsCard stats={vstats} onCommunity={onStats} />
       {list.mine ? <VipManagers key={`mg-${list.id}`} list={list} /> : (
