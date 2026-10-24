@@ -4774,7 +4774,7 @@ function VipListPage({ id, me, onSignIn, onBack }) {
   )
 }
 
-function VipOwner({ me, onOpenList, onStats, focus }) {
+function VipOwner({ me, onOpenList, onStats, focus, canCreate = false }) {
   const { t, lang } = useLang()
   const v = t.vip
   const [list, setList] = useState(undefined)
@@ -4870,6 +4870,8 @@ function VipOwner({ me, onOpenList, onStats, focus }) {
     try { await navigator.clipboard.writeText(url); setNote(v.copied) } catch { window.prompt('', url) }
   }
   if (list === undefined) return null
+  // New businesses are added by the Wepawao Team; regular members never see the create form.
+  if (list === null && !canCreate) return null
   if (list === null) {
     return (
       <form onSubmit={create} className={`${card} space-y-3`}>
@@ -5256,7 +5258,7 @@ function VipManagers({ list }) {
   )
 }
 
-function VipHub({ me, onOpenList, onBack, onStats, focus }) {
+function VipHub({ me, onOpenList, onBack, onStats, focus, canCreate = false }) {
   const { t } = useLang()
   const v = t.vip
   const [lists, setLists] = useState([])
@@ -5299,7 +5301,7 @@ function VipHub({ me, onOpenList, onBack, onStats, focus }) {
           ))}
         </div>
       )}
-      <VipOwner me={me} onOpenList={onOpenList} onStats={onStats} focus={focus} />
+      <VipOwner me={me} onOpenList={onOpenList} onStats={onStats} focus={focus} canCreate={canCreate} />
       <button type="button" className="px-1 font-bold text-[#4a3af0] underline" onClick={onBack}>{t.myPage.title}</button>
     </div>
   )
@@ -6105,6 +6107,22 @@ export default function App() {
     if (!me) { setIsAdmin(false); return }
     supabase.rpc('is_admin').then(({ data, error }) => setIsAdmin(!error && data === true))
   }, [me])
+  // What My page offers: owners and managers get "My Restaurant", VIP customers get "My VIP messages",
+  // everyone else nothing. Checked again each time My page opens (e.g. after joining a VIP list).
+  const [vipRole, setVipRole] = useState({ biz: false, vip: false })
+  useEffect(() => {
+    if (!me) { setVipRole({ biz: false, vip: false }); return }
+    if (tab !== 'mypage') return
+    let live = true
+    Promise.all([
+      supabase.from('vip_lists').select('id', { count: 'exact', head: true }).eq('owner_id', me),
+      supabase.from('vip_managers').select('list_id', { count: 'exact', head: true }).eq('user_id', me),
+      supabase.from('vip_members').select('list_id', { count: 'exact', head: true }).eq('user_id', me),
+    ]).then(([o, m, j]) => {
+      if (live) setVipRole({ biz: (o.count || 0) + (m.count || 0) > 0, vip: (j.count || 0) > 0 })
+    })
+    return () => { live = false }
+  }, [me, tab])
   function closeAdvertise() {
     setAdvertise(false)
     const url = new URL(window.location.href)
@@ -6488,7 +6506,7 @@ export default function App() {
               onBack={() => { setVipId(null); setTab('everyone') }} />
           )}
           {tab === 'viphub' && me && (
-            <VipHub me={me} focus={vipFocus} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
+            <VipHub me={me} focus={vipFocus} canCreate={isAdmin} onOpenList={(id) => { setVipId(id); setTab('vip'); window.scrollTo(0, 0) }}
               onBack={() => { setTab('mypage'); window.scrollTo(0, 0) }} onStats={openStats} />
           )}
           {tab === 'mypage' && me && (
@@ -6499,7 +6517,11 @@ export default function App() {
                   <button className="rounded-full bg-[#f6d155] px-6 py-3 font-bold text-[#14123a]" onClick={() => { setTab('affiliate'); window.scrollTo(0, 0) }}>{t.myPage.network}</button>
                   <div className="flex basis-full flex-col items-start gap-2">
                     <button className="rounded-full border-2 border-white/70 px-5 py-2.5 font-bold text-white" onClick={() => { setTab('restaurants'); window.scrollTo(0, 0) }}>{t.rest.btn}</button>
-                    <button className="rounded-full border-2 border-[#f6d155] px-5 py-2.5 font-bold text-[#f6d155]" onClick={() => { setTab('viphub'); window.scrollTo(0, 0) }}>{t.vip.hubBtn}</button>
+                    {(isAdmin || vipRole.biz || vipRole.vip) && (
+                      <button className="rounded-full border-2 border-[#f6d155] px-5 py-2.5 font-bold text-[#f6d155]" onClick={() => { setTab('viphub'); window.scrollTo(0, 0) }}>
+                        {isAdmin || vipRole.biz ? t.vip.hubBtn : t.vip.inboxTitle}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
